@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:p="http://www.springframework.org/schema/p" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+        ">
+        
+    <!-- 2026.10.01 :: 오라클 데이터베이스 접속정보 XML 전체 생성 -->
+    
+    <!-- 2026.10.01 :: context-common.xml 하단에 추가 등록하였음 -->
+    <!-- <bean id="applicationContextProvider" class="com.nexacro.uiadapter.spring.core.context.ApplicationContextProvider" lazy-init="false" /> -->
+
+    <!-- 2026.10.01 :: Nexacro UIAdapter에서 제공하는 Oracle 전용 DBMS 클래스를 Spring 컨터이너 객체에 등록 -->
+    <bean id="oracleDbms" class="com.nexacro.uiadapter.spring.dao.dbms.Oracle" />
+    
+    <!-- 
+    <bean id="hsqlDbms"   class="com.nexacro.uiadapter.spring.dao.dbms.Hsql" />
+    <bean id="mssqlDbms"  class="com.nexacro.uiadapter.spring.dao.dbms.Mssql" />
+    <bean id="mysqlDbms"  class="com.nexacro.uiadapter.spring.dao.dbms.Mysql" />
+    <bean id="tiberoDbms" class="com.nexacro.uiadapter.spring.dao.dbms.Tibero" />
+     -->
+    
+    <!-- 2026.10.01 :: Nexacro UIAdapter에서 DBMS별 처리 객체를 관리하는 클래스 Spring에 등록하는 Bean
+         id="dbmsProvider"   		: Spring에 등록하는 Bean 이름
+         DbVendorsProvider   		: Nexacro UIAdapter에서 DBMS별 처리 객체를 관리하는 클래스
+         property name="dbvendors" 	: DbVendorsProvider의 dbvendors 프로퍼티에 값을 설정
+    -->
+    <bean id="dbmsProvider" class="com.nexacro.uiadapter.spring.dao.DbVendorsProvider">
+        <property name="dbvendors">
+            <map>
+                 <entry key="Oracle"     value-ref="oracleDbms"/>
+                 
+                 <!-- 
+                 <entry key="HSQL Database Engine" value-ref="hsqlDbms"/>
+                 <entry key="Microsoft SQL Server" value-ref="mssqlDbms"/>
+                 <entry key="MySQL"      value-ref="mysqlDbms"/>
+                <entry key="Tibero"     value-ref="tiberoDbms"/>
+                 -->
+            </map>
+        </property>
+    </bean>
+</beans>

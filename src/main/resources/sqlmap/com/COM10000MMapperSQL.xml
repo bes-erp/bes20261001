@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.com.service.impl.COM10000MMapper">
+
+	<!-- ******************************************************************************
+	     코드유형 데이터 조회 : 특수문자 : <![CDATA[  ]]>
+	******************************************************************************* -->
+	<select id="selectCodeTypeList" resultType="map">
+		select cct.code_type                          as code_type
+		     , cct.code_type_nm                       as code_type_nm
+		     , cct.code_type_nm_s                     as code_type_nm_s
+		     , to_char(cct.start_date, 'yyyy-mm-dd')  as start_date
+		     , to_char(cct.end_date, 'yyyy-mm-dd')    as end_date
+		     , cct.create_type_cd                     as create_type_cd
+		     , cct.remark                             as remark
+		     , cct.create_date                        as create_date
+		     , cct.create_by                          as create_by
+		     , cct.update_date                        as update_date
+		     , cct.update_by                          as update_by
+		  from com_code_type cct
+		 where 1=1
+	
+	    <if test='code_type != null and code_type != ""'>
+	       and cct.code_type = #{code_type}
+	    </if>
+	
+	    <if test='code_type_name != null and code_type_name != ""'>
+	       and cct.code_type_nm like #{code_type_name} || '%'
+	    </if>
+	</select>
+
+	<!-- ******************************************************************************
+	     코드 데이터 조회 : 특수문자 : <![CDATA[  ]]>
+	******************************************************************************* -->
+	<select id="selectCodeList" resultType="map">
+		select cc.code_type                              as code_type
+		      ,cc.code                                   as code     
+		      ,cc.code_nm                                as code_nm  
+		      ,cc.code_nm_s                              as code_nm_s
+		      ,to_char(cc.start_date, 'yyyy-mm-dd')      as start_date
+		      ,to_char(cc.end_date, 'yyyy-mm-dd')        as end_date
+		      ,cc.sort_order                             as sort_order 
+		      ,cc.attr_chr1                              as attr_chr1  
+		      ,cc.attr_chr2                              as attr_chr2  
+		      ,cc.attr_chr3                              as attr_chr3  
+		      ,cc.attr_chr4                              as attr_chr4  
+		      ,cc.attr_chr5                              as attr_chr5  
+		      ,cc.attr_num1                              as attr_num1  
+		      ,cc.attr_num2                              as attr_num2  
+		      ,cc.attr_num3                              as attr_num3  
+		      ,cc.attr_num4                              as attr_num4  
+		      ,cc.attr_num5                              as attr_num5  
+		      ,cc.attr_date1                             as attr_date1 
+		      ,cc.attr_date2                             as attr_date2 
+		      ,cc.attr_date3                             as attr_date3 
+		      ,cc.attr_date4                             as attr_date4 
+		      ,cc.attr_date5                             as attr_date5 
+		      ,cc.remark                                 as remark     
+		      ,cc.create_date                            as create_date
+		      ,cc.create_by                              as create_by  
+		      ,cc.update_date                            as update_date
+		      ,cc.update_by                              as update_by  
+		  from com_code cc
+		 where 1=1
+		 	
+	    <if test='code_type != null and code_type != ""'>
+	       and cc.code_type = #{code_type}
+	    </if>
+	
+	    <if test='code != null and code != ""'>
+	       and cc.code = #{code}
+	    </if>
+	
+	    <if test='code_nm != null and code_nm != ""'>
+	       and cc.code_nm like #{code_nm} || '%'
+	    </if>
+	    
+		 order by cc.code_type
+		         ,cc.code
+	</select>
+
+	<!-- ******************************************************************************
+	     [콤보박스] 코드유형에 따른 코드 데이터를 조회 : 특수문자 : <![CDATA[  ]]>
+	******************************************************************************* -->
+	<select id="selectComboCodeList" resultType="map">
+		select cc.code                                   as code     
+		      ,cc.code_nm                                as code_nm 
+		  from com_code cc
+		 where 1=1
+		 	
+	    <if test='code_type != null and code_type != ""'>
+	       and cc.code_type = #{code_type}
+	    </if>
+	
+	    <if test='sel_type != null and sel_type != "" and sel_type =="A"'>
+	       and trunc(sysdate) between cc.start_date and nvl(cc.end_date, trunc(to_date('9999-12-31', 'yyyy-mm-dd')))
+	    </if>
+	
+	    <if test='sel_type != null and sel_type != "" and sel_type =="I"'>
+	       and not (trunc(sysdate) between cc.start_date and nvl(cc.end_date, trunc(to_date('9999-12-31', 'yyyy-mm-dd'))))
+	    </if>
+	    
+		 order by cc.sort_order
+	</select>
+
+
+</mapper>

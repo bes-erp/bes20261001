@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+    <!-- 2026.10.01 :: java 패키지 루트 변경(egovframework → erp) -->
+    <context:component-scan base-package="erp">
+       <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+    </context:component-scan>
+
+	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+			    <!-- 2026.10.01 :: 메시지 폴더 경로 변경에 따른 classpath 변경 -->
+				<value>classpath:/config/message/message-common</value>
+				
+				<value>classpath:/org/egovframe/rte/fdl/idgnr/messages/idgnr</value>
+				<value>classpath:/org/egovframe/rte/fdl/property/messages/properties</value>
+			</list>
+		</property>
+		<property name="cacheSeconds">
+			<value>60</value>
+		</property>
+	</bean>
+	
+	<bean id="leaveaTrace" class="org.egovframe.rte.fdl.cmmn.trace.LeaveaTrace">
+		<property name="traceHandlerServices">
+			<list>
+				<ref bean="traceHandlerService" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="traceHandlerService" class="org.egovframe.rte.fdl.cmmn.trace.manager.DefaultTraceHandleManager">
+		<property name="reqExpMatcher">
+			<ref bean="antPathMater" />
+		</property>
+		<property name="patterns">
+			<list>
+				<value>*</value>
+			</list>
+		</property>
+		<property name="handlers">
+			<list>
+				<ref bean="defaultTraceHandler" />
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="antPathMater" class="org.springframework.util.AntPathMatcher" />
+	<bean id="defaultTraceHandler" class="org.egovframe.rte.fdl.cmmn.trace.handler.DefaultTraceHandler" />
+	
+	<!-- 2026.10.01 :: 넥사크로 UIAdapter에서 스프링의 ApplicationContext를 참조할 수 있도록 등록하는 Bean 추가
+     1. id="applicationContextProvider": 스프링 컨테이너에 등록할 Bean 이름
+     2. class="com.nexacro...ApplicationContextProvider": 스프링 애플리케이션 컨텍스트를 제공하는 넥사크로 UIAdapter 클래스
+     3. lazy-init="false": 최초 사용 시점까지 생성을 미루지 않고, 스프링 컨테이너 초기화 시 Bean을 생성하도록 설정
+     	******************************************************************************************************************
+     		구분				true												false
+     	******************************************************************************************************************
+			의미				지연 초기화											즉시 초기화
+			Bean 생성 시점		해당 Bean을 처음 사용할 때							스프링 컨테이너 초기화 시
+			서버 시작 시 생성	사용하지 않으면 생성이 지연될 수 있음				일반적인 싱글톤 Bean은 생성됨
+			초기 오류 발견		실제 사용 시점에 오류가 발견될 수 있음				서버 초기화 과정에서 오류를 발견하기 쉬움
+			주요 목적			초기 로딩 부담 감소									초기화 및 의존성 문제 조기 확인
+		******************************************************************************************************************
+	 -->
+	<bean id="applicationContextProvider"  class="com.nexacro.uiadapter.spring.core.context.ApplicationContextProvider"  lazy-init="false" />
+	 
+</beans>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    
+    <!-- 2026.10.01 :: 전자정부 샘플 정보 삭제
+    <typeAliases>
+		<typeAlias alias="egovMap" type="org.egovframe.rte.psl.dataaccess.util.EgovMap"/>
+		<typeAlias alias="searchVO" type="erp.com.service.SampleDefaultVO"/>
+		<typeAlias alias="sampleVO" type="erp.com.service.SampleVO"/>
+    </typeAliases> 
+    -->
+        
+    <!-- 2026.10.01 :: Mapper xml 처리결과 데이터 건수가 0일 경우 조회된 쿼리의 컬럼에 대한 정보를 리턴 -->
+    <plugins>    
+	    <plugin interceptor="com.nexacro.uiadapter.spring.dao.mybatis.NexacroMybatisMetaDataProvider" />
+	    <plugin interceptor="com.nexacro.uiadapter.spring.dao.mybatis.NexacroMybatisResultSetHandler" />
+	</plugins>
+</configuration>

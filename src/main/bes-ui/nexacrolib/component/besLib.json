@@ -1,0 +1,19 @@
+{
+  "name": "besLib",
+  "version": "1.0.0.0001",
+  "description": "Built1 enterprise system framework library",
+  "license": "",
+  "scripts": [
+    "besLib/libDate.js"
+   ,"besLib/libUtil.js"
+   ,"besLib/libDataSet.js"
+   ,"besLib/libCombo.js"
+
+  ],
+  "scriptsfilter": [    
+  ],
+  "objInfo" : [
+  ],
+  "designscripts" : [  
+  ]
+}
