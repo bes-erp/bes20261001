@@ -1,0 +1,212 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="Form_Login" width="1280" height="720" titletext="BES 로그인" onload="Form_Login_onload" onsize="Form_Login_onsize">
+    <Objects>
+      <Dataset id="dsLoginResult">
+        <ColumnInfo>
+          <Column id="RESULT_CD" type="STRING" size="10"/>
+          <Column id="RESULT_DESCR" type="STRING" size="4000"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[/************************************************************************
+ * Form Name : Form_Login
+ * Description : BES 로그인 화면
+ ************************************************************************/
+// 화면 최초 로딩
+this.Form_Login_onload = function(obj, e)
+{
+    this.fn_centerLogin();
+    this.divLogin.form.edtUserId.setFocus();
+};
+
+// 로그인 영역 중앙 정렬
+this.fn_centerLogin = function()
+{
+    // 현재 Form 크기
+    var nFormWidth  = this.getOffsetWidth();
+    var nFormHeight = this.getOffsetHeight();
+
+    // 로그인 박스 크기
+    var nLoginWidth  = this.divLogin.getOffsetWidth();
+    var nLoginHeight = this.divLogin.getOffsetHeight();
+
+    // 저작권 문구까지 포함한 전체 영역 높이
+    var nGap = 20;
+    var nCopyrightHeight = this.staCopyright.getOffsetHeight();
+
+    var nTotalHeight = nLoginHeight + nGap + nCopyrightHeight;
+
+    // 중앙 위치 계산
+    var nLeft = Math.max(0, Math.floor((nFormWidth - nLoginWidth) / 2));
+    var nTop  = Math.max(0, Math.floor((nFormHeight - nTotalHeight) / 2));
+
+    // 로그인 박스 이동
+    this.divLogin.move(nLeft, nTop);
+
+    // 저작권 문구도 함께 이동
+    this.staCopyright.move(
+        nLeft,
+        nTop + nLoginHeight + nGap
+    );
+};
+
+// 화면 크기 변경 시 다시 중앙 정렬
+this.Form_Login_onsize = function(obj, e)
+{
+    this.fn_centerLogin();
+};
+
+// 로그인 버튼 클릭
+this.btnLogin_onclick = function(obj, e)
+{
+    this.fn_login();
+};
+
+// 비밀번호 입력 후 Enter
+this.edtPassword_onkeydown = function(obj, e)
+{
+    if (e.keycode == 13)
+    {
+        this.fn_login();
+    }
+};
+
+// 로그인 처리
+this.fn_login = function()
+{
+    var sUserId = this.divLogin.form.edtUserId.value;
+    var sPassword = this.divLogin.form.edtPassword.value;
+
+    // 아이디 필수값 확인
+    if (this.gfn_isEmpty(sUserId))
+    {
+        this.alert("아이디를 입력해 주세요.");
+        this.divLogin.form.edtUserId.setFocus();
+        return;
+    }
+
+    // 비밀번호 필수값 확인
+    if (this.gfn_isEmpty(sPassword))
+    {
+        this.alert("비밀번호를 입력해 주세요.");
+        this.divLogin.form.edtPassword.setFocus();
+        return;
+    }
+
+    // 로그인 요청용 Dataset
+    if (!this.objects["dsLogin"])
+    {
+        var ds = new Dataset("dsLogin", this);
+        ds.addColumn("USER_ID", "STRING", 30);
+        ds.addColumn("PASSWORD", "STRING", 512);
+        this.addChild("dsLogin", ds);
+    }
+
+    this.dsLogin.clearData();
+
+    var nRow = this.dsLogin.addRow();
+
+    this.dsLogin.setColumn(nRow, "USER_ID", sUserId);
+    this.dsLogin.setColumn(nRow, "PASSWORD", sPassword);
+
+    var sSvcId    = "login";
+    var sSvcURL   = "svcUrl::com/login/login.do";
+    var sInData   = "dsLogin=dsLogin";
+    var sOutData = "dsLoginResult=outLogin";
+    var sArgument = "";
+    var sCallback = "fn_loginCallback";
+
+    this.transaction(
+        sSvcId,
+        sSvcURL,
+        sInData,
+        sOutData,
+        sArgument,
+        sCallback
+    );
+};
+
+// 로그인 결과 Callback
+this.fn_loginCallback = function(sSvcId, nErrorCode, sErrorMsg)
+{
+    if (sSvcId != "login")
+    {
+        return;
+    }
+
+    if (nErrorCode != 0)
+    {
+        this.alert("로그인 요청 오류: " + sErrorMsg);
+        return;
+    }
+
+    if (!this.dsLoginResult ||
+        this.dsLoginResult.rowcount == 0)
+    {
+        this.alert("로그인 결과가 없습니다.");
+        return;
+    }
+
+    var sResultCd = this.dsLoginResult.getColumn(0, "RESULT_CD");
+    var sResultMsg = this.dsLoginResult.getColumn(0, "RESULT_DESCR");
+
+    if (sResultCd == "S")
+    {
+        // 비밀번호 데이터 삭제
+        this.dsLogin.clearData();
+        this.divLogin.form.edtPassword.set_value("");
+
+        this.alert("로그인에 성공했습니다.");
+		
+		// 로그인 성공 후 화면 전환
+		this.fn_goMain();
+    }
+    else
+    {
+        this.divLogin.form.edtPassword.set_value("");
+        this.alert(sResultMsg || "로그인에 실패했습니다.");
+    }
+};
+
+
+// 공백 및 NULL 체크
+this.gfn_isEmpty = function(value)
+{
+    if (value === null || value === undefined)
+    {
+        return true;
+    }
+
+    return String(value).trim().length === 0;
+};
+
+// 로그인 성공 후 업무 화면 이동
+this.fn_goMain = function()
+{
+	var objFrame = this.getOwnerFrame();
+	
+	// 현재 Form이 들어 있는 Frame의 화면 변경
+	objFrame.set_formurl("FrameBase/Form_Work.xfdl");
+}]]></Script>
+    <Layouts>
+      <Layout height="720" width="1280">
+        <Div id="divLogin" taborder="0" left="400" top="125" width="480" height="470" background="#FFFFFF" border="1px solid #DDE3EC" borderRadius="12px">
+          <Layouts>
+            <Layout width="480" height="470">
+              <Static id="staTitle" taborder="0" left="40" top="45" width="400" height="50" text="BES" font="bold 32px Arial" color="#234E91" textAlign="center"/>
+              <Static id="staSubTitle" taborder="1" left="40" top="96" width="400" height="24" text="Business Enterprise System" font="13px Arial" color="#7B8794" textAlign="center"/>
+              <Static id="staId" taborder="2" left="65" top="155" width="350" height="25" text="아이디" font="bold 13px Arial" color="#344054"/>
+              <Edit id="edtUserId" taborder="3" left="65" top="185" width="350" height="42" displaynulltext="아이디를 입력하세요" font="14px Arial" border="1px solid #CED4DA" borderRadius="5px"/>
+              <Static id="staPw" taborder="4" left="65" top="245" width="350" height="25" text="비밀번호" font="bold 13px Arial" color="#344054"/>
+              <Edit id="edtPassword" taborder="5" left="65" top="275" width="350" height="42" password="true" displaynulltext="비밀번호를 입력하세요" font="14px Arial" border="1px solid #CED4DA" borderRadius="5px" onkeydown="edtPassword_onkeydown"/>
+              <CheckBox id="chkSaveId" taborder="6" left="65" top="330" width="150" height="25" text="아이디 저장" font="12px Arial" color="#667085"/>
+              <Button id="btnLogin" taborder="7" left="65" top="380" width="350" height="48" text="로그인" font="bold 16px Arial" color="#FFFFFF" background="#2454A6" border="0px none" borderRadius="5px" onclick="btnLogin_onclick"/>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Static id="staCopyright" taborder="1" left="400" top="615" width="480" height="30" text="© BES. All rights reserved." color="#98A2B3" font="12px Arial" textAlign="center"/>
+      </Layout>
+    </Layouts>
+  </Form>
+</FDL>
