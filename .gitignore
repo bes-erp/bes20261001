@@ -1,3 +1,4 @@
+
 # ========================================
 # Java 기본
 # ========================================
@@ -21,11 +22,6 @@
 *.zip
 *.tar.gz
 *.rar
-
-# Nexacro WEB-INF libraries - Git upload exception
-!**/WEB-INF/
-!**/WEB-INF/lib/
-!**/WEB-INF/lib/*.jar
 
 # Virtual machine crash logs
 hs_err_pid*
@@ -68,6 +64,7 @@ release.properties
 *.~sql
 *.~pdc
 
+
 # ========================================
 # Nexacro
 # ========================================
@@ -79,6 +76,25 @@ $*.xfdl$
 *.xfdl~
 *.xfdl.bak
 *.bak
+
+
+# ========================================
+# Nexacro WEB-INF
+# ========================================
+# WEB-INF 기본 폴더 및 하위 파일은 Git 관리 대상
+# config, lib, jsp, images, html 모두 포함
+
+# lib 내부 JAR 파일 예외 처리
+!src/main/webapp/WEB-INF/lib/
+!src/main/webapp/WEB-INF/lib/*.jar
+
+# import, export 폴더는 폴더만 유지하고 내부 파일 제외
+src/main/webapp/WEB-INF/import/*
+src/main/webapp/WEB-INF/export/*
+
+# import, export 폴더 유지용 .gitkeep 파일 허용
+!src/main/webapp/WEB-INF/import/.gitkeep
+!src/main/webapp/WEB-INF/export/.gitkeep
 
 
 # ========================================
