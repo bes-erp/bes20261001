@@ -202,7 +202,7 @@ this.fn_reset = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 /***************************************************************************************
  * 4. TRANSACTION, CALLBACK
  **************************************************************************************/
-this.fn_callBack = function (trId, errCD, errMsg)
+this.fn_callBack = function (sSvcID, nErrCd, sErrMsg)
 {
 
 };

@@ -709,7 +709,7 @@
         /***************************************************************************************
          * 4. TRANSACTION, CALLBACK
          **************************************************************************************/
-        this.fn_callBack = function (trId, errCD, errMsg)
+        this.fn_callBack = function (sSvcID, nErrCd, sErrMsg)
         {
 
         };
