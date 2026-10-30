@@ -45,7 +45,7 @@ release.properties
 # ========================================
 # Eclipse / STS
 # ========================================
-# Eclipse workspace
+# Eclipse workspace (개인 설정 제외)
 .metadata/
 
 # Eclipse recommender
@@ -56,6 +56,11 @@ release.properties
 
 # Eclipse APT
 .factorypath
+
+# Eclipse project settings
+# .project
+# .classpath
+# .settings/ 는 Git 관리 대상
 
 
 # ========================================
@@ -81,18 +86,17 @@ $*.xfdl$
 # ========================================
 # Nexacro WEB-INF
 # ========================================
-# WEB-INF 기본 폴더 및 하위 파일은 Git 관리 대상
-# config, lib, jsp, images, html 모두 포함
+# WEB-INF 하위 모든 폴더 및 파일 Git 포함
+!src/main/webapp/WEB-INF/
+!src/main/webapp/WEB-INF/**
 
-# lib 내부 JAR 파일 예외 처리
-!src/main/webapp/WEB-INF/lib/
-!src/main/webapp/WEB-INF/lib/*.jar
-
-# import, export 폴더는 폴더만 유지하고 내부 파일 제외
+# import 폴더는 유지하고 내부 파일 제외
 src/main/webapp/WEB-INF/import/*
+
+# export 폴더는 유지하고 내부 파일 제외
 src/main/webapp/WEB-INF/export/*
 
-# import, export 폴더 유지용 .gitkeep 파일 허용
+# import/export 폴더 유지용 파일
 !src/main/webapp/WEB-INF/import/.gitkeep
 !src/main/webapp/WEB-INF/export/.gitkeep
 
