@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
   <TypeDefinition url="..\default_typedef.xml"/>
-  <Form id="Work" classname="Work" inheritanceid="" position="absolute" titletext="Detail" left="0" width="1420" top="0" height="850">
+  <Form id="Work" classname="Work" inheritanceid="" position="absolute" titletext="Detail" left="0" width="1420" top="0" height="850" onload="fn_init">
     <Layouts>
       <Layout>
         <Static id="Static08" taborder="3" cssclass="sta_WFSA_BG" left="30" top="58" right="30" height="50"/>
         <Button id="btn_WF_crud" taborder="0" text="Save" position="absolute" right="30" width="70" top="121" height="34" cssclass="button_WF_blue"/>
         <Button id="btn_WF_crud00" taborder="1" text="Delete" position="absolute" right="105" width="70" top="121" height="34" cssclass="button_WF_gray"/>
         <Button id="btn_WF_crud01" taborder="2" text="Add" position="absolute" width="70" top="121" height="34" right="180"/>
-        <Static id="sta_WF_SearchBox" position="absolute" text="" left="0" right="0" top="0" height="40" cssclass="sta_WF_SearchBox"/>
+        <Static id="sta_WF_SearchBox" position="absolute" text="" left="30" right="-30" top="71" height="40" cssclass="sta_WF_SearchBox"/>
         <Static id="sta_WFSA_LabelP" text="Project :" position="absolute" wordwrap="none" left="45" width="60" top="65" height="34"/>
         <Button id="btn_WF_search" taborder="42" position="absolute" width="70" top="66" height="34" cssclass="button_WF_white" text="Search" left="488"/>
         <Edit id="Edit00" taborder="44" position="absolute" left="103" width="90" top="66" height="34" cssclass="input_point" background="#ffffff"/>
@@ -93,5 +93,135 @@
         <Static id="Static10" taborder="87" text="~" left="433" top="401" width="11" height="28"/>
       </Layout>
     </Layouts>
+    <Script type="xscript5.1"><![CDATA[/***************************************************************************************
+ * 프로젝트        : Built1 Enterprise System 구축 프로젝트
+ * 업무구분        : 시스템관리
+ * 파일명          : SYS10000M.xfdl
+ * 작성자          : Built1
+ * 작성일          : 2026-10-01
+ *
+ * 화면            : 로그인
+ * 설명            : 사용자 로그인 및 개인의 세션정보 등록
+ *---------------------------------------------------------------------------------------
+ * 변경일            변경자            변경내역
+ *---------------------------------------------------------------------------------------
+ * 2026-10-01        Built1            최초작성
+ ***************************************************************************************/
+
+
+
+/***************************************************************************************
+ * 1. FORM 변수 선언
+ **************************************************************************************/
+
+
+/***************************************************************************************
+ * 2. FORM LOAD
+ **************************************************************************************/
+this.fn_init = function (obj:Form, e:nexacro.LoadEventInfo)
+{
+
+};
+
+
+/***************************************************************************************
+ * 3. 공통 버튼
+ **************************************************************************************/
+/*
+ * 기능 : 검색
+ */
+this.fn_search = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+
+};
+
+
+/*
+ * 기능 : 검색 초기화
+ */
+this.fn_searchClear = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+
+};
+
+
+/*
+ * 기능 : 신규
+ */
+this.fn_new = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+
+};
+
+
+/*
+ * 기능 : 저장
+ */
+this.fn_save = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+
+};
+
+
+/*
+ * 기능 : 삭제
+ */
+this.fn_delelete = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+
+};
+
+
+/*
+ * 기능 : 도움말
+ */
+this.fn_help = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+
+};
+
+
+/*
+ * 기능 : 출력
+ */
+this.fn_print = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+
+};
+
+
+/*
+ * 기능 : 초기화
+ */
+this.fn_reset = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+
+};
+
+
+/***************************************************************************************
+ * 4. TRANSACTION, CALLBACK
+ **************************************************************************************/
+this.fn_callBack = function (trId, errCD, errMsg)
+{
+
+};
+
+
+/***************************************************************************************
+ * 5. 팝업 호출 및 콜백
+ **************************************************************************************/
+
+
+/***************************************************************************************
+ * 6. 기타 함수
+ **************************************************************************************/
+
+
+/***************************************************************************************
+ * 7. 이벤트
+ **************************************************************************************/
+
+]]></Script>
   </Form>
 </FDL>

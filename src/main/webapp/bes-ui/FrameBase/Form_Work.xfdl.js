@@ -275,7 +275,7 @@
         	var sArgument 		= "userId=" + sUserId; 								//매개변수
         	var sCallbackFunc 	= "fn_callback";									//콜백함수
 
-        	// 공통코드 조회
+        	//공통코드 조회
         	this.gfn_transaction(sSvcID, sSvcURL, sInDatasets, sOutDatasets, sArgument, sCallbackFunc);
 
         };
