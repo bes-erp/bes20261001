@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.com.service.impl.SYS10000MMapper">
+
+    <!-- 사용자 로그인 인증 패키지 호출 -->
+    <update id="loginPassword"
+            statementType="CALLABLE"
+            parameterType="map">
+
+        { CALL BCOM.COM_USER_PKG.LOGIN_PASSWORD_P(
+            #{user_id, mode=IN, jdbcType=VARCHAR},
+            #{password, mode=IN, jdbcType=VARCHAR},
+            #{result_cd, mode=OUT, jdbcType=VARCHAR},
+            #{result_descr, mode=OUT, jdbcType=VARCHAR}
+        ) }
+    </update>
+
+</mapper>
