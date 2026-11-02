@@ -39,7 +39,7 @@
 
             obj = new Static("sta_subTitle","40","96","400","24",null,null,null,null,null,null,this.div_login.form);
             obj.set_taborder("1");
-            obj.set_text("Business Enterprise System");
+            obj.set_text("Built1 Enterprise System");
             obj.set_font("13px Arial");
             obj.set_color("#7B8794");
             obj.set_textAlign("center");

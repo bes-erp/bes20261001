@@ -287,7 +287,7 @@ this.edt_password_onkeydown = function(obj, e)
           <Layouts>
             <Layout width="480" height="470">
               <Static id="sta_title" taborder="0" left="40" top="45" width="400" height="50" text="BES" font="bold 32px Arial" color="#234E91" textAlign="center"/>
-              <Static id="sta_subTitle" taborder="1" left="40" top="96" width="400" height="24" text="Business Enterprise System" font="13px Arial" color="#7B8794" textAlign="center"/>
+              <Static id="sta_subTitle" taborder="1" left="40" top="96" width="400" height="24" text="Built1 Enterprise System" font="13px Arial" color="#7B8794" textAlign="center"/>
               <Static id="sta_id" taborder="2" left="65" top="155" width="350" height="25" text="아이디" font="bold 13px Arial" color="#344054"/>
               <Edit id="edt_userId" taborder="3" left="65" top="185" width="350" height="42" displaynulltext="아이디를 입력하세요" font="14px Arial" border="1px solid #CED4DA" borderRadius="5px"/>
               <Static id="sta_pw" taborder="4" left="65" top="245" width="350" height="25" text="비밀번호" font="bold 13px Arial" color="#344054"/>
