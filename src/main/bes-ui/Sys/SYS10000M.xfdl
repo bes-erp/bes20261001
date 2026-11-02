@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="SYS10000M" width="1280" height="720" titletext="BES 로그인" onload="SYS10000M_onload" onsize="SYS10000M_onsize">
+  <Form id="SYS10000M" width="1280" height="720" titletext="로그인" onload="SYS10000M_onload" onsize="SYS10000M_onsize">
     <Objects>
       <Dataset id="ds_loginResult">
         <ColumnInfo>

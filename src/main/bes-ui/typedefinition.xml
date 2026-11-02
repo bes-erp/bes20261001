@@ -47,6 +47,8 @@
     <Service prefixid="FrameBase" type="form" url="./FrameBase/" version="0" cachelevel="session" include_subdir="false" communicationversion="0"/>
     <Service prefixid="svcUrl" type="JSP" version="0" cachelevel="session" include_subdir="false" communicationversion="0" url="http://localhost:8011/bes/"/>
     <Service prefixid="besLib" type="js" url="./nexacrolib/component/besLib/" version="0" cachelevel="session" include_subdir="true" communicationversion="0"/>
+    <Service prefixid="Com" type="form" url="./Com/" version="0" cachelevel="session" include_subdir="false" communicationversion="0"/>
+    <Service prefixid="Sys" type="form" url="./Sys/" version="0" cachelevel="session" include_subdir="false" communicationversion="0"/>
   </Services>
   <Protocols/>
   <DeviceAdaptors/>
