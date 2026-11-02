@@ -10,31 +10,31 @@
   </Modules>
   <Components>
     <Component type="JavaScript" id="Button" classname="nexacro.Button" prefixid="btn_"/>
-    <Component type="JavaScript" id="Combo" classname="nexacro.Combo"/>
-    <Component type="JavaScript" id="Edit" classname="nexacro.Edit"/>
-    <Component type="JavaScript" id="MaskEdit" classname="nexacro.MaskEdit"/>
-    <Component type="JavaScript" id="TextArea" classname="nexacro.TextArea"/>
-    <Component type="JavaScript" id="Static" classname="nexacro.Static"/>
-    <Component type="JavaScript" id="Div" classname="nexacro.Div"/>
-    <Component type="JavaScript" id="PopupDiv" classname="nexacro.PopupDiv"/>
-    <Component type="JavaScript" id="Radio" classname="nexacro.Radio"/>
-    <Component type="JavaScript" id="CheckBox" classname="nexacro.CheckBox"/>
-    <Component type="JavaScript" id="ListBox" classname="nexacro.ListBox"/>
-    <Component type="JavaScript" id="Grid" classname="nexacro.Grid"/>
-    <Component type="JavaScript" id="Spin" classname="nexacro.Spin"/>
-    <Component type="JavaScript" id="Menu" classname="nexacro.Menu"/>
-    <Component type="JavaScript" id="PopupMenu" classname="nexacro.PopupMenu"/>
-    <Component type="JavaScript" id="Tab" classname="nexacro.Tab"/>
-    <Component type="JavaScript" id="GroupBox" classname="nexacro.GroupBox"/>
-    <Component type="JavaScript" id="Calendar" classname="nexacro.Calendar"/>
-    <Component type="JavaScript" id="ImageViewer" classname="nexacro.ImageViewer"/>
-    <Component type="JavaScript" id="ProgressBar" classname="nexacro.ProgressBar"/>
-    <Component type="JavaScript" id="Plugin" classname="nexacro.Plugin"/>
-    <Component type="JavaScript" id="Dataset" classname="nexacro.NormalDataset"/>
-    <Component type="JavaScript" id="ListView" classname="nexacro.ListView"/>
-    <Component type="JavaScript" id="DataObject" classname="nexacro.DataObject"/>
-    <Component type="JavaScript" id="CheckBoxSet" classname="nexacro.CheckBoxSet"/>
-    <Component type="JavaScript" id="MultiCombo" classname="nexacro.MultiCombo"/>
+    <Component type="JavaScript" id="Combo" classname="nexacro.Combo" prefixid="cbo_"/>
+    <Component type="JavaScript" id="Edit" classname="nexacro.Edit" prefixid="edt_"/>
+    <Component type="JavaScript" id="MaskEdit" classname="nexacro.MaskEdit" prefixid="msk_"/>
+    <Component type="JavaScript" id="TextArea" classname="nexacro.TextArea" prefixid="txa_"/>
+    <Component type="JavaScript" id="Static" classname="nexacro.Static" prefixid="sta_"/>
+    <Component type="JavaScript" id="Div" classname="nexacro.Div" prefixid="div_"/>
+    <Component type="JavaScript" id="PopupDiv" classname="nexacro.PopupDiv" prefixid="pdiv_"/>
+    <Component type="JavaScript" id="Radio" classname="nexacro.Radio" prefixid="rdo_"/>
+    <Component type="JavaScript" id="CheckBox" classname="nexacro.CheckBox" prefixid="chk_"/>
+    <Component type="JavaScript" id="ListBox" classname="nexacro.ListBox" prefixid="lst_"/>
+    <Component type="JavaScript" id="Grid" classname="nexacro.Grid" prefixid="grd_"/>
+    <Component type="JavaScript" id="Spin" classname="nexacro.Spin" prefixid="spn_"/>
+    <Component type="JavaScript" id="Menu" classname="nexacro.Menu" prefixid="mnu_"/>
+    <Component type="JavaScript" id="PopupMenu" classname="nexacro.PopupMenu" prefixid="pmnu_"/>
+    <Component type="JavaScript" id="Tab" classname="nexacro.Tab" prefixid="tab_"/>
+    <Component type="JavaScript" id="GroupBox" classname="nexacro.GroupBox" prefixid="gbox_"/>
+    <Component type="JavaScript" id="Calendar" classname="nexacro.Calendar" prefixid="cal_"/>
+    <Component type="JavaScript" id="ImageViewer" classname="nexacro.ImageViewer" prefixid="img_"/>
+    <Component type="JavaScript" id="ProgressBar" classname="nexacro.ProgressBar" prefixid="pgb_"/>
+    <Component type="JavaScript" id="Plugin" classname="nexacro.Plugin" prefixid="plg_"/>
+    <Component type="JavaScript" id="Dataset" classname="nexacro.NormalDataset" prefixid="ds_"/>
+    <Component type="JavaScript" id="ListView" classname="nexacro.ListView" prefixid="lv_"/>
+    <Component type="JavaScript" id="DataObject" classname="nexacro.DataObject" prefixid="dto_"/>
+    <Component type="JavaScript" id="CheckBoxSet" classname="nexacro.CheckBoxSet" prefixid="chs_"/>
+    <Component type="JavaScript" id="MultiCombo" classname="nexacro.MultiCombo" prefixid="mcbo_"/>
   </Components>
   <Services>
     <Service prefixid="theme" type="resource" url="./_resource_/_theme_/" version="0" cachelevel="session" include_subdir="true"/>
