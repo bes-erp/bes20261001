@@ -40,7 +40,7 @@
 this.fn_init = function(obj, e)
 {
     this.fn_centerLogin();
-    this.div_login.form.edt_userId.setFocus();
+    //this.div_login.form.edt_userId.setFocus();
 };
 
 
@@ -153,13 +153,34 @@ this.fn_callBack = function(sSvcId, nErrorCode, sErrorMsg)
     var sResultMsg = this.ds_loginResult.getColumn(0, "RESULT_DESCR");
 
     // 로그인 성공
-    if (sResultCd == "S")
-    {
-        this.alert("로그인에 성공했습니다.");
+	
+	if (sResultCd == "S")
+	{
+		var objApp = nexacro.getApplication();
 
-        // 업무 화면 이동
-        this.fn_goMain();
-    }
+		// 로그인 아이디 저장
+		var sUserId = this.div_login.form.edt_userId.value;
+		objApp.gvUserId = sUserId;
+
+		// 상단 프레임 가져오기
+		var objTopFrame =
+			objApp.mainframe.VFrameSetMain
+				  .HFrameSet00.VFrameSet00.TopFrame;
+
+		// 상단 사용자 정보 표시
+		if (objTopFrame && objTopFrame.form)
+		{
+			var objUserName = objTopFrame.form.sta_UserName;
+
+			if (objUserName)
+			{
+				objUserName.set_text(sUserId);
+			}
+		}
+
+		// 메인 화면으로 이동
+		this.fn_goMain();
+	}
     else
     {
         // 로그인 실패 메시지
@@ -179,68 +200,68 @@ this.fn_callBack = function(sSvcId, nErrorCode, sErrorMsg)
  ***************************************************************************************/
 
 /*
+ * 기능 : 로그인 성공 후 메인 프레임 전환
+ */
+this.fn_goMain = function()
+{
+    var objApp = nexacro.getApplication();
+
+    // Application_Desktop.xadl의 최상위 FrameSet
+    var objMainFrame = objApp.mainframe.VFrameSetMain;
+
+    if (!objMainFrame)
+    {
+        this.alert("메인 프레임을 찾을 수 없습니다.");
+        return;
+    }
+
+    // 로그인 화면 숨김 / 메인 화면 표시
+    objMainFrame.set_separatesize("0,*");
+};
+
+
+/*
  * 기능 : 로그인 화면 중앙 정렬
  */
 this.fn_centerLogin = function()
 {
-    // Form 크기
+    // 현재 Form의 실제 크기
     var nFormWidth = this.getOffsetWidth();
     var nFormHeight = this.getOffsetHeight();
 
-    // 로그인 영역 크기
+    // 로그인 박스 크기
     var nLoginWidth = this.div_login.getOffsetWidth();
     var nLoginHeight = this.div_login.getOffsetHeight();
 
-    // 저작권 문구 포함 높이
+    // 저작권 문구 높이 및 간격
     var nGap = 20;
     var nCopyrightHeight = this.sta_copyright.getOffsetHeight();
 
+    // 로그인 박스 + 저작권 문구 전체 높이
     var nTotalHeight = nLoginHeight + nGap + nCopyrightHeight;
 
-    // 중앙 위치 계산
+    // 가로 중앙
     var nLeft = Math.max(
         0,
         Math.floor((nFormWidth - nLoginWidth) / 2)
     );
 
+    // 세로 중앙
     var nTop = Math.max(
         0,
         Math.floor((nFormHeight - nTotalHeight) / 2)
     );
 
-    // 로그인 영역 이동
+    // 로그인 박스 이동
     this.div_login.move(nLeft, nTop);
 
-    // 저작권 문구 이동
+    // 저작권 문구도 같은 가로 위치로 이동
     this.sta_copyright.move(
         nLeft,
         nTop + nLoginHeight + nGap
     );
 };
 
-/*
- * 기능 : 공백 및 NULL 확인
- */
-this.fn_isEmpty = function(value)
-{
-    if (value === null || value === undefined)
-    {
-        return true;
-    }
-
-    return String(value).trim().length === 0;
-};
-
-/*
- * 기능 : 로그인 성공 후 업무 화면 이동
- */
-this.fn_goMain = function()
-{
-    var objFrame = this.getOwnerFrame();
-
-    // 현재 Frame의 화면 변경
-    objFrame.set_formurl("FrameBase/Form_Work.xfdl");
-};
 
 
 /***************************************************************************************
@@ -280,7 +301,22 @@ this.edt_password_onkeydown = function(obj, e)
     {
         this.fn_login();
     }
-};]]></Script>
+};
+
+
+/*
+ * 기능 : NULL 및 공백 여부 확인
+ */
+this.fn_isEmpty = function(value)
+{
+    if (value === null || value === undefined)
+    {
+        return true;
+    }
+
+    return String(value).trim().length === 0;
+};
+]]></Script>
     <Layouts>
       <Layout height="720" width="1280">
         <Div id="div_login" taborder="0" left="400" top="125" width="480" height="470" background="#FFFFFF" border="1px solid #DDE3EC" borderRadius="12px">

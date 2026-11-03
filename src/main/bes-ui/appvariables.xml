@@ -1,5 +1,83 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <AppVariables version="2.0">
-  <Datasets/>
-  <Variables/>
+  <Datasets>
+    <Dataset id="gdsMenu">
+      <ColumnInfo>
+        <Column id="MENU_ID" type="STRING" size="256" description="메뉴 고유값"/>
+        <Column id="PARENT_ID" type="STRING" size="256" description="상위 메뉴 ID"/>
+        <Column id="MENU_NAME" type="STRING" size="256" description="화면에 표시할 메뉴명"/>
+        <Column id="FORM_URL" type="STRING" size="256" description="업무화면 경로(미개발 화면은 예정 경로)"/>
+        <Column id="MENU_LEVEL" type="INT" size="4" description="메뉴 깊이"/>
+      </ColumnInfo>
+      <Rows>
+        <Row>
+          <Col id="MENU_ID">SYS</Col>
+          <Col id="PARENT_ID"/>
+          <Col id="MENU_NAME">시스템관리</Col>
+          <Col id="FORM_URL"/>
+          <Col id="MENU_LEVEL">0</Col>
+        </Row>
+        <Row>
+          <Col id="MENU_ID">SYS11000M</Col>
+          <Col id="PARENT_ID">SYS</Col>
+          <Col id="MENU_NAME">로그정보</Col>
+          <Col id="FORM_URL"/>
+          <Col id="MENU_LEVEL">1</Col>
+        </Row>
+        <Row>
+          <Col id="MENU_ID">SYS12000M</Col>
+          <Col id="PARENT_ID">SYS</Col>
+          <Col id="MENU_NAME">배치관리</Col>
+          <Col id="FORM_URL"/>
+          <Col id="MENU_LEVEL">1</Col>
+        </Row>
+        <Row>
+          <Col id="MENU_ID">COM</Col>
+          <Col id="PARENT_ID"/>
+          <Col id="MENU_NAME">공통관리</Col>
+          <Col id="FORM_URL"/>
+          <Col id="MENU_LEVEL">0</Col>
+        </Row>
+        <Row>
+          <Col id="MENU_ID">COM10000M</Col>
+          <Col id="PARENT_ID">COM</Col>
+          <Col id="MENU_NAME">코드등록</Col>
+          <Col id="FORM_URL">Com::COM10000M.xfdl</Col>
+          <Col id="MENU_LEVEL">1</Col>
+        </Row>
+        <Row>
+          <Col id="MENU_ID">COM11000M</Col>
+          <Col id="PARENT_ID">COM</Col>
+          <Col id="MENU_NAME">사용자등록</Col>
+          <Col id="FORM_URL">Com::COM11000M.xfdl</Col>
+          <Col id="MENU_LEVEL">1</Col>
+        </Row>
+        <Row>
+          <Col id="MENU_ID">COM11010M</Col>
+          <Col id="PARENT_ID">COM</Col>
+          <Col id="MENU_NAME">권한등록</Col>
+          <Col id="FORM_URL"/>
+          <Col id="MENU_LEVEL">1</Col>
+        </Row>
+        <Row>
+          <Col id="MENU_ID">COM11020M</Col>
+          <Col id="PARENT_ID">COM</Col>
+          <Col id="MENU_NAME">메뉴등록</Col>
+          <Col id="FORM_URL">Com::COM11020M.xfdl</Col>
+          <Col id="MENU_LEVEL">1</Col>
+        </Row>
+        <Row>
+          <Col id="MENU_ID">COM12000M</Col>
+          <Col id="PARENT_ID">COM</Col>
+          <Col id="MENU_NAME">메시지등록</Col>
+          <Col id="FORM_URL"/>
+          <Col id="MENU_LEVEL">1</Col>
+        </Row>
+      </Rows>
+    </Dataset>
+  </Datasets>
+  <Variables>
+    <Variable id="gvUserId"/>
+  </Variables>
+  <DataObjects/>
 </AppVariables>
