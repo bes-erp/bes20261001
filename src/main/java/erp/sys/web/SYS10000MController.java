@@ -1,4 +1,4 @@
-package erp.com.web;
+package erp.sys.web;
 
 import java.util.Collections;
 import java.util.Map;
@@ -13,20 +13,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.nexacro.uiadapter.spring.core.annotation.ParamDataSet;
 import com.nexacro.uiadapter.spring.core.data.NexacroResult;
 
-import erp.com.service.SYS10000MService;
+import erp.sys.service.SYS10000MService;
 import lombok.extern.slf4j.Slf4j;
+
 
 /**
 * =====================================================================================
-* @packageName     : erp.com.web
-* @fileName        : SYS10000MController.java
-* @author          : Built1
-* @date            : 2026.11.02
-* @description     : 사용자 로그인 요청 및 세션정보를 처리하는 클래스
+* @packageName    		: erp.sys.web
+* @fileName       		: SYS10000MController.java
+* @author         		: Built1
+* @date           		: 2026.11.03
+* @description    		: 사용자 로그인 요청 및 세션정보를 처리하는 클래스
 * =====================================================================================
-* 수정일자          수정자             수정내용
+* 수정일자         		수정자             수정내용
 * -------------------------------------------------------------------------------------
-* 2026.11.02        Built1             최초 생성
+* 2026.11.03        	Built1             최초 생성
 */
 @Slf4j
 @Controller

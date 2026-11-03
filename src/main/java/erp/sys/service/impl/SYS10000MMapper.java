@@ -1,31 +1,33 @@
-package erp.com.service;
+package erp.sys.service.impl;
 
 import java.util.Map;
 
+import org.egovframe.rte.psl.dataaccess.mapper.Mapper;
+
 /**
 * =====================================================================================
-* @packageName     : erp.com.service
-* @fileName        : SYS10000MService.java
+* @packageName     : erp.com.service.impl
+* @fileName        : SYS10000MMapper.java
 * @author          : Built1
 * @date            : 2026.11.02
-* @description     : 사용자 로그인 인증을 처리하는 인터페이스 클래스
+* @description     : 사용자 로그인 인증 패키지를 호출하는 Mapper 인터페이스 클래스
 * =====================================================================================
 * 수정일자          수정자             수정내용
 * -------------------------------------------------------------------------------------
 * 2026.11.02        Built1             최초 생성
 */
-public interface SYS10000MService {
+@Mapper
+public interface SYS10000MMapper {
 
     /**
-    * @methodName      : login
+    * @methodName      : loginPassword
     * @author          : built1
     * @date            : 2026.11.02
-    * @description     : 사용자 로그인 인증을 처리하는 메소드
-    * @param loginParamMap
-    * @return
+    * @description     : 사용자 로그인 인증 패키지를 호출하는 메소드
+    * @param mapperParamMap
+    * @return 
     * @throws Exception
     */
-    public abstract Map<String, Object> login(
-            Map<String, Object> loginParamMap) throws Exception;
-
+    public abstract void loginPassword(Map<String, Object> mapperParamMap);
+ 
 }

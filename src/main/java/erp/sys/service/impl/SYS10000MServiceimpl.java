@@ -1,4 +1,4 @@
-package erp.com.service.impl;
+package erp.sys.service.impl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,7 +8,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import erp.com.service.SYS10000MService;
+import erp.sys.service.SYS10000MService;
 import lombok.extern.slf4j.Slf4j;
 
 /**
