@@ -25,10 +25,11 @@
             obj = new Div("divMenu","0","0",null,null,"0","0",null,null,null,null,this);
             obj.set_taborder("0");
             obj.set_background("#FFFFFF");
+            obj.set_border("0px none");
             obj.getSetter("scrollbartype").set("none");
             this.addChild(obj.name, obj);
 
-            obj = new Grid("grdMenu","8","12",null,null,"8","12",null,null,null,null,this.divMenu.form);
+            obj = new Grid("grdMenu","8","8",null,null,"8","8",null,null,null,null,this.divMenu.form);
             obj.set_taborder("0");
             obj.set_binddataset("gdsMenu");
             obj.set_autofittype("col");
@@ -36,7 +37,10 @@
             obj.set_treeusecheckbox("false");
             obj.set_treeuseimage("false");
             obj.set_treeusebutton("use");
-            obj._setContents("<Formats><Format id=\"default\"><Columns><Column size=\"170\"/></Columns><Rows><Row size=\"0\" band=\"head\"/><Row size=\"38\"/></Rows><Band id=\"head\"><Cell text=\"\"/></Band><Band id=\"body\"><Cell text=\"bind:MENU_NAME\" displaytype=\"treeitemcontrol\" edittype=\"tree\" treelevel=\"bind:MENU_LEVEL\"/></Band></Format></Formats>");
+            obj.set_border("0px none");
+            obj.set_background("#FFFFFF");
+            obj.set_cssclass("menuGrid");
+            obj._setContents("<Formats><Format id=\"default\"><Columns><Column size=\"170\"/></Columns><Rows><Row size=\"0\" band=\"head\"/><Row size=\"22\"/></Rows><Band id=\"head\"><Cell text=\"\"/></Band><Band id=\"body\"><Cell text=\"bind:MENU_NAME\" displaytype=\"treeitemcontrol\" edittype=\"tree\" treelevel=\"bind:MENU_LEVEL\" cssclass=\"expr:MENU_LEVEL == 0 ? &apos;menuParent&apos; : &apos;menuChild&apos;\"/></Band></Format></Formats>");
             this.divMenu.addChild(obj.name, obj);
             // Layout Functions
             //-- Default Layout : this.divMenu.form
@@ -61,6 +65,7 @@
         
         // User Script
         this.registerScript("Form_Left.xfdl", function() {
+
         /***************************************************************************************
          * 프로젝트        : Built1 Enterprise System 구축 프로젝트
          * 업무구분        : 공통 프레임
@@ -74,32 +79,51 @@
          * 변경일            변경자            변경내역
          *---------------------------------------------------------------------------------------
          * 2026-11-03        Built1            전역 Dataset 기반 메뉴 트리 구성
+         * 2026-11-04        Built1            왼쪽 메뉴 디자인 개선 및 스크립트 정리
          ***************************************************************************************/
+
 
         /***************************************************************************************
          * 1. FORM 변수 선언
          ***************************************************************************************/
 
+
         /***************************************************************************************
          * 2. FORM LOAD
          ***************************************************************************************/
+
+        /*
+         * 기능 : 메뉴 레벨에 따른 행 높이 설정
+         */
         this.Form_Left_onload = function(obj, e)
         {
-            // gdsMenu는 Application Variables > Datasets에서 정의한다.
-            // Form 내부에 별도 Dataset이나 고정 메뉴 행을 만들지 않는다.
+            var dsMenu = nexacro.getApplication().gdsMenu;
+            var grdMenu = this.divMenu.form.grdMenu;
+
+            if (!dsMenu) return;
+
+            for (var i = 0; i < dsMenu.rowcount; i++)
+            {
+                var nLevel = Number(dsMenu.getColumn(i, "MENU_LEVEL"));
+
+                grdMenu.setRealRowSize(i, nLevel == 0 ? 22 : 28);
+            }
         };
 
         /***************************************************************************************
          * 3. 공통 버튼
          ***************************************************************************************/
 
+
         /***************************************************************************************
          * 4. TRANSACTION, CALLBACK
          ***************************************************************************************/
 
+
         /***************************************************************************************
          * 5. 팝업 호출 및 콜백
          ***************************************************************************************/
+
 
         /***************************************************************************************
          * 6. 기타 함수
@@ -109,22 +133,24 @@
         /***************************************************************************************
          * 7. 이벤트
          ***************************************************************************************/
+
+        /*
+         * 기능 : 왼쪽 메뉴 선택 시 업무 화면 이동
+         */
         this.divMenu_grdMenu_oncellclick = function(obj, e)
         {
-            var nRow = e.row;
             var dsMenu = nexacro.getApplication().gdsMenu;
 
-            if (!dsMenu || nRow < 0 || nRow >= dsMenu.rowcount) return;
+            if (!dsMenu || e.row < 0 || e.row >= dsMenu.rowcount) return;
 
-            var sFormUrl = dsMenu.getColumn(nRow, "FORM_URL");
+            // 선택한 메뉴의 화면 URL 조회
+            var sFormUrl = dsMenu.getColumn(e.row, "FORM_URL");
 
-            // 상위 메뉴는 화면을 열지 않는다.
-            if (!sFormUrl) return;
+            // 화면 URL이 없는 상위 메뉴는 이동하지 않음
+            if (this.gfn_isNull(sFormUrl)) return;
 
-            // Application_Desktop.xadl의 WorkFrame 접근
-            var objApp = nexacro.getApplication();
-            var objWorkFrame =
-                objApp.mainframe.VFrameSetMain.HFrameSet00.VFrameSet00.WorkFrame;
+            // 업무 화면 프레임 조회
+            var objWorkFrame = nexacro.getApplication().mainframe.VFrameSetMain.VFrameSet00.HFrameSet00.WorkFrame;
 
             if (!objWorkFrame)
             {
@@ -132,11 +158,9 @@
                 return;
             }
 
-            // 왼쪽 메뉴와 상단 영역은 유지하고 업무 화면만 변경
+            // 선택한 업무 화면으로 이동
             objWorkFrame.set_formurl(sFormUrl);
         };
-
-
         });
         
         // Regist UI Components Event

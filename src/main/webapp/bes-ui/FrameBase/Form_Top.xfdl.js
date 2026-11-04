@@ -22,7 +22,7 @@
 
             
             // UI Components Initialize
-            obj = new Static("sta_Brand","20","0","72","49",null,null,null,null,null,null,this);
+            obj = new Static("sta_Brand","20","0","44","49",null,null,null,null,null,null,this);
             obj.set_taborder("0");
             obj.set_text("BES");
             obj.set_color("#24436D");
@@ -30,35 +30,47 @@
             obj.set_cursor("pointer");
             this.addChild(obj.name, obj);
 
-            obj = new Static("sta_SystemName","94","0","260","49",null,null,null,null,null,null,this);
+            obj = new Static("sta_SystemName","84","0","260","49",null,null,null,null,null,null,this);
             obj.set_taborder("1");
             obj.set_text("Built1 Enterprise System");
             obj.set_color("#41556F");
             obj.set_font("12px Arial");
             this.addChild(obj.name, obj);
 
-            obj = new Static("sta_UserName",null,"0","120","49","82",null,null,null,null,null,this);
-            obj.set_taborder("3");
+            obj = new Static("sta_UserName",null,"0","175","49","187",null,null,null,null,null,this);
+            obj.set_taborder("2");
             obj.set_text("");
             obj.set_textAlign("right");
             obj.set_color("#52647A");
             obj.set_font("12px Arial");
             this.addChild(obj.name, obj);
 
-            obj = new Button("btn_logout",null,"0","60","49","18",null,null,null,null,null,this);
-            obj.set_taborder("4");
-            obj.set_text("로그아웃");
+            obj = new Button("btn_changePw",null,"0","90","49","92",null,null,null,null,null,this);
+            obj.set_taborder("3");
+            obj.set_text("패스워드 변경");
             obj.set_font("12px Arial");
-            obj.set_color("#52647A");
+            obj.set_color("#3478C0");
             obj.set_background("transparent");
             obj.set_border("0px none");
-            obj.set_textAlign("right");
             obj.set_cursor("pointer");
             this.addChild(obj.name, obj);
 
-            obj = new Static("sta_BottomLine","0",null,null,"1","0","0",null,null,null,null,this);
+            obj = new Static("sta_Separator",null,"0","8","49","84",null,null,null,null,null,this);
             obj.set_taborder("4");
-            obj.set_background("#DCE3EC");
+            obj.set_text("|");
+            obj.set_textAlign("center");
+            obj.set_color("#B8C2CF");
+            obj.set_font("12px Arial");
+            this.addChild(obj.name, obj);
+
+            obj = new Button("btn_logout",null,"0","70","49","14",null,null,null,null,null,this);
+            obj.set_taborder("5");
+            obj.set_text("로그아웃");
+            obj.set_font("12px Arial");
+            obj.set_color("#3478C0");
+            obj.set_background("transparent");
+            obj.set_border("0px none");
+            obj.set_cursor("pointer");
             this.addChild(obj.name, obj);
             // Layout Functions
             //-- Default Layout : this
@@ -87,33 +99,34 @@
          * 작성일          : 2026-11-03
          *
          * 화면            : BES 공통 상단 영역
-         * 설명            : 시스템명 및 사용자 정보 표시 영역 (로그인 정보 연동 전)
+         * 설명            : 시스템명, 사용자 환영 문구, 패스워드 변경 및 로그아웃
          *---------------------------------------------------------------------------------------
          * 변경일            변경자            변경내역
          *---------------------------------------------------------------------------------------
          * 2026-11-03        Built1            공통 상단 화면 구성
+         * 2026-11-04        Built1            상단 디자인 및 사용자 환영 문구 개선
+         * 2026-11-04        Built1            패스워드 변경 버튼 추가
          ***************************************************************************************/
+
 
         /***************************************************************************************
          * 1. FORM 변수 선언
          ***************************************************************************************/
+
 
         /***************************************************************************************
          * 2. FORM LOAD
          ***************************************************************************************/
 
         /*
-         * 기능 : 상단 로그인 사용자 아이디 표시
+         * 기능 : 상단 로그인 사용자 정보 표시
          */
         this.Form_Top_onload = function(obj, e)
         {
             var objApp = nexacro.getApplication();
 
-            // 로그인 성공 시 저장한 사용자 아이디
-            var sUserId = objApp.gvUserId || "";
-
-            // 상단 사용자 정보 표시
-            this.sta_UserName.set_text(sUserId);
+            // 로그인 사용자 환영 문구 표시
+            this.sta_UserName.set_text(objApp.gvUserId ? objApp.gvUserId + "님 환영합니다." : "");
         };
 
 
@@ -121,9 +134,11 @@
          * 3. 공통 버튼
          ***************************************************************************************/
 
+
         /***************************************************************************************
          * 4. TRANSACTION, CALLBACK
          ***************************************************************************************/
+
 
         /***************************************************************************************
          * 5. 팝업 호출 및 콜백
@@ -139,7 +154,7 @@
          */
         this.fn_logout = function()
         {
-            var objApp = nexacro.getApplication();
+            var objApp      = nexacro.getApplication();
             var objFrameSet = objApp.mainframe.VFrameSetMain;
 
             if (!objFrameSet)
@@ -148,66 +163,29 @@
                 return;
             }
 
-            // 1. 로그인 화면 입력값 초기화
+            // 로그인 화면 정보 복원
             var objLoginFrame = objFrameSet.LoginFrame;
 
-            if (objLoginFrame && objLoginFrame.form)
+            if (objLoginFrame && objLoginFrame.form && objLoginFrame.form.fn_resetLogin)
             {
-                var objLoginForm = objLoginFrame.form;
-
-                if (objLoginForm.div_login)
-                {
-        			objLoginForm.div_login.form.edt_userId.set_value(null);
-        			objLoginForm.div_login.form.edt_password.set_value(null);
-                }
-
-                if (objLoginForm.ds_login)
-                {
-                    objLoginForm.ds_login.clearData();
-                }
-
-                if (objLoginForm.ds_loginResult)
-                {
-                    objLoginForm.ds_loginResult.clearData();
-                }
+                objLoginFrame.form.fn_resetLogin();
             }
 
-            // 2. 로그인 사용자 정보 초기화
+            // 로그인 사용자 정보 초기화
             objApp.gvUserId = "";
             this.sta_UserName.set_text("");
 
-            // 3. 로그인 화면 표시 / 업무 화면 숨김
+            // 로그인 화면 표시
             objFrameSet.set_separatesize("*,0");
 
-            // 4. 로그아웃 완료 알림
             this.alert("로그아웃 되었습니다.");
-        };
-
-
-
-        /*
-         * 기능 : 로그인 입력 정보 초기화
-         */
-        this.fn_resetLogin = function()
-        {
-            this.div_login.form.edt_userId.set_value("");
-            this.div_login.form.edt_password.set_value("");
-
-            if (this.ds_login)
-            {
-                this.ds_login.clearData();
-            }
-
-            if (this.ds_loginResult)
-            {
-                this.ds_loginResult.clearData();
-            }
         };
 
 
         /***************************************************************************************
          * 7. 이벤트
          ***************************************************************************************/
+
         /*
          * 기능 : 로그아웃 버튼 클릭
          */
@@ -216,6 +194,16 @@
             this.fn_logout();
         };
 
+
+        /*
+         * 기능 : 패스워드 변경 버튼 클릭
+         */
+        this.btn_changePw_onclick = function(obj, e)
+        {
+            this.alert("패스워드 변경 기능 개발 예정");
+        };
+
+
         /*
          * 기능 : BES 로고 클릭 시 초기 업무 화면으로 이동
          */
@@ -223,9 +211,8 @@
         {
             var objApp = nexacro.getApplication();
 
-            // 메인 화면의 WorkFrame 가져오기
-            var objWorkFrame =
-                objApp.mainframe.VFrameSetMain.HFrameSet00.VFrameSet00.WorkFrame;
+            // 메인 화면 WorkFrame 접근
+            var objWorkFrame = objApp.mainframe.VFrameSetMain.VFrameSet00.HFrameSet00.WorkFrame;
 
             if (!objWorkFrame)
             {
@@ -244,6 +231,7 @@
         {
             this.addEventHandler("onload",this.Form_Top_onload,this);
             this.sta_Brand.addEventHandler("onclick",this.sta_Brand_onclick,this);
+            this.btn_changePw.addEventHandler("onclick",this.btn_changePw_onclick,this);
             this.btn_logout.addEventHandler("onclick",this.btn_logout_onclick,this);
         };
         this.loadIncludeScript("Form_Top.xfdl");

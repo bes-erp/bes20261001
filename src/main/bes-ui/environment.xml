@@ -2,9 +2,10 @@
 <ENV version="2.1">
   <Environment themeid="theme::blue" datatyperule="2.0">
     <ScreenDefinition>
-      <Screen id="Desktop_screen" type="desktop"/>
+      <Screen id="Desktop_screen" type="desktop" loadingimage="url('theme://images/built1_Logo_Spin.gif')"/>
     </ScreenDefinition>
     <Variables/>
     <Cookies/>
+    <httpheader/>
   </Environment>
 </ENV>

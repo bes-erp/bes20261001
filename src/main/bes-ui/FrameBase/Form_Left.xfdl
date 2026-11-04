@@ -3,10 +3,10 @@
   <Form id="Form_Left" width="200" height="720" titletext="메뉴" background="#FFFFFF" scrollbartype="none" onload="Form_Left_onload">
     <Layouts>
       <Layout width="200" height="720" screenid="Desktop_screen">
-        <Div id="divMenu" taborder="0" left="0" top="0" right="0" bottom="0" background="#FFFFFF" scrollbartype="none">
+        <Div id="divMenu" taborder="0" left="0" top="0" right="0" bottom="0" background="#FFFFFF" border="0px none" scrollbartype="none">
           <Layouts>
             <Layout>
-              <Grid id="grdMenu" taborder="0" left="8" top="12" right="8" bottom="12" binddataset="gdsMenu" autofittype="col" treeinitstatus="expand,all" treeusecheckbox="false" treeuseimage="false" treeusebutton="use" oncellclick="divMenu_grdMenu_oncellclick">
+              <Grid id="grdMenu" taborder="0" left="8" top="8" right="8" bottom="8" binddataset="gdsMenu" autofittype="col" treeinitstatus="expand,all" treeusecheckbox="false" treeuseimage="false" treeusebutton="use" border="0px none" background="#FFFFFF" oncellclick="divMenu_grdMenu_oncellclick" cssclass="menuGrid">
                 <Formats>
                   <Format id="default">
                     <Columns>
@@ -14,13 +14,13 @@
                     </Columns>
                     <Rows>
                       <Row size="0" band="head"/>
-                      <Row size="38"/>
+                      <Row size="22"/>
                     </Rows>
                     <Band id="head">
                       <Cell text=""/>
                     </Band>
                     <Band id="body">
-                      <Cell text="bind:MENU_NAME" displaytype="treeitemcontrol" edittype="tree" treelevel="bind:MENU_LEVEL"/>
+                      <Cell text="bind:MENU_NAME" displaytype="treeitemcontrol" edittype="tree" treelevel="bind:MENU_LEVEL" cssclass="expr:MENU_LEVEL == 0 ? 'menuParent' : 'menuChild'"/>
                     </Band>
                   </Format>
                 </Formats>
@@ -30,8 +30,8 @@
         </Div>
       </Layout>
     </Layouts>
-    <Objects/>
-    <Script type="xscript5.1"><![CDATA[/***************************************************************************************
+    <Script type="xscript5.1"><![CDATA[
+/***************************************************************************************
  * 프로젝트        : Built1 Enterprise System 구축 프로젝트
  * 업무구분        : 공통 프레임
  * 파일명          : Form_Left.xfdl
@@ -44,32 +44,51 @@
  * 변경일            변경자            변경내역
  *---------------------------------------------------------------------------------------
  * 2026-11-03        Built1            전역 Dataset 기반 메뉴 트리 구성
+ * 2026-11-04        Built1            왼쪽 메뉴 디자인 개선 및 스크립트 정리
  ***************************************************************************************/
+
 
 /***************************************************************************************
  * 1. FORM 변수 선언
  ***************************************************************************************/
 
+
 /***************************************************************************************
  * 2. FORM LOAD
  ***************************************************************************************/
+
+/*
+ * 기능 : 메뉴 레벨에 따른 행 높이 설정
+ */
 this.Form_Left_onload = function(obj, e)
 {
-    // gdsMenu는 Application Variables > Datasets에서 정의한다.
-    // Form 내부에 별도 Dataset이나 고정 메뉴 행을 만들지 않는다.
+    var dsMenu = nexacro.getApplication().gdsMenu;
+    var grdMenu = this.divMenu.form.grdMenu;
+
+    if (!dsMenu) return;
+
+    for (var i = 0; i < dsMenu.rowcount; i++)
+    {
+        var nLevel = Number(dsMenu.getColumn(i, "MENU_LEVEL"));
+
+        grdMenu.setRealRowSize(i, nLevel == 0 ? 22 : 28);
+    }
 };
 
 /***************************************************************************************
  * 3. 공통 버튼
  ***************************************************************************************/
 
+
 /***************************************************************************************
  * 4. TRANSACTION, CALLBACK
  ***************************************************************************************/
 
+
 /***************************************************************************************
  * 5. 팝업 호출 및 콜백
  ***************************************************************************************/
+
 
 /***************************************************************************************
  * 6. 기타 함수
@@ -79,33 +98,33 @@ this.Form_Left_onload = function(obj, e)
 /***************************************************************************************
  * 7. 이벤트
  ***************************************************************************************/
+
+/*
+ * 기능 : 왼쪽 메뉴 선택 시 업무 화면 이동
+ */
 this.divMenu_grdMenu_oncellclick = function(obj, e)
 {
-    var nRow = e.row;
     var dsMenu = nexacro.getApplication().gdsMenu;
 
-    if (!dsMenu || nRow < 0 || nRow >= dsMenu.rowcount) return;
+    if (!dsMenu || e.row < 0 || e.row >= dsMenu.rowcount) return;
 
-    var sFormUrl = dsMenu.getColumn(nRow, "FORM_URL");
+    // 선택한 메뉴의 화면 URL 조회
+    var sFormUrl = dsMenu.getColumn(e.row, "FORM_URL");
 
-    // 상위 메뉴는 화면을 열지 않는다.
-    if (!sFormUrl) return;
+    // 화면 URL이 없는 상위 메뉴는 이동하지 않음
+    if (this.gfn_isNull(sFormUrl)) return;
 
-    // Application_Desktop.xadl의 WorkFrame 접근
-    var objApp = nexacro.getApplication();
-    var objWorkFrame =
-        objApp.mainframe.VFrameSetMain.HFrameSet00.VFrameSet00.WorkFrame;
-
+    // 업무 화면 프레임 조회
+    var objWorkFrame = nexacro.getApplication().mainframe.VFrameSetMain.VFrameSet00.HFrameSet00.WorkFrame;
+	
     if (!objWorkFrame)
     {
         this.alert("WorkFrame을 찾을 수 없습니다.");
         return;
     }
 
-    // 왼쪽 메뉴와 상단 영역은 유지하고 업무 화면만 변경
+    // 선택한 업무 화면으로 이동
     objWorkFrame.set_formurl(sFormUrl);
-};
-
-]]></Script>
+};]]></Script>
   </Form>
 </FDL>

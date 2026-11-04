@@ -325,6 +325,33 @@
 {
 	background : #f0f0f0;
 }
+
+/* 왼쪽 메뉴 기본 스타일 */
+.Grid.menuGrid .body .row .cell
+{
+    background : #FFFFFF;
+    -nexa-border : 0px none;
+}
+
+/* 마우스 오버 시 배경색 유지 */
+.Grid.menuGrid .body .row .cell[status=mouseover]
+{
+    background : #FFFFFF;
+}
+
+/* 선택 후에도 배경색 유지 */
+.Grid.menuGrid .body .row .cell[userstatus=selected]
+{
+    background : #FFFFFF;
+}
+
+/* 하위 메뉴 마우스 오버 */
+.Grid.menuGrid .body .row .cell.menuChild[status=mouseover]
+{
+    color : #3478C0;
+    cursor : pointer;
+}
+
 /* headcellbutton (Same as ButtonControl) */
 /* headcellcalendar (Same as CalendarControl) */
 /* headcellcheckbox (Same as CheckBoxControl) */
@@ -596,6 +623,21 @@
 	font : 12px "Malgun Gothic";
 	color : #666666;
 }
+
+/* 왼쪽 하위 메뉴 기본 글자색 */
+.Grid.menuGrid .body .row .cell.menuChild .celltreeitem .treeitemtext
+{
+    color : #666666;
+}
+
+/* 왼쪽 하위 메뉴 마우스 오버 */
+.Grid.menuGrid .body .row .cell.menuChild .celltreeitem .treeitemtext[status=mouseover]
+{
+    color : #3478C0;
+    cursor : pointer;
+}
+
+
 
 .GridCellControl .celltreeitem .treeitemtext[status=disabled]
 {

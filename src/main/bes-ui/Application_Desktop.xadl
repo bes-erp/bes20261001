@@ -3,22 +3,24 @@
   <Application id="Application_Desktop" screenid="Desktop_screen">
     <Layout>
       <MainFrame id="mainframe" showtitlebar="true" showstatusbar="true" left="0" top="0" width="1280" height="720" titletext="Built1 Enterprise System">
-        <VFrameSet id="VFrameSetMain" separatesize="*,0">
+        <VFrameSet id="VFrameSetMain" separatesize="*,0" border="0px none">
           <Frames>
             <!-- 로그인 화면 -->
             <ChildFrame id="LoginFrame" showtitlebar="false" showstatusbar="false" formurl="Sys::SYS10000M.xfdl" dragmovetype="none"/>
-            <!-- 로그인 성공 후 표시할 메인 화면 -->
-            <HFrameSet id="HFrameSet00" separatesize="200,*">
+            <!-- 로그인 성공 후 메인 화면 -->
+            <VFrameSet id="VFrameSet00" separatesize="50,*" border="0px none">
               <Frames>
-                <ChildFrame id="LeftFrame" showtitlebar="false" showstatusbar="false" formurl="FrameBase::Form_Left.xfdl" dragmovetype="none"/>
-                <VFrameSet id="VFrameSet00" separatesize="50,*">
+                <!-- 전체 너비 상단 영역 -->
+                <ChildFrame id="TopFrame" showtitlebar="false" showstatusbar="false" border="0px none" formurl="FrameBase::Form_Top.xfdl" dragmovetype="none"/>
+                <!-- 왼쪽 메뉴 및 업무 영역 -->
+                <HFrameSet id="HFrameSet00" separatesize="200,*" border="0px none">
                   <Frames>
-                    <ChildFrame id="TopFrame" showtitlebar="false" showstatusbar="false" formurl="FrameBase::Form_Top.xfdl" dragmovetype="none"/>
-                    <ChildFrame id="WorkFrame" showtitlebar="false" showstatusbar="false" formurl="FrameBase::Form_Work.xfdl" dragmovetype="none"/>
+                    <ChildFrame id="LeftFrame" showtitlebar="false" showstatusbar="false" border="0px none" formurl="FrameBase::Form_Left.xfdl" dragmovetype="none"/>
+                    <ChildFrame id="WorkFrame" showtitlebar="false" showstatusbar="false" border="0px none" formurl="FrameBase::Form_Work.xfdl" dragmovetype="none"/>
                   </Frames>
-                </VFrameSet>
+                </HFrameSet>
               </Frames>
-            </HFrameSet>
+            </VFrameSet>
           </Frames>
         </VFrameSet>
       </MainFrame>

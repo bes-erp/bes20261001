@@ -52,115 +52,126 @@
             obj.set_text("조회");
             this.addChild(obj.name, obj);
 
-            obj = new Grid("grd_code_type","20","75","470","215",null,null,null,null,null,null,this);
+            obj = new Static("stc_code_type","160","33","92","14",null,null,null,null,null,null,this);
+            obj.set_taborder("24");
+            obj.set_text("코드유형");
+            obj.set_textAlign("right");
+            this.addChild(obj.name, obj);
+
+            obj = new Edit("edt_code_type","257","30","160","20",null,null,null,null,null,null,this);
+            obj.set_taborder("23");
+            obj.set_inputmode("upper");
+            this.addChild(obj.name, obj);
+
+            obj = new Button("btn_alert",null,"20","120","40","20",null,null,null,null,null,this);
+            obj.set_taborder("2");
+            obj.set_text("alert test");
+            this.addChild(obj.name, obj);
+
+            obj = new Grid("grd_code_type","20","75",null,"35%","50%",null,null,null,null,null,this);
             obj.set_taborder("1");
             obj.set_binddataset("ds_code_type");
             obj._setContents("<Formats><Format id=\"default\"><Columns><Column size=\"149\"/><Column size=\"149\"/><Column size=\"93\"/><Column size=\"91\"/><Column size=\"80\"/></Columns><Rows><Row size=\"24\" band=\"head\"/><Row size=\"24\"/></Rows><Band id=\"head\"><Cell text=\"CODE_TYPE\"/><Cell col=\"1\" text=\"CODE_TYPE_NM\"/><Cell col=\"2\" text=\"START_DATE\"/><Cell col=\"3\" text=\"END_DATE\"/><Cell col=\"4\" text=\"CREATE_TYPE_CD\"/></Band><Band id=\"body\"><Cell text=\"bind:CODE_TYPE\"/><Cell col=\"1\" text=\"bind:CODE_TYPE_NM\"/><Cell col=\"2\" text=\"bind:START_DATE\"/><Cell col=\"3\" text=\"bind:END_DATE\"/><Cell col=\"4\" text=\"bind:CREATE_TYPE_CD\"/></Band></Format></Formats>");
             this.addChild(obj.name, obj);
 
-            obj = new Button("btn_alert","930","20","120","40",null,null,null,null,null,null,this);
-            obj.set_taborder("2");
-            obj.set_text("alert test");
+            obj = new Grid("grd_code","grd_code_type:10","75",null,"35%","20",null,null,null,null,null,this);
+            obj.set_taborder("22");
+            obj.set_binddataset("ds_code");
+            obj._setContents("<Formats><Format id=\"default\"><Columns><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/></Columns><Rows><Row size=\"24\" band=\"head\"/><Row size=\"24\"/></Rows><Band id=\"head\"><Cell text=\"CODE_TYPE\"/><Cell col=\"1\" text=\"CODE\"/><Cell col=\"2\" text=\"CODE_NM\"/><Cell col=\"3\" text=\"CODE_NM_S\"/><Cell col=\"4\" text=\"START_DATE\"/><Cell col=\"5\" text=\"END_DATE\"/><Cell col=\"6\" text=\"SORT_ORDER\"/><Cell col=\"7\" text=\"ATTR_CHR1\"/><Cell col=\"8\" text=\"ATTR_NUM1\"/><Cell col=\"9\" text=\"ATTR_DATE1\"/><Cell col=\"10\" text=\"CREATE_DATE\"/></Band><Band id=\"body\"><Cell text=\"bind:CODE_TYPE\"/><Cell col=\"1\" text=\"bind:CODE\"/><Cell col=\"2\" text=\"bind:CODE_NM\"/><Cell col=\"3\" text=\"bind:CODE_NM_S\"/><Cell col=\"4\" text=\"bind:START_DATE\"/><Cell col=\"5\" text=\"bind:END_DATE\"/><Cell col=\"6\" text=\"bind:SORT_ORDER\"/><Cell col=\"7\" text=\"bind:ATTR_CHR1\"/><Cell col=\"8\" text=\"bind:ATTR_NUM1\"/><Cell col=\"9\" text=\"bind:ATTR_DATE1\"/><Cell col=\"10\" text=\"bind:CREATE_DATE\"/></Band></Format></Formats>");
             this.addChild(obj.name, obj);
 
-            obj = new Button("btn_createBatchJob","20","310","120","40",null,null,null,null,null,null,this);
+            obj = new Button("btn_createBatchJob","20","grd_code_type:20","120","40",null,null,null,null,null,null,this);
             obj.set_taborder("3");
             obj.set_text("배치작업생성(C)");
             obj.getSetter("executeTypeCd").set("C");
             this.addChild(obj.name, obj);
 
-            obj = new Button("btn_searchBatchJobList","150","310","120","40",null,null,null,null,null,null,this);
+            obj = new Button("btn_searchBatchJobList","150","grd_code_type:20","120","40",null,null,null,null,null,null,this);
             obj.set_taborder("4");
             obj.set_text("배치작업조회");
             this.addChild(obj.name, obj);
 
-            obj = new Grid("grd_batchJob","20","490","1040","170",null,null,null,null,null,null,this);
-            obj.set_taborder("5");
-            obj.set_binddataset("ds_batch_job");
-            obj._setContents("<Formats><Format id=\"default\"><Columns><Column size=\"99\"/><Column size=\"189\"/><Column size=\"301\"/><Column size=\"216\"/><Column size=\"151\"/><Column size=\"364\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/></Columns><Rows><Row size=\"24\" band=\"head\"/><Row size=\"24\"/></Rows><Band id=\"head\"><Cell text=\"STATE\"/><Cell col=\"1\" text=\"JOB_NAME\"/><Cell col=\"2\" text=\"JOB_ACTION\"/><Cell col=\"3\" text=\"COMMENTS\"/><Cell col=\"4\" text=\"START_DATE\"/><Cell col=\"5\" text=\"REPEAT_INTERVAL\"/><Cell col=\"6\" text=\"RUN_COUNT\"/><Cell col=\"7\" text=\"FAILURE_COUNT\"/><Cell col=\"8\" text=\"RETRY_COUNT\"/></Band><Band id=\"body\"><Cell text=\"bind:STATE\"/><Cell col=\"1\" text=\"bind:JOB_NAME\"/><Cell col=\"2\" text=\"bind:JOB_ACTION\"/><Cell col=\"3\" text=\"bind:COMMENTS\"/><Cell col=\"4\" text=\"bind:START_DATE\"/><Cell col=\"5\" text=\"bind:REPEAT_INTERVAL\"/><Cell col=\"6\" text=\"bind:RUN_COUNT\"/><Cell col=\"7\" text=\"bind:FAILURE_COUNT\"/><Cell col=\"8\" text=\"bind:RETRY_COUNT\"/></Band></Format></Formats>");
+            obj = new Button("btn_stopBatchJob","20","btn_createBatchJob:2","120","40",null,null,null,null,null,null,this);
+            obj.set_taborder("13");
+            obj.set_text("배치작업중지(S)");
+            obj.getSetter("executeTypeCd").set("S");
             this.addChild(obj.name, obj);
 
-            obj = new Edit("edt_jobName","437","310","290","17",null,null,null,null,null,null,this);
+            obj = new Button("btn_enableBatchJob","20","btn_stopBatchJob:2","120","40",null,null,null,null,null,null,this);
+            obj.set_taborder("14");
+            obj.set_text("스케줄 활성화(E)");
+            obj.getSetter("executeTypeCd").set("E");
+            this.addChild(obj.name, obj);
+
+            obj = new Button("btn_dropBatchJob","150","btn_stopBatchJob:2","120","40",null,null,null,null,null,null,this);
+            obj.set_taborder("17");
+            obj.set_text("배치작업 삭제(X)");
+            obj.getSetter("executeTypeCd").set("X");
+            this.addChild(obj.name, obj);
+
+            obj = new Button("btn_disableBatchJob","20","btn_enableBatchJob:2","120","40",null,null,null,null,null,null,this);
+            obj.set_taborder("15");
+            obj.set_text("스케줄 비활성화(D)");
+            obj.getSetter("executeTypeCd").set("D");
+            this.addChild(obj.name, obj);
+
+            obj = new Button("btn_changeBatchJob","150","btn_enableBatchJob:2","120","40",null,null,null,null,null,null,this);
+            obj.set_taborder("16");
+            obj.set_text("스케줄 주기변경(U)");
+            obj.getSetter("executeTypeCd").set("U");
+            this.addChild(obj.name, obj);
+
+            obj = new Static("stc_job_name","270","grd_code_type:21","162","14",null,null,null,null,null,null,this);
+            obj.set_taborder("9");
+            obj.set_text("배치작업명");
+            obj.set_textAlign("right");
+            this.addChild(obj.name, obj);
+
+            obj = new Edit("edt_jobName","437","grd_code_type:20","290","17",null,null,null,null,null,null,this);
             obj.set_taborder("6");
             obj.set_value("BGF_BSYS_LOG_HISTORY_M0002");
             obj.set_inputmode("upper");
             obj.set_text("BGF_BSYS_LOG_HISTORY_M0002");
             this.addChild(obj.name, obj);
 
-            obj = new Edit("edt_jobActionName","437","329","290","20",null,null,null,null,null,null,this);
+            obj = new Static("stc_job_action_name","270","grd_code_type:42","162","14",null,null,null,null,null,null,this);
+            obj.set_taborder("10");
+            obj.set_text("실행 프로그램 스크립트");
+            obj.set_textAlign("right");
+            this.addChild(obj.name, obj);
+
+            obj = new Edit("edt_jobActionName","437","grd_code_type:39","290","20",null,null,null,null,null,null,this);
             obj.set_taborder("7");
             obj.set_value("bsys_log_pkg.history_p");
             obj.set_inputmode("lower");
             obj.set_text("bsys_log_pkg.history_p");
             this.addChild(obj.name, obj);
 
-            obj = new Calendar("cal_startDate","437","351","201","20",null,null,null,null,null,null,this);
-            obj.set_taborder("8");
-            obj.set_editformat("yyyy-MM-dd");
-            obj.set_dateformat("yyyy-MM-dd");
-            this.addChild(obj.name, obj);
-
-            obj = new Static("stc_job_name","270","311","162","14",null,null,null,null,null,null,this);
-            obj.set_taborder("9");
-            obj.set_text("배치작업명");
-            obj.set_textAlign("right");
-            this.addChild(obj.name, obj);
-
-            obj = new Static("stc_job_action_name","270","332","162","14",null,null,null,null,null,null,this);
-            obj.set_taborder("10");
-            obj.set_text("실행 프로그램 스크립트");
-            obj.set_textAlign("right");
-            this.addChild(obj.name, obj);
-
-            obj = new Static("stc_start_date","270","354","162","14",null,null,null,null,null,null,this);
+            obj = new Static("stc_start_date","270","grd_code_type:64","162","14",null,null,null,null,null,null,this);
             obj.set_taborder("11");
             obj.set_text("배치작업 시작일시");
             obj.set_textAlign("right");
             this.addChild(obj.name, obj);
 
-            obj = new MaskEdit("msk_startTime","640","351","87","20",null,null,null,null,null,null,this);
+            obj = new Calendar("cal_startDate","437","grd_code_type:61","201","20",null,null,null,null,null,null,this);
+            obj.set_taborder("8");
+            obj.set_editformat("yyyy-MM-dd");
+            obj.set_dateformat("yyyy-MM-dd");
+            this.addChild(obj.name, obj);
+
+            obj = new MaskEdit("msk_startTime","640","grd_code_type:61","87","20",null,null,null,null,null,null,this);
             obj.set_taborder("12");
             obj.set_format("##:##:##");
             obj.set_type("string");
             this.addChild(obj.name, obj);
 
-            obj = new Button("btn_stopBatchJob","20","352","120","40",null,null,null,null,null,null,this);
-            obj.set_taborder("13");
-            obj.set_text("배치작업중지(S)");
-            obj.getSetter("executeTypeCd").set("S");
-            this.addChild(obj.name, obj);
-
-            obj = new Button("btn_enableBatchJob","20","394","120","40",null,null,null,null,null,null,this);
-            obj.set_taborder("14");
-            obj.set_text("스케줄 활성화(E)");
-            obj.getSetter("executeTypeCd").set("E");
-            this.addChild(obj.name, obj);
-
-            obj = new Button("btn_disableBatchJob","20","436","120","40",null,null,null,null,null,null,this);
-            obj.set_taborder("15");
-            obj.set_text("스케줄 비활성화(D)");
-            obj.getSetter("executeTypeCd").set("D");
-            this.addChild(obj.name, obj);
-
-            obj = new Button("btn_changeBatchJob","150","436","120","40",null,null,null,null,null,null,this);
-            obj.set_taborder("16");
-            obj.set_text("스케줄 주기변경(U)");
-            obj.getSetter("executeTypeCd").set("U");
-            this.addChild(obj.name, obj);
-
-            obj = new Button("btn_dropBatchJob","150","394","120","40",null,null,null,null,null,null,this);
-            obj.set_taborder("17");
-            obj.set_text("배치작업 삭제(X)");
-            obj.getSetter("executeTypeCd").set("X");
-            this.addChild(obj.name, obj);
-
-            obj = new Static("stc_repeat_cd","270","376","162","14",null,null,null,null,null,null,this);
+            obj = new Static("stc_repeat_cd","270","grd_code_type:86","162","14",null,null,null,null,null,null,this);
             obj.set_taborder("18");
             obj.set_text("반복유형코드");
             obj.set_textAlign("right");
             this.addChild(obj.name, obj);
 
-            obj = new Combo("cbo_repeat_cd","437","373","123","20",null,null,null,null,null,null,this);
+            obj = new Combo("cbo_repeat_cd","437","grd_code_type:83","123","20",null,null,null,null,null,null,this);
             obj.set_taborder("19");
             obj.set_innerdataset("ds_cbo_repeat_cd");
             obj.set_datacolumn("CODE_NM");
@@ -170,34 +181,23 @@
             obj.set_index("1");
             this.addChild(obj.name, obj);
 
-            obj = new Static("stc_interval","270","398","162","14",null,null,null,null,null,null,this);
+            obj = new Static("stc_interval","270","grd_code_type:108","162","14",null,null,null,null,null,null,this);
             obj.set_taborder("20");
             obj.set_text("반복간격");
             obj.set_textAlign("right");
             this.addChild(obj.name, obj);
 
-            obj = new Spin("spn_interval","437","395","123","20",null,null,null,null,null,null,this);
+            obj = new Spin("spn_interval","437","grd_code_type:105","123","20",null,null,null,null,null,null,this);
             obj.set_taborder("21");
             obj.set_min("1");
             obj.set_max("1000");
             obj.set_value("1");
             this.addChild(obj.name, obj);
 
-            obj = new Grid("grd_code","498","75","552","215",null,null,null,null,null,null,this);
-            obj.set_taborder("22");
-            obj.set_binddataset("ds_code");
-            obj._setContents("<Formats><Format id=\"default\"><Columns><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/></Columns><Rows><Row size=\"24\" band=\"head\"/><Row size=\"24\"/></Rows><Band id=\"head\"><Cell text=\"CODE_TYPE\"/><Cell col=\"1\" text=\"CODE\"/><Cell col=\"2\" text=\"CODE_NM\"/><Cell col=\"3\" text=\"CODE_NM_S\"/><Cell col=\"4\" text=\"START_DATE\"/><Cell col=\"5\" text=\"END_DATE\"/><Cell col=\"6\" text=\"SORT_ORDER\"/><Cell col=\"7\" text=\"ATTR_CHR1\"/><Cell col=\"8\" text=\"ATTR_NUM1\"/><Cell col=\"9\" text=\"ATTR_DATE1\"/><Cell col=\"10\" text=\"CREATE_DATE\"/></Band><Band id=\"body\"><Cell text=\"bind:CODE_TYPE\"/><Cell col=\"1\" text=\"bind:CODE\"/><Cell col=\"2\" text=\"bind:CODE_NM\"/><Cell col=\"3\" text=\"bind:CODE_NM_S\"/><Cell col=\"4\" text=\"bind:START_DATE\"/><Cell col=\"5\" text=\"bind:END_DATE\"/><Cell col=\"6\" text=\"bind:SORT_ORDER\"/><Cell col=\"7\" text=\"bind:ATTR_CHR1\"/><Cell col=\"8\" text=\"bind:ATTR_NUM1\"/><Cell col=\"9\" text=\"bind:ATTR_DATE1\"/><Cell col=\"10\" text=\"bind:CREATE_DATE\"/></Band></Format></Formats>");
-            this.addChild(obj.name, obj);
-
-            obj = new Edit("edt_code_type","257","30","160","20",null,null,null,null,null,null,this);
-            obj.set_taborder("23");
-            obj.set_inputmode("upper");
-            this.addChild(obj.name, obj);
-
-            obj = new Static("stc_code_type","160","33","92","14",null,null,null,null,null,null,this);
-            obj.set_taborder("24");
-            obj.set_text("코드유형");
-            obj.set_textAlign("right");
+            obj = new Grid("grd_batchJob","20","btn_disableBatchJob:14",null,null,"20","10",null,null,null,null,this);
+            obj.set_taborder("5");
+            obj.set_binddataset("ds_batch_job");
+            obj._setContents("<Formats><Format id=\"default\"><Columns><Column size=\"99\"/><Column size=\"189\"/><Column size=\"301\"/><Column size=\"216\"/><Column size=\"151\"/><Column size=\"364\"/><Column size=\"80\"/><Column size=\"80\"/><Column size=\"80\"/></Columns><Rows><Row size=\"24\" band=\"head\"/><Row size=\"24\"/></Rows><Band id=\"head\"><Cell text=\"STATE\"/><Cell col=\"1\" text=\"JOB_NAME\"/><Cell col=\"2\" text=\"JOB_ACTION\"/><Cell col=\"3\" text=\"COMMENTS\"/><Cell col=\"4\" text=\"START_DATE\"/><Cell col=\"5\" text=\"REPEAT_INTERVAL\"/><Cell col=\"6\" text=\"RUN_COUNT\"/><Cell col=\"7\" text=\"FAILURE_COUNT\"/><Cell col=\"8\" text=\"RETRY_COUNT\"/></Band><Band id=\"body\"><Cell text=\"bind:STATE\"/><Cell col=\"1\" text=\"bind:JOB_NAME\"/><Cell col=\"2\" text=\"bind:JOB_ACTION\"/><Cell col=\"3\" text=\"bind:COMMENTS\"/><Cell col=\"4\" text=\"bind:START_DATE\"/><Cell col=\"5\" text=\"bind:REPEAT_INTERVAL\"/><Cell col=\"6\" text=\"bind:RUN_COUNT\"/><Cell col=\"7\" text=\"bind:FAILURE_COUNT\"/><Cell col=\"8\" text=\"bind:RETRY_COUNT\"/></Band></Format></Formats>");
             this.addChild(obj.name, obj);
             // Layout Functions
             //-- Default Layout : this
@@ -205,7 +205,7 @@
             this.addLayout(obj.name, obj);
             
             // BindItem Information
-            obj = new BindItem("item0","edt_code_type","value","ds_search","code_type");
+            obj = new BindItem("item0","edt_code_type","value","ds_search","CODE_TYPE");
             this.addChild(obj.name, obj);
             obj.bind();
             
@@ -446,9 +446,9 @@
             this.btn_searchBatchJobList.addEventHandler("onclick",this.btn_searchBatchJobList_onclick,this);
             this.btn_stopBatchJob.addEventHandler("onclick",this.btn_createBatchJob_onclick,this);
             this.btn_enableBatchJob.addEventHandler("onclick",this.btn_createBatchJob_onclick,this);
+            this.btn_dropBatchJob.addEventHandler("onclick",this.btn_createBatchJob_onclick,this);
             this.btn_disableBatchJob.addEventHandler("onclick",this.btn_createBatchJob_onclick,this);
             this.btn_changeBatchJob.addEventHandler("onclick",this.btn_createBatchJob_onclick,this);
-            this.btn_dropBatchJob.addEventHandler("onclick",this.btn_createBatchJob_onclick,this);
             this.cbo_repeat_cd.addEventHandler("onitemchanged",this.cbo_repeat_cd_onitemchanged,this);
         };
         this.loadIncludeScript("Form_Work.xfdl");

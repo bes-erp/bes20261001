@@ -1,0 +1,449 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="COM11020M" width="1200" height="720" titletext="메뉴등록" background="#FFFFFF" scrollbartype="none" onload="COM11020M_onload">
+    <Objects>
+      <Dataset id="dsMenu" useclientlayout="true">
+        <ColumnInfo>
+          <Column id="MENU_ID" type="BIGDECIMAL" size="20"/>
+          <Column id="PARENT_MENU_CD" type="STRING" size="30"/>
+          <Column id="CHILD_MENU_CD" type="STRING" size="30"/>
+          <Column id="CHILD_MENU_NM" type="STRING" size="200"/>
+          <Column id="CHILD_PAGE_ULR" type="STRING" size="100"/>
+          <Column id="CHILD_MENU_LEVEL" type="INT" size="4"/>
+          <Column id="CHILD_MENU_SEQ" type="INT" size="4"/>
+          <Column id="USER_YN" type="STRING" size="1"/>
+          <Column id="BTN_SEARCH_YN" type="STRING" size="1"/>
+          <Column id="BTN_SEARCH_INIT_YN" type="STRING" size="1"/>
+          <Column id="BTN_SAVE_YN" type="STRING" size="1"/>
+          <Column id="BTN_ADD_ROW_YN" type="STRING" size="1"/>
+          <Column id="BTN_DEL_ROW_YN" type="STRING" size="1"/>
+          <Column id="BTN_EXCEL_DOWN_YN" type="STRING" size="1"/>
+          <Column id="BTN_EXCEL_UP_YN" type="STRING" size="1"/>
+          <Column id="BTN_PRINT_YN" type="STRING" size="1"/>
+          <Column id="BTN_BATCH_YN" type="STRING" size="1"/>
+          <Column id="REMARK" type="STRING" size="4000"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="dsYn">
+        <ColumnInfo>
+          <Column id="CODE" type="STRING" size="1"/>
+          <Column id="NAME" type="STRING" size="20"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="CODE">Y</Col>
+            <Col id="NAME">사용</Col>
+          </Row>
+          <Row>
+            <Col id="CODE">N</Col>
+            <Col id="NAME">미사용</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="dsSearchYn">
+        <ColumnInfo>
+          <Column id="CODE" type="STRING" size="1"/>
+          <Column id="NAME" type="STRING" size="20"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="CODE"/>
+            <Col id="NAME">전체</Col>
+          </Row>
+          <Row>
+            <Col id="CODE">Y</Col>
+            <Col id="NAME">사용</Col>
+          </Row>
+          <Row>
+            <Col id="CODE">N</Col>
+            <Col id="NAME">미사용</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+    <Layouts>
+      <Layout width="1200" height="720" screenid="Desktop_screen">
+        <Static id="staTitle" left="20" top="14" width="250" height="34" text="메뉴등록" font="bold 20px Arial" color="#222222"/>
+        <Div id="divSearch" left="20" top="58" right="20" height="66" background="#F7F8FA" border="1px solid #E0E4E9" scrollbartype="none">
+          <Layouts>
+            <Layout width="1158" height="66">
+              <Static id="staMenu" left="16" top="18" width="66" height="28" text="메뉴검색"/>
+              <Edit id="edtMenu" left="82" top="18" width="210" height="28" onkeydown="divSearch_edtMenu_onkeydown"/>
+              <Static id="staUseYn" left="edtMenu:18" top="18" width="62" height="28" text="사용여부"/>
+              <Combo id="cboUseYn" left="staUseYn:4" top="18" width="100" height="28" innerdataset="dsSearchYn" codecolumn="CODE" datacolumn="NAME"/>
+              <Button id="btnSearch" right="104" top="18" width="80" height="28" text="조회" onclick="divSearch_btnSearch_onclick"/>
+              <Button id="btnSearchInit" right="16" top="18" width="80" height="28" text="초기화" onclick="divSearch_btnSearchInit_onclick"/>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Static id="staList" left="20" top="143" width="120" height="30" text="메뉴 목록" font="bold 15px Arial"/>
+        <Static id="staCount" left="staList:4" top="143" width="130" height="30" text="총 0건" color="#666666"/>
+        <Button id="btnSave" right="20" top="143" width="80" height="30" text="저장" onclick="btnSave_onclick"/>
+        <Button id="btnDelRow" right="btnSave:8" top="143" width="80" height="30" text="행삭제" onclick="btnDelRow_onclick"/>
+        <Button id="btnAddRow" right="btnDelRow:8" top="143" width="80" height="30" text="행추가" onclick="btnAddRow_onclick"/>
+        <Grid id="grdMenu" left="20" top="183" right="20" bottom="20" binddataset="dsMenu" autofittype="col" autoenter="select" selecttype="row" border="1px solid #D9DEE5">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="90"/>
+                <Column size="130"/>
+                <Column size="130"/>
+                <Column size="170"/>
+                <Column size="225"/>
+                <Column size="80"/>
+                <Column size="85"/>
+                <Column size="85"/>
+                <Column size="180"/>
+              </Columns>
+              <Rows>
+                <Row size="34" band="head"/>
+                <Row size="32"/>
+              </Rows>
+              <Band id="head">
+                <Cell col="0" text="메뉴 ID"/>
+                <Cell col="1" text="상위 메뉴 코드"/>
+                <Cell col="2" text="메뉴 코드"/>
+                <Cell col="3" text="메뉴명"/>
+                <Cell col="4" text="화면 경로"/>
+                <Cell col="5" text="레벨"/>
+                <Cell col="6" text="표시 순서"/>
+                <Cell col="7" text="사용 여부"/>
+                <Cell col="8" text="비고"/>
+              </Band>
+              <Band id="body">
+                <Cell col="0" text="bind:MENU_ID" edittype="none"/>
+                <Cell col="1" text="bind:PARENT_MENU_CD" edittype="text"/>
+                <Cell col="2" text="bind:CHILD_MENU_CD" edittype="text"/>
+                <Cell col="3" text="bind:CHILD_MENU_NM" edittype="text"/>
+                <Cell col="4" text="bind:CHILD_PAGE_ULR" edittype="text"/>
+                <Cell col="5" text="bind:CHILD_MENU_LEVEL" edittype="text"/>
+                <Cell col="6" text="bind:CHILD_MENU_SEQ" edittype="text"/>
+                <Cell col="7" text="bind:USER_YN" edittype="combo" combodataset="dsYn" combocodecol="CODE" combodatacol="NAME" displaytype="combotext"/>
+                <Cell col="8" text="bind:REMARK" edittype="text"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[
+/***************************************************************************************
+ * 프로젝트        : Built1 Enterprise System 구축 프로젝트
+ * 업무구분        : 공통관리
+ * 파일명          : COM11020M.xfdl
+ * 작성자          : Built1
+ * 작성일          : 2026-11-04
+ *
+ * 화면            : 메뉴등록
+ * 설명            : 메뉴정보 조회, 등록, 수정 및 삭제
+ *---------------------------------------------------------------------------------------
+ * 변경일            변경자            변경내역
+ *---------------------------------------------------------------------------------------
+ * 2026-11-04        Built1            최초작성
+ ***************************************************************************************/
+
+/***************************************************************************************
+ * 1. FORM 변수 선언
+ ***************************************************************************************/
+
+
+/***************************************************************************************
+ * 2. FORM LOAD
+ ***************************************************************************************/
+
+/*
+ * 기능 : 화면 최초 로드 및 메뉴 조회
+ */
+this.COM11020M_onload = function(obj, e)
+{
+    this.divSearch.form.cboUseYn.set_index(0);
+    this.fn_search();
+};
+
+
+/***************************************************************************************
+ * 3. 공통 버튼
+ ***************************************************************************************/
+
+/*
+ * 기능 : 메뉴 조회
+ */
+this.fn_search = function()
+{
+    this.grdMenu.updateToDataset();
+
+    if (this.gfn_dataSetChange(this.dsMenu))
+    {
+        if (!this.confirm("저장하지 않은 변경사항이 있습니다. 다시 조회하시겠습니까?")) return;
+    }
+
+    var sMenuText     = this.divSearch.form.edtMenu.value;
+    var sUseYn        = this.divSearch.form.cboUseYn.value;
+    var sSvcID        = "selectMenuList";
+    var sSvcURL       = "svcUrl::com/menu/selectMenuList.do";
+    var sInDataSets   = "";
+    var sOutDataSets  = "dsMenu=outMenu";
+    var sArgument     = "menuText=" + nexacro.wrapQuote(this.gfn_isNull(sMenuText) ? "" : sMenuText);
+        sArgument    += " userYn=" + nexacro.wrapQuote(this.gfn_isNull(sUseYn) ? "" : sUseYn);
+    var sCallbackFunc = "fn_callBack";
+
+    this.gfn_transaction(sSvcID, sSvcURL, sInDataSets, sOutDataSets, sArgument, sCallbackFunc);
+};
+
+/*
+ * 기능 : 조회조건 초기화
+ */
+this.fn_searchInit = function()
+{
+    this.divSearch.form.edtMenu.set_value("");
+    this.divSearch.form.cboUseYn.set_index(0);
+    this.fn_search();
+};
+
+/*
+ * 기능 : 신규 메뉴 행 추가
+ */
+this.fn_addRow = function()
+{
+    var objDs = this.dsMenu;
+    var nRow  = objDs.addRow();
+
+    objDs.setColumn(nRow, "PARENT_MENU_CD", "COM");
+    objDs.setColumn(nRow, "CHILD_MENU_LEVEL", 1);
+    objDs.setColumn(nRow, "CHILD_MENU_SEQ", objDs.rowcount);
+    objDs.setColumn(nRow, "USER_YN", "Y");
+    objDs.setColumn(nRow, "BTN_SEARCH_YN", "Y");
+    objDs.setColumn(nRow, "BTN_SEARCH_INIT_YN", "Y");
+    objDs.setColumn(nRow, "BTN_SAVE_YN", "Y");
+    objDs.setColumn(nRow, "BTN_ADD_ROW_YN", "Y");
+    objDs.setColumn(nRow, "BTN_DEL_ROW_YN", "Y");
+    objDs.setColumn(nRow, "BTN_EXCEL_DOWN_YN", "Y");
+    objDs.setColumn(nRow, "BTN_EXCEL_UP_YN", "N");
+    objDs.setColumn(nRow, "BTN_PRINT_YN", "N");
+    objDs.setColumn(nRow, "BTN_BATCH_YN", "N");
+    objDs.set_rowposition(nRow);
+
+    this.fn_setCount();
+};
+
+/*
+ * 기능 : 선택 메뉴 행 삭제
+ */
+this.fn_delRow = function()
+{
+    this.grdMenu.updateToDataset();
+
+    var objDs = this.dsMenu;
+    var nRow  = objDs.rowposition;
+
+    if (nRow < 0)
+    {
+        this.alert("삭제할 메뉴를 선택하세요.");
+        return;
+    }
+
+    if (!this.confirm("선택한 메뉴를 삭제하시겠습니까?")) return;
+
+    objDs.deleteRow(nRow);
+    this.fn_setCount();
+};
+
+/*
+ * 기능 : 변경 메뉴 저장
+ */
+this.fn_save = function()
+{
+    this.grdMenu.updateToDataset();
+
+    if (!this.gfn_dataSetChange(this.dsMenu))
+    {
+        this.alert("저장할 변경사항이 없습니다.");
+        return;
+    }
+
+    if (!this.fn_validate()) return;
+    if (!this.confirm("변경된 메뉴정보를 저장하시겠습니까?")) return;
+
+    var sSvcID        = "saveMenuList";
+    var sSvcURL       = "svcUrl::com/menu/saveMenuList.do";
+    var sInDataSets   = "inMenu=dsMenu:U";
+    var sOutDataSets  = "";
+    var sArgument     = "";
+    var sCallbackFunc = "fn_callBack";
+
+    this.gfn_transaction(sSvcID, sSvcURL, sInDataSets, sOutDataSets, sArgument, sCallbackFunc);
+};
+
+
+/***************************************************************************************
+ * 4. TRANSACTION, CALLBACK
+ ***************************************************************************************/
+
+/*
+ * 기능 : 메뉴 조회 및 저장 결과 처리
+ */
+this.fn_callBack = function(sSvcID, nErrorCode, sErrorMsg)
+{
+    if (nErrorCode < 0)
+    {
+        this.alert("처리 중 오류가 발생했습니다.\n" + sErrorMsg);
+        return;
+    }
+
+    switch (sSvcID)
+    {
+        case "selectMenuList":
+            this.fn_setCount();
+            break;
+
+        case "saveMenuList":
+            this.dsMenu.applyChange();
+            this.alert("저장되었습니다.");
+            this.fn_search();
+            break;
+    }
+};
+
+
+/***************************************************************************************
+ * 5. 팝업 호출 및 콜백
+ ***************************************************************************************/
+
+
+/***************************************************************************************
+ * 6. 기타 함수
+ ***************************************************************************************/
+
+/*
+ * 기능 : 메뉴 건수 표시
+ */
+this.fn_setCount = function()
+{
+    this.staCount.set_text("총 " + this.dsMenu.rowcount + "건");
+};
+
+/*
+ * 기능 : 메뉴 입력값 검사
+ */
+this.fn_validate = function()
+{
+    var objDs = this.dsMenu;
+
+    for (var i = 0; i < objDs.rowcount; i++)
+    {
+        var nRowType = objDs.getRowType(i);
+
+        if (nRowType != Dataset.ROWTYPE_INSERT && nRowType != Dataset.ROWTYPE_UPDATE) continue;
+
+        var sParentCd = objDs.getColumn(i, "PARENT_MENU_CD");
+        var sMenuCd   = objDs.getColumn(i, "CHILD_MENU_CD");
+        var sMenuNm   = objDs.getColumn(i, "CHILD_MENU_NM");
+        var nLevel    = objDs.getColumn(i, "CHILD_MENU_LEVEL");
+        var nSeq      = objDs.getColumn(i, "CHILD_MENU_SEQ");
+        var sUseYn    = objDs.getColumn(i, "USER_YN");
+        var sPageUrl  = objDs.getColumn(i, "CHILD_PAGE_ULR");
+
+        if (this.gfn_isNull(sParentCd) || this.gfn_isNull(sMenuCd) || this.gfn_isNull(sMenuNm))
+        {
+            this.alert((i + 1) + "행의 상위 메뉴 코드, 메뉴 코드, 메뉴명을 입력하세요.");
+            objDs.set_rowposition(i);
+            return false;
+        }
+
+        if (String(sParentCd).length > 30 || String(sMenuCd).length > 30 || String(sMenuNm).length > 200 || (!this.gfn_isNull(sPageUrl) && String(sPageUrl).length > 100))
+        {
+            this.alert((i + 1) + "행의 입력 길이가 DB 컬럼 크기를 초과했습니다.");
+            objDs.set_rowposition(i);
+            return false;
+        }
+
+        if (!/^\d+$/.test(String(nLevel)) || !/^\d+$/.test(String(nSeq)))
+        {
+            this.alert((i + 1) + "행의 메뉴 레벨과 표시 순서는 0 이상의 정수여야 합니다.");
+            objDs.set_rowposition(i);
+            return false;
+        }
+
+        if (sUseYn != "Y" && sUseYn != "N")
+        {
+            this.alert((i + 1) + "행의 사용 여부를 확인하세요.");
+            objDs.set_rowposition(i);
+            return false;
+        }
+
+        if (sParentCd == sMenuCd)
+        {
+            this.alert((i + 1) + "행의 메뉴 코드는 자기 자신을 상위 메뉴로 지정할 수 없습니다.");
+            objDs.set_rowposition(i);
+            return false;
+        }
+
+        for (var j = 0; j < objDs.rowcount; j++)
+        {
+            if (i != j && sMenuCd == objDs.getColumn(j, "CHILD_MENU_CD"))
+            {
+                this.alert("중복된 메뉴 코드입니다.\n" + sMenuCd);
+                objDs.set_rowposition(i);
+                return false;
+            }
+        }
+    }
+
+    return true;
+};
+
+
+/***************************************************************************************
+ * 7. 이벤트
+ ***************************************************************************************/
+
+/*
+ * 기능 : 조회 버튼 클릭
+ */
+this.divSearch_btnSearch_onclick = function(obj, e)
+{
+    this.fn_search();
+};
+
+/*
+ * 기능 : 초기화 버튼 클릭
+ */
+this.divSearch_btnSearchInit_onclick = function(obj, e)
+{
+    this.fn_searchInit();
+};
+
+/*
+ * 기능 : 행추가 버튼 클릭
+ */
+this.btnAddRow_onclick = function(obj, e)
+{
+    this.fn_addRow();
+};
+
+/*
+ * 기능 : 행삭제 버튼 클릭
+ */
+this.btnDelRow_onclick = function(obj, e)
+{
+    this.fn_delRow();
+};
+
+/*
+ * 기능 : 저장 버튼 클릭
+ */
+this.btnSave_onclick = function(obj, e)
+{
+    this.fn_save();
+};
+
+/*
+ * 기능 : 검색어 Enter 입력
+ */
+this.divSearch_edtMenu_onkeydown = function(obj, e)
+{
+    if (e.keycode == 13) this.fn_search();
+};
+]]></Script>
+  </Form>
+</FDL>

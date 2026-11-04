@@ -3,8 +3,13 @@
   <Form id="Form_Work" width="1080" height="670" titletext="Form_Work" onload="Form_Work_onload">
     <Layouts>
       <Layout width="1080" height="670" screenid="Desktop_screen">
+        <!-- 상단 조회 영역 -->
         <Button id="btn_search" taborder="0" text="조회" left="20" top="20" width="120" height="40" onclick="btn_search_onclick"/>
-        <Grid id="grd_code_type" taborder="1" left="20" top="75" width="470" height="215" binddataset="ds_code_type">
+        <Static id="stc_code_type" taborder="24" text="코드유형" left="160" top="33" width="92" height="14" textAlign="right"/>
+        <Edit id="edt_code_type" taborder="23" left="257" top="30" width="160" height="20" inputmode="upper"/>
+        <Button id="btn_alert" taborder="2" text="alert test" right="20" top="20" width="120" height="40" onclick="btn_alert_onclick"/>
+        <!-- 코드유형 그리드: 왼쪽 절반 / 높이는 화면의 35% -->
+        <Grid id="grd_code_type" taborder="1" left="20" top="75" right="50%" height="35%" binddataset="ds_code_type">
           <Formats>
             <Format id="default">
               <Columns>
@@ -35,69 +40,8 @@
             </Format>
           </Formats>
         </Grid>
-        <Button id="btn_alert" taborder="2" text="alert test" left="930" top="20" width="120" height="40" onclick="btn_alert_onclick"/>
-        <Button id="btn_createBatchJob" taborder="3" text="배치작업생성(C)" left="20" top="310" width="120" height="40" onclick="btn_createBatchJob_onclick" executeTypeCd="C"/>
-        <Button id="btn_searchBatchJobList" taborder="4" text="배치작업조회" left="150" top="310" width="120" height="40" onclick="btn_searchBatchJobList_onclick"/>
-        <Grid id="grd_batchJob" taborder="5" left="20" top="490" width="1040" height="170" binddataset="ds_batch_job">
-          <Formats>
-            <Format id="default">
-              <Columns>
-                <Column size="99"/>
-                <Column size="189"/>
-                <Column size="301"/>
-                <Column size="216"/>
-                <Column size="151"/>
-                <Column size="364"/>
-                <Column size="80"/>
-                <Column size="80"/>
-                <Column size="80"/>
-              </Columns>
-              <Rows>
-                <Row size="24" band="head"/>
-                <Row size="24"/>
-              </Rows>
-              <Band id="head">
-                <Cell text="STATE"/>
-                <Cell col="1" text="JOB_NAME"/>
-                <Cell col="2" text="JOB_ACTION"/>
-                <Cell col="3" text="COMMENTS"/>
-                <Cell col="4" text="START_DATE"/>
-                <Cell col="5" text="REPEAT_INTERVAL"/>
-                <Cell col="6" text="RUN_COUNT"/>
-                <Cell col="7" text="FAILURE_COUNT"/>
-                <Cell col="8" text="RETRY_COUNT"/>
-              </Band>
-              <Band id="body">
-                <Cell text="bind:STATE"/>
-                <Cell col="1" text="bind:JOB_NAME"/>
-                <Cell col="2" text="bind:JOB_ACTION"/>
-                <Cell col="3" text="bind:COMMENTS"/>
-                <Cell col="4" text="bind:START_DATE"/>
-                <Cell col="5" text="bind:REPEAT_INTERVAL"/>
-                <Cell col="6" text="bind:RUN_COUNT"/>
-                <Cell col="7" text="bind:FAILURE_COUNT"/>
-                <Cell col="8" text="bind:RETRY_COUNT"/>
-              </Band>
-            </Format>
-          </Formats>
-        </Grid>
-        <Edit id="edt_jobName" taborder="6" left="437" top="310" width="290" height="17" value="BGF_BSYS_LOG_HISTORY_M0002" text="BGF_BSYS_LOG_HISTORY_M0002" inputmode="upper"/>
-        <Edit id="edt_jobActionName" taborder="7" left="437" top="329" width="290" height="20" text="bsys_log_pkg.history_p" value="bsys_log_pkg.history_p" inputmode="lower"/>
-        <Calendar id="cal_startDate" taborder="8" left="437" top="351" width="201" height="20" editformat="yyyy-MM-dd" dateformat="yyyy-MM-dd"/>
-        <Static id="stc_job_name" taborder="9" text="배치작업명" left="270" top="311" width="162" height="14" textAlign="right"/>
-        <Static id="stc_job_action_name" taborder="10" text="실행 프로그램 스크립트" left="270" top="332" width="162" height="14" textAlign="right"/>
-        <Static id="stc_start_date" taborder="11" text="배치작업 시작일시" left="270" top="354" width="162" height="14" textAlign="right"/>
-        <MaskEdit id="msk_startTime" taborder="12" left="640" top="351" width="87" height="20" format="##:##:##" type="string"/>
-        <Button id="btn_stopBatchJob" taborder="13" text="배치작업중지(S)" left="20" top="352" width="120" height="40" onclick="btn_createBatchJob_onclick" executeTypeCd="S"/>
-        <Button id="btn_enableBatchJob" taborder="14" text="스케줄 활성화(E)" left="20" top="394" width="120" height="40" onclick="btn_createBatchJob_onclick" executeTypeCd="E"/>
-        <Button id="btn_disableBatchJob" taborder="15" text="스케줄 비활성화(D)" left="20" top="436" width="120" height="40" onclick="btn_createBatchJob_onclick" executeTypeCd="D"/>
-        <Button id="btn_changeBatchJob" taborder="16" text="스케줄 주기변경(U)" left="150" top="436" width="120" height="40" onclick="btn_createBatchJob_onclick" executeTypeCd="U"/>
-        <Button id="btn_dropBatchJob" taborder="17" text="배치작업 삭제(X)" left="150" top="394" width="120" height="40" onclick="btn_createBatchJob_onclick" executeTypeCd="X"/>
-        <Static id="stc_repeat_cd" taborder="18" text="반복유형코드" left="270" top="376" width="162" height="14" textAlign="right"/>
-        <Combo id="cbo_repeat_cd" taborder="19" left="437" top="373" width="123" height="20" value="RT110" index="1" innerdataset="ds_cbo_repeat_cd" datacolumn="CODE_NM" codecolumn="CODE" text="시간단위" onitemchanged="cbo_repeat_cd_onitemchanged"/>
-        <Static id="stc_interval" taborder="20" text="반복간격" left="270" top="398" width="162" height="14" textAlign="right"/>
-        <Spin id="spn_interval" taborder="21" left="437" top="395" width="123" height="20" max="1000" min="1" value="1"/>
-        <Grid id="grd_code" taborder="22" left="498" top="75" width="552" height="215" binddataset="ds_code">
+        <!-- 코드 그리드: 코드유형 그리드 오른쪽 10px부터 오른쪽 끝까지 -->
+        <Grid id="grd_code" taborder="22" left="grd_code_type:10" top="75" right="20" height="35%" binddataset="ds_code">
           <Formats>
             <Format id="default">
               <Columns>
@@ -146,8 +90,70 @@
             </Format>
           </Formats>
         </Grid>
-        <Edit id="edt_code_type" taborder="23" left="257" top="30" width="160" height="20" inputmode="upper"/>
-        <Static id="stc_code_type" taborder="24" text="코드유형" left="160" top="33" width="92" height="14" textAlign="right"/>
+        <!-- 배치작업 버튼 영역: 상단 그리드 아래에 따라붙음 -->
+        <Button id="btn_createBatchJob" taborder="3" text="배치작업생성(C)" left="20" top="grd_code_type:20" width="120" height="40" onclick="btn_createBatchJob_onclick" executeTypeCd="C"/>
+        <Button id="btn_searchBatchJobList" taborder="4" text="배치작업조회" left="150" top="grd_code_type:20" width="120" height="40" onclick="btn_searchBatchJobList_onclick"/>
+        <Button id="btn_stopBatchJob" taborder="13" text="배치작업중지(S)" left="20" top="btn_createBatchJob:2" width="120" height="40" onclick="btn_createBatchJob_onclick" executeTypeCd="S"/>
+        <Button id="btn_enableBatchJob" taborder="14" text="스케줄 활성화(E)" left="20" top="btn_stopBatchJob:2" width="120" height="40" onclick="btn_createBatchJob_onclick" executeTypeCd="E"/>
+        <Button id="btn_dropBatchJob" taborder="17" text="배치작업 삭제(X)" left="150" top="btn_stopBatchJob:2" width="120" height="40" onclick="btn_createBatchJob_onclick" executeTypeCd="X"/>
+        <Button id="btn_disableBatchJob" taborder="15" text="스케줄 비활성화(D)" left="20" top="btn_enableBatchJob:2" width="120" height="40" onclick="btn_createBatchJob_onclick" executeTypeCd="D"/>
+        <Button id="btn_changeBatchJob" taborder="16" text="스케줄 주기변경(U)" left="150" top="btn_enableBatchJob:2" width="120" height="40" onclick="btn_createBatchJob_onclick" executeTypeCd="U"/>
+        <!-- 배치작업 입력 영역 -->
+        <Static id="stc_job_name" taborder="9" text="배치작업명" left="270" top="grd_code_type:21" width="162" height="14" textAlign="right"/>
+        <Edit id="edt_jobName" taborder="6" left="437" top="grd_code_type:20" width="290" height="17" value="BGF_BSYS_LOG_HISTORY_M0002" text="BGF_BSYS_LOG_HISTORY_M0002" inputmode="upper"/>
+        <Static id="stc_job_action_name" taborder="10" text="실행 프로그램 스크립트" left="270" top="grd_code_type:42" width="162" height="14" textAlign="right"/>
+        <Edit id="edt_jobActionName" taborder="7" left="437" top="grd_code_type:39" width="290" height="20" text="bsys_log_pkg.history_p" value="bsys_log_pkg.history_p" inputmode="lower"/>
+        <Static id="stc_start_date" taborder="11" text="배치작업 시작일시" left="270" top="grd_code_type:64" width="162" height="14" textAlign="right"/>
+        <Calendar id="cal_startDate" taborder="8" left="437" top="grd_code_type:61" width="201" height="20" editformat="yyyy-MM-dd" dateformat="yyyy-MM-dd"/>
+        <MaskEdit id="msk_startTime" taborder="12" left="640" top="grd_code_type:61" width="87" height="20" format="##:##:##" type="string"/>
+        <Static id="stc_repeat_cd" taborder="18" text="반복유형코드" left="270" top="grd_code_type:86" width="162" height="14" textAlign="right"/>
+        <Combo id="cbo_repeat_cd" taborder="19" left="437" top="grd_code_type:83" width="123" height="20" value="RT110" index="1" innerdataset="ds_cbo_repeat_cd" datacolumn="CODE_NM" codecolumn="CODE" text="시간단위" onitemchanged="cbo_repeat_cd_onitemchanged"/>
+        <Static id="stc_interval" taborder="20" text="반복간격" left="270" top="grd_code_type:108" width="162" height="14" textAlign="right"/>
+        <Spin id="spn_interval" taborder="21" left="437" top="grd_code_type:105" width="123" height="20" max="1000" min="1" value="1"/>
+        <!-- 배치작업 그리드: 버튼 영역 아래부터 화면 하단까지 꽉 채움 -->
+        <Grid id="grd_batchJob" taborder="5" left="20" top="btn_disableBatchJob:14" right="20" bottom="10" binddataset="ds_batch_job">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="99"/>
+                <Column size="189"/>
+                <Column size="301"/>
+                <Column size="216"/>
+                <Column size="151"/>
+                <Column size="364"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="80"/>
+              </Columns>
+              <Rows>
+                <Row size="24" band="head"/>
+                <Row size="24"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="STATE"/>
+                <Cell col="1" text="JOB_NAME"/>
+                <Cell col="2" text="JOB_ACTION"/>
+                <Cell col="3" text="COMMENTS"/>
+                <Cell col="4" text="START_DATE"/>
+                <Cell col="5" text="REPEAT_INTERVAL"/>
+                <Cell col="6" text="RUN_COUNT"/>
+                <Cell col="7" text="FAILURE_COUNT"/>
+                <Cell col="8" text="RETRY_COUNT"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:STATE"/>
+                <Cell col="1" text="bind:JOB_NAME"/>
+                <Cell col="2" text="bind:JOB_ACTION"/>
+                <Cell col="3" text="bind:COMMENTS"/>
+                <Cell col="4" text="bind:START_DATE"/>
+                <Cell col="5" text="bind:REPEAT_INTERVAL"/>
+                <Cell col="6" text="bind:RUN_COUNT"/>
+                <Cell col="7" text="bind:FAILURE_COUNT"/>
+                <Cell col="8" text="bind:RETRY_COUNT"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
       </Layout>
     </Layouts>
     <Objects>
@@ -463,7 +469,7 @@ this.cbo_repeat_cd_onitemchanged = function(obj:nexacro.Combo,e:nexacro.ItemChan
 };
 ]]></Script>
     <Bind>
-      <BindItem id="item0" compid="edt_code_type" propid="value" datasetid="ds_search" columnid="code_type"/>
+      <BindItem id="item0" compid="edt_code_type" propid="value" datasetid="ds_search" columnid="CODE_TYPE"/>
     </Bind>
   </Form>
 </FDL>

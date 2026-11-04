@@ -998,7 +998,28 @@
             											{
             												"color" : nexacro.ColorObject("#ffffff")
             											}
-            										}
+            										},
+            										"class" :
+            										[
+            											{
+            												"menuGrid" :
+            												{
+            													"self" :
+            													{
+            														"enabled" :
+            														{
+            															"border" : nexacro.BorderObject("0px none")
+            														},
+            														"mouseover" :
+            														{
+            														},
+            														"selected" :
+            														{
+            														}
+            													}
+            												}
+            											}
+            										]
             									}
             								}
             							},
@@ -1094,7 +1115,48 @@
             							}
             						}
             					}
-            				}
+            				},
+            				"class" :
+            				[
+            					{
+            						"menuChild" :
+            						{
+            							"parent" :
+            							{
+            								"row" :
+            								{
+            									"parent" :
+            									{
+            										"body" :
+            										{
+            											"parent" :
+            											{
+            												"Grid" :
+            												{
+            													"class" :
+            													[
+            														{
+            															"menuGrid" :
+            															{
+            																"self" :
+            																{
+            																	"mouseover" :
+            																	{
+            																		"color" : nexacro.ColorObject("#3478C0")
+            																	}
+            																}
+            															}
+            														}
+            													]
+            												}
+            											}
+            										}
+            									}
+            								}
+            							}
+            						}
+            					}
+            				]
             			},
             			"subcell" :
             			{
@@ -1694,6 +1756,54 @@
             										"color" : nexacro.ColorObject("#999999")
             									}
             								}
+            							},
+            							"cell" :
+            							{
+            								"class" :
+            								[
+            									{
+            										"menuChild" :
+            										{
+            											"parent" :
+            											{
+            												"row" :
+            												{
+            													"parent" :
+            													{
+            														"body" :
+            														{
+            															"parent" :
+            															{
+            																"Grid" :
+            																{
+            																	"class" :
+            																	[
+            																		{
+            																			"menuGrid" :
+            																			{
+            																				"self" :
+            																				{
+            																					"enabled" :
+            																					{
+            																						"color" : nexacro.ColorObject("#666666")
+            																					},
+            																					"mouseover" :
+            																					{
+            																						"color" : nexacro.ColorObject("#3478C0")
+            																					}
+            																				}
+            																			}
+            																		}
+            																	]
+            																}
+            															}
+            														}
+            													}
+            												}
+            											}
+            										}
+            									}
+            								]
             							}
             						}
             					}
@@ -4329,6 +4439,7 @@
         		imgcache[nexacro._getImageLocation("theme://images/btn_WF_Stepitem_S.png")] = { width:13, height:13 };
         		imgcache[nexacro._getImageLocation("theme://images/btn_expand.png")] = { width:9, height:6 };
         		imgcache[nexacro._getImageLocation("theme://images/btn_WF_Popupexpand.png")] = { width:3, height:5 };
+        		imgcache[nexacro._getImageLocation("theme://images/built1_Logo_Spin.gif")] = { width:390, height:130 };
         		imgcache[nexacro._getImageLocation("theme://images/chk_WF_Box_F.png")] = { width:13, height:13 };
         		imgcache[nexacro._getImageLocation("theme://images/img_WF_Grdimg.png")] = { width:12, height:14 };
         		imgcache[nexacro._getImageLocation("theme://images/img_WF_Htrackbar.png")] = { width:8, height:5 };

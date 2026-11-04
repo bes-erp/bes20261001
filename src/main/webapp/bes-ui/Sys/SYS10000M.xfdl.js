@@ -17,6 +17,11 @@
             }
             
             // Object(Dataset, ExcelExportObject) Initialize
+            obj = new Dataset("ds_login", this);
+            obj._setContents({"ColumnInfo" : {"Column" : [ {"id" : "USER_ID","type" : "STRING","size" : "30"},{"id" : "PASSWORD","type" : "STRING","size" : "512"}]}});
+            this.addChild(obj.name, obj);
+
+
             obj = new Dataset("ds_loginResult", this);
             obj._setContents({"ColumnInfo" : {"Column" : [ {"id" : "RESULT_CD","type" : "STRING","size" : "10"},{"id" : "RESULT_DESCR","type" : "STRING","size" : "4000"}]}});
             this.addChild(obj.name, obj);
@@ -76,15 +81,22 @@
             obj.set_borderRadius("5px");
             this.div_login.addChild(obj.name, obj);
 
-            obj = new CheckBox("chk_saveId","65","330","150","25",null,null,null,null,null,null,this.div_login.form);
+            obj = new CheckBox("chk_saveId","65","330","100","25",null,null,null,null,null,null,this.div_login.form);
             obj.set_taborder("6");
             obj.set_text("아이디 저장");
             obj.set_font("12px Arial");
             obj.set_color("#667085");
             this.div_login.addChild(obj.name, obj);
 
-            obj = new Button("btn_login","65","380","350","48",null,null,null,null,null,null,this.div_login.form);
+            obj = new CheckBox("chk_savePw","180","330","110","25",null,null,null,null,null,null,this.div_login.form);
             obj.set_taborder("7");
+            obj.set_text("비밀번호 저장");
+            obj.set_font("12px Arial");
+            obj.set_color("#667085");
+            this.div_login.addChild(obj.name, obj);
+
+            obj = new Button("btn_login","65","380","350","48",null,null,null,null,null,null,this.div_login.form);
+            obj.set_taborder("8");
             obj.set_text("로그인");
             obj.set_font("bold 16px Arial");
             obj.set_color("#FFFFFF");
@@ -136,12 +148,18 @@
          * 변경일            변경자            변경내역
          *---------------------------------------------------------------------------------------
          * 2026-11-02        Built1            최초작성
+         * 2026-11-04        Built1            공통 함수 적용 및 로그인 정보 저장 기능 추가
          ***************************************************************************************/
 
 
         /***************************************************************************************
          * 1. FORM 변수 선언
          ***************************************************************************************/
+
+        this.fv_saveIdKey   = "BES_DEV_SAVE_ID";
+        this.fv_userIdKey   = "BES_DEV_USER_ID";
+        this.fv_savePwKey   = "BES_DEV_SAVE_PW";
+        this.fv_passwordKey = "BES_DEV_PASSWORD";
 
 
         /***************************************************************************************
@@ -153,8 +171,8 @@
          */
         this.fn_init = function(obj, e)
         {
-            this.fn_centerLogin();
-            //this.div_login.form.edt_userId.setFocus();
+        	this.fn_centerLogin();
+            this.fn_loadLoginInfo();
         };
 
 
@@ -167,11 +185,11 @@
          */
         this.fn_login = function()
         {
-            var sUserId = this.div_login.form.edt_userId.value;
-            var sPassword = this.div_login.form.edt_password.value;
+            var sUserId       = this.div_login.form.edt_userId.value;
+            var sPassword     = this.div_login.form.edt_password.value;
 
             // 아이디 필수값 확인
-            if (this.fn_isEmpty(sUserId))
+            if (this.gfn_isNull(sUserId))
             {
                 this.alert("아이디를 입력해 주세요.");
                 this.div_login.form.edt_userId.setFocus();
@@ -179,49 +197,30 @@
             }
 
             // 비밀번호 필수값 확인
-            if (this.fn_isEmpty(sPassword))
+            if (this.gfn_isNull(sPassword))
             {
                 this.alert("비밀번호를 입력해 주세요.");
                 this.div_login.form.edt_password.setFocus();
                 return;
             }
 
-            // 로그인 요청 Dataset 생성
-            if (!this.objects["ds_login"])
-            {
-                var dsLogin = new Dataset("ds_login", this);
-
-                dsLogin.addColumn("USER_ID", "STRING", 30);
-                dsLogin.addColumn("PASSWORD", "STRING", 512);
-
-                this.addChild("ds_login", dsLogin);
-            }
-
             // 로그인 요청 데이터 설정
             this.ds_login.clearData();
 
             var nRow = this.ds_login.addRow();
-
             this.ds_login.setColumn(nRow, "USER_ID", sUserId);
             this.ds_login.setColumn(nRow, "PASSWORD", sPassword);
 
             // 로그인 Transaction 설정
-            var sSvcId = "login";
-            var sSvcURL = "svcUrl::sys/SYS10000M/login.do";
-            var sInData = "dsLogin=ds_login";
-            var sOutData = "ds_loginResult=outLogin";
-            var sArgument = "";
-            var sCallback = "fn_callBack";
+            var sSvcID        = "login";
+            var sSvcURL       = "svcUrl::sys/SYS10000M/login.do";
+            var sInDatasets   = "dsLogin=ds_login";
+            var sOutDatasets  = "ds_loginResult=outLogin";
+            var sArgument     = "";
+            var sCallbackFunc = "fn_callBack";
 
-            // 로그인 요청
-            this.transaction(
-                sSvcId,
-                sSvcURL,
-                sInData,
-                sOutData,
-                sArgument,
-                sCallback
-            );
+            // 공통 Transaction 호출
+            this.gfn_transaction(sSvcID, sSvcURL, sInDatasets, sOutDatasets, sArgument, sCallbackFunc);
         };
 
 
@@ -232,72 +231,59 @@
         /*
          * 기능 : 로그인 Transaction 결과 처리
          */
-        this.fn_callBack = function(sSvcId, nErrorCode, sErrorMsg)
+        this.fn_callBack = function(sSvcID, nErrorCode, sErrorMsg)
         {
-            if (sSvcId != "login")
-            {
-                return;
-            }
+            if (sSvcID != "login") return;
 
             // 로그인 요청 데이터 삭제
-            if (this.ds_login)
-            {
-                this.ds_login.clearData();
-            }
-
-            // 비밀번호 입력값 삭제
-            this.div_login.form.edt_password.set_value("");
+            this.ds_login.clearData();
 
             // Transaction 오류 확인
             if (nErrorCode != 0)
             {
+                this.div_login.form.edt_password.set_value(null);
                 this.alert("로그인 요청 오류: " + sErrorMsg);
                 return;
             }
 
-            // 로그인 결과 데이터 확인
-            if (!this.ds_loginResult ||
-                this.ds_loginResult.rowcount == 0)
+            // 로그인 결과 확인
+            if (this.ds_loginResult.rowcount == 0)
             {
+                this.div_login.form.edt_password.set_value(null);
                 this.alert("로그인 결과가 없습니다.");
                 return;
             }
 
-            var sResultCd = this.ds_loginResult.getColumn(0, "RESULT_CD");
+            var sResultCd  = this.ds_loginResult.getColumn(0, "RESULT_CD");
             var sResultMsg = this.ds_loginResult.getColumn(0, "RESULT_DESCR");
 
             // 로그인 성공
+            if (sResultCd == "S")
+            {
+                var sUserId = this.div_login.form.edt_userId.value;
+                var objApp  = nexacro.getApplication();
 
-        	if (sResultCd == "S")
-        	{
-        		var objApp = nexacro.getApplication();
+                // 로그인 정보 저장
+                this.fn_saveLoginInfo();
 
-        		// 로그인 아이디 저장
-        		var sUserId = this.div_login.form.edt_userId.value;
-        		objApp.gvUserId = sUserId;
+                // 로그인 사용자 정보 설정
+                objApp.gvUserId = sUserId;
 
-        		// 상단 프레임 가져오기
-        		var objTopFrame =
-        			objApp.mainframe.VFrameSetMain
-        				  .HFrameSet00.VFrameSet00.TopFrame;
+                // 상단 프레임 사용자 정보 표시
+                var objTopFrame = objApp.mainframe.VFrameSetMain.VFrameSet00.TopFrame;
 
-        		// 상단 사용자 정보 표시
-        		if (objTopFrame && objTopFrame.form)
+                if (objTopFrame && objTopFrame.form && objTopFrame.form.sta_UserName)
         		{
-        			var objUserName = objTopFrame.form.sta_UserName;
-
-        			if (objUserName)
-        			{
-        				objUserName.set_text(sUserId);
-        			}
+        			objTopFrame.form.sta_UserName.set_text(sUserId + "님 환영합니다.");
         		}
 
-        		// 메인 화면으로 이동
-        		this.fn_goMain();
-        	}
+                // 메인 화면 이동
+                this.fn_goMain();
+            }
             else
             {
-                // 로그인 실패 메시지
+                // 로그인 실패 처리
+                this.div_login.form.edt_password.set_value(null);
                 this.alert(sResultMsg || "로그인에 실패했습니다.");
                 this.div_login.form.edt_password.setFocus();
             }
@@ -314,13 +300,94 @@
          ***************************************************************************************/
 
         /*
+         * 기능 : 로그인 정보 저장
+         */
+        this.fn_saveLoginInfo = function()
+        {
+            var objLogin = this.div_login.form;
+            var bSaveId  = (objLogin.chk_saveId.value == 1);
+            var bSavePw  = (objLogin.chk_savePw.value == 1);
+
+            // 아이디 저장
+            if (bSaveId)
+            {
+                nexacro.setPrivateProfile(this.fv_saveIdKey, "1");
+                nexacro.setPrivateProfile(this.fv_userIdKey, objLogin.edt_userId.value);
+            }
+            else
+            {
+                nexacro.removePrivateProfile(this.fv_saveIdKey);
+                nexacro.removePrivateProfile(this.fv_userIdKey);
+            }
+
+            // 비밀번호 저장
+            if (bSavePw)
+            {
+                nexacro.setPrivateProfile(this.fv_savePwKey, "1");
+                nexacro.setPrivateProfile(this.fv_passwordKey, objLogin.edt_password.value);
+            }
+            else
+            {
+                nexacro.removePrivateProfile(this.fv_savePwKey);
+                nexacro.removePrivateProfile(this.fv_passwordKey);
+            }
+        };
+
+
+        /*
+         * 기능 : 저장된 로그인 정보 조회
+         */
+        this.fn_loadLoginInfo = function()
+        {
+            var objLogin = this.div_login.form;
+            var sSaveId  = nexacro.getPrivateProfile(this.fv_saveIdKey);
+            var sSavePw  = nexacro.getPrivateProfile(this.fv_savePwKey);
+            var bSaveId  = (sSaveId == "1");
+            var bSavePw  = (sSavePw == "1");
+
+            // 저장 여부 체크박스 설정
+            objLogin.chk_saveId.set_value(bSaveId ? 1 : 0);
+            objLogin.chk_savePw.set_value(bSavePw ? 1 : 0);
+
+            // 아이디 조회
+            if (bSaveId)
+            {
+                objLogin.edt_userId.set_value(nexacro.getPrivateProfile(this.fv_userIdKey));
+            }
+            else
+            {
+                objLogin.edt_userId.set_value(null);
+            }
+
+            // 비밀번호 조회
+            if (bSavePw)
+            {
+                objLogin.edt_password.set_value(nexacro.getPrivateProfile(this.fv_passwordKey));
+            }
+            else
+            {
+                objLogin.edt_password.set_value(null);
+            }
+        };
+
+
+        /*
+         * 기능 : 로그아웃 후 로그인 정보 초기화
+         */
+        this.fn_resetLogin = function()
+        {
+            this.ds_login.clearData();
+            this.ds_loginResult.clearData();
+            this.fn_loadLoginInfo();
+        };
+
+
+        /*
          * 기능 : 로그인 성공 후 메인 프레임 전환
          */
         this.fn_goMain = function()
         {
-            var objApp = nexacro.getApplication();
-
-            // Application_Desktop.xadl의 최상위 FrameSet
+            var objApp       = nexacro.getApplication();
             var objMainFrame = objApp.mainframe.VFrameSetMain;
 
             if (!objMainFrame)
@@ -329,54 +396,29 @@
                 return;
             }
 
-            // 로그인 화면 숨김 / 메인 화면 표시
             objMainFrame.set_separatesize("0,*");
         };
-
 
         /*
          * 기능 : 로그인 화면 중앙 정렬
          */
         this.fn_centerLogin = function()
         {
-            // 현재 Form의 실제 크기
-            var nFormWidth = this.getOffsetWidth();
-            var nFormHeight = this.getOffsetHeight();
+            var objApp        = nexacro.getApplication();
+            var objLoginFrame = objApp.mainframe.VFrameSetMain.LoginFrame;
 
-            // 로그인 박스 크기
-            var nLoginWidth = this.div_login.getOffsetWidth();
-            var nLoginHeight = this.div_login.getOffsetHeight();
+            if (!objLoginFrame) return;
 
-            // 저작권 문구 높이 및 간격
-            var nGap = 20;
-            var nCopyrightHeight = this.sta_copyright.getOffsetHeight();
+            // 공통 함수를 이용한 로그인 Div 중앙 정렬
+            this.gfn_center(this.div_login, this, 0, -25);
 
-            // 로그인 박스 + 저작권 문구 전체 높이
-            var nTotalHeight = nLoginHeight + nGap + nCopyrightHeight;
+            // 하단 문구 위치 설정
+            var nLeft = this.div_login.getOffsetLeft();
+            var nTop  = this.div_login.getOffsetTop()
+                      + this.div_login.getOffsetHeight() + 20;
 
-            // 가로 중앙
-            var nLeft = Math.max(
-                0,
-                Math.floor((nFormWidth - nLoginWidth) / 2)
-            );
-
-            // 세로 중앙
-            var nTop = Math.max(
-                0,
-                Math.floor((nFormHeight - nTotalHeight) / 2)
-            );
-
-            // 로그인 박스 이동
-            this.div_login.move(nLeft, nTop);
-
-            // 저작권 문구도 같은 가로 위치로 이동
-            this.sta_copyright.move(
-                nLeft,
-                nTop + nLoginHeight + nGap
-            );
+            this.sta_copyright.move(nLeft, nTop);
         };
-
-
 
         /***************************************************************************************
          * 7. 이벤트
@@ -390,6 +432,7 @@
             this.fn_init(obj, e);
         };
 
+
         /*
          * 기능 : 화면 크기 변경 이벤트
          */
@@ -398,6 +441,7 @@
             this.fn_centerLogin();
         };
 
+
         /*
          * 기능 : 로그인 버튼 클릭 이벤트
          */
@@ -405,6 +449,7 @@
         {
             this.fn_login();
         };
+
 
         /*
          * 기능 : 비밀번호 입력 후 Enter 키 이벤트
@@ -415,20 +460,6 @@
             {
                 this.fn_login();
             }
-        };
-
-
-        /*
-         * 기능 : NULL 및 공백 여부 확인
-         */
-        this.fn_isEmpty = function(value)
-        {
-            if (value === null || value === undefined)
-            {
-                return true;
-            }
-
-            return String(value).trim().length === 0;
         };
 
         });

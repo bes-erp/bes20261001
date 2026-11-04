@@ -3,11 +3,12 @@
   <Form id="Form_Top" width="1080" height="50" titletext="공통 상단 영역" background="#FFFFFF" scrollbartype="none" onload="Form_Top_onload">
     <Layouts>
       <Layout width="1080" height="50" screenid="Desktop_screen">
-        <Static id="sta_Brand" taborder="0" text="BES" left="20" top="0" width="72" height="49" color="#24436D" font="bold 22px Arial" cursor="pointer" onclick="sta_Brand_onclick"/>
-        <Static id="sta_SystemName" taborder="1" text="Built1 Enterprise System" left="94" top="0" width="260" height="49" color="#41556F" font="12px Arial"/>
-        <Static id="sta_UserName" taborder="3" text="" right="82" top="0" width="120" height="49" textAlign="right" color="#52647A" font="12px Arial"/>
-        <Button id="btn_logout" taborder="4" text="로그아웃" right="18" top="0" width="60" height="49" font="12px Arial" color="#52647A" background="transparent" border="0px none" textAlign="right" cursor="pointer" onclick="btn_logout_onclick"/>
-        <Static id="sta_BottomLine" taborder="4" left="0" right="0" bottom="0" height="1" background="#DCE3EC"/>
+        <Static id="sta_Brand" taborder="0" text="BES" left="20" top="0" width="44" height="49" color="#24436D" font="bold 22px Arial" cursor="pointer" onclick="sta_Brand_onclick"/>
+        <Static id="sta_SystemName" taborder="1" text="Built1 Enterprise System" left="84" top="0" width="260" height="49" color="#41556F" font="12px Arial"/>
+        <Static id="sta_UserName" taborder="2" text="" right="187" top="0" width="175" height="49" textAlign="right" color="#52647A" font="12px Arial"/>
+        <Button id="btn_changePw" taborder="3" text="패스워드 변경" right="92" top="0" width="90" height="49" font="12px Arial" color="#3478C0" background="transparent" border="0px none" cursor="pointer" onclick="btn_changePw_onclick"/>
+        <Static id="sta_Separator" taborder="4" text="|" right="84" top="0" width="8" height="49" textAlign="center" color="#B8C2CF" font="12px Arial"/>
+        <Button id="btn_logout" taborder="5" text="로그아웃" right="14" top="0" width="70" height="49" font="12px Arial" color="#3478C0" background="transparent" border="0px none" cursor="pointer" onclick="btn_logout_onclick"/>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/***************************************************************************************
@@ -18,33 +19,34 @@
  * 작성일          : 2026-11-03
  *
  * 화면            : BES 공통 상단 영역
- * 설명            : 시스템명 및 사용자 정보 표시 영역 (로그인 정보 연동 전)
+ * 설명            : 시스템명, 사용자 환영 문구, 패스워드 변경 및 로그아웃
  *---------------------------------------------------------------------------------------
  * 변경일            변경자            변경내역
  *---------------------------------------------------------------------------------------
  * 2026-11-03        Built1            공통 상단 화면 구성
+ * 2026-11-04        Built1            상단 디자인 및 사용자 환영 문구 개선
+ * 2026-11-04        Built1            패스워드 변경 버튼 추가
  ***************************************************************************************/
+
 
 /***************************************************************************************
  * 1. FORM 변수 선언
  ***************************************************************************************/
+
 
 /***************************************************************************************
  * 2. FORM LOAD
  ***************************************************************************************/
 
 /*
- * 기능 : 상단 로그인 사용자 아이디 표시
+ * 기능 : 상단 로그인 사용자 정보 표시
  */
 this.Form_Top_onload = function(obj, e)
 {
     var objApp = nexacro.getApplication();
 
-    // 로그인 성공 시 저장한 사용자 아이디
-    var sUserId = objApp.gvUserId || "";
-
-    // 상단 사용자 정보 표시
-    this.sta_UserName.set_text(sUserId);
+    // 로그인 사용자 환영 문구 표시
+    this.sta_UserName.set_text(objApp.gvUserId ? objApp.gvUserId + "님 환영합니다." : "");
 };
 
 
@@ -52,9 +54,11 @@ this.Form_Top_onload = function(obj, e)
  * 3. 공통 버튼
  ***************************************************************************************/
 
+
 /***************************************************************************************
  * 4. TRANSACTION, CALLBACK
  ***************************************************************************************/
+
 
 /***************************************************************************************
  * 5. 팝업 호출 및 콜백
@@ -70,7 +74,7 @@ this.Form_Top_onload = function(obj, e)
  */
 this.fn_logout = function()
 {
-    var objApp = nexacro.getApplication();
+    var objApp      = nexacro.getApplication();
     var objFrameSet = objApp.mainframe.VFrameSetMain;
 
     if (!objFrameSet)
@@ -79,66 +83,29 @@ this.fn_logout = function()
         return;
     }
 
-    // 1. 로그인 화면 입력값 초기화
+    // 로그인 화면 정보 복원
     var objLoginFrame = objFrameSet.LoginFrame;
 
-    if (objLoginFrame && objLoginFrame.form)
+    if (objLoginFrame && objLoginFrame.form && objLoginFrame.form.fn_resetLogin)
     {
-        var objLoginForm = objLoginFrame.form;
-
-        if (objLoginForm.div_login)
-        {
-			objLoginForm.div_login.form.edt_userId.set_value(null);
-			objLoginForm.div_login.form.edt_password.set_value(null);
-        }
-
-        if (objLoginForm.ds_login)
-        {
-            objLoginForm.ds_login.clearData();
-        }
-
-        if (objLoginForm.ds_loginResult)
-        {
-            objLoginForm.ds_loginResult.clearData();
-        }
+        objLoginFrame.form.fn_resetLogin();
     }
 
-    // 2. 로그인 사용자 정보 초기화
+    // 로그인 사용자 정보 초기화
     objApp.gvUserId = "";
     this.sta_UserName.set_text("");
 
-    // 3. 로그인 화면 표시 / 업무 화면 숨김
+    // 로그인 화면 표시
     objFrameSet.set_separatesize("*,0");
 
-    // 4. 로그아웃 완료 알림
     this.alert("로그아웃 되었습니다.");
-};
-
-
-
-/*
- * 기능 : 로그인 입력 정보 초기화
- */
-this.fn_resetLogin = function()
-{
-    this.div_login.form.edt_userId.set_value("");
-    this.div_login.form.edt_password.set_value("");
-
-    if (this.ds_login)
-    {
-        this.ds_login.clearData();
-    }
-
-    if (this.ds_loginResult)
-    {
-        this.ds_loginResult.clearData();
-    }
 };
 
 
 /***************************************************************************************
  * 7. 이벤트
  ***************************************************************************************/
+
 /*
  * 기능 : 로그아웃 버튼 클릭
  */
@@ -147,6 +114,16 @@ this.btn_logout_onclick = function(obj, e)
     this.fn_logout();
 };
 
+
+/*
+ * 기능 : 패스워드 변경 버튼 클릭
+ */
+this.btn_changePw_onclick = function(obj, e)
+{
+    this.alert("패스워드 변경 기능 개발 예정");
+};
+
+
 /*
  * 기능 : BES 로고 클릭 시 초기 업무 화면으로 이동
  */
@@ -154,9 +131,8 @@ this.sta_Brand_onclick = function(obj, e)
 {
     var objApp = nexacro.getApplication();
 
-    // 메인 화면의 WorkFrame 가져오기
-    var objWorkFrame =
-        objApp.mainframe.VFrameSetMain.HFrameSet00.VFrameSet00.WorkFrame;
+    // 메인 화면 WorkFrame 접근
+    var objWorkFrame = objApp.mainframe.VFrameSetMain.VFrameSet00.HFrameSet00.WorkFrame;
 
     if (!objWorkFrame)
     {

@@ -397,6 +397,11 @@ textarea::-webkit-scrollbar { display: none; }
 	text-align : center;
 	background-position-x : center;
 }
+.Grid.menuGrid .body .row .cell
+{
+	background : #FFFFFF;
+	border : 0px none;
+}
 .Grid .body .row .cell
 {
 	color : #666666;
@@ -506,6 +511,10 @@ textarea::-webkit-scrollbar { display: none; }
 .GridCellControl .celltreeitem .treeitemtext
 {
 	font : 12px "Malgun Gothic";
+	color : #666666;
+}
+.Grid.menuGrid .body .row .cell.menuChild.dummy.dummy.dummy .celltreeitem .treeitemtext
+{
 	color : #666666;
 }
 .GridCellControl .celltreeline
@@ -1178,6 +1187,15 @@ textarea::-webkit-scrollbar { display: none; }
 {
 	background : #efefef;
 }
+#nexacontainer .Grid.menuGrid .body .row .cell[data-status=mouseover]
+{
+	background : #FFFFFF;
+}
+#nexacontainer .Grid.menuGrid .body .row .cell.menuChild.dummy.dummy.dummy[data-status=mouseover]
+{
+	color : #3478C0;
+	cursor : pointer;
+}
 #nexacontainer .Grid .body .row .cell[data-status=mouseover]
 {
 	background : #f6f6f6;
@@ -1219,6 +1237,11 @@ textarea::-webkit-scrollbar { display: none; }
 #nexacontainer .GridCellControl .cellmaskedit[data-status=focused]
 {
 	border : 1px solid #5a86cd;
+}
+#nexacontainer .Grid.menuGrid .body .row .cell.menuChild.dummy.dummy.dummy .celltreeitem .treeitemtext[data-status=mouseover]
+{
+	color : #3478C0;
+	cursor : pointer;
 }
 #nexacontainer .ListBox[data-status=mouseover]
 {
@@ -1701,6 +1724,10 @@ textarea::-webkit-scrollbar { display: none; }
 #nexacontainer .SpinControl[data-userstatus=invalidtext]
 {
 	color : #999999;
+}
+#nexacontainer .Grid.menuGrid .body .row .cell[data-userstatus=selected]
+{
+	background : #FFFFFF;
 }
 #nexacontainer .Grid .body .row .cell[data-userstatus=selected]
 {

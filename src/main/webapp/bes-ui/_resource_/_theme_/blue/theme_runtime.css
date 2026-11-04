@@ -187,6 +187,11 @@
 {
 	text-align : center;
 }
+.Grid.menuGrid .body .row .cell
+{
+	background : #FFFFFF;
+	border : 0px none;
+}
 .Grid .body .row .cell
 {
 	color : #666666;
@@ -277,6 +282,10 @@
 .GridCellControl .celltreeitem .treeitemtext
 {
 	font : 12px "Malgun Gothic";
+	color : #666666;
+}
+.Grid.menuGrid .body .row .cell.menuChild .celltreeitem .treeitemtext
+{
 	color : #666666;
 }
 .GridCellControl .celltreeline
@@ -881,6 +890,15 @@
 {
 	background : #efefef;
 }
+.Grid.menuGrid .body .row .cell[status=mouseover]
+{
+	background : #FFFFFF;
+}
+.Grid.menuGrid .body .row .cell.menuChild[status=mouseover]
+{
+	color : #3478C0;
+	cursor : pointer;
+}
 .Grid .body .row .cell[status=mouseover]
 {
 	background : #f6f6f6;
@@ -918,6 +936,11 @@
 .GridCellControl .cellmaskedit[status=focused]
 {
 	border : 1px solid #5a86cd;
+}
+.Grid.menuGrid .body .row .cell.menuChild .celltreeitem .treeitemtext[status=mouseover]
+{
+	color : #3478C0;
+	cursor : pointer;
 }
 .ListBox[status=mouseover]
 {
@@ -1353,6 +1376,10 @@
 .SpinControl[userstatus=invalidtext]
 {
 	color : #999999;
+}
+.Grid.menuGrid .body .row .cell[userstatus=selected]
+{
+	background : #FFFFFF;
 }
 .Grid .body .row .cell[userstatus=selected]
 {
