@@ -1,0 +1,83 @@
+﻿-- ------------------------------------------------------------------------------------------------
+conn system/manager@bes;
+-- ------------------------------------------------------------------------------------------------
+
+
+-- ------------------------------------------------------------------------------------------------
+-- 테이블 생성
+-- ------------------------------------------------------------------------------------------------
+-- 테이블 삭제
+drop table bcom.com_auth_menu cascade constraints;
+
+-- 테이블 생성
+create table bcom.com_auth_menu
+(
+     auth_id                 number         not null
+    ,menu_id                 number         not null
+    ,user_yn                 varchar2(1)    default 'Y'
+    ,btn_search_yn           varchar2(1)    default 'Y'
+    ,btn_search_init_yn      varchar2(1)    default 'Y'
+    ,btn_save_yn             varchar2(1)    default 'Y'
+    ,btn_add_row_yn          varchar2(1)    default 'Y'
+    ,btn_del_row_yn          varchar2(1)    default 'Y'
+    ,btn_excel_down_yn       varchar2(1)    default 'Y'
+    ,btn_excel_up_yn         varchar2(1)    default 'N'
+    ,btn_print_yn            varchar2(1)    default 'N'
+    ,btn_batch_yn            varchar2(1)    default 'N'       
+    ,remark                  varchar2(4000)
+    ,create_date             date           default sysdate
+    ,create_by               varchar2(50)   default 'admin'
+    ,update_date             date           default sysdate
+    ,update_by               varchar2(50)   default 'admin'
+) tablespace bes_data;
+
+-- 테이블 설명
+comment on table  bcom.com_auth_menu                      is '[공통관리] 메뉴';
+comment on column bcom.com_auth_menu.auth_id              is '권한ID';
+comment on column bcom.com_auth_menu.menu_id              is '메뉴ID';
+comment on column bcom.com_auth_menu.user_yn              is '사용여부';
+comment on column bcom.com_auth_menu.btn_search_yn        is '버튼(조회)';
+comment on column bcom.com_auth_menu.btn_search_init_yn   is '버튼(초기화)';
+comment on column bcom.com_auth_menu.btn_save_yn          is '버튼(저장)';
+comment on column bcom.com_auth_menu.btn_add_row_yn       is '버튼(행추가)';
+comment on column bcom.com_auth_menu.btn_del_row_yn       is '버튼(행삭제)';
+comment on column bcom.com_auth_menu.btn_excel_down_yn    is '버튼(엑셀다운로드)';
+comment on column bcom.com_auth_menu.btn_excel_up_yn      is '버튼(엑셀업로드)';
+comment on column bcom.com_auth_menu.btn_print_yn         is '버튼(출력)';
+comment on column bcom.com_auth_menu.btn_batch_yn         is '버튼(처리)';
+comment on column bcom.com_auth_menu.remark               is '비고';
+
+comment on column bcom.com_auth_menu.create_date          is '생성일시';
+comment on column bcom.com_auth_menu.create_by            is '생성자';
+comment on column bcom.com_auth_menu.update_date          is '수정일시';
+comment on column bcom.com_auth_menu.update_by            is '수정자';
+
+
+-- primary 인덱스
+alter table bcom.com_auth_menu add constraint com_auth_menu_pk primary key (auth_id, menu_id) using index tablespace bes_index;
+
+-- unique 인덱스
+--create unique index bcom.com_auth_menu_uk01 on bcom.com_auth_menu (parent_menu_cd, child_menu_cd) tablespace bes_index;
+
+-- normal 인덱스
+--create index bcom.com_auth_menu_ix01 on bcom.com_auth_menu (child_menu_nm)  tablespace bes_index;
+--create index bcom.com_auth_menu_ix02 on bcom.com_auth_menu (child_page_ulr) tablespace bes_index;
+
+
+-- 메뉴부여
+grant all on bcom.com_auth_menu to bsys;
+--grant all on bcom.com_auth_menu to bhrm;
+
+-- 시노님 생성
+create or replace synonym bsys.com_auth_menu for bcom.com_auth_menu;
+--create or replace synonym bhrm.com_auth_menu for bcom.com_auth_menu;
+
+
+-- ----------------------------------------------------------------------------
+conn bcom/bcom@bes;
+-- ----------------------------------------------------------------------------
+-- 데이터 조회
+select csm.*
+  from com_auth_menu csm
+ where 1=1
+;
