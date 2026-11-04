@@ -2,6 +2,7 @@
 conn system/manager@bes;
 -- ------------------------------------------------------------------------------------------------
 
+
 -- ------------------------------------------------------------------------------------------------
 -- 시퀀스 생성
 -- ------------------------------------------------------------------------------------------------
@@ -34,7 +35,7 @@ drop table bcom.com_menu cascade constraints;
 -- 테이블 생성
 create table bcom.com_menu
 (
-     menu_id                 number         not null
+     menu_id                 number         default bcom.com_menu_s.nextval
     ,parent_menu_cd          varchar2(30)   not null
     ,child_menu_cd           varchar2(30)   not null 
     ,child_menu_nm           varchar2(200)  not null
@@ -60,7 +61,7 @@ create table bcom.com_menu
 
 -- 테이블 설명
 comment on table  bcom.com_menu                      is '[공통관리] 메뉴';
-comment on column bcom.com_menu.menu_id              is '메뉴ID [ 시퀀스 : com_menu_s ]';
+comment on column bcom.com_menu.menu_id              is '메뉴ID';
 comment on column bcom.com_menu.parent_menu_cd       is '상위메뉴코드';
 comment on column bcom.com_menu.child_menu_cd        is '하위메뉴코드';
 comment on column bcom.com_menu.child_menu_nm        is '하위메뉴명';

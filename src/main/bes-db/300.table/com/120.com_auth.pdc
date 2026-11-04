@@ -2,13 +2,40 @@
 conn system/manager@bes;
 -- ------------------------------------------------------------------------------------------------
 
+
+-- ------------------------------------------------------------------------------------------------
+-- 시퀀스 생성
+-- ------------------------------------------------------------------------------------------------
+-- 시퀀스 삭제
+drop   sequence bcom.com_auth_s;
+
+-- 시퀀스 생성
+create sequence bcom.com_auth_s
+minvalue 1
+maxvalue 999999999999
+start with 1000000
+increment by 1
+order;
+
+-- 권한 부여
+grant select on bcom.com_auth_s to bsys;
+
+-- 시노님 생성
+drop synonym bsys.zehr_log_s;
+create synonym bsys.zehr_log_s for bcom.com_auth_s;
+
+
+
+-- ------------------------------------------------------------------------------------------------
+-- 테이블 생성
+-- ------------------------------------------------------------------------------------------------
 -- 테이블 삭제
 drop table bcom.com_auth cascade constraints;
 
 -- 테이블 생성
 create table bcom.com_auth
 (
-     auth_id                 number         not null
+     auth_id                 number         default bcom.com_auth_s.nextval
     ,auth_name               varchar2(200)  not null
     ,auth_name_s             varchar2(100)  not null
     ,user_yn                 varchar2(1)    default 'Y'
