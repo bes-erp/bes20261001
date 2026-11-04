@@ -1,0 +1,64 @@
+﻿-- ------------------------------------------------------------------------------------------------
+conn system/manager@bes;
+-- ------------------------------------------------------------------------------------------------
+
+-- 테이블 삭제
+drop   table bcom.com_code_type cascade constraints;
+
+-- 테이블 생성
+create table bcom.com_code_type
+(
+     code_type               varchar2(30)   not null
+    ,code_type_nm            varchar2(200)  not null
+    ,code_type_nm_s          varchar2(100)  not null
+    ,start_date              date           default sysdate not null
+    ,end_date                date
+    ,create_type_cd          varchar2(30)   default 'U' not null
+    ,remark                  varchar2(4000)
+    ,create_date             date           default sysdate
+    ,create_by               varchar2(50)   default 'admin'
+    ,update_date             date           default sysdate
+    ,update_by               varchar2(50)   default 'admin'
+) tablespace bes_data;
+
+-- 테이블 설명
+comment on table  bcom.com_code_type                 is '[공통관리] 코드유형';
+comment on column bcom.com_code_type.code_type       is '코드유형';
+comment on column bcom.com_code_type.code_type_nm    is '코드유형명';
+comment on column bcom.com_code_type.code_type_nm_s  is '코드유형명(약칭)';
+comment on column bcom.com_code_type.start_date      is '시작일자';
+comment on column bcom.com_code_type.end_date        is '종료일자';
+comment on column bcom.com_code_type.create_type_cd  is '생성유형코드';
+comment on column bcom.com_code_type.remark          is '비고';
+
+comment on column bcom.com_code_type.create_date     is '생성일시';
+comment on column bcom.com_code_type.create_by       is '생성자';
+comment on column bcom.com_code_type.update_date     is '수정일시';
+comment on column bcom.com_code_type.update_by       is '수정자';
+
+-- primary 인덱스
+alter table bcom.com_code_type add constraint com_code_type_pk primary key (code_type) using index tablespace bes_index;
+
+-- unique 인덱스
+--create unique index bcom.com_code_type_uk01 on bcom.com_code_type (corp_id, code_type_id) tablespace bes_index;
+
+-- normal 인덱스
+create index bcom.com_code_type_ix01 on bcom.com_code_type (code_type_nm) tablespace bes_index;
+
+-- 권한부여
+grant all on bcom.com_code_type to bsys;
+grant all on bcom.com_code_type to bhrm;
+
+-- 시노님 생성
+create or replace synonym bsys.com_code_type for bcom.com_code_type;
+create or replace synonym bhrm.com_code_type for bcom.com_code_type;
+
+
+-- ----------------------------------------------------------------------------
+conn bsys/bsys@bes;
+-- ----------------------------------------------------------------------------
+-- 데이터 조회
+select cct.*
+  from com_code_type cct
+ where 1=1
+;

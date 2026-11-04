@@ -1,0 +1,76 @@
+﻿-- 사용자 접속
+conn system/manager@bes;
+-- ------------------------------------------------------------------------------------------------
+
+-- ------------------------------------------------------------------------------------------------
+-- 11g버전 이상 "c##" 사용하지 않기 위한 설정 적용
+alter session set "_oracle_script"=true;
+-- ------------------------------------------------------------------------------------------------
+
+-- ------------------------------------------------------------------------------------------------
+-- bsys 사용자 생성
+-- ------------------------------------------------------------------------------------------------
+drop   user bsys cascade;
+create user bsys identified by "bsys"
+default tablespace bes_data
+temporary tablespace temp
+profile default
+quota unlimited on bes_data
+quota unlimited on bes_index;
+
+-- 롤권한
+grant dba to bsys;
+
+-- 시스템 권한
+grant create cluster                 to bsys with admin option;
+grant create dimension               to bsys with admin option;
+grant create indextype               to bsys with admin option;
+grant create job                     to bsys with admin option;
+grant create materialized view       to bsys with admin option;
+grant create operator                to bsys with admin option;
+grant create procedure               to bsys with admin option;
+grant create sequence                to bsys with admin option;
+grant create session                 to bsys with admin option;
+grant create synonym                 to bsys with admin option;
+grant create table                   to bsys with admin option;
+grant create trigger                 to bsys with admin option;
+grant create type                    to bsys with admin option;
+grant create view                    to bsys with admin option;
+grant unlimited tablespace           to bsys;
+
+
+
+-- ------------------------------------------------------------------------------------------------
+-- bcom 사용자 생성
+-- ------------------------------------------------------------------------------------------------
+drop   user bcom cascade;
+create user bcom identified by "bcom"
+default tablespace bes_data
+temporary tablespace temp
+profile default
+quota unlimited on bes_data
+quota unlimited on bes_index;
+
+-- 롤권한
+grant connect, resource to bcom;
+
+-- ------------------------------------------------------------------------------------------------
+-- bhrm 사용자 생성
+-- ------------------------------------------------------------------------------------------------
+drop   user bhrm cascade;
+create user bhrm identified by "bhrm"
+default tablespace bes_data
+temporary tablespace temp
+profile default
+quota unlimited on bes_data
+quota unlimited on bes_index;
+
+-- 롤권한
+grant connect, resource to bhrm;
+
+
+select *
+  from dba_users du
+ where 1=1
+   and du.username like 'B%'
+;

@@ -1,0 +1,74 @@
+﻿-- ------------------------------------------------------------------------------------------------
+conn system/manager@bes;
+-- ------------------------------------------------------------------------------------------------
+
+-- 테이블 삭제
+drop table bcom.com_user cascade constraints;
+
+-- 테이블 생성
+create table bcom.com_user
+(
+     user_id                 varchar2(30)   not null
+    ,user_name               varchar2(50)   not null
+    ,password                varchar2(512)  not null
+    ,email_address           varchar2(128)
+    ,mobile_number           varchar2(128)
+    ,user_yn                 varchar2(1)    default 'Y'
+    ,lock_yn                 varchar2(1)    default 'N'
+    ,login_fail_count        number         default 0
+    ,last_login_date         date
+    ,last_pw_change_date     date
+    ,remark                  varchar2(4000)
+    ,create_date             date           default sysdate
+    ,create_by               varchar2(50)   default 'admin'
+    ,update_date             date           default sysdate
+    ,update_by               varchar2(50)   default 'admin'
+) tablespace bes_data;
+
+-- 테이블 설명
+comment on table  bcom.com_user                      is '[공통관리] 사용자';
+comment on column bcom.com_user.user_id              is '사용자ID';
+comment on column bcom.com_user.user_name            is '사용자명';
+comment on column bcom.com_user.password             is '비밀번호';
+comment on column bcom.com_user.email_address        is '이메일주소';
+comment on column bcom.com_user.mobile_number        is '전화번호';
+comment on column bcom.com_user.user_yn              is '사용여부';
+comment on column bcom.com_user.lock_yn              is '락여부';
+comment on column bcom.com_user.login_fail_count     is '실패횟수';
+comment on column bcom.com_user.last_login_date      is '최종로그인일자';
+comment on column bcom.com_user.last_pw_change_date  is '최종비밀번호변경일자';
+comment on column bcom.com_user.remark               is '비고';
+
+comment on column bcom.com_user.create_date          is '생성일시';
+comment on column bcom.com_user.create_by            is '생성자';
+comment on column bcom.com_user.update_date          is '수정일시';
+comment on column bcom.com_user.update_by            is '수정자';
+
+
+-- primary 인덱스
+alter table bcom.com_user add constraint com_user_pk primary key (user_id) using index tablespace bes_index;
+
+-- unique 인덱스
+--create unique index bcom.com_user_uk01 on bcom.com_user (user_name) tablespace bes_index;
+
+-- normal 인덱스
+create index bcom.com_user_ix01 on bcom.com_user (user_name) tablespace bes_index;
+
+
+-- 권한부여
+grant all on bcom.com_user to bsys;
+grant all on bcom.com_user to bhrm;
+
+-- 시노님 생성
+create or replace synonym bsys.com_user for bcom.com_user;
+create or replace synonym bhrm.com_user for bcom.com_user;
+
+
+-- ----------------------------------------------------------------------------
+conn bsys/bsys@bes;
+-- ----------------------------------------------------------------------------
+-- 데이터 조회
+select cu.*
+  from com_user cu
+ where 1=1
+;

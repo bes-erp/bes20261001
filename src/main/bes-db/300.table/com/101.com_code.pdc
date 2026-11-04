@@ -1,0 +1,97 @@
+﻿-- ------------------------------------------------------------------------------------------------
+conn system/manager@bes;
+-- ------------------------------------------------------------------------------------------------
+
+-- 테이블 삭제
+drop table bcom.com_code cascade constraints;
+
+-- 테이블 생성
+create table bcom.com_code
+(
+     code_type               varchar2(30)   not null
+    ,code                    varchar2(30)   not null
+    ,code_nm                 varchar2(200)  not null
+    ,code_nm_s               varchar2(100)  not null
+    ,start_date              date           default sysdate not null
+    ,end_date                date
+    ,sort_order              number         default 1
+    ,attr_chr1               varchar2(200)
+    ,attr_chr2               varchar2(200)
+    ,attr_chr3               varchar2(200)
+    ,attr_chr4               varchar2(200)
+    ,attr_chr5               varchar2(200)
+    ,attr_num1               number
+    ,attr_num2               number
+    ,attr_num3               number
+    ,attr_num4               number
+    ,attr_num5               number
+    ,attr_date1              date
+    ,attr_date2              date
+    ,attr_date3              date
+    ,attr_date4              date
+    ,attr_date5              date
+    ,remark                  varchar2(4000)
+    ,create_date             date           default sysdate
+    ,create_by               varchar2(50)   default 'admin'
+    ,update_date             date           default sysdate
+    ,update_by               varchar2(50)   default 'admin'
+) tablespace bes_data;
+
+-- 테이블 설명
+comment on table  bcom.com_code                 is '[공통관리] 코드';
+comment on column bcom.com_code.code_type       is '코드유형';
+comment on column bcom.com_code.code            is '코드';
+comment on column bcom.com_code.code_nm         is '코드명';
+comment on column bcom.com_code.code_nm_s       is '코드명(약칭)';
+comment on column bcom.com_code.start_date      is '시작일자';
+comment on column bcom.com_code.end_date        is '종료일자';
+comment on column bcom.com_code.sort_order      is '정렬순서';
+
+comment on column bcom.com_code.attr_chr1       is '부가문자1';
+comment on column bcom.com_code.attr_chr2       is '부가문자2';
+comment on column bcom.com_code.attr_chr3       is '부가문자3';
+comment on column bcom.com_code.attr_chr4       is '부가문자4';
+comment on column bcom.com_code.attr_chr5       is '부가문자5';
+comment on column bcom.com_code.attr_num1       is '부가숫자1';
+comment on column bcom.com_code.attr_num2       is '부가숫자2';
+comment on column bcom.com_code.attr_num3       is '부가숫자3';
+comment on column bcom.com_code.attr_num4       is '부가숫자4';
+comment on column bcom.com_code.attr_num5       is '부가숫자5';
+comment on column bcom.com_code.attr_date1      is '부가날짜1';
+comment on column bcom.com_code.attr_date2      is '부가날짜2';
+comment on column bcom.com_code.attr_date3      is '부가날짜3';
+comment on column bcom.com_code.attr_date4      is '부가날짜4';
+comment on column bcom.com_code.attr_date5      is '부가날짜5';
+comment on column bcom.com_code.remark          is '비고';
+
+comment on column bcom.com_code.create_date     is '생성일시';
+comment on column bcom.com_code.create_by       is '생성자';
+comment on column bcom.com_code.update_date     is '수정일시';
+comment on column bcom.com_code.update_by       is '수정자';
+
+-- primary 인덱스
+alter table bcom.com_code add constraint com_code_pk primary key (code_type, code) using index tablespace bes_index;
+
+-- unique 인덱스
+--create unique index bcom.com_code_uk01 on bcom.com_code (code_type, code) tablespace bes_index;
+
+-- normal 인덱스
+create index bcom.com_code_ix01 on bcom.com_code (code_nm) tablespace bes_index;
+
+-- 권한부여
+grant all on bcom.com_code to bsys;
+grant all on bcom.com_code to bhrm;
+
+-- 시노님 생성
+create or replace synonym bsys.com_code for bcom.com_code;
+create or replace synonym bhrm.com_code for bcom.com_code;
+
+
+-- ----------------------------------------------------------------------------
+conn bsys/bsys@bes;
+-- ----------------------------------------------------------------------------
+-- 데이터 조회
+select cc.*
+  from com_code cc
+ where 1=1
+;

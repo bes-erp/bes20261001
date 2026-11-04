@@ -1,0 +1,58 @@
+﻿-- ----------------------------------------------------------------------------
+conn system/manager@bes;
+-- ----------------------------------------------------------------------------
+
+-- 뷰 삭제
+drop view bcom.com_code_type_v;
+
+-- 뷰 생성
+create or replace view bcom.com_code_type_v
+as
+select
+     /* =======================================================================
+      * Package Name     : com_code_type_v
+      * Description      : [공통관리] 코드유형 뷰
+      * Author           : Built1
+      * Created Date     : 2026-11-01
+      * Update History
+      * -----------------------------------------------------------------------
+      * 작성일자           작성자        내용
+      * -----------------------------------------------------------------------
+      * 2026-11-01         Built1        최초작성
+      * =======================================================================
+      */
+       cct.code_type                                                           as code_type
+      ,cct.code_type_nm                                                        as code_type_nm
+      ,cct.code_type_nm_s                                                      as code_type_nm_s
+      ,cct.start_date                                                          as start_date
+      ,cct.end_date                                                            as end_date
+      ,cct.create_type_cd                                                      as create_type_cd
+      ,cc.code_nm                                                              as create_type_nm
+      ,cct.remark                                                              as remark
+      ,cct.create_date                                                         as create_date
+      ,cct.create_by                                                           as create_by
+      ,cct.update_date                                                         as update_date
+      ,cct.update_by                                                           as update_by
+  from com_code_type cct
+       left join com_code cc on cc.code_type = 'CREATE_TYPE_CD'
+                            and cc.code      = cct.create_type_cd
+ where 1=1
+;
+
+-- 권한부여
+grant all on bcom.com_code_type_v to bsys;
+grant all on bcom.com_code_type_v to bhrm;
+
+-- 시노님 생성
+create or replace synonym bsys.com_code_type_v for bcom.com_code_type_v;
+create or replace synonym bhrm.com_code_type_v for bcom.com_code_type_v;
+
+
+-- ----------------------------------------------------------------------------
+conn bsys/bsys@bes;
+-- ----------------------------------------------------------------------------
+-- 데이터 조회
+select cctv.*
+  from com_code_type_v cctv
+ where 1=1
+;
