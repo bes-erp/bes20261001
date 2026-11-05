@@ -2,7 +2,7 @@
 <ENV version="2.1">
   <Environment themeid="theme::blue" datatyperule="2.0">
     <ScreenDefinition>
-      <Screen id="Desktop_screen" type="desktop" loadingimage="url('theme://images/built1_Logo_Spin.gif')"/>
+      <Screen id="Desktop_screen" type="desktop" loadingimage="url('theme://images_ifc/built1_Logo_Spin_Grey.gif')" icon="url('favicon.ico')"/>
     </ScreenDefinition>
     <Variables/>
     <Cookies/>

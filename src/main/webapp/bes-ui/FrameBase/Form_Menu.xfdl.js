@@ -1,0 +1,321 @@
+(function()
+{
+    return function()
+    {
+        if (!this._is_form)
+            return;
+        
+        var obj = null;
+        
+        this.on_create = function()
+        {
+            this.set_name("Form_Menu");
+            this.set_titletext("공통 상단 메뉴");
+            this.set_cssclass("besMenuForm");
+            this.set_scrollbartype("none");
+            this.set_scrolltype("none");
+            if (Form == this.constructor)
+            {
+                this._setFormPosition(1080,46);
+            }
+            
+            // Object(Dataset, ExcelExportObject) Initialize
+
+            
+            // UI Components Initialize
+            obj = new Div("div_menu","0","0",null,null,"0","0",null,null,null,null,this);
+            obj.set_taborder("0");
+            obj.set_cssclass("besMenuDiv");
+            obj.getSetter("scrollbartype").set("none");
+            obj.getSetter("scrolltype").set("none");
+            this.addChild(obj.name, obj);
+
+            obj = new Button("btn_toggleMenu","0","0","58","42",null,null,null,null,null,null,this.div_menu.form);
+            obj.set_taborder("0");
+            obj.set_text("");
+            obj.set_cssclass("besMenuToggleClose");
+            obj.set_cursor("pointer");
+            this.div_menu.addChild(obj.name, obj);
+            // Layout Functions
+            //-- Default Layout : this.div_menu.form
+            obj = new Layout("default","",1080,46,this.div_menu.form,function(p){});
+            this.div_menu.form.addLayout(obj.name, obj);
+
+            //-- Default Layout : this
+            obj = new Layout("default","Desktop_screen",1080,46,this,function(p){});
+            this.addLayout(obj.name, obj);
+            
+            // BindItem Information
+
+            
+            // TriggerItem Information
+
+        };
+        
+        this.loadPreloadList = function()
+        {
+
+        };
+        
+        // User Script
+        this.registerScript("Form_Menu.xfdl", function() {
+        /***************************************************************************************
+         * 프로젝트        : Built1 Enterprise System 구축 프로젝트
+         * 업무구분        : 공통 프레임
+         * 파일명          : Form_Menu.xfdl
+         * 작성자          : Built1
+         * 작성일          : 2026-11-05
+         *
+         * 화면            : BES 상단 메뉴
+         * 설명            : DB 메뉴정보를 이용한 최상위 메뉴 표시 및 왼쪽 메뉴 연동
+         *---------------------------------------------------------------------------------------
+         * 변경일            변경자            변경내역
+         *---------------------------------------------------------------------------------------
+         * 2026-11-05        Built1            최초작성 및 DB 메뉴정보 연동
+         * 2026-11-05        Built1            왼쪽 메뉴 접기 및 펼치기 기능 추가
+         * 2026-11-05        Built1            MDI 탭 선택 시 상단 및 왼쪽 메뉴 연동
+         ***************************************************************************************/
+
+
+        /***************************************************************************************
+         * 1. FORM 변수 선언
+         ***************************************************************************************/
+
+        // 현재 선택한 최상위 메뉴 코드
+        this.fv_topMenuCd = "";
+
+        // 왼쪽 메뉴 표시 여부 (true: 펼침, false: 접힘)
+        this.fv_leftMenuOpen = true;
+
+
+        /***************************************************************************************
+         * 2. FORM LOAD
+         ***************************************************************************************/
+
+        /*
+         * 기능 : 상단 메뉴 초기화
+         */
+        this.fn_init = function(obj, e)
+        {
+            // 전역 메뉴 Dataset을 기준으로 상단 메뉴 버튼 생성
+            this.fn_createTopMenu();
+        };
+
+
+        /***************************************************************************************
+         * 3. 공통 버튼
+         ***************************************************************************************/
+
+
+        /***************************************************************************************
+         * 4. TRANSACTION, CALLBACK
+         ***************************************************************************************/
+
+
+        /***************************************************************************************
+         * 5. 팝업 호출 및 콜백
+         ***************************************************************************************/
+
+
+        /***************************************************************************************
+         * 6. 기타 함수
+         ***************************************************************************************/
+
+        /*
+         * 기능 : DB 최상위 메뉴 버튼 생성
+         */
+        this.fn_createTopMenu = function()
+        {
+            var objApp  = nexacro.getApplication();
+            var dsMenu  = objApp.gdsMenu;
+            var objForm = this.div_menu.form;
+
+            // 전역 메뉴 Dataset이 없거나 조회된 메뉴가 없으면 종료
+            if (!dsMenu || dsMenu.rowcount == 0) return;
+
+            // 기존에 동적으로 생성한 최상위 메뉴 버튼 제거
+            // 햄버거 버튼(btn_toggleMenu)은 제거 대상에서 제외
+            for (var i = objForm.components.length - 1; i >= 0; i--)
+            {
+                var objComp = objForm.components[i];
+
+                if (objComp.name.indexOf("btn_menu_") == 0)
+                {
+                    objForm.removeChild(objComp.name);
+                    objComp.destroy();
+                }
+            }
+
+            // 햄버거 버튼 너비(58px) 이후부터 최상위 메뉴 배치
+            var nLeft  = 58;
+            var nWidth = 120;
+            var nIndex = 0;
+
+            // 전체 메뉴에서 1레벨 최상위 메뉴만 조회
+            for (var i = 0; i < dsMenu.rowcount; i++)
+            {
+                var nLevel = Number(dsMenu.getColumn(i, "CHILD_MENU_LEVEL"));
+
+                // 2레벨 및 3레벨 메뉴는 상단 버튼 생성 대상에서 제외
+                if (nLevel != 1) continue;
+
+                var sMenuCd   = dsMenu.getColumn(i, "CHILD_MENU_CD");
+                var sMenuNm   = dsMenu.getColumn(i, "CHILD_MENU_NM");
+                var sButtonId = "btn_menu_" + nIndex;
+
+                // 최상위 메뉴 버튼을 42px 높이로 동적 생성
+                var objButton = new nexacro.Button(sButtonId, nLeft, 0, nWidth, 42, null, null, null, null, null, null, objForm);
+
+                // 생성한 버튼을 div_menu 내부 Form에 등록
+                objForm.addChild(sButtonId, objButton);
+
+                // DB 메뉴명과 공통 CSS 스타일 적용
+                objButton.set_text(sMenuNm);
+                objButton.set_cssclass("besMenuButton");
+                objButton.set_cursor("pointer");
+
+                // 버튼 클릭 시 해당 메뉴를 식별할 수 있도록 메뉴 코드 저장
+                objButton.menuCd = sMenuCd;
+
+                // 동적으로 생성한 버튼에 클릭 이벤트 연결
+                objButton.addEventHandler("onclick", this.fn_topMenu_onclick, this);
+
+                // 버튼 화면 표시
+                objButton.show();
+
+                // 다음 버튼의 시작 위치와 생성 순번 증가
+                nLeft += nWidth;
+                nIndex++;
+            }
+
+            // 최상위 메뉴가 존재하면 첫 번째 메뉴를 기본 선택
+            if (nIndex > 0)
+            {
+                var objFirstButton = objForm.components["btn_menu_0"];
+
+                if (objFirstButton)
+                {
+                    this.fn_selectTopMenu(objFirstButton.menuCd);
+                }
+            }
+        };
+
+
+        /*
+         * 기능 : 최상위 메뉴 선택 및 왼쪽 메뉴 연동
+         */
+        this.fn_selectTopMenu = function(sMenuCd)
+        {
+            var objApp  = nexacro.getApplication();
+            var objForm = this.div_menu.form;
+
+            // 현재 선택한 최상위 메뉴 코드 저장
+            this.fv_topMenuCd = sMenuCd;
+
+            // 동적으로 생성된 상단 메뉴 버튼의 선택 상태 변경
+            for (var i = 0; i < objForm.components.length; i++)
+            {
+                var objComp = objForm.components[i];
+
+                if (objComp.name.indexOf("btn_menu_") == 0)
+                {
+                    // 선택한 메뉴에는 선택 CSS, 나머지 메뉴에는 기본 CSS 적용
+                    objComp.set_cssclass(objComp.menuCd == sMenuCd ? "besMenuButtonSelected" : "besMenuButton");
+                }
+            }
+
+            // 왼쪽 메뉴 프레임 조회
+            var objLeftFrame = objApp.mainframe.VFrameSetMain.VFrameSet00.HFrameSet00.LeftFrame;
+
+            // 왼쪽 메뉴 프레임이 아직 생성되지 않았으면 종료
+            if (!objLeftFrame || !objLeftFrame.form) return;
+
+            // 선택한 최상위 메뉴 코드 전달
+            // Form_Left에서 해당 메뉴의 2레벨 및 3레벨 목록을 다시 구성
+            objLeftFrame.form.fn_selectTopMenu(sMenuCd);
+        };
+
+
+        /*
+         * 기능 : 왼쪽 메뉴 접기 및 펼치기
+         */
+        this.fn_toggleLeftMenu = function()
+        {
+            var objApp       = nexacro.getApplication();
+            var objHFrameSet = objApp.mainframe.VFrameSetMain.VFrameSet00.HFrameSet00;
+            var objButton    = this.div_menu.form.btn_toggleMenu;
+
+            if (this.fv_leftMenuOpen)
+            {
+                // 왼쪽 메뉴 너비를 0으로 변경하여 접기
+                objHFrameSet.set_separatesize("0,*");
+
+                // 현재 상태를 접힘으로 변경
+                this.fv_leftMenuOpen = false;
+
+                // 접힌 상태에서 사용할 햄버거 버튼 CSS 적용
+                objButton.set_cssclass("besMenuToggleOpen");
+            }
+            else
+            {
+                // 왼쪽 메뉴 너비를 200px로 복원하여 펼치기
+                objHFrameSet.set_separatesize("200,*");
+
+                // 현재 상태를 펼침으로 변경
+                this.fv_leftMenuOpen = true;
+
+                // 펼친 상태에서 사용할 햄버거 버튼 CSS 적용
+                objButton.set_cssclass("besMenuToggleClose");
+            }
+        };
+
+
+        /***************************************************************************************
+         * 7. 이벤트
+         ***************************************************************************************/
+
+        /*
+         * 기능 : 상단 메뉴 로딩 이벤트
+         */
+        this.Form_Menu_onload = function(obj, e)
+        {
+            // 화면 로딩 시 DB 최상위 메뉴 버튼 생성
+            this.fn_init(obj, e);
+        };
+
+
+        /*
+         * 기능 : 최상위 메뉴 버튼 클릭 이벤트
+         */
+        this.fn_topMenu_onclick = function(obj, e)
+        {
+            // 클릭한 버튼에 저장된 메뉴 코드로 상단 및 왼쪽 메뉴 변경
+            this.fn_selectTopMenu(obj.menuCd);
+        };
+
+
+        /*
+         * 기능 : 왼쪽 메뉴 접기 및 펼치기 버튼 클릭
+         */
+        this.btn_toggleMenu_onclick = function(obj, e)
+        {
+            // 현재 왼쪽 메뉴 표시 상태에 따라 접기 또는 펼치기
+            this.fn_toggleLeftMenu();
+        };
+
+        });
+        
+        // Regist UI Components Event
+        this.on_initEvent = function()
+        {
+            this.addEventHandler("onload",this.Form_Menu_onload,this);
+            this.div_menu.form.btn_toggleMenu.addEventHandler("onclick",this.btn_toggleMenu_onclick,this);
+        };
+        this.loadIncludeScript("Form_Menu.xfdl");
+        this.loadPreloadList();
+        
+        // Remove Reference
+        obj = null;
+    };
+}
+)();

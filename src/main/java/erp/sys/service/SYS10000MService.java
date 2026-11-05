@@ -25,7 +25,5 @@ public interface SYS10000MService {
     * @return
     * @throws Exception
     */
-    public abstract Map<String, Object> login(
-            Map<String, Object> loginParamMap) throws Exception;
-
+    public abstract Map<String, Object> login(Map<String, Object> loginParamMap) throws Exception;
 }

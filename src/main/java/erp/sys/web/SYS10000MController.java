@@ -16,19 +16,18 @@ import com.nexacro.uiadapter.spring.core.data.NexacroResult;
 import erp.sys.service.SYS10000MService;
 import lombok.extern.slf4j.Slf4j;
 
-
 /**
-* =====================================================================================
-* @packageName    		: erp.sys.web
-* @fileName       		: SYS10000MController.java
-* @author         		: Built1
-* @date           		: 2026.11.03
-* @description    		: 사용자 로그인 요청 및 세션정보를 처리하는 클래스
-* =====================================================================================
-* 수정일자         		수정자             수정내용
-* -------------------------------------------------------------------------------------
-* 2026.11.03        	Built1             최초 생성
-*/
+ * =====================================================================================
+ * @packageName     : erp.sys.web
+ * @fileName        : SYS10000MController.java
+ * @author          : Built1
+ * @date            : 2026.11.03
+ * @description     : 사용자 로그인 요청 및 세션정보를 처리하는 클래스
+ * =====================================================================================
+ * 수정일자          수정자             수정내용
+ * -------------------------------------------------------------------------------------
+ * 2026.11.03        Built1             최초 생성
+ */
 @Slf4j
 @Controller
 @RequestMapping(value = "sys/SYS10000M")
@@ -38,19 +37,18 @@ public class SYS10000MController {
     private SYS10000MService service;
 
     /**
-    * @methodName      : login
-    * @author          : built1
-    * @date            : 2026.11.02
-    * @description     : 사용자 로그인 요청 및 세션정보를 처리하는 메소드
-    * @param loginParamMap
-    * @param request
-    * @return
-    * @throws Exception
-    */
+     * @methodName      : login
+     * @author          : Built1
+     * @date            : 2026.11.02
+     * @description     : 사용자 로그인 요청 및 세션정보를 처리하는 메소드
+     * @param loginParamMap 로그인 요청정보
+     * @param request       HTTP 요청정보
+     * @return              로그인 결과 Dataset
+     * @throws Exception
+     */
     @RequestMapping(value = "login.do")
-    public NexacroResult login(
-            @ParamDataSet(name = "dsLogin") Map<String, Object> loginParamMap,
-            HttpServletRequest request) throws Exception {
+    public NexacroResult login(@ParamDataSet(name = "dsLogin") Map<String, Object> loginParamMap,
+                               HttpServletRequest request) throws Exception {
 
         // 사용자 로그인 인증
         Map<String, Object> resultMap = service.login(loginParamMap);

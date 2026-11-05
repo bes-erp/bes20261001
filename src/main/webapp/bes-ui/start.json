@@ -30,7 +30,7 @@
         ],
         "screen" :
         [    
-        {"id":"Desktop_screen","type":"desktop","loadingimage":"url('theme://images/built1_Logo_Spin.gif')","themeid":"theme::blue"}
+        {"id":"Desktop_screen","type":"desktop","loadingimage":"url('theme://images_ifc/built1_Logo_Spin_Grey.gif')","icon":"url('favicon.ico')","themeid":"theme::blue"}
         ],
         "xadl" :
         [
@@ -39,10 +39,12 @@
         	"launch":"./Application_Desktop.xadl.js",
         	"quickview":"./Application_Desktop.xadl.quickview.js",
         	"form":[
-        				"./Sys/SYS10000M.xfdl.js",
+        				"./sys/SYS10000M.xfdl.js",
         		"./FrameBase/Form_Top.xfdl.js",
+        		"./FrameBase/Form_Menu.xfdl.js",
+        		"./FrameBase/Form_Mdi.xfdl.js",
         		"./FrameBase/Form_Left.xfdl.js",
-        		"./FrameBase/Form_Work.xfdl.js"
+        		"./FrameBase/Form_TabWork.xfdl.js"
         	]
         }
         ],  

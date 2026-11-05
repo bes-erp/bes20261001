@@ -1,116 +1,186 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="COM12000M" width="1280" height="720" titletext="메시지등록">
+  <Form id="COM12000M" width="1280" height="720" titletext="메시지등록" onload="COM12000M_onload">
     <Objects>
-      <!-- 조회 조건: 설계서의 컬럼명 사용 -->
-      <Dataset id="ds_search">
+      <Dataset id="dsMsgGubun">
         <ColumnInfo>
-          <Column id="message_class_cd" type="STRING" size="30"/>
-          <Column id="message_type_cd" type="STRING" size="30"/>
-          <Column id="message_text_ko" type="STRING" size="300"/>
+          <Column id="code" type="STRING" size="256"/>
+          <Column id="name" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="code">ALL</Col>
+            <Col id="name">전체</Col>
+          </Row>
+          <Row>
+            <Col id="code">FM</Col>
+            <Col id="name">화면</Col>
+          </Row>
+          <Row>
+            <Col id="code">NM</Col>
+            <Col id="name">시스템</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="dsMsgType">
+        <ColumnInfo>
+          <Column id="code" type="STRING" size="256"/>
+          <Column id="name" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="code">ALL</Col>
+            <Col id="name">전체</Col>
+          </Row>
+          <Row>
+            <Col id="code">A</Col>
+            <Col id="name">경고</Col>
+          </Row>
+          <Row>
+            <Col id="code">C</Col>
+            <Col id="name">확인</Col>
+          </Row>
+          <Row>
+            <Col id="code">I</Col>
+            <Col id="name">정보</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="dsMessage">
+        <ColumnInfo>
+          <Column id="MESSAGE_NUM" type="STRING" size="30"/>
+          <Column id="MESSAGE_GUBUN" type="STRING" size="30"/>
+          <Column id="MESSAGE_TYPE_CD" type="STRING" size="30"/>
+          <Column id="MESSAGE_TEXT_KO" type="STRING" size="300"/>
+          <Column id="MESSAGE_TEXT_EN" type="STRING" size="300"/>
+          <Column id="MESSAGE_TEXT_ZH" type="STRING" size="300"/>
+          <Column id="MESSAGE_TEXT_JA" type="STRING" size="300"/>
+          <Column id="MESSAGE_TEXT_OT" type="STRING" size="300"/>
+          <Column id="REMARK" type="STRING" size="4000"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="dsMsgTypeGrid">
+        <ColumnInfo>
+          <Column id="code" type="STRING" size="30"/>
+          <Column id="name" type="STRING" size="100"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="code">A</Col>
+            <Col id="name">경고</Col>
+          </Row>
+          <Row>
+            <Col id="code">C</Col>
+            <Col id="name">확인</Col>
+          </Row>
+          <Row>
+            <Col id="code">I</Col>
+            <Col id="name">정보</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="dsMsgGubunGrid">
+        <ColumnInfo>
+          <Column id="code" type="STRING" size="30"/>
+          <Column id="name" type="STRING" size="100"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="code">FM</Col>
+            <Col id="name">화면</Col>
+          </Row>
+          <Row>
+            <Col id="code">NM</Col>
+            <Col id="name">시스템</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="dsSearch">
+        <ColumnInfo>
+          <Column id="messageGubun" type="STRING" size="30"/>
+          <Column id="messageType" type="STRING" size="30"/>
+          <Column id="messageText" type="STRING" size="300"/>
         </ColumnInfo>
         <Rows>
           <Row/>
         </Rows>
       </Dataset>
-      <!-- 목록: 실제 SYS_MESSAGE 컬럼 + UI 전용 컬럼 -->
-      <Dataset id="ds_message">
-        <ColumnInfo>
-          <Column id="select_yn" type="STRING" size="1"/>
-          <Column id="message_class_cd" type="STRING" size="30"/>
-          <Column id="message_type_cd" type="STRING" size="30"/>
-          <Column id="message_num" type="STRING" size="30"/>
-          <Column id="message_text_ko" type="STRING" size="300"/>
-          <Column id="message_text_en" type="STRING" size="300"/>
-          <Column id="message_text_zh" type="STRING" size="300"/>
-          <Column id="message_text_ja" type="STRING" size="300"/>
-          <Column id="message_text_ot" type="STRING" size="300"/>
-          <Column id="remark" type="STRING" size="4000"/>
-        </ColumnInfo>
-      </Dataset>
-      <!-- 임시 공통코드: 추후 회사 공통코드 조회로 교체 가능 -->
-      <Dataset id="ds_cbo_message_class_cd">
-        <ColumnInfo>
-          <Column id="code" type="STRING" size="30"/>
-          <Column id="name" type="STRING" size="100"/>
-        </ColumnInfo>
-        <Rows>
-          <Row>
-            <Col id="code">ALL</Col>
-            <Col id="name">전체</Col>
-          </Row>
-          <Row>
-            <Col id="code">FM</Col>
-            <Col id="name">화면</Col>
-          </Row>
-          <Row>
-            <Col id="code">NM</Col>
-            <Col id="name">시스템</Col>
-          </Row>
-        </Rows>
-      </Dataset>
-      <Dataset id="ds_cbo_message_type_cd">
-        <ColumnInfo>
-          <Column id="code" type="STRING" size="30"/>
-          <Column id="name" type="STRING" size="100"/>
-        </ColumnInfo>
-        <Rows>
-          <Row>
-            <Col id="code">ALL</Col>
-            <Col id="name">전체</Col>
-          </Row>
-          <Row>
-            <Col id="code">A</Col>
-            <Col id="name">경고</Col>
-          </Row>
-          <Row>
-            <Col id="code">C</Col>
-            <Col id="name">확인</Col>
-          </Row>
-          <Row>
-            <Col id="code">I</Col>
-            <Col id="name">정보</Col>
-          </Row>
-        </Rows>
-      </Dataset>
-      <Dataset id="ds_cbo_grid_message_class_cd">
-        <ColumnInfo>
-          <Column id="code" type="STRING" size="30"/>
-          <Column id="name" type="STRING" size="100"/>
-        </ColumnInfo>
-        <Rows>
-          <Row>
-            <Col id="code">FM</Col>
-            <Col id="name">화면</Col>
-          </Row>
-          <Row>
-            <Col id="code">NM</Col>
-            <Col id="name">시스템</Col>
-          </Row>
-        </Rows>
-      </Dataset>
-      <Dataset id="ds_cbo_grid_message_type_cd">
-        <ColumnInfo>
-          <Column id="code" type="STRING" size="30"/>
-          <Column id="name" type="STRING" size="100"/>
-        </ColumnInfo>
-        <Rows>
-          <Row>
-            <Col id="code">A</Col>
-            <Col id="name">경고</Col>
-          </Row>
-          <Row>
-            <Col id="code">C</Col>
-            <Col id="name">확인</Col>
-          </Row>
-          <Row>
-            <Col id="code">I</Col>
-            <Col id="name">정보</Col>
-          </Row>
-        </Rows>
-      </Dataset>
     </Objects>
-    <Script type="xscript5.1"><![CDATA[/***************************************************************************************
+    <Layouts>
+      <Layout height="720" mobileorientation="landscape" width="1280">
+        <!-- 전체 배경 -->
+        <Static id="staBackground" left="0" top="0" width="1280" height="720" background="#F5F7FA"/>
+        <!-- 화면 제목 -->
+        <Static id="staTitle" text="메시지등록" left="25" top="20" width="250" height="36" font="bold 18pt Arial" color="#243B64"/>
+        <Static id="staSubTitle" text="메시지를 등록하고 관리합니다." left="27" top="55" width="400" height="20" font="normal 9pt Arial" color="#7A8494"/>
+        <!-- 저장 버튼 -->
+        <Button id="btnSave" text="저장" left="1160" top="25" width="95" height="34" font="bold 10pt Arial" background="#315B96" color="#FFFFFF" border="1px solid #315B96" onclick="btnSave_onclick"/>
+        <!-- 조회조건 영역 -->
+        <Static id="staSearchPanel" left="25" top="90" width="1230" height="125" background="#FFFFFF" border="1px solid #DCE2EB" text=""/>
+        <Static id="staSearchTitle" text="조회조건" left="45" top="105" width="150" height="25" font="bold 12pt Arial" color="#243B64"/>
+        <Static id="staSearchLine" left="45" top="137" width="1190" height="1" background="#E6EAF0"/>
+        <!-- 메시지구분 -->
+        <Static id="staMsgGubun" text="메시지구분" left="45" top="160" width="100" height="28" textAlign="right" verticalAlign="middle" font="bold 10pt Arial" color="#46546A"/>
+        <Combo id="cboMsgGubun" left="155" top="156" width="160" height="34" innerdataset="dsMsgGubun" codecolumn="code" datacolumn="name" index="0" text="전체"/>
+        <!-- 메시지유형 -->
+        <Static id="staMsgType" text="메시지유형" left="340" top="160" width="100" height="28" textAlign="right" verticalAlign="middle" font="bold 10pt Arial" color="#46546A"/>
+        <Combo id="cboMsgType" left="450" top="156" width="160" height="34" innerdataset="dsMsgType" codecolumn="code" datacolumn="name" index="0"/>
+        <!-- 메시지 검색 -->
+        <Static id="staMsgSearch" text="메시지" left="635" top="160" width="80" height="28" textAlign="right" verticalAlign="middle" font="bold 10pt Arial" color="#46546A"/>
+        <Edit id="edtMsgSearch" left="725" top="156" width="280" height="34" maxlength="100"/>
+        <!-- 조회 / 초기화 -->
+        <Button id="btnSearch" text="조회" left="1030" top="156" width="85" height="34" font="bold 10pt Arial" background="#315B96" color="#FFFFFF" border="1px solid #315B96" onclick="btnSearch_onclick"/>
+        <Button id="btnReset" text="초기화" left="1125" top="156" width="85" height="34" font="normal 10pt Arial" background="#FFFFFF" color="#46546A" border="1px solid #C9D1DD"/>
+        <!-- 메시지 목록 영역 -->
+        <Static id="staResultPanel" left="25" top="230" width="1230" height="460" background="#FFFFFF" border="1px solid #DCE2EB" onclick="staResultPanel_onclick"/>
+        <Static id="staGridTitle" text="메시지 목록" left="45" top="248" width="200" height="28" font="bold 12pt Arial" color="#243B64"/>
+        <Static id="staGridSubTitle" text="등록된 메시지를 확인하고 수정 및 추가할 수 있습니다." left="45" top="278" width="400" height="18" font="normal 9pt Arial" color="#8993A2"/>
+        <!-- 행추가 / 행삭제 -->
+        <Button id="btnAddRow" text="행추가" left="1030" top="250" width="85" height="32" font="normal 9pt Arial" background="#FFFFFF" color="#315B96" border="1px solid #AABBD2" onclick="btnAddRow_onclick"/>
+        <Button id="btnDeleteRow" text="행삭제" left="1120" top="250" width="85" height="32" font="normal 9pt Arial" background="#FFFFFF" color="#C35B5B" border="1px solid #DAB8B8" onclick="btnDeleteRow_onclick"/>
+        <Static id="staResultLine" left="45" top="300" width="1190" height="1" background="#E6EAF0"/>
+        <!-- 메시지 Grid -->
+        <Grid id="grdMessage" left="45" top="315" width="1190" height="355" binddataset="dsMessage" autofittype="col">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="110"/>
+                <Column size="100"/>
+                <Column size="210"/>
+                <Column size="210"/>
+                <Column size="180"/>
+                <Column size="180"/>
+                <Column size="200"/>
+              </Columns>
+              <Rows>
+                <Row size="38" band="head"/>
+                <Row size="38"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="메시지구분"/>
+                <Cell col="1" text="메시지유형"/>
+                <Cell col="2" text="메시지(한국어)"/>
+                <Cell col="3" text="메시지(영어)"/>
+                <Cell col="4" text="메시지(중국어)"/>
+                <Cell col="5" text="메시지(일본어)"/>
+                <Cell col="6" text="메시지(기타)"/>
+              </Band>
+              <Band id="body">
+                <Cell displaytype="combocontrol" edittype="combo" combodataset="dsMsgGubunGrid" combocodecol="code" combodatacol="name" text="bind:MESSAGE_GUBUN"/>
+                <Cell col="1" displaytype="combocontrol" edittype="combo" combodataset="dsMsgTypeGrid" combocodecol="code" text="bind:MESSAGE_TYPE_CD" combodatacol="name"/>
+                <Cell col="2" displaytype="normal" edittype="text" text="bind:MESSAGE_TEXT_KO"/>
+                <Cell col="3" displaytype="normal" edittype="text" text="bind:MESSAGE_TEXT_EN"/>
+                <Cell col="4" displaytype="normal" edittype="text" text="bind:MESSAGE_TEXT_ZH"/>
+                <Cell col="5" displaytype="normal" edittype="text" text="bind:MESSAGE_TEXT_JA"/>
+                <Cell col="6" displaytype="normal" edittype="text" text="bind:MESSAGE_TEXT_OT"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[
+/***************************************************************************************
  * 프로젝트        : Built1 Enterprise System 구축 프로젝트
  * 업무구분        : 공통관리
  * 파일명          : COM12000M.xfdl
@@ -119,7 +189,7 @@
  *---------------------------------------------------------------------------------------
  * 변경일            변경자            변경내역
  *---------------------------------------------------------------------------------------
- * 2026-11-05        Built1            화면 및 스크립트 재작성
+ * 2026-11-03        Built1            최초작성
  ***************************************************************************************/
 
 
@@ -135,31 +205,9 @@
 /*
  * 기능 : 화면 초기화
  */
-this.COM12000M_onload = function(obj:nexacro.Form, e:nexacro.LoadEventInfo)
+this.fn_init = function(obj, e)
 {
-    this.fn_init();
-};
-
-/*
- * 기능 : 조회조건 및 메시지 목록 초기화
- */
-this.fn_init = function()
-{
-    // 검색조건 Dataset 초기화
-    this.ds_search.clearData();
-    this.ds_search.addRow();
-
-    // 조회조건 기본값 설정
-    this.cbo_message_class_cd.set_value("ALL");
-    this.cbo_message_type_cd.set_value("ALL");
-    this.edt_message_text_ko.set_value("");
-
-    // 목록 초기화
-    this.ds_message.clearData();
-    this.fn_setMessageCount();
-
-    // 서버 조회 기능 연결 후 최초 조회 사용
-    // this.fn_search();
+    this.fn_search();
 };
 
 
@@ -172,182 +220,32 @@ this.fn_init = function()
  */
 this.fn_search = function()
 {
-    // 조회조건 Dataset 초기화
-    this.ds_search.clearData();
+    // 조회조건 가져오기
+    var sGubun = this.cboMsgGubun.value;
+    var sType  = this.cboMsgType.value;
+    var sText  = this.edtMsgSearch.value;
 
-    var nRow = this.ds_search.addRow();
+    // 검색조건 Dataset 초기화
+    this.dsSearch.clearData();
 
-    // 조회조건 설정
-    this.ds_search.setColumn(nRow, "message_class_cd", this.cbo_message_class_cd.value);
-    this.ds_search.setColumn(nRow, "message_type_cd" , this.cbo_message_type_cd.value);
-    this.ds_search.setColumn(nRow, "message_text_ko", this.edt_message_text_ko.value);
+    // 검색조건 행 추가
+    var nRow = this.dsSearch.addRow();
 
-    // 사용자 정보
-    var sUserId = nexacro.getApplication().gvUserId;
+    // 검색조건 설정
+    this.dsSearch.setColumn(nRow, "messageGubun", sGubun);
+    this.dsSearch.setColumn(nRow, "messageType", sType);
+    this.dsSearch.setColumn(nRow, "messageText", sText);
 
-    // Transaction 설정
-    var sSvcID        = "selectMessageList";
-    var sSvcURL       = "svcUrl::com/COM12000M/selectMessageList.do";
-    var sInDatasets   = "inSearch=ds_search";
-    var sOutDatasets  = "ds_message=outSelectMessageList";
-    var sArgument     = "userId=" + nexacro.wrapQuote(sUserId || "");
-    var sCallbackFunc = "fn_callback";
+    // 조회 Transaction 설정
+    var sSvcId = "selectMessageList";
+    var sSvcURL = "svcUrl::com12000m/selectMessageList.do";
+    var sInData = "dsSearch=dsSearch:A";
+    var sOutData = "dsMessage=dsMessage";
+    var sArgument = "";
+    var sCallback = "fn_callBack";
 
-    // 메시지 목록 조회
-    this.gfn_transaction(sSvcID, sSvcURL, sInDatasets, sOutDatasets, sArgument, sCallbackFunc);
-};
-
-/*
- * 기능 : 조회조건 초기화
- */
-this.fn_reset = function()
-{
-    this.cbo_message_class_cd.set_value("ALL");
-    this.cbo_message_type_cd.set_value("ALL");
-    this.edt_message_text_ko.set_value("");
-
-    this.ds_search.clearData();
-    this.ds_search.addRow();
-};
-
-/*
- * 기능 : 메시지 목록 건수 표시
- */
-this.fn_setMessageCount = function()
-{
-    var nCnt = this.ds_message.rowcount;
-
-    this.sta_message_count.set_text("(" + nCnt + "건)");
-};
-
-/*
- * 기능 : 메시지 목록 첫 번째 행 추가
- */
-this.fn_addRow = function()
-{
-    var nRow = this.ds_message.insertRow(0);
-
-    this.ds_message.setColumn(nRow, "select_yn"       , "0");
-    this.ds_message.setColumn(nRow, "message_class_cd", "FM");
-    this.ds_message.setColumn(nRow, "message_type_cd" , "A");
-
-    this.ds_message.set_rowposition(nRow);
-
-    this.fn_setMessageCount();
-};
-
-/*
- * 기능 : 선택된 메시지 행 삭제
- */
-this.fn_deleteRow = function()
-{
-    var nDeleteCnt = 0;
-
-    // 뒤쪽 행부터 삭제하여 행 번호 변경 방지
-    for (var i = this.ds_message.rowcount - 1; i >= 0; i--)
-    {
-        var sSelectYn = this.ds_message.getColumn(i, "select_yn");
-
-        if (sSelectYn == "1")
-        {
-            this.ds_message.deleteRow(i);
-            nDeleteCnt++;
-        }
-    }
-
-    if (nDeleteCnt == 0)
-    {
-        this.alert("삭제할 행을 선택해주세요.");
-        return;
-    }
-
-    this.fn_setMessageCount();
-};
-
-
-/*
- * 기능 : 저장 전 필수 입력값 검사
- */
-this.fn_validate = function()
-{
-    for (var i = 0; i < this.ds_message.rowcount; i++)
-    {
-        var nRowType = this.ds_message.getRowType(i);
-
-        // 신규 및 수정된 행만 검사
-        if (nRowType == 2 || nRowType == 4)
-        {
-            var sClassCd = this.ds_message.getColumn(i, "message_class_cd");
-            var sTypeCd  = this.ds_message.getColumn(i, "message_type_cd");
-            var sTextKo  = this.ds_message.getColumn(i, "message_text_ko");
-
-            if (this.gfn_isNull(sClassCd))
-            {
-                this.alert("메시지분류는 필수 항목입니다.");
-                this.ds_message.set_rowposition(i);
-                return false;
-            }
-
-            if (this.gfn_isNull(sTypeCd))
-            {
-                this.alert("메시지유형은 필수 항목입니다.");
-                this.ds_message.set_rowposition(i);
-                return false;
-            }
-
-            if (this.gfn_isNull(sTextKo) || String(sTextKo).trim() == "")
-            {
-                this.alert("메시지(한글)는 필수 항목입니다.");
-                this.ds_message.set_rowposition(i);
-                return false;
-            }
-        }
-    }
-
-    return true;
-};
-
-/*
- * 기능 : 변경 데이터 존재 여부 확인
- */
-this.fn_isChanged = function()
-{
-    if (this.ds_message.getDeletedRowCount() > 0)
-    {
-        return true;
-    }
-
-    for (var i = 0; i < this.ds_message.rowcount; i++)
-    {
-        var nRowType = this.ds_message.getRowType(i);
-
-        if (nRowType == 2 || nRowType == 4)
-        {
-            return true;
-        }
-    }
-
-    return false;
-};
-
-/*
- * 기능 : 메시지 저장
- */
-this.fn_save = function()
-{
-    if (!this.fn_isChanged())
-    {
-        this.alert("변경된 데이터가 없습니다.");
-        return;
-    }
-
-    if (!this.fn_validate())
-    {
-        return;
-    }
-
-    // DB 저장 Controller 및 트랜잭션 구현 전에는 호출하지 않음
-    this.alert("저장 서버 기능 연결 후 테스트할 예정입니다.");
+    // 조회 요청
+    this.gfn_transaction(sSvcId, sSvcURL, sInData, sOutData, sArgument, sCallback);
 };
 
 
@@ -358,39 +256,22 @@ this.fn_save = function()
 /*
  * 기능 : Transaction 결과 처리
  */
-//콜백
-this.fn_callback = function(sSvcID, nErrCd, sErrMsg)
+this.fn_callBack = function(sSvcId, nErrorCode, sErrorMsg)
 {
-    if(nErrCd < 0) {
-        alert(sErrMsg);
+    if (nErrorCode != 0)
+    {
+        if (sSvcId == "selectMessageList")
+        {
+            this.alert("조회 요청 오류: " + sErrorMsg);
+        }
+        else if (sSvcId == "saveMessage")
+        {
+            this.alert("저장 요청 오류: " + sErrorMsg);
+        }
         return;
     }
 
-    switch(sSvcID) {
-
-        //메시지 목록 조회
-        case "selectMessageList":
-
-            var nCnt = this.ds_message.rowcount;
-
-            //조회 건수 표시
-            this.fn_setMessageCount();
-
-            if (nCnt == 0) {
-                alert("조회조건에 일치하는 데이터가 존재하지 않습니다.");
-                //this.gfn_msgBox('MSG-A-10030');
-            }
-            break;
-
-        //메시지 저장 (추후 서버 기능 연결)
-        case "saveMessage":
-
-            alert("정상적으로 저장되었습니다.");
-
-            //저장 후 재조회
-            this.fn_search();
-            break;
-    }
+    // 저장 성공 처리는 실제 DB 저장 기능 연결 후 추가 예정
 };
 
 
@@ -408,75 +289,120 @@ this.fn_callback = function(sSvcID, nErrCd, sErrMsg)
  * 7. 이벤트
  ***************************************************************************************/
 
+/*
+ * 기능 : 화면 로딩 이벤트
+ */
+this.COM12000M_onload = function(obj, e)
+{
+    this.fn_init(obj, e);
+};
+
+/*
+ * 기능 : 조회 버튼 클릭 이벤트
+ */
+this.btnSearch_onclick = function(obj, e)
+{
+    this.fn_search();
+};
+
+
+this.btnAddRow_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	// 메시지 목록에 새로운 행 추가
+    var nRow = this.dsMessage.addRow();
+
+    // 새 행의 기본값 설정
+    this.dsMessage.setColumn(nRow, "MESSAGE_GUBUN", "FM");
+    this.dsMessage.setColumn(nRow, "MESSAGE_TYPE_CD", "A");
+};
+
+this.btnDeleteRow_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	 // 현재 선택된 행 번호 가져오기
+    var nRow = this.dsMessage.rowposition;
+
+    // 선택된 행이 없으면 종료
+    if (nRow < 0)
+    {
+        this.alert("삭제할 행을 선택해주세요.");
+        return;
+    }
+
+    // 선택된 행 삭제
+    this.dsMessage.deleteRow(nRow);
+};
+
+this.btnSave_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+		
+	// 변경된 데이터가 있는지 확인
+    var bChanged = false;
+
+    // 신규 또는 수정된 행 확인
+    for (var i = 0; i < this.dsMessage.rowcount; i++)
+    {
+        var nRowType = this.dsMessage.getRowType(i);
+
+        if (nRowType == 2 || nRowType == 4)
+        {
+            bChanged = true;
+            break;
+        }
+    }
+
+    // 삭제된 기존 행 확인
+    if (this.dsMessage.getDeletedRowCount() > 0)
+    {
+        bChanged = true;
+    }
+
+    // 변경된 데이터가 없으면 안내
+    if (!bChanged)
+    {
+        this.alert("변경된 데이터가 없습니다.");
+        return;
+    }
+    
+	// 필수 입력값 검사
+	for (var i = 0; i < this.dsMessage.rowcount; i++)
+	{
+		var nRowType = this.dsMessage.getRowType(i);
+
+		// 신규 또는 수정된 행만 검사
+		if (nRowType == 2 || nRowType == 4)
+		{
+			var arrRequired = [
+				"MESSAGE_TEXT_KO",
+				"MESSAGE_TEXT_EN",
+				"MESSAGE_TEXT_ZH",
+				"MESSAGE_TEXT_JA",
+				"MESSAGE_TEXT_OT"
+			];
+
+			for (var j = 0; j < arrRequired.length; j++)
+			{
+				var sValue = this.dsMessage.getColumn(i, arrRequired[j]);
+
+				if (sValue == null || String(sValue).trim() == "")
+				{
+					this.alert("필수 메시지 항목을 입력해주세요.");
+					this.dsMessage.set_rowposition(i);
+					return;
+				}
+			}
+		}
+	}		
+    // 저장 Transaction 설정
+	var sSvcId = "saveMessage";
+	var sSvcURL = "svcUrl::com12000m/saveMessage.do";
+	var sInData = "dsMessage=dsMessage:U";
+	var sOutData = "";
+	var sArgument = "";
+	var sCallback = "fn_callBack";
+
+	// 저장 요청
+	this.gfn_transaction(sSvcId, sSvcURL, sInData, sOutData, sArgument, sCallback);
+};
 ]]></Script>
-    <Layouts>
-      <Layout width="1280" height="720" mobileorientation="landscape">
-        <!-- 상단 저장 -->
-        <Button id="btn_save" text="저장" right="20" top="12" width="76" height="28" taborder="0"/>
-        <!-- 조회 조건 박스 -->
-        <Static id="sta_search_bg" left="16" top="49" right="16" height="60" background="#E4E9F8" border="1px solid #CDD5E8"/>
-        <Static id="sta_message_class_cd" text="메시지분류" left="31" top="66" width="82" height="26" verticalAlign="middle"/>
-        <Combo id="cbo_message_class_cd" left="114" top="65" width="150" height="28" taborder="1" innerdataset="ds_cbo_message_class_cd" codecolumn="code" datacolumn="name" value="ALL" index="0"/>
-        <Static id="sta_message_type_cd" text="메시지유형" left="294" top="66" width="81" height="26" verticalAlign="middle"/>
-        <Combo id="cbo_message_type_cd" left="377" top="65" width="150" height="28" taborder="2" innerdataset="ds_cbo_message_type_cd" codecolumn="code" datacolumn="name" value="ALL" index="0"/>
-        <Static id="sta_message_text_ko" text="메시지(한글)" left="557" top="66" width="98" height="26" verticalAlign="middle"/>
-        <Edit id="edt_message_text_ko" left="655" top="65" width="244" height="28" taborder="3" maxlength="300"/>
-        <Button id="btn_search" text="조회" right="105" top="65" width="70" height="28" taborder="4" onclick="fn_search"/>
-        <Button id="btn_reset" text="초기화" right="27" top="65" width="70" height="28" taborder="5"/>
-        <!-- 그리드 툴바 -->
-        <Static id="sta_message_list" text="메시지 목록" left="10" top="122" width="78" height="27" font="bold 11pt Arial" textAlign="left"/>
-        <Static id="sta_message_count" text="(0건)" left="88" top="122" width="65" height="27" verticalAlign="middle"/>
-        <Button id="btn_excel" text="엑셀다운로드" right="201" top="119" width="115" height="28" taborder="6"/>
-        <Button id="btn_add" text="행추가" right="111" top="119" width="83" height="28" taborder="7"/>
-        <Button id="btn_delete" text="행삭제" right="20" top="119" width="83" height="28" taborder="8"/>
-        <!-- 메시지 목록: 9개 컬럼(No, 선택, 분류, 유형, 번호, 5개 언어) -->
-        <Grid id="grd_message" left="16" top="157" right="16" bottom="20" taborder="9" binddataset="ds_message" selecttype="row" autoenter="select" autofittype="none">
-          <Formats>
-            <Format id="default">
-              <Columns>
-                <Column size="44"/>
-                <Column size="42"/>
-                <Column size="85"/>
-                <Column size="85"/>
-                <Column size="95"/>
-                <Column size="300"/>
-                <Column size="280"/>
-                <Column size="250"/>
-                <Column size="250"/>
-                <Column size="250"/>
-              </Columns>
-              <Rows>
-                <Row size="32" band="head"/>
-                <Row size="32"/>
-              </Rows>
-              <Band id="head">
-                <Cell text="No"/>
-                <Cell col="1" text="V"/>
-                <Cell col="2" text="*메시지분류"/>
-                <Cell col="3" text="*메시지유형"/>
-                <Cell col="4" text="*메시지번호"/>
-                <Cell col="5" text="*메시지(한글)"/>
-                <Cell col="6" text="메시지(영문)"/>
-                <Cell col="7" text="메시지(중국)"/>
-                <Cell col="8" text="메시지(일본)"/>
-                <Cell col="9" text="메시지(기타)"/>
-              </Band>
-              <Band id="body">
-                <Cell text="expr:currow+1" edittype="none" textAlign="center"/>
-                <Cell col="1" text="bind:select_yn" displaytype="checkboxcontrol" edittype="checkbox" textAlign="center"/>
-                <Cell col="2" text="bind:message_class_cd" displaytype="combocontrol" edittype="combo" combodataset="ds_cbo_grid_message_class_cd" combocodecol="code" combodatacol="name"/>
-                <Cell col="3" text="bind:message_type_cd" displaytype="combocontrol" edittype="combo" combodataset="ds_cbo_grid_message_type_cd" combocodecol="code" combodatacol="name"/>
-                <Cell col="4" text="bind:message_num" edittype="none"/>
-                <Cell col="5" text="bind:message_text_ko" edittype="text"/>
-                <Cell col="6" text="bind:message_text_en" edittype="text"/>
-                <Cell col="7" text="bind:message_text_zh" edittype="text"/>
-                <Cell col="8" text="bind:message_text_ja" edittype="text"/>
-                <Cell col="9" text="bind:message_text_ot" edittype="text"/>
-              </Band>
-            </Format>
-          </Formats>
-        </Grid>
-      </Layout>
-    </Layouts>
   </Form>
 </FDL>

@@ -11,7 +11,7 @@
         {
             this.set_name("Form_Top");
             this.set_titletext("공통 상단 영역");
-            this.set_background("#FFFFFF");
+            this.set_cssclass("besTopForm");
             this.set_scrollbartype("none");
             if (Form == this.constructor)
             {
@@ -22,54 +22,51 @@
 
             
             // UI Components Initialize
-            obj = new Static("sta_Brand","20","0","44","49",null,null,null,null,null,null,this);
+            obj = new ImageViewer("img_Brand","20","13","24","24",null,null,null,null,null,null,this);
             obj.set_taborder("0");
+            obj.set_image("theme://images_ifc/bes_icon_24_2x.png");
+            obj.set_stretch("fit");
+            obj.set_cssclass("besTopLogo");
+            this.addChild(obj.name, obj);
+
+            obj = new Static("sta_Brand","56","0","58","49",null,null,null,null,null,null,this);
+            obj.set_taborder("1");
             obj.set_text("BES");
-            obj.set_color("#24436D");
-            obj.set_font("bold 22px Arial");
+            obj.set_cssclass("besTopBrand");
             obj.set_cursor("pointer");
             this.addChild(obj.name, obj);
 
-            obj = new Static("sta_SystemName","84","0","260","49",null,null,null,null,null,null,this);
-            obj.set_taborder("1");
+            obj = new Static("sta_SystemName","112","0","260","49",null,null,null,null,null,null,this);
+            obj.set_taborder("2");
             obj.set_text("Built1 Enterprise System");
-            obj.set_color("#41556F");
-            obj.set_font("12px Arial");
+            obj.set_cssclass("besTopSystemName");
             this.addChild(obj.name, obj);
 
             obj = new Static("sta_UserName",null,"0","175","49","187",null,null,null,null,null,this);
-            obj.set_taborder("2");
+            obj.set_taborder("3");
             obj.set_text("");
             obj.set_textAlign("right");
-            obj.set_color("#52647A");
-            obj.set_font("12px Arial");
+            obj.set_cssclass("besTopUserName");
             this.addChild(obj.name, obj);
 
             obj = new Button("btn_changePw",null,"0","90","49","92",null,null,null,null,null,this);
-            obj.set_taborder("3");
+            obj.set_taborder("4");
             obj.set_text("패스워드 변경");
-            obj.set_font("12px Arial");
-            obj.set_color("#3478C0");
-            obj.set_background("transparent");
-            obj.set_border("0px none");
+            obj.set_cssclass("besTopActionButton");
             obj.set_cursor("pointer");
             this.addChild(obj.name, obj);
 
             obj = new Static("sta_Separator",null,"0","8","49","84",null,null,null,null,null,this);
-            obj.set_taborder("4");
+            obj.set_taborder("5");
             obj.set_text("|");
             obj.set_textAlign("center");
-            obj.set_color("#B8C2CF");
-            obj.set_font("12px Arial");
+            obj.set_cssclass("besTopSeparator");
             this.addChild(obj.name, obj);
 
             obj = new Button("btn_logout",null,"0","70","49","14",null,null,null,null,null,this);
-            obj.set_taborder("5");
+            obj.set_taborder("6");
             obj.set_text("로그아웃");
-            obj.set_font("12px Arial");
-            obj.set_color("#3478C0");
-            obj.set_background("transparent");
-            obj.set_border("0px none");
+            obj.set_cssclass("besTopActionButton");
             obj.set_cursor("pointer");
             this.addChild(obj.name, obj);
             // Layout Functions
@@ -106,6 +103,7 @@
          * 2026-11-03        Built1            공통 상단 화면 구성
          * 2026-11-04        Built1            상단 디자인 및 사용자 환영 문구 개선
          * 2026-11-04        Built1            패스워드 변경 버튼 추가
+         * 2026-11-05        Built1            BES 로고 클릭 시 MDI 홈 화면 연동
          ***************************************************************************************/
 
 
@@ -125,7 +123,8 @@
         {
             var objApp = nexacro.getApplication();
 
-            // 로그인 사용자 환영 문구 표시
+            // 전역 변수에 저장된 로그인 사용자 ID를 상단 환영 문구에 표시
+            // 로그인 사용자 정보가 없으면 빈 문자열 표시
             this.sta_UserName.set_text(objApp.gvUserId ? objApp.gvUserId + "님 환영합니다." : "");
         };
 
@@ -157,27 +156,31 @@
             var objApp      = nexacro.getApplication();
             var objFrameSet = objApp.mainframe.VFrameSetMain;
 
+            // 메인 프레임이 존재하지 않으면 로그아웃 화면 전환 중단
             if (!objFrameSet)
             {
                 this.alert("메인 프레임을 찾을 수 없습니다.");
                 return;
             }
 
-            // 로그인 화면 정보 복원
+            // 로그인 화면 프레임 조회
             var objLoginFrame = objFrameSet.LoginFrame;
 
+            // 로그인 화면에 남아 있는 인증 결과 및 메뉴 Dataset 초기화
+            // 아이디 및 비밀번호 저장 설정은 기존 사용자 선택값으로 복원
             if (objLoginFrame && objLoginFrame.form && objLoginFrame.form.fn_resetLogin)
             {
                 objLoginFrame.form.fn_resetLogin();
             }
 
-            // 로그인 사용자 정보 초기화
+            // 현재 로그인 사용자 정보를 전역 변수와 상단 화면에서 제거
             objApp.gvUserId = "";
             this.sta_UserName.set_text("");
 
-            // 로그인 화면 표시
+            // 메인 화면을 숨기고 로그인 화면 표시
             objFrameSet.set_separatesize("*,0");
 
+            // 로그아웃 완료 안내
             this.alert("로그아웃 되었습니다.");
         };
 
@@ -191,6 +194,7 @@
          */
         this.btn_logout_onclick = function(obj, e)
         {
+            // 로그인 정보 초기화 및 로그인 화면 전환
             this.fn_logout();
         };
 
@@ -200,28 +204,30 @@
          */
         this.btn_changePw_onclick = function(obj, e)
         {
+            // 패스워드 변경 기능은 추후 개발 예정
             this.alert("패스워드 변경 기능 개발 예정");
         };
 
 
         /*
-         * 기능 : BES 로고 클릭 시 초기 업무 화면으로 이동
+         * 기능 : BES 로고 클릭 시 홈 화면 이동
          */
         this.sta_Brand_onclick = function(obj, e)
         {
-            var objApp = nexacro.getApplication();
+            var objApp      = nexacro.getApplication();
+            var objMdiFrame = objApp.mainframe.VFrameSetMain.VFrameSet00.MdiFrame;
 
-            // 메인 화면 WorkFrame 접근
-            var objWorkFrame = objApp.mainframe.VFrameSetMain.VFrameSet00.HFrameSet00.WorkFrame;
-
-            if (!objWorkFrame)
+            // MDI 프레임 또는 탭 선택 함수가 없으면 오류 표시
+            if (!objMdiFrame || !objMdiFrame.form || !objMdiFrame.form.fn_selectTab)
             {
-                this.alert("WorkFrame을 찾을 수 없습니다.");
+                this.alert("MdiFrame을 찾을 수 없습니다.");
                 return;
             }
 
-            // 초기 업무 화면으로 변경
-            objWorkFrame.set_formurl("FrameBase::Form_Work.xfdl");
+            // 홈을 선택하여 업무 탭 활성화 상태 해제
+            // Form_TabWork에서 기존 Form_Work 홈 화면 표시
+            // 열려 있는 업무 탭과 화면 데이터는 유지
+            objMdiFrame.form.fn_selectTab("");
         };
 
         });

@@ -9,7 +9,7 @@
 		
             // global dataset
             obj = new Dataset("gdsMenu", this);
-            obj._setContents({"ColumnInfo" : {"Column" : [ {"id" : "MENU_ID","type" : "STRING","size" : "256"},{"id" : "PARENT_ID","type" : "STRING","size" : "256"},{"id" : "MENU_NAME","type" : "STRING","size" : "256"},{"id" : "FORM_URL","type" : "STRING","size" : "256"},{"id" : "MENU_LEVEL","type" : "INT","size" : "4"}]},"Rows" : [{"MENU_ID" : "SYS","PARENT_ID" : "","MENU_NAME" : "시스템관리","FORM_URL" : "","MENU_LEVEL" : "0"},{"MENU_ID" : "SYS11000M","PARENT_ID" : "SYS","MENU_NAME" : "로그정보","FORM_URL" : "","MENU_LEVEL" : "1"},{"MENU_ID" : "SYS12000M","PARENT_ID" : "SYS","MENU_NAME" : "배치관리","FORM_URL" : "","MENU_LEVEL" : "1"},{"MENU_ID" : "COM","PARENT_ID" : "","MENU_NAME" : "공통관리","FORM_URL" : "","MENU_LEVEL" : "0"},{"MENU_ID" : "COM10000M","PARENT_ID" : "COM","MENU_NAME" : "코드등록","FORM_URL" : "Com::COM10000M.xfdl","MENU_LEVEL" : "1"},{"MENU_ID" : "COM11000M","PARENT_ID" : "COM","MENU_NAME" : "사용자등록","FORM_URL" : "Com::COM11000M.xfdl","MENU_LEVEL" : "1"},{"MENU_ID" : "COM11010M","PARENT_ID" : "COM","MENU_NAME" : "권한등록","FORM_URL" : "","MENU_LEVEL" : "1"},{"MENU_ID" : "COM11020M","PARENT_ID" : "COM","MENU_NAME" : "메뉴등록","FORM_URL" : "Com::COM11020M.xfdl","MENU_LEVEL" : "1"},{"MENU_ID" : "COM12000M","PARENT_ID" : "COM","MENU_NAME" : "메시지등록","FORM_URL" : "Com::COM12000M.xfdl","MENU_LEVEL" : "1"}]});
+            obj._setContents({"ColumnInfo" : {"Column" : [ {"id" : "MENU_ID","type" : "STRING","size" : "256"},{"id" : "PARENT_MENU_CD","type" : "STRING","size" : "256"},{"id" : "CHILD_MENU_CD","type" : "STRING","size" : "256"},{"id" : "CHILD_MENU_NM","type" : "STRING","size" : "256"},{"id" : "CHILD_PAGE_ULR","type" : "STRING","size" : "256"},{"id" : "CHILD_MENU_LEVEL","type" : "INT","size" : "256"},{"id" : "CHILD_MENU_SEQ","type" : "INT","size" : "256"},{"id" : "USER_YN","type" : "STRING","size" : "256"},{"id" : "BTN_SEARCH_YN","type" : "STRING","size" : "256"},{"id" : "BTN_SEARCH_INIT_YN","type" : "STRING","size" : "256"},{"id" : "BTN_SAVE_YN","type" : "STRING","size" : "256"},{"id" : "BTN_ADD_ROW_YN","type" : "STRING","size" : "256"},{"id" : "BTN_DEL_ROW_YN","type" : "STRING","size" : "256"},{"id" : "BTN_EXCEL_DOWN_YN","type" : "STRING","size" : "256"},{"id" : "BTN_EXCEL_UP_YN","type" : "STRING","size" : "256"},{"id" : "BTN_PRINT_YN","type" : "STRING","size" : "256"},{"id" : "BTN_BATCH_YN","type" : "STRING","size" : "256"},{"id" : "REMARK","type" : "STRING","size" : "256"},{"id" : "CREATE_DATE","type" : "STRING","size" : "256"},{"id" : "CREATE_BY","type" : "STRING","size" : "256"},{"id" : "UPDATE_DATE","type" : "STRING","size" : "256"},{"id" : "UPDATE_BY","type" : "STRING","size" : "256"}]}});
             this._addDataset(obj.name, obj);
             
             // global variable
@@ -51,16 +51,16 @@
             this.addChild(frame0.name, frame0);
             this.frame=frame0;
 
-            var frame1 = new ChildFrame("LoginFrame",null,null,null,null,null,null,"Sys::SYS10000M.xfdl",frame0);
+            var frame1 = new ChildFrame("LoginFrame",null,null,null,null,null,null,"sys::SYS10000M.xfdl",frame0);
             frame1.set_showtitlebar("false");
             frame1.set_showstatusbar("false");
             frame1.set_dragmovetype("none");
             frame0.addChild(frame1.name, frame1);
-            frame1.set_formurl("Sys::SYS10000M.xfdl");
+            frame1.set_formurl("sys::SYS10000M.xfdl");
 
 
             var frame2 = new VFrameSet("VFrameSet00",null,null,null,null,null,null,frame0);
-            frame2.set_separatesize("50,*");
+            frame2.set_separatesize("50,42,30,*");
             frame2.set_border("0px none");
             frame0.addChild(frame2.name, frame2);
 
@@ -73,27 +73,45 @@
             frame3.set_formurl("FrameBase::Form_Top.xfdl");
 
 
-            var frame4 = new HFrameSet("HFrameSet00",null,null,null,null,null,null,frame2);
-            frame4.set_separatesize("200,*");
+            var frame4 = new ChildFrame("MenuFrame",null,null,null,null,null,null,"FrameBase::Form_Menu.xfdl",frame2);
+            frame4.set_showtitlebar("false");
+            frame4.set_showstatusbar("false");
             frame4.set_border("0px none");
+            frame4.set_dragmovetype("none");
             frame2.addChild(frame4.name, frame4);
+            frame4.set_formurl("FrameBase::Form_Menu.xfdl");
 
-            var frame5 = new ChildFrame("LeftFrame",null,null,null,null,null,null,"FrameBase::Form_Left.xfdl",frame4);
+
+            var frame5 = new ChildFrame("MdiFrame",null,null,null,null,null,null,"FrameBase::Form_Mdi.xfdl",frame2);
             frame5.set_showtitlebar("false");
             frame5.set_showstatusbar("false");
             frame5.set_border("0px none");
             frame5.set_dragmovetype("none");
-            frame4.addChild(frame5.name, frame5);
-            frame5.set_formurl("FrameBase::Form_Left.xfdl");
+            frame2.addChild(frame5.name, frame5);
+            frame5.set_formurl("FrameBase::Form_Mdi.xfdl");
 
 
-            var frame6 = new ChildFrame("WorkFrame",null,null,null,null,null,null,"FrameBase::Form_Work.xfdl",frame4);
-            frame6.set_showtitlebar("false");
-            frame6.set_showstatusbar("false");
+            var frame6 = new HFrameSet("HFrameSet00",null,null,null,null,null,null,frame2);
+            frame6.set_separatesize("200,*");
             frame6.set_border("0px none");
-            frame6.set_dragmovetype("none");
-            frame4.addChild(frame6.name, frame6);
-            frame6.set_formurl("FrameBase::Form_Work.xfdl");
+            frame2.addChild(frame6.name, frame6);
+
+            var frame7 = new ChildFrame("LeftFrame",null,null,null,null,null,null,"FrameBase::Form_Left.xfdl",frame6);
+            frame7.set_showtitlebar("false");
+            frame7.set_showstatusbar("false");
+            frame7.set_border("0px none");
+            frame7.set_dragmovetype("none");
+            frame6.addChild(frame7.name, frame7);
+            frame7.set_formurl("FrameBase::Form_Left.xfdl");
+
+
+            var frame8 = new ChildFrame("WorkFrame",null,null,null,null,null,null,"FrameBase::Form_TabWork.xfdl",frame6);
+            frame8.set_showtitlebar("false");
+            frame8.set_showstatusbar("false");
+            frame8.set_border("0px none");
+            frame8.set_dragmovetype("none");
+            frame6.addChild(frame8.name, frame8);
+            frame8.set_formurl("FrameBase::Form_TabWork.xfdl");
         };
         
         this.on_initEvent = function()

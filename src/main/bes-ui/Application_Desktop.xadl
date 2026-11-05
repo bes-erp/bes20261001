@@ -6,17 +6,21 @@
         <VFrameSet id="VFrameSetMain" separatesize="*,0" border="0px none">
           <Frames>
             <!-- 로그인 화면 -->
-            <ChildFrame id="LoginFrame" showtitlebar="false" showstatusbar="false" formurl="Sys::SYS10000M.xfdl" dragmovetype="none"/>
+            <ChildFrame id="LoginFrame" showtitlebar="false" showstatusbar="false" formurl="sys::SYS10000M.xfdl" dragmovetype="none"/>
             <!-- 로그인 성공 후 메인 화면 -->
-            <VFrameSet id="VFrameSet00" separatesize="50,*" border="0px none">
+            <VFrameSet id="VFrameSet00" separatesize="50,42,30,*" border="0px none">
               <Frames>
-                <!-- 전체 너비 상단 영역 -->
+                <!-- 흰색 상단 사용자 정보 -->
                 <ChildFrame id="TopFrame" showtitlebar="false" showstatusbar="false" border="0px none" formurl="FrameBase::Form_Top.xfdl" dragmovetype="none"/>
-                <!-- 왼쪽 메뉴 및 업무 영역 -->
+                <!-- 청록색 대메뉴 -->
+                <ChildFrame id="MenuFrame" showtitlebar="false" showstatusbar="false" border="0px none" formurl="FrameBase::Form_Menu.xfdl" dragmovetype="none"/>
+                <!-- 열린 업무 화면 탭 -->
+                <ChildFrame id="MdiFrame" showtitlebar="false" showstatusbar="false" border="0px none" formurl="FrameBase::Form_Mdi.xfdl" dragmovetype="none"/>
+                <!-- 좌측 메뉴 및 업무 영역 -->
                 <HFrameSet id="HFrameSet00" separatesize="200,*" border="0px none">
                   <Frames>
                     <ChildFrame id="LeftFrame" showtitlebar="false" showstatusbar="false" border="0px none" formurl="FrameBase::Form_Left.xfdl" dragmovetype="none"/>
-                    <ChildFrame id="WorkFrame" showtitlebar="false" showstatusbar="false" border="0px none" formurl="FrameBase::Form_Work.xfdl" dragmovetype="none"/>
+                    <ChildFrame id="WorkFrame" showtitlebar="false" showstatusbar="false" border="0px none" formurl="FrameBase::Form_TabWork.xfdl" dragmovetype="none"/>
                   </Frames>
                 </HFrameSet>
               </Frames>

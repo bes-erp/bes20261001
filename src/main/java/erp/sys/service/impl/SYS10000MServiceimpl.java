@@ -12,17 +12,17 @@ import erp.sys.service.SYS10000MService;
 import lombok.extern.slf4j.Slf4j;
 
 /**
-* =====================================================================================
-* @packageName     : erp.com.service.impl
-* @fileName        : SYS10000MServiceimpl.java
-* @author          : Built1
-* @date            : 2026.11.02
-* @description     : 사용자 로그인 인증을 처리하는 구현체 클래스
-* =====================================================================================
-* 수정일자          수정자             수정내용
-* -------------------------------------------------------------------------------------
-* 2026.11.02        Built1             최초 생성
-*/
+ * =====================================================================================
+ * @packageName     : erp.sys.service.impl
+ * @fileName        : SYS10000MServiceimpl.java
+ * @author          : Built1
+ * @date            : 2026.11.02
+ * @description     : 사용자 로그인 인증을 처리하는 구현체 클래스
+ * =====================================================================================
+ * 수정일자          수정자             수정내용
+ * -------------------------------------------------------------------------------------
+ * 2026.11.02        Built1             최초 생성
+ */
 @Slf4j
 @Service
 public class SYS10000MServiceimpl implements SYS10000MService {
@@ -31,18 +31,17 @@ public class SYS10000MServiceimpl implements SYS10000MService {
     private SYS10000MMapper mapper;
 
     /**
-    * @methodName      : login
-    * @author          : built1
-    * @date            : 2026.11.02
-    * @description     : 사용자 로그인 인증을 처리하는 상속메소드
-    * @param loginParamMap
-    * @return
-    * @throws Exception
-    */
+     * @methodName      : login
+     * @author          : Built1
+     * @date            : 2026.11.02
+     * @description     : 사용자 로그인 인증을 처리하는 상속메소드
+     * @param loginParamMap 로그인 요청정보
+     * @return              로그인 인증 결과
+     * @throws Exception
+     */
     @Override
     @Transactional
-    public Map<String, Object> login(
-            Map<String, Object> loginParamMap) throws Exception {
+    public Map<String, Object> login(Map<String, Object> loginParamMap) throws Exception {
 
         // 로그인 결과 변수 선언
         Map<String, Object> resultMap = new HashMap<>();
