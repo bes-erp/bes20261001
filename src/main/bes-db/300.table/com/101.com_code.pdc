@@ -32,9 +32,9 @@ create table bcom.com_code
     ,attr_date5              date
     ,remark                  varchar2(4000)
     ,create_date             date           default sysdate
-    ,create_by               varchar2(50)   default 'admin'
+    ,create_by               varchar2(50)   default 'ADMIN'
     ,update_date             date           default sysdate
-    ,update_by               varchar2(50)   default 'admin'
+    ,update_by               varchar2(50)   default 'ADMIN'
 ) tablespace bes_data;
 
 -- 테이블 설명
