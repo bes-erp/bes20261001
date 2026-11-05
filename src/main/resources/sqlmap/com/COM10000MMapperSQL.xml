@@ -8,16 +8,16 @@
 	******************************************************************************* -->
 	<select id="selectCodeTypeList" resultType="map">
 		select cct.code_type                          as code_type
-		     , cct.code_type_nm                       as code_type_nm
-		     , cct.code_type_nm_s                     as code_type_nm_s
-		     , to_char(cct.start_date, 'yyyy-mm-dd')  as start_date
-		     , to_char(cct.end_date, 'yyyy-mm-dd')    as end_date
-		     , cct.create_type_cd                     as create_type_cd
-		     , cct.remark                             as remark
-		     , cct.create_date                        as create_date
-		     , cct.create_by                          as create_by
-		     , cct.update_date                        as update_date
-		     , cct.update_by                          as update_by
+		      ,cct.code_type_nm                       as code_type_nm
+		      ,cct.code_type_nm_s                     as code_type_nm_s
+		      ,to_char(cct.start_date, 'yyyy-mm-dd')  as start_date
+		      ,to_char(cct.end_date, 'yyyy-mm-dd')    as end_date
+		      ,cct.create_type_cd                     as create_type_cd
+		      ,cct.remark                             as remark
+		      ,cct.create_date                        as create_date
+		      ,cct.create_by                          as create_by
+		      ,cct.update_date                        as update_date
+		      ,cct.update_by                          as update_by
 		  from com_code_type cct
 		 where 1=1
 	
@@ -79,30 +79,5 @@
 		 order by cc.code_type
 		         ,cc.code
 	</select>
-
-	<!-- ******************************************************************************
-	     [콤보박스] 코드유형에 따른 코드 데이터를 조회 : 특수문자 : <![CDATA[  ]]>
-	******************************************************************************* -->
-	<select id="selectComboCodeList" resultType="map">
-		select cc.code                                   as code     
-		      ,cc.code_nm                                as code_nm 
-		  from com_code cc
-		 where 1=1
-		 	
-	    <if test='code_type != null and code_type != ""'>
-	       and cc.code_type = #{code_type}
-	    </if>
-	
-	    <if test='sel_type != null and sel_type != "" and sel_type =="A"'>
-	       and trunc(sysdate) between cc.start_date and nvl(cc.end_date, trunc(to_date('9999-12-31', 'yyyy-mm-dd')))
-	    </if>
-	
-	    <if test='sel_type != null and sel_type != "" and sel_type =="I"'>
-	       and not (trunc(sysdate) between cc.start_date and nvl(cc.end_date, trunc(to_date('9999-12-31', 'yyyy-mm-dd'))))
-	    </if>
-	    
-		 order by cc.sort_order
-	</select>
-
 
 </mapper>

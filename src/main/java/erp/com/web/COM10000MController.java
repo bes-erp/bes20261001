@@ -48,7 +48,7 @@ public class COM10000MController {
 	public NexacroResult selectCodeList(@ParamDataSet(name = "inSearch") Map<String, Object> searchParamMap
 			                           ,@ParamVariable(name = "userId") String userId) throws Exception {
 		
-    	log.debug("## [ COM10000MController     ] : {}", "selectCodeList");
+    	log.debug("## [ CBO10000MController     ] : {}", "selectCodeList");
     	
     	log.debug("## [ searchParamMap          ] : {}", searchParamMap);
     	log.debug("## [ code_type               ] : {}", searchParamMap.get("code_type"));
@@ -72,29 +72,4 @@ public class COM10000MController {
 		
 	}
     
-    /**
-    * @methodName     		: selectComboCodeList
-    * @author         		: built1
-    * @date           		: 2026.10.21
-    * @description    		: [콤보박스] 코드유형에 따른 코드 데이터를 조회하는 메소드
-    * @param codeType
-    * @param selType
-    * @return
-    * @throws Exception
-    */
-    @RequestMapping(value = "selectComboCodeList.do")
-    public NexacroResult selectComboCodeList(@ParamVariable(name = "codeType") String codeType
-    		                                ,@ParamVariable(name = "selType") String selType) throws Exception {
-    	
-    	//자바 형식 데이터를 넥사크로 데이터셋 형식으로 전환
-    	NexacroResult result = new NexacroResult();
-    	
-    	//코드 조회
-    	List<Map<String, Object>> resultList = service.selectComboCodeList(codeType, selType);
-    	
-    	//조회된 데이터셋 결과 추가
-    	result.addDataSet("outSelectComboCodeList", resultList);
-    	
-    	return result;
-    }
 }

@@ -70,7 +70,7 @@
           <Col id="MENU_ID">COM12000M</Col>
           <Col id="PARENT_ID">COM</Col>
           <Col id="MENU_NAME">메시지등록</Col>
-          <Col id="FORM_URL"/>
+          <Col id="FORM_URL">Com::COM12000M.xfdl</Col>
           <Col id="MENU_LEVEL">1</Col>
         </Row>
       </Rows>

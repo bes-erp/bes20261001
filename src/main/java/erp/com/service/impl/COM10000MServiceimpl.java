@@ -69,28 +69,4 @@ public class COM10000MServiceimpl implements COM10000MService {
 		return resultMap;
 	}
 
-	/**
-	* @methodName     		: selectComboCodeList
-	* @author         		: built1
-	* @date           		: 2026.10.21
-	* @description    		: [콤보박스] 코드유형에 따른 코드 데이터를 조회하는 메소드
-	* @param codeType
-	* @param selType
-	* @return
-	* @throws Exception
-	*/
-	@Override
-	public List<Map<String, Object>> selectComboCodeList(String codeType, String selType) throws Exception {
-		
-		//매퍼로 전달할 변수(Map) 선언
-		Map<String, Object> mapperParamMap = new HashMap<>();
-		
-		//매퍼로 전달할 Map 변수에 매개변수 할당
-		mapperParamMap.put("code_type", codeType);
-		mapperParamMap.put("sel_type" , selType);
-		
-		//코드 조회 및 결과 리턴		
-		return mapper.selectComboCodeList(mapperParamMap);
-	}
-
 }

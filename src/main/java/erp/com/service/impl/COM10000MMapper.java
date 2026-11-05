@@ -42,14 +42,4 @@ public interface COM10000MMapper {
 	*/
 	public abstract List<Map<String, Object>> selectCodeList(Map<String, Object> mapperParamMap) throws Exception;
 
-	/**
-	* @methodName     		: selectComboCodeList
-	* @author         		: built1
-	* @date           		: 2026.10.21
-	* @description    		: [콤보박스] 코드유형에 따른 코드 데이터를 조회하는 메소드
-	* @param mapperParamMap
-	* @return
-	*/
-	public abstract List<Map<String, Object>> selectComboCodeList(Map<String, Object> mapperParamMap) throws Exception;
-
 }

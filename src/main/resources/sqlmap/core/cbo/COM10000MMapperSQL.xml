@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.core.cbo.service.impl.CBO10000MMapper">
+
+	<!-- ******************************************************************************
+	     * [콤보박스] 코드유형에 따른 코드 데이터를 조회 
+	     * 특수문자 : <![CDATA[  ]]>
+	******************************************************************************* -->
+	<select id="selectComboCodeList" resultType="map">
+	    select /* CBO10000MMapper.selectComboCodeList */
+	           code
+	          ,code_nm
+	      from (
+				<if test='add_all_row =="Y"'>
+				select #{code_type}                                                 as code_type
+				      ,''                                                           as code
+				      ,'전체'         	                                            as code_nm
+				      ,to_date('1900-01-01', 'yyyy-mm-dd')                          as start_date
+				      ,to_date('9999-12-31', 'yyyy-mm-dd')                          as end_date
+				      ,0                                                            as sort_order
+				  from dual
+				union all
+				</if>
+				
+				select cc.code_type                                                 as code_type
+				      ,cc.code                                                      as code     
+				      ,cc.code_nm     		                                        as code_nm
+				      ,cc.start_date                                                as start_date 
+				      ,trunc(nvl(cc.end_date, to_date('9999-12-31', 'yyyy-mm-dd'))) as end_date
+				      ,cc.sort_order  as sort_order
+				  from com_code cc
+				 where 1=1
+			   ) cc
+         where 1=1
+		 	
+	    <if test='code_type != null and code_type != ""'>
+	       and cc.code_type = #{code_type}
+	    </if>
+	
+	    <if test='active_type =="Y"'>
+	       and trunc(sysdate) between cc.start_date and cc.end_date
+	    </if>
+	
+	    <if test='active_type =="N"'>
+	       and not (trunc(sysdate) between cc.start_date and cc.end_date
+	    </if>
+	    
+		 order by cc.sort_order
+	</select>
+
+
+</mapper>

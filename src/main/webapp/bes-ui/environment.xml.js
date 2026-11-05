@@ -22,7 +22,7 @@ if (nexacro.Environment)
         nexacro._addService("extlib", "file", "./_extlib_/", "session", null, "", "0", "");
         nexacro._addService("Base", "form", "./Base/", "session", null, "", "0", "0");
         nexacro._addService("FrameBase", "form", "./FrameBase/", "session", null, "", "0", "0");
-        nexacro._addService("svcUrl", "JSP", "http://localhost:8011/bes/", "session", null, "", "0", "0");
+        nexacro._addService("svcUrl", "JSP", "http://localhost:8011/bes/", "none", null, "", "0", "0");
         nexacro._addService("besLib", "js", "./nexacrolib/component/besLib/", "session", null, "", "0", "0");
         nexacro._addService("Com", "form", "./Com/", "session", null, "", "0", "0");
         nexacro._addService("Sys", "form", "./Sys/", "session", null, "", "0", "0");
