@@ -1,5 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Script version="1.0" type="xscript5.1"><![CDATA[var pForm = nexacro.Form.prototype;
+﻿var pForm = nexacro.Form.prototype;
 
 /*
  ===============================================================================
@@ -90,4 +89,3 @@ pForm.gfn_setLanguage = function(sLanguage)
     // 최종 적용된 언어 코드 반환
     return sLanguage;
 };
-]]></Script>
