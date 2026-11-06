@@ -1,0 +1,70 @@
+﻿-- ------------------------------------------------------------------------------------------------
+conn system/manager@orcl;
+-- ------------------------------------------------------------------------------------------------
+
+-- 테이블 삭제
+drop   table bsys.sys_message cascade constraints;
+
+-- 테이블 생성
+create table bsys.sys_message
+(
+     message_num             varchar2(30)   not null
+    ,message_type_cd         varchar2(30)   not null
+    ,message_text_ko         varchar2(300)  not null
+    ,message_text_en         varchar2(300)  not null
+    ,message_text_zh         varchar2(300)  not null
+    ,message_text_ja         varchar2(300)  not null
+    ,message_text_ot         varchar2(300)  not null
+    ,remark                  varchar2(4000)
+    ,create_date             date           default sysdate
+    ,create_by               varchar2(50)   default 'admin'
+    ,update_date             date           default sysdate
+    ,update_by               varchar2(50)   default 'admin'
+) tablespace bes_data;
+
+-- 테이블 설명
+comment on table  bsys.sys_message                  is '[공통관리] 메시지';
+comment on column bsys.sys_message.message_num      is '메시지번호';
+comment on column bsys.sys_message.message_type_cd  is '메시지유형코드 [ 코드유형: MESSAGE_TYPE_CD ]';
+comment on column bsys.sys_message.message_text_ko  is '메시지(국어)';
+comment on column bsys.sys_message.message_text_en  is '메시지(영어)';
+comment on column bsys.sys_message.message_text_zh  is '메시지(중국어)';
+comment on column bsys.sys_message.message_text_ja  is '메시지(일본어)';
+comment on column bsys.sys_message.message_text_ot  is '메시지(기타)';
+comment on column bsys.sys_message.remark           is '비고';
+
+comment on column bsys.sys_message.create_date      is '생성일시';
+comment on column bsys.sys_message.create_by        is '생성자';
+comment on column bsys.sys_message.update_date      is '수정일시';
+comment on column bsys.sys_message.update_by        is '수정자';
+
+-- primary 인덱스
+alter table bsys.sys_message add constraint sys_message_pk primary key (message_num) using index tablespace bes_index;
+
+-- unique 인덱스
+create unique index bsys.sys_message_uk01 on bsys.sys_message (message_type_cd, message_text_ko) tablespace bes_index;
+
+-- normal 인덱스
+create index bsys.sys_message_ix01 on bsys.sys_message (message_type_cd, message_text_en) tablespace bes_index;
+create index bsys.sys_message_ix02 on bsys.sys_message (message_type_cd, message_text_zh) tablespace bes_index;
+create index bsys.sys_message_ix03 on bsys.sys_message (message_type_cd, message_text_ja) tablespace bes_index;
+create index bsys.sys_message_ix04 on bsys.sys_message (message_type_cd, message_text_ot) tablespace bes_index;
+
+
+-- 권한부여
+grant all on bsys.sys_message to bcom;
+grant all on bsys.sys_message to bhrm;
+
+-- 시노님 생성
+create or replace synonym bcom.sys_message for bsys.sys_message;
+create or replace synonym bhrm.sys_message for bsys.sys_message;
+
+
+-- ----------------------------------------------------------------------------
+conn bsys/bsys@orcl;
+-- ----------------------------------------------------------------------------
+-- 데이터 조회
+select sm.*
+  from sys_message sm
+ where 1=1
+;

@@ -1,0 +1,89 @@
+﻿-- ------------------------------------------------------------------------------------------------
+conn system/manager@orcl;
+-- ------------------------------------------------------------------------------------------------
+
+
+-- ------------------------------------------------------------------------------------------------
+-- 시퀀스 생성
+-- ------------------------------------------------------------------------------------------------
+-- 시퀀스 삭제
+drop   sequence bcom.com_auth_s;
+
+-- 시퀀스 생성
+create sequence bcom.com_auth_s
+minvalue 1
+maxvalue 999999999999
+start with 1000000
+increment by 1
+order;
+
+-- 권한 부여
+grant select on bcom.com_auth_s to bsys;
+
+-- 시노님 생성
+drop synonym bsys.zehr_log_s;
+create synonym bsys.zehr_log_s for bcom.com_auth_s;
+
+
+
+-- ------------------------------------------------------------------------------------------------
+-- 테이블 생성
+-- ------------------------------------------------------------------------------------------------
+-- 테이블 삭제
+drop table bcom.com_auth cascade constraints;
+
+-- 테이블 생성
+create table bcom.com_auth
+(
+     auth_id                 number         default bcom.com_auth_s.nextval
+    ,auth_name               varchar2(200)  not null
+    ,auth_name_s             varchar2(100)  not null
+    ,user_yn                 varchar2(1)    default 'Y'
+    ,remark                  varchar2(4000)
+    ,create_date             date           default sysdate
+    ,create_by               varchar2(50)   default 'ADMIN'
+    ,update_date             date           default sysdate
+    ,update_by               varchar2(50)   default 'ADMIN'
+) tablespace bes_data;
+
+-- 테이블 설명
+comment on table  bcom.com_auth                      is '[공통관리] 권한';
+comment on column bcom.com_auth.auth_id              is '권한ID';
+comment on column bcom.com_auth.auth_name            is '권한명';
+comment on column bcom.com_auth.auth_name_s          is '권한명(약어)';
+comment on column bcom.com_auth.user_yn              is '사용여부';
+comment on column bcom.com_auth.remark               is '비고';
+
+comment on column bcom.com_auth.create_date          is '생성일시';
+comment on column bcom.com_auth.create_by            is '생성자';
+comment on column bcom.com_auth.update_date          is '수정일시';
+comment on column bcom.com_auth.update_by            is '수정자';
+
+
+-- primary 인덱스
+alter table bcom.com_auth add constraint com_auth_pk primary key (auth_id) using index tablespace bes_index;
+
+-- unique 인덱스
+--create unique index bcom.com_auth_uk01 on bcom.com_auth (user_name) tablespace bes_index;
+
+-- normal 인덱스
+create index bcom.com_auth_ix01 on bcom.com_auth (auth_name) tablespace bes_index;
+
+
+-- 권한부여
+grant all on bcom.com_auth to bsys;
+--grant all on bcom.com_auth to bhrm;
+
+-- 시노님 생성
+create or replace synonym bsys.com_auth for bcom.com_auth;
+--create or replace synonym bhrm.com_auth for bcom.com_auth;
+
+
+-- ----------------------------------------------------------------------------
+conn bcom/bcom@orcl;
+-- ----------------------------------------------------------------------------
+-- 데이터 조회
+select ca.*
+  from com_auth ca
+ where 1=1
+;

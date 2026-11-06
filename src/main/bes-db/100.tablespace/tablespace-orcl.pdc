@@ -1,0 +1,41 @@
+﻿-- ------------------------------------------------------------------------------------------------
+-- DB Version : Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production Version 19.3.0.0.0
+-- 사용자 비밀번호 변경
+-- sqlplus / as sysdba
+-- alter user system identified by "manager";
+-- alter user bsys identified by "bsys";
+conn system/manager@orcl;
+-- ------------------------------------------------------------------------------------------------
+show user;
+set trimspool on;
+set timing on;
+set heading on;
+set linesize 205;
+set pagesize 20;
+
+-- 테이블스페이스 삭제
+drop tablespace bes_data  including contents and datafiles;
+drop tablespace bes_index including contents and datafiles;
+
+-- 테이블스페이스 생성
+create tablespace bes_data  datafile 'c:\oracle\19c\oradata\orcl\bes_data01.dbf'  size 50m reuse autoextend on next 10m maxsize unlimited;
+create tablespace bes_index datafile 'c:\oracle\19c\oradata\orcl\bes_idx01.dbf'   size 50m reuse autoextend on next 10m maxsize unlimited;
+
+-- 테이블스페이스 조회
+select df.status    as "상태"
+      ,df.enabled   as "읽기쓰기"
+      ,df.name      as "파일경로"
+      ,ts.name      as "테이블스페이스명"
+  from v$datafile df
+       inner join v$tablespace ts on ts.ts# = df.ts#
+ where 1=1
+   and ts.name like 'bes_%'
+;
+
+-- 데이터 파일 조회
+select file_name                     as dbf_file_full_path
+      ,tablespace_name               as tablespace_name
+      ,round(bytes / 1024 / 1024, 2) as size_mb
+  from dba_data_files
+ order by file_name;
+;
