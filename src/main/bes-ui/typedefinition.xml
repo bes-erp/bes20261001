@@ -44,11 +44,13 @@
     <Service prefixid="font" type="resource" url="./_resource_/_font_/" version="0" cachelevel="session" include_subdir="false"/>
     <Service prefixid="extlib" type="resource" url="./_extlib_/" version="0" cachelevel="session" include_subdir="true"/>
     <Service prefixid="Base" type="form" url="./Base/" version="0" cachelevel="session" include_subdir="false" communicationversion="0"/>
-    <Service prefixid="FrameBase" type="form" url="./FrameBase/" version="0" cachelevel="session" include_subdir="false" communicationversion="0"/>
+    <Service prefixid="besframebase" type="form" url="./besframebase/" version="0" cachelevel="session" include_subdir="false" communicationversion="0"/>
     <Service prefixid="svcUrl" type="JSP" version="0" cachelevel="none" include_subdir="false" communicationversion="0" url="http://localhost:8011/bes/"/>
     <Service prefixid="besLib" type="js" url="./nexacrolib/component/besLib/" version="0" cachelevel="session" include_subdir="true" communicationversion="0"/>
     <Service prefixid="com" type="form" url="./com/" version="0" cachelevel="session" include_subdir="false" communicationversion="0"/>
     <Service prefixid="sys" type="form" url="./sys/" version="0" cachelevel="session" include_subdir="false" communicationversion="0"/>
+    <Service prefixid="temp" type="form" url="./temp/" version="0" cachelevel="session" include_subdir="false" communicationversion="0"/>
+    <Service prefixid="sample" type="form" url="./sample/" version="0" cachelevel="session" include_subdir="false" communicationversion="0"/>
   </Services>
   <Protocols/>
   <DeviceAdaptors/>

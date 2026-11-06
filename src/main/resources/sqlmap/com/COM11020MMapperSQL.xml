@@ -3,69 +3,81 @@
 
 <mapper namespace="erp.com.service.impl.COM11020MMapper">
 
-    <!-- 메뉴등록 화면 : 메뉴정보 목록 조회 -->
+    <!--
+    ***************************************************************************************
+         메뉴등록 화면 : 메뉴정보 목록 조회
+    ***************************************************************************************
+    -->
     <select id="selectMenuList" parameterType="map" resultType="map">
-        SELECT MENU_ID
-              ,PARENT_MENU_CD
-              ,CHILD_MENU_CD
-              ,CHILD_MENU_NM
-              ,CHILD_PAGE_ULR
-              ,CHILD_MENU_LEVEL
-              ,CHILD_MENU_SEQ
-              ,USER_YN
-              ,BTN_SEARCH_YN
-              ,BTN_SEARCH_INIT_YN
-              ,BTN_SAVE_YN
-              ,BTN_ADD_ROW_YN
-              ,BTN_DEL_ROW_YN
-              ,BTN_EXCEL_DOWN_YN
-              ,BTN_EXCEL_UP_YN
-              ,BTN_PRINT_YN
-              ,BTN_BATCH_YN
-              ,REMARK
-          FROM BCOM.COM_MENU
-         WHERE 1 = 1
+
+        select cm.menu_id            as "MENU_ID"
+              ,cm.parent_menu_cd     as "PARENT_MENU_CD"
+              ,cm.child_menu_cd      as "CHILD_MENU_CD"
+              ,cm.child_menu_nm      as "CHILD_MENU_NM"
+              ,cm.child_page_ulr     as "CHILD_PAGE_ULR"
+              ,cm.child_menu_level   as "CHILD_MENU_LEVEL"
+              ,cm.child_menu_seq     as "CHILD_MENU_SEQ"
+              ,cm.user_yn            as "USER_YN"
+              ,cm.btn_search_yn      as "BTN_SEARCH_YN"
+              ,cm.btn_search_init_yn as "BTN_SEARCH_INIT_YN"
+              ,cm.btn_save_yn        as "BTN_SAVE_YN"
+              ,cm.btn_add_row_yn     as "BTN_ADD_ROW_YN"
+              ,cm.btn_del_row_yn     as "BTN_DEL_ROW_YN"
+              ,cm.btn_excel_down_yn  as "BTN_EXCEL_DOWN_YN"
+              ,cm.btn_excel_up_yn    as "BTN_EXCEL_UP_YN"
+              ,cm.btn_print_yn       as "BTN_PRINT_YN"
+              ,cm.btn_batch_yn       as "BTN_BATCH_YN"
+              ,cm.remark             as "REMARK"
+          from bcom.com_menu cm
+         where 1 = 1
 
         <!-- 메뉴코드 또는 메뉴명 검색 -->
         <if test="menuText != null and menuText != ''">
-           AND (
-                  UPPER(CHILD_MENU_CD) LIKE '%' || UPPER(#{menuText}) || '%'
-               OR UPPER(CHILD_MENU_NM) LIKE '%' || UPPER(#{menuText}) || '%'
+           and (
+                  upper(cm.child_menu_cd) like '%' || upper(#{menuText}) || '%'
+               or upper(cm.child_menu_nm) like '%' || upper(#{menuText}) || '%'
            )
         </if>
 
         <!-- 사용여부 검색 -->
         <if test="userYn != null and userYn != ''">
-           AND USER_YN = #{userYn}
+           and cm.user_yn = #{userYn}
         </if>
 
-         ORDER BY CHILD_MENU_SEQ, MENU_ID
+         order by cm.child_menu_seq, cm.menu_id
+
     </select>
 
 
-    <!-- 공통 프레임 : 사용 가능한 메뉴정보 목록 조회 -->
+    <!--
+    ***************************************************************************************
+         공통 프레임 : 사용 가능한 메뉴정보 목록 조회
+    ***************************************************************************************
+    -->
     <select id="selectFrameMenuList" resultType="map">
-        SELECT MENU_ID
-              ,PARENT_MENU_CD
-              ,CHILD_MENU_CD
-              ,CHILD_MENU_NM
-              ,CHILD_PAGE_ULR
-              ,CHILD_MENU_LEVEL
-              ,CHILD_MENU_SEQ
-              ,USER_YN
-              ,BTN_SEARCH_YN
-              ,BTN_SEARCH_INIT_YN
-              ,BTN_SAVE_YN
-              ,BTN_ADD_ROW_YN
-              ,BTN_DEL_ROW_YN
-              ,BTN_EXCEL_DOWN_YN
-              ,BTN_EXCEL_UP_YN
-              ,BTN_PRINT_YN
-              ,BTN_BATCH_YN
-              ,REMARK
-          FROM BCOM.COM_MENU
-         WHERE USER_YN = 'Y'
-         ORDER BY CHILD_MENU_SEQ, MENU_ID
+
+        select cm.menu_id            as "MENU_ID"
+              ,cm.parent_menu_cd     as "PARENT_MENU_CD"
+              ,cm.child_menu_cd      as "CHILD_MENU_CD"
+              ,cm.child_menu_nm      as "CHILD_MENU_NM"
+              ,cm.child_page_ulr     as "CHILD_PAGE_ULR"
+              ,cm.child_menu_level   as "CHILD_MENU_LEVEL"
+              ,cm.child_menu_seq     as "CHILD_MENU_SEQ"
+              ,cm.user_yn            as "USER_YN"
+              ,cm.btn_search_yn      as "BTN_SEARCH_YN"
+              ,cm.btn_search_init_yn as "BTN_SEARCH_INIT_YN"
+              ,cm.btn_save_yn        as "BTN_SAVE_YN"
+              ,cm.btn_add_row_yn     as "BTN_ADD_ROW_YN"
+              ,cm.btn_del_row_yn     as "BTN_DEL_ROW_YN"
+              ,cm.btn_excel_down_yn  as "BTN_EXCEL_DOWN_YN"
+              ,cm.btn_excel_up_yn    as "BTN_EXCEL_UP_YN"
+              ,cm.btn_print_yn       as "BTN_PRINT_YN"
+              ,cm.btn_batch_yn       as "BTN_BATCH_YN"
+              ,cm.remark             as "REMARK"
+          from bcom.com_menu cm
+         where cm.user_yn = 'Y'
+         order by cm.child_menu_seq, cm.menu_id
+
     </select>
 
 </mapper>

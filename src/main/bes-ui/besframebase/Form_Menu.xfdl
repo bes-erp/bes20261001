@@ -1,0 +1,353 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="Form_Menu" width="1080" height="46" titletext="공통 상단 메뉴" cssclass="besMenuForm" scrollbartype="none" scrolltype="none" onload="Form_Menu_onload">
+    <Layouts>
+      <Layout width="1080" height="46" screenid="Desktop_screen">
+        <Div id="div_menu" taborder="0" left="0" top="0" right="0" bottom="0" cssclass="besMenuDiv" scrollbartype="none" scrolltype="none">
+          <Layouts>
+            <Layout width="1080" height="46">
+              <Button id="btn_toggleMenu" taborder="0" left="0" top="0" width="58" height="42" text="" cssclass="besMenuToggleClose" cursor="pointer" onclick="btn_toggleMenu_onclick"/>
+            </Layout>
+          </Layouts>
+        </Div>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[/***************************************************************************************
+ * 프로젝트        : Built1 Enterprise System 구축 프로젝트
+ * 업무구분        : 공통 프레임
+ * 파일명          : Form_Menu.xfdl
+ * 작성자          : Built1
+ * 작성일          : 2026-11-05
+ *
+ * 화면            : BES 상단 메뉴
+ * 설명            : DB 메뉴정보를 이용한 최상위 메뉴 표시 및 왼쪽 메뉴 연동
+ *---------------------------------------------------------------------------------------
+ * 변경일            변경자            변경내역
+ *---------------------------------------------------------------------------------------
+ * 2026-11-05        Built1            최초작성 및 DB 메뉴정보 연동
+ * 2026-11-05        Built1            왼쪽 메뉴 접기 및 펼치기 기능 추가
+ * 2026-11-05        Built1            MDI 탭 선택 시 상단 및 왼쪽 메뉴 연동
+ * 2026-11-06        Built1            전역 Dataset 및 프레임 ID 변경
+ ***************************************************************************************/
+
+
+/***************************************************************************************
+ * 1. FORM 변수 선언
+ ***************************************************************************************/
+
+// fv_topMenuCd : 현재 선택한 1레벨 최상위 메뉴 코드
+// 상단 메뉴 버튼의 선택 상태를 관리할 때 사용
+this.fv_topMenuCd = "";
+
+// fv_leftMenuOpen : 왼쪽 메뉴가 펼쳐져 있는지 나타내는 Boolean 변수
+// true : 왼쪽 메뉴가 펼쳐진 상태
+// false : 왼쪽 메뉴가 접힌 상태
+// 햄버거 버튼 클릭 시 상태를 반대로 변경
+this.fv_leftMenuOpen = true;
+
+
+/***************************************************************************************
+ * 2. FORM LOAD
+ ***************************************************************************************/
+
+/*
+ * 기능 : 상단 메뉴 초기화
+ * 설명 : 전역 메뉴 Dataset을 기준으로 1레벨 상단 메뉴 버튼 생성
+ */
+this.fn_init = function(obj, e)
+{
+    // fn_createTopMenu : DB에서 조회한 메뉴정보를 이용하여
+    // 1레벨 최상위 메뉴 버튼을 동적으로 생성하는 함수
+    this.fn_createTopMenu();
+};
+
+
+/***************************************************************************************
+ * 3. 공통 버튼
+ ***************************************************************************************/
+
+
+/***************************************************************************************
+ * 4. TRANSACTION, CALLBACK
+ ***************************************************************************************/
+
+
+/***************************************************************************************
+ * 5. 팝업 호출 및 콜백
+ ***************************************************************************************/
+
+
+/***************************************************************************************
+ * 6. 기타 함수
+ ***************************************************************************************/
+
+/*
+ * 기능 : DB 최상위 메뉴 버튼 생성
+ * 설명 : 전역 gds_menu에서 1레벨 메뉴만 조회하여
+ *        div_menu 내부에 최상위 메뉴 버튼을 동적으로 생성
+ */
+this.fn_createTopMenu = function()
+{
+    // objApp : Nexacro 애플리케이션 객체
+    // 전역 메뉴 Dataset에 접근하기 위해 사용
+    var objApp = nexacro.getApplication();
+
+    // dsMenu : 전체 메뉴정보가 저장된 전역 Dataset gds_menu
+    // 1레벨, 2레벨, 3레벨 메뉴정보를 모두 포함
+    var dsMenu = objApp.gds_menu;
+
+    // objForm : 상단 메뉴 영역인 div_menu 내부 Form 객체
+    // 동적으로 생성할 메뉴 버튼을 등록하기 위해 사용
+    var objForm = this.div_menu.form;
+
+    // 전역 메뉴 Dataset이 없거나 조회된 메뉴가 없으면 종료
+    if (!dsMenu || dsMenu.rowcount == 0) return;
+
+    // 기존에 동적으로 생성한 상단 메뉴 버튼 제거
+    // 컴포넌트를 삭제하므로 마지막 인덱스부터 역순으로 확인
+    for (var i = objForm.components.length - 1; i >= 0; i--)
+    {
+        // objComp : 현재 확인 중인 div_menu 내부 컴포넌트
+        var objComp = objForm.components[i];
+
+        // btn_menu_로 시작하는 컴포넌트만 제거
+        // btn_toggleMenu는 이름이 다르므로 제거하지 않음
+        if (objComp.name.indexOf("btn_menu_") == 0)
+        {
+            // 기존 메뉴 버튼을 부모 Form에서 등록 해제
+            objForm.removeChild(objComp.name);
+
+            // 기존 버튼 객체 제거
+            objComp.destroy();
+        }
+    }
+
+    // nLeft : 첫 번째 상단 메뉴 버튼의 시작 X좌표
+    // 햄버거 버튼 너비 58px 이후부터 메뉴 버튼 배치
+    var nLeft = 58;
+
+    // nWidth : 상단 메뉴 버튼 하나의 너비
+    // 각 메뉴 버튼을 120px 간격으로 배치
+    var nWidth = 120;
+
+    // nIndex : 생성한 최상위 메뉴 버튼의 순번
+    // 버튼 ID 생성 및 첫 번째 버튼 선택에 사용
+    var nIndex = 0;
+
+    // 전역 메뉴 Dataset의 전체 행을 순서대로 확인
+    for (var i = 0; i < dsMenu.rowcount; i++)
+    {
+        // nLevel : 현재 메뉴의 계층 레벨
+        // 1은 최상위 메뉴, 2와 3은 하위 메뉴
+        var nLevel = Number(dsMenu.getColumn(i, "CHILD_MENU_LEVEL"));
+
+        // 1레벨 메뉴가 아니면 현재 반복을 건너뛰고 다음 메뉴 확인
+        // continue : 반복문 전체를 종료하지 않고 다음 반복으로 이동
+        if (nLevel != 1) continue;
+
+        // sMenuCd : 현재 최상위 메뉴의 고유 코드
+        // 버튼 클릭 시 선택할 메뉴를 구분하기 위해 사용
+        var sMenuCd = dsMenu.getColumn(i, "CHILD_MENU_CD");
+
+        // sMenuNm : 현재 최상위 메뉴의 표시 이름
+        // 동적으로 생성한 버튼의 텍스트로 사용
+        var sMenuNm = dsMenu.getColumn(i, "CHILD_MENU_NM");
+
+        // sButtonId : 동적으로 생성할 메뉴 버튼의 고유 ID
+        // 예 : btn_menu_0, btn_menu_1, btn_menu_2
+        var sButtonId = "btn_menu_" + nIndex;
+
+        // objButton : 동적으로 생성한 Nexacro Button 객체
+        // sButtonId : 버튼 ID
+        // nLeft : 버튼의 왼쪽 위치
+        // 0 : 버튼의 위쪽 위치
+        // nWidth : 버튼 너비
+        // 42 : 버튼 높이
+        // objForm : 버튼을 생성할 부모 Form
+        var objButton = new nexacro.Button(sButtonId, nLeft, 0, nWidth, 42, null, null, null, null, null, null, objForm);
+
+        // 생성한 버튼을 div_menu 내부 Form에 자식 컴포넌트로 등록
+        objForm.addChild(sButtonId, objButton);
+
+        // DB에서 조회한 메뉴명을 버튼에 표시
+        objButton.set_text(sMenuNm);
+
+        // 상단 메뉴 버튼의 기본 CSS 클래스 적용
+        objButton.set_cssclass("besMenuButton");
+
+        // 버튼 위에 마우스를 올리면 포인터 커서 표시
+        objButton.set_cursor("pointer");
+
+        // 동적으로 생성한 버튼에 menuCd 속성 저장
+        // 클릭 이벤트에서 어떤 최상위 메뉴인지 구분
+        objButton.menuCd = sMenuCd;
+
+        // 버튼 클릭 시 fn_topMenu_onclick 함수 실행
+        // this : 이벤트 함수를 실행할 Form_Menu 객체
+        objButton.addEventHandler("onclick", this.fn_topMenu_onclick, this);
+
+        // 생성한 상단 메뉴 버튼을 화면에 표시
+        objButton.show();
+
+        // 다음 메뉴 버튼의 시작 X좌표 계산
+        // 현재 위치에 버튼 너비 120px을 더함
+        nLeft += nWidth;
+
+        // 생성한 최상위 메뉴 버튼 순번 증가
+        nIndex++;
+    }
+
+    // 최상위 메뉴 버튼이 하나 이상 생성된 경우
+    if (nIndex > 0)
+    {
+        // objFirstButton : 첫 번째로 생성한 최상위 메뉴 버튼
+        // components["btn_menu_0"]으로 버튼 객체 조회
+        var objFirstButton = objForm.components["btn_menu_0"];
+
+        // 첫 번째 메뉴 버튼이 존재하면 기본 선택 처리
+        if (objFirstButton)
+        {
+            // 첫 번째 최상위 메뉴를 선택하고 왼쪽 메뉴도 함께 갱신
+            this.fn_selectTopMenu(objFirstButton.menuCd);
+        }
+    }
+};
+
+
+/*
+ * 기능 : 최상위 메뉴 선택 및 왼쪽 메뉴 연동
+ * 설명 : 선택한 최상위 메뉴의 버튼 CSS를 변경하고
+ *        Form_Left에 메뉴 코드를 전달하여 하위 메뉴를 갱신
+ */
+this.fn_selectTopMenu = function(sMenuCd)
+{
+    // sMenuCd : 사용자가 선택한 1레벨 최상위 메뉴 코드
+
+    // objApp : Nexacro 애플리케이션 객체
+    // 왼쪽 메뉴 프레임에 접근하기 위해 사용
+    var objApp = nexacro.getApplication();
+
+    // objForm : 상단 메뉴 버튼들이 등록된 div_menu 내부 Form
+    var objForm = this.div_menu.form;
+
+    // 현재 선택한 최상위 메뉴 코드를 Form 변수에 저장
+    this.fv_topMenuCd = sMenuCd;
+
+    // 동적으로 생성된 상단 메뉴 버튼을 순서대로 확인
+    for (var i = 0; i < objForm.components.length; i++)
+    {
+        // objComp : 현재 확인 중인 상단 메뉴 컴포넌트
+        var objComp = objForm.components[i];
+
+        // btn_menu_로 시작하는 최상위 메뉴 버튼만 처리
+        if (objComp.name.indexOf("btn_menu_") == 0)
+        {
+            // 현재 버튼의 메뉴 코드가 선택한 메뉴 코드와 같은지 비교
+            // 일치하면 선택 CSS, 일치하지 않으면 기본 CSS 적용
+            objComp.set_cssclass(objComp.menuCd == sMenuCd ? "besMenuButtonSelected" : "besMenuButton");
+        }
+    }
+
+    // objLeftFrame : 왼쪽 메뉴 화면이 연결된 LeftFrame 객체
+    // VFrameSetWork : 로그인 후 표시되는 메인 업무 프레임
+    // HFrameSetWork : 왼쪽 메뉴와 업무 화면을 구분하는 프레임
+    // LeftFrame : Form_Left.xfdl이 연결된 프레임
+    var objLeftFrame = objApp.mainframe.VFrameSetMain.VFrameSetWork.HFrameSetWork.LeftFrame;
+
+    // 왼쪽 메뉴 프레임 또는 내부 Form이 없으면 종료
+    if (!objLeftFrame || !objLeftFrame.form) return;
+
+    // Form_Left의 fn_selectTopMenu 함수 호출
+    // 선택한 최상위 메뉴 코드를 전달하여
+    // 해당 메뉴에 속한 2레벨 및 3레벨 메뉴를 다시 구성
+    objLeftFrame.form.fn_selectTopMenu(sMenuCd);
+};
+
+
+/*
+ * 기능 : 왼쪽 메뉴 접기 및 펼치기
+ * 설명 : HFrameSetWork의 왼쪽 영역 너비를 변경하여
+ *        왼쪽 메뉴를 접거나 다시 펼치는 기능
+ */
+this.fn_toggleLeftMenu = function()
+{
+    // objApp : Nexacro 애플리케이션 객체
+    // 메인 프레임에 접근하기 위해 사용
+    var objApp = nexacro.getApplication();
+
+    // objHFrameSet : 왼쪽 메뉴와 업무 화면을 구분하는 HFrameSetWork
+    // separatesize 속성을 변경하여 왼쪽 메뉴 너비 조정
+    var objHFrameSet = objApp.mainframe.VFrameSetMain.VFrameSetWork.HFrameSetWork;
+
+    // objButton : 왼쪽 메뉴 접기 및 펼치기 버튼
+    // div_menu 내부의 btn_toggleMenu 컴포넌트
+    var objButton = this.div_menu.form.btn_toggleMenu;
+
+    // fv_leftMenuOpen이 true이면 현재 왼쪽 메뉴가 펼쳐진 상태
+    if (this.fv_leftMenuOpen)
+    {
+        // set_separatesize : HFrameSet의 자식 프레임 너비 설정
+        // "0,*" : 왼쪽 메뉴 너비 0, 나머지 너비는 업무 화면에 할당
+        objHFrameSet.set_separatesize("0,*");
+
+        // 왼쪽 메뉴 상태를 접힘(false)으로 변경
+        this.fv_leftMenuOpen = false;
+
+        // 메뉴가 접힌 상태에서 사용할 햄버거 버튼 CSS 적용
+        objButton.set_cssclass("besMenuToggleOpen");
+    }
+    else
+    {
+        // "200,*" : 왼쪽 메뉴 너비 200px, 나머지 너비는 업무 화면
+        // 접힌 왼쪽 메뉴를 원래 너비로 복원
+        objHFrameSet.set_separatesize("200,*");
+
+        // 왼쪽 메뉴 상태를 펼침(true)으로 변경
+        this.fv_leftMenuOpen = true;
+
+        // 메뉴가 펼쳐진 상태에서 사용할 햄버거 버튼 CSS 적용
+        objButton.set_cssclass("besMenuToggleClose");
+    }
+};
+
+
+/***************************************************************************************
+ * 7. 이벤트
+ ***************************************************************************************/
+
+/*
+ * 기능 : 상단 메뉴 로딩 이벤트
+ * 설명 : Form_Menu 최초 로드 시 최상위 메뉴 버튼 생성
+ */
+this.Form_Menu_onload = function(obj, e)
+{
+    // fn_init : 전역 메뉴정보를 이용한 상단 메뉴 초기화
+    this.fn_init(obj, e);
+};
+
+
+/*
+ * 기능 : 최상위 메뉴 버튼 클릭 이벤트
+ * 설명 : 사용자가 클릭한 최상위 메뉴에 맞게 상단·왼쪽 메뉴 갱신
+ */
+this.fn_topMenu_onclick = function(obj, e)
+{
+    // obj : 클릭 이벤트가 발생한 상단 메뉴 버튼
+    // obj.menuCd : 버튼 생성 시 저장한 최상위 메뉴 코드
+    this.fn_selectTopMenu(obj.menuCd);
+};
+
+
+/*
+ * 기능 : 왼쪽 메뉴 접기 및 펼치기 버튼 클릭
+ * 설명 : 햄버거 버튼 클릭 시 왼쪽 메뉴 표시 상태 전환
+ */
+this.btn_toggleMenu_onclick = function(obj, e)
+{
+    // fn_toggleLeftMenu : 현재 왼쪽 메뉴 상태를 확인하여
+    // 펼쳐져 있으면 접고, 접혀 있으면 다시 펼치는 함수
+    this.fn_toggleLeftMenu();
+};
+]]></Script>
+  </Form>
+</FDL>

@@ -1,0 +1,398 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="Form_Left" width="200" height="720" titletext="메뉴" cssclass="besLeftForm" scrollbartype="none" onload="Form_Left_onload">
+    <Objects>
+      <Dataset id="ds_menu">
+        <ColumnInfo>
+          <Column id="MENU_ID" type="STRING" size="256"/>
+          <Column id="PARENT_MENU_CD" type="STRING" size="256"/>
+          <Column id="CHILD_MENU_CD" type="STRING" size="256"/>
+          <Column id="CHILD_MENU_NM" type="STRING" size="256"/>
+          <Column id="CHILD_PAGE_ULR" type="STRING" size="256"/>
+          <Column id="CHILD_MENU_LEVEL" type="INT" size="256"/>
+          <Column id="CHILD_MENU_SEQ" type="INT" size="256"/>
+          <Column id="USER_YN" type="STRING" size="256"/>
+          <Column id="BTN_SEARCH_YN" type="STRING" size="256"/>
+          <Column id="BTN_SEARCH_INIT_YN" type="STRING" size="256"/>
+          <Column id="BTN_SAVE_YN" type="STRING" size="256"/>
+          <Column id="BTN_ADD_ROW_YN" type="STRING" size="256"/>
+          <Column id="BTN_DEL_ROW_YN" type="STRING" size="256"/>
+          <Column id="BTN_EXCEL_DOWN_YN" type="STRING" size="256"/>
+          <Column id="BTN_EXCEL_UP_YN" type="STRING" size="256"/>
+          <Column id="BTN_PRINT_YN" type="STRING" size="256"/>
+          <Column id="BTN_BATCH_YN" type="STRING" size="256"/>
+          <Column id="REMARK" type="STRING" size="256"/>
+          <Column id="CREATE_DATE" type="STRING" size="256"/>
+          <Column id="CREATE_BY" type="STRING" size="256"/>
+          <Column id="UPDATE_DATE" type="STRING" size="256"/>
+          <Column id="UPDATE_BY" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[/***************************************************************************************
+ * 프로젝트        : Built1 Enterprise System 구축 프로젝트
+ * 업무구분        : 공통 프레임
+ * 파일명          : Form_Left.xfdl
+ * 작성자          : Built1
+ * 작성일          : 2026-11-03
+ *
+ * 화면            : BES 왼쪽 메뉴
+ * 설명            : DB 메뉴정보를 이용한 계층형 왼쪽 메뉴 표시 및 업무 화면 이동
+ *---------------------------------------------------------------------------------------
+ * 변경일            변경자            변경내역
+ *---------------------------------------------------------------------------------------
+ * 2026-11-03        Built1            최초작성
+ * 2026-11-04        Built1            왼쪽 메뉴 디자인 개선 및 스크립트 정리
+ * 2026-11-05        Built1            DB 메뉴정보 연동 및 메뉴 계층 구성
+ * 2026-11-05        Built1            MDI 업무 탭 연동
+ * 2026-11-06        Built1            전역 Dataset 및 프레임 ID 변경
+ ***************************************************************************************/
+
+
+/***************************************************************************************
+ * 1. FORM 변수 선언
+ ***************************************************************************************/
+
+// fv_topMenuCd : 현재 왼쪽 메뉴에 표시 중인 1레벨 최상위 메뉴 코드
+// 상단 메뉴를 변경하면 선택한 메뉴 코드로 갱신
+// fn_selectTopMenu 함수에서 사용
+this.fv_topMenuCd = "";
+
+
+/***************************************************************************************
+ * 2. FORM LOAD
+ ***************************************************************************************/
+
+/*
+ * 기능 : 왼쪽 메뉴 초기화
+ * 설명 : 전역 메뉴 Dataset에서 첫 번째 1레벨 메뉴를 찾고
+ *        해당 메뉴의 2레벨 및 3레벨 하위 메뉴를 표시
+ */
+this.fn_init = function(obj, e)
+{
+    // objApp : Nexacro 애플리케이션 객체
+    // 애플리케이션에 등록된 전역 Dataset에 접근하기 위해 사용
+    var objApp = nexacro.getApplication();
+
+    // dsMenu : 전역 Dataset gds_menu를 참조하는 지역 변수
+    // 로그인 성공 후 DB에서 조회한 전체 메뉴정보가 저장되어 있음
+    // 지역 변수 이름은 dsMenu이며 실제 Dataset ID는 gds_menu
+    var dsMenu = objApp.gds_menu;
+
+    // 전역 메뉴 Dataset이 존재하지 않거나 데이터가 없으면 종료
+    // rowcount : Dataset에 저장된 데이터 행 개수
+    if (!dsMenu || dsMenu.rowcount == 0) return;
+
+    // 전체 메뉴정보를 첫 번째 행부터 순서대로 확인
+    // i : 현재 조회 중인 Dataset의 행 번호
+    for (var i = 0; i < dsMenu.rowcount; i++)
+    {
+        // getColumn : 지정한 행과 컬럼의 데이터 조회
+        // CHILD_MENU_LEVEL : 메뉴의 계층 레벨
+        // Number : 조회한 값을 숫자형으로 변환
+        // 레벨 1은 상단에 표시되는 최상위 메뉴
+        if (Number(dsMenu.getColumn(i, "CHILD_MENU_LEVEL")) == 1)
+        {
+            // fn_selectTopMenu : 선택한 최상위 메뉴의 하위 메뉴 구성 함수
+            // CHILD_MENU_CD : 현재 메뉴의 고유 코드
+            // 첫 번째 1레벨 메뉴 코드를 전달하여 왼쪽 메뉴 생성
+            this.fn_selectTopMenu(dsMenu.getColumn(i, "CHILD_MENU_CD"));
+
+            // 첫 번째 1레벨 메뉴를 찾았으므로 반복문 종료
+            // 나머지 최상위 메뉴는 사용자가 상단에서 선택할 때 처리
+            break;
+        }
+    }
+};
+
+
+/***************************************************************************************
+ * 3. 공통 버튼
+ ***************************************************************************************/
+
+
+/***************************************************************************************
+ * 4. TRANSACTION, CALLBACK
+ ***************************************************************************************/
+
+
+/***************************************************************************************
+ * 5. 팝업 호출 및 콜백
+ ***************************************************************************************/
+
+
+/***************************************************************************************
+ * 6. 기타 함수
+ ***************************************************************************************/
+
+/*
+ * 기능 : 선택한 최상위 메뉴의 하위 메뉴 조회 및 Grid 구성
+ * 설명 : 1레벨 메뉴 코드를 기준으로 2레벨 및 3레벨 메뉴를 조회
+ *        조회한 메뉴정보를 ds_menu에 저장하여 왼쪽 Grid에 표시
+ *
+ *        1레벨 : 상단 최상위 메뉴
+ *        2레벨 : 왼쪽 메뉴의 분류 항목
+ *        3레벨 : 실제 업무 화면을 실행하는 메뉴
+ *
+ *        Grid Tree 표시를 위해 2레벨은 0, 3레벨은 1로 변경
+ */
+this.fn_selectTopMenu = function(sTopMenuCd)
+{
+    // sTopMenuCd : 사용자가 선택한 1레벨 최상위 메뉴 코드
+    // 이 코드와 부모 메뉴 코드가 일치하는 하위 메뉴만 조회
+
+    // objApp : Nexacro 애플리케이션 객체
+    // 전역 메뉴 Dataset에 접근하기 위해 사용
+    var objApp = nexacro.getApplication();
+
+    // dsMenu : 전체 메뉴정보가 저장된 전역 Dataset gds_menu
+    // 1레벨, 2레벨, 3레벨 메뉴정보를 모두 포함
+    var dsMenu = objApp.gds_menu;
+
+    // 전역 메뉴 Dataset이 없으면 하위 메뉴를 구성할 수 없으므로 종료
+    if (!dsMenu) return;
+
+    // fv_topMenuCd : 현재 선택한 최상위 메뉴 코드 저장
+    // 다른 상단 메뉴를 선택하면 해당 메뉴 코드로 갱신
+    this.fv_topMenuCd = sTopMenuCd;
+
+    // ds_menu : 왼쪽 Grid에 표시할 메뉴정보를 저장하는 Form Dataset
+    // 이전에 선택한 상단 메뉴의 데이터가 남지 않도록 초기화
+    // clearData : Dataset 컬럼 구조는 유지하고 데이터 행만 삭제
+    this.ds_menu.clearData();
+
+    // 전체 메뉴 Dataset에서 선택한 최상위 메뉴의 하위 메뉴 검색
+    // i : 현재 확인 중인 gds_menu의 행 번호
+    for (var i = 0; i < dsMenu.rowcount; i++)
+    {
+        // nLevel : 현재 메뉴의 계층 레벨
+        // 1은 최상위 메뉴, 2는 중간 분류 메뉴, 3은 업무 메뉴
+        var nLevel = Number(dsMenu.getColumn(i, "CHILD_MENU_LEVEL"));
+
+        // sParentCd : 현재 메뉴의 상위 메뉴 코드
+        // 선택한 1레벨 메뉴에 속한 항목인지 확인할 때 사용
+        var sParentCd = dsMenu.getColumn(i, "PARENT_MENU_CD");
+
+        // sChildCd : 현재 메뉴 자신의 고유 코드
+        // 현재 2레벨 메뉴에 속한 3레벨 메뉴를 찾을 때 사용
+        var sChildCd = dsMenu.getColumn(i, "CHILD_MENU_CD");
+
+        // 현재 메뉴가 2레벨인지 확인
+        // 부모 메뉴 코드가 선택한 1레벨 메뉴 코드와 일치하는지 확인
+        // 두 조건을 만족하면 왼쪽 메뉴 Dataset에 추가
+        if (nLevel == 2 && sParentCd == sTopMenuCd)
+        {
+            // nRow : ds_menu에 새로 추가된 행 번호
+            // addRow : Dataset 마지막에 새로운 데이터 행 추가
+            var nRow = this.ds_menu.addRow();
+
+            // copyRow : 원본 Dataset의 특정 행을 대상 Dataset으로 복사
+            // nRow : 복사할 대상 ds_menu 행 번호
+            // dsMenu : 원본 전역 메뉴 Dataset
+            // i : 원본 Dataset에서 복사할 행 번호
+            // 메뉴 코드, 메뉴명, 화면 URL 등 동일한 컬럼의 값 복사
+            this.ds_menu.copyRow(nRow, dsMenu, i);
+
+            // 왼쪽 Grid Tree에서 2레벨 메뉴를 최상위 항목으로 표시
+            // DB 메뉴 레벨은 2이지만 Grid에는 2·3레벨만 표시
+            // 따라서 Grid 표시용 레벨을 0으로 변경
+            // 원본 gds_menu의 값은 변경되지 않음
+            this.ds_menu.setColumn(nRow, "CHILD_MENU_LEVEL", 0);
+
+            // 현재 2레벨 메뉴에 속하는 3레벨 업무 메뉴 조회
+            // j : 전체 메뉴 Dataset의 행 번호
+            // 모든 메뉴를 확인하면서 부모 코드가 sChildCd인지 비교
+            for (var j = 0; j < dsMenu.rowcount; j++)
+            {
+                // nChildLevel : 현재 확인 중인 메뉴의 계층 레벨
+                // 3레벨 업무 메뉴인지 확인하기 위해 사용
+                var nChildLevel = Number(dsMenu.getColumn(j, "CHILD_MENU_LEVEL"));
+
+                // sChildParentCd : 현재 확인 중인 메뉴의 부모 메뉴 코드
+                // 바깥 반복문에서 찾은 2레벨 메뉴 코드와 비교
+                var sChildParentCd = dsMenu.getColumn(j, "PARENT_MENU_CD");
+
+                // 현재 메뉴가 3레벨이고 부모가 선택한 2레벨 메뉴인 경우
+                // 해당 업무 메뉴를 왼쪽 Grid Dataset에 추가
+                if (nChildLevel == 3 && sChildParentCd == sChildCd)
+                {
+                    // nChildRow : ds_menu에 추가한 3레벨 업무 메뉴 행 번호
+                    var nChildRow = this.ds_menu.addRow();
+
+                    // 전역 메뉴 Dataset의 j번째 업무 메뉴정보 복사
+                    // 현재 2레벨 메뉴 바로 아래에 3레벨 메뉴 추가
+                    this.ds_menu.copyRow(nChildRow, dsMenu, j);
+
+                    // Grid Tree에서 3레벨 업무 메뉴를 하위 항목으로 표시
+                    // 원래 메뉴 레벨 3을 Grid 표시용 레벨 1로 변경
+                    // 부모는 0, 자식은 1로 구분
+                    this.ds_menu.setColumn(nChildRow, "CHILD_MENU_LEVEL", 1);
+                }
+            }
+        }
+    }
+
+    // fn_setMenuRowSize : 메뉴 레벨에 따른 Grid 행 높이 설정 함수
+    // 메뉴 데이터 구성이 완료된 후 실행
+    this.fn_setMenuRowSize();
+};
+
+
+/*
+ * 기능 : 메뉴 레벨별 Grid 행 높이 설정
+ * 설명 : 2레벨 분류 메뉴와 3레벨 업무 메뉴의 높이를 다르게 적용
+ */
+this.fn_setMenuRowSize = function()
+{
+    // grdMenu : divMenu 내부 Form에 배치된 메뉴 Grid 컴포넌트
+    // divMenu.form : Div 내부 Form에 접근
+    // grdMenu : 왼쪽 메뉴를 표시하는 Grid
+    var grdMenu = this.divMenu.form.grdMenu;
+
+    // 왼쪽 메뉴 Dataset의 전체 행을 순서대로 확인
+    // i : 현재 높이를 설정할 메뉴 행 번호
+    for (var i = 0; i < this.ds_menu.rowcount; i++)
+    {
+        // nLevel : 왼쪽 Grid 표시용 메뉴 레벨
+        // 0은 2레벨 분류 메뉴, 1은 3레벨 업무 메뉴
+        var nLevel = Number(this.ds_menu.getColumn(i, "CHILD_MENU_LEVEL"));
+
+        // setRealRowSize : 지정한 Grid 행의 실제 높이 변경
+        // nLevel이 0이면 32px, 1이면 28px 적용
+        // 분류 메뉴를 업무 메뉴보다 조금 크게 표시
+        grdMenu.setRealRowSize(i, nLevel == 0 ? 32 : 28);
+    }
+};
+
+
+/*
+ * 기능 : 선택한 업무 메뉴의 MDI 탭 생성 및 화면 이동
+ * 설명 : 왼쪽 3레벨 업무 메뉴를 클릭하면
+ *        메뉴 코드, 메뉴명, 화면 URL을 MDI 프레임에 전달
+ *        Form_Mdi에서 신규 탭 생성 또는 기존 탭 선택 처리
+ */
+this.fn_openMenu = function(sMenuCd, sMenuNm, sFormUrl)
+{
+    // sMenuCd : 클릭한 업무 메뉴의 고유 코드
+    // sMenuNm : 클릭한 업무 메뉴의 표시 이름
+    // sFormUrl : 업무 메뉴와 연결된 Nexacro 화면 URL
+
+    // gfn_isNull : 값이 비어 있는지 확인하는 공통 함수
+    // 메뉴 코드 또는 화면 URL이 없으면 화면을 열 수 없으므로 종료
+    if (this.gfn_isNull(sMenuCd) || this.gfn_isNull(sFormUrl)) return;
+
+    // objApp : Nexacro 애플리케이션 객체
+    // 메인 프레임 및 MDI 프레임에 접근하기 위해 사용
+    var objApp = nexacro.getApplication();
+
+    // objMdiFrame : 업무 탭을 관리하는 MdiFrame 객체
+    // mainframe → VFrameSetMain → VFrameSetWork → MdiFrame 순서로 접근
+    // Form_Mdi에 정의된 업무 탭 생성 함수를 호출하기 위해 사용
+    var objMdiFrame = objApp.mainframe.VFrameSetMain.VFrameSetWork.MdiFrame;
+
+    // MDI 프레임이 존재하는지 확인
+    // MDI 프레임 내부 Form이 로드되었는지 확인
+    // fn_openTab 함수가 정의되어 있는지 확인
+    // 하나라도 없으면 업무 화면을 열 수 없으므로 종료
+    if (!objMdiFrame || !objMdiFrame.form || !objMdiFrame.form.fn_openTab)
+    {
+        this.alert("MdiFrame을 찾을 수 없습니다.");
+        return;
+    }
+
+    // fn_openTab : Form_Mdi에 정의된 업무 탭 생성 및 선택 함수
+    // sMenuCd : 메뉴를 구분하는 고유 코드
+    // sMenuNm : MDI 탭에 표시할 메뉴 이름
+    // sFormUrl : 실제 업무 화면의 Nexacro URL
+    // 이미 열린 메뉴라면 기존 탭을 선택하고, 없으면 신규 탭 생성
+    objMdiFrame.form.fn_openTab(sMenuCd, sMenuNm, sFormUrl);
+};
+
+
+/***************************************************************************************
+ * 7. 이벤트
+ ***************************************************************************************/
+
+/*
+ * 기능 : 왼쪽 메뉴 로딩 이벤트
+ * 설명 : Form_Left 화면이 로드되면 초기 메뉴 구성 함수 실행
+ */
+this.Form_Left_onload = function(obj, e)
+{
+    // fn_init : 첫 번째 1레벨 메뉴를 찾아 왼쪽 메뉴 구성
+    // Form_Left 화면 최초 로드 시 호출
+    this.fn_init(obj, e);
+};
+
+
+/*
+ * 기능 : 왼쪽 메뉴 선택 시 업무 탭 생성
+ * 설명 : 클릭한 메뉴가 3레벨 업무 메뉴인 경우 MDI 업무 탭 실행
+ */
+this.divMenu_grdMenu_oncellclick = function(obj, e)
+{
+    // obj : 클릭 이벤트가 발생한 Grid 컴포넌트
+    // e : Grid 클릭 이벤트 정보
+    // e.row : 사용자가 클릭한 Grid의 데이터 행 번호
+
+    // 클릭한 행이 Dataset 범위를 벗어나면 종료
+    // e.row가 음수이면 실제 메뉴 데이터 행이 아닌 영역
+    // e.row가 전체 행 개수 이상이면 유효하지 않은 행
+    if (e.row < 0 || e.row >= this.ds_menu.rowcount) return;
+
+    // nLevel : 클릭한 메뉴의 Grid 표시용 레벨
+    // 0은 2레벨 분류 메뉴, 1은 3레벨 업무 메뉴
+    var nLevel = Number(this.ds_menu.getColumn(e.row, "CHILD_MENU_LEVEL"));
+
+    // 2레벨 메뉴는 분류 항목이므로 업무 화면을 열지 않음
+    // 3레벨 업무 메뉴를 클릭한 경우에만 다음 단계 진행
+    if (nLevel == 0) return;
+
+    // sMenuCd : 클릭한 3레벨 업무 메뉴의 고유 코드
+    // MDI에서 동일한 메뉴가 이미 열려 있는지 구분할 때 사용
+    var sMenuCd = this.ds_menu.getColumn(e.row, "CHILD_MENU_CD");
+
+    // sMenuNm : 클릭한 업무 메뉴의 표시 이름
+    // MDI 업무 탭 버튼에 표시할 텍스트
+    var sMenuNm = this.ds_menu.getColumn(e.row, "CHILD_MENU_NM");
+
+    // sFormUrl : 클릭한 업무 메뉴에 연결된 Nexacro 화면 URL
+    // MDI에서 실제 업무 화면을 생성할 때 사용
+    var sFormUrl = this.ds_menu.getColumn(e.row, "CHILD_PAGE_ULR");
+
+    // fn_openMenu : 선택한 메뉴정보를 MDI 프레임에 전달하는 함수
+    // 메뉴 코드, 메뉴명, 화면 URL을 전달하여 업무 화면 실행
+    this.fn_openMenu(sMenuCd, sMenuNm, sFormUrl);
+};
+]]></Script>
+    <Layouts>
+      <Layout width="200" height="720" screenid="Desktop_screen">
+        <Div id="divMenu" taborder="0" left="0" top="0" right="0" bottom="0" cssclass="besLeftMenuDiv" scrollbartype="none">
+          <Layouts>
+            <Layout>
+              <Grid id="grdMenu" taborder="0" left="8" top="8" right="8" bottom="8" binddataset="ds_menu" autofittype="col" treeinitstatus="expand,all" treeusecheckbox="false" treeuseimage="false" treeusebutton="use" cssclass="besLeftMenuGrid" oncellclick="divMenu_grdMenu_oncellclick">
+                <Formats>
+                  <Format id="default">
+                    <Columns>
+                      <Column size="170"/>
+                    </Columns>
+                    <Rows>
+                      <Row size="0" band="head"/>
+                      <Row size="28"/>
+                    </Rows>
+                    <Band id="head">
+                      <Cell text=""/>
+                    </Band>
+                    <Band id="body">
+                      <Cell text="bind:CHILD_MENU_NM" displaytype="treeitemcontrol" edittype="tree" treelevel="bind:CHILD_MENU_LEVEL" cssclass="expr:CHILD_MENU_LEVEL == 0 ? 'menuParent' : 'menuChild'"/>
+                    </Band>
+                  </Format>
+                </Formats>
+              </Grid>
+            </Layout>
+          </Layouts>
+        </Div>
+      </Layout>
+    </Layouts>
+  </Form>
+</FDL>

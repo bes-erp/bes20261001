@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <AppVariables version="2.0">
   <Datasets>
-    <Dataset id="gdsMenu">
+    <Dataset id="gds_menu">
       <ColumnInfo>
         <Column id="MENU_ID" type="STRING" size="256"/>
         <Column id="PARENT_MENU_CD" type="STRING" size="256"/>
