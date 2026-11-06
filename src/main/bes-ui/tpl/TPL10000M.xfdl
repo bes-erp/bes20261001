@@ -1,0 +1,322 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="TPL10000M" width="1007" height="720" titletext="템플릿-조회" font="bold 12px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;">
+    <Layouts>
+      <Layout height="720" mobileorientation="landscape" width="1007">
+        <Static id="sta_margin_left" taborder="0" text="10" left="0" top="0" width="10" height="720" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;"/>
+        <Static id="sta_margin_top" taborder="1" text="10" left="0" top="0" width="1007" height="10" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;"/>
+        <Static id="sta_margin_right" taborder="2" text="10" left="997" top="0" width="10" height="720" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;맑은 고딕&quot;"/>
+        <Static id="sta_margin_bottom" taborder="3" text="10" left="0" top="710" width="1007" height="10" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;맑은 고딕&quot;"/>
+        <Div id="div_com_btn" taborder="4" text="28" left="10" top="sta_margin_top:0" height="28" right="10" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;">
+          <Layouts>
+            <Layout>
+              <Button id="btn_searchOpen" taborder="0" left="0" top="2" width="30" height="24" cssclass="btn_WF_searchOpen" onclick="nfn_searchOpen_onclick"/>
+              <Static id="sta_title" taborder="1" text="메시지 등록" left="btn_searchOpen:5" top="2" width="229" height="24" cssclass="sta_WF_title" fittocontents="width" font="bold 14px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;"/>
+              <Button id="btn_save" taborder="2" text="저장" top="0" height="28" right="0" width="80" icon="url('theme://images/btn_TF_Max_O.png')" textPadding="0px 0px 0px 1px" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;"/>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="div_search" taborder="5" left="10" top="div_com_btn:5" height="46" background="#f6f6f6" right="10" font="12px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" formscrolltype="none" formscrollbartype="none">
+          <Layouts>
+            <Layout>
+              <Combo id="cbo_message_class_cd" left="114" top="9" width="150" height="24" taborder="0" innerdataset="ds_cbo_message_class_cd" codecolumn="CODE" datacolumn="CODE_NM" value="ALL" index="0" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;"/>
+              <Static id="sta_margin_left" taborder="6" text="10" left="0" top="0" width="10" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" bottom="0"/>
+              <Static id="sta_message_class_cd" text="메시지분류" left="sta_margin_left:0" top="10" width="100" height="24" verticalAlign="middle" taborder="1" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" textAlign="right"/>
+              <Static id="sta_margin_left00" taborder="7" text="10" left="cbo_message_class_cd:10" top="0" width="10" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" bottom="0"/>
+              <Static id="sta_message_type_cd" text="메시지유형" left="sta_margin_left00:0" top="10" width="100" height="24" verticalAlign="middle" taborder="2" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" textAlign="right"/>
+              <Combo id="cbo_message_type_cd" left="sta_message_type_cd:5" top="10" width="150" height="24" taborder="3" innerdataset="ds_cbo_message_type_cd" codecolumn="CODE" datacolumn="CODE_NM" value="ALL" index="0" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;"/>
+              <Static id="sta_message_text_ko" text="메시지(한글)" left="557" top="10" width="100" height="24" verticalAlign="middle" taborder="4" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" textAlign="right"/>
+              <Edit id="edt_message_text_ko" left="sta_message_text_ko:5" top="10" width="200" height="24" taborder="5" maxlength="300" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;"/>
+              <Static id="sta_margin_left00_00" taborder="8" text="10" left="cbo_message_type_cd:0" top="0" width="10" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" bottom="0"/>
+              <Button id="Button45_00" taborder="9" top="9" width="26" height="28" cssclass="btn_SA_search" tooltiptext="조회" icon="url('theme://images_ifc/btn_TF_search_O.png')" right="33"/>
+              <Button id="Button44_00_01" taborder="10" top="9" height="28" cssclass="btn_SA_reset" tooltiptext="초기화" width="26" right="5"/>
+              <Static id="sta_margin_left00_00_00" taborder="11" text="10" top="0" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" bottom="0" width="10" right="0"/>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="div_title" taborder="6" text="30" left="10" top="div_search:5" height="28" right="10" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;">
+          <Layouts>
+            <Layout>
+              <Button id="btn_favorite" taborder="1" left="0" top="2" width="24" height="24" cssclass="btn_WF_favorite"/>
+              <Static id="sta_title" taborder="0" text="메시지 목록" left="btn_favorite:5" top="2" width="229" height="24" cssclass="sta_WF_title" fittocontents="width" font="bold 12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;"/>
+              <Button id="btn_delRow_ds_basIdclass" taborder="3" top="2" width="26" height="24" cssclass="btn_WF_grdDel" tooltiptext="행삭제" right="2" initvalueid="x"/>
+              <Button id="btn_addRow_ds_basIdclass" taborder="2" top="2" width="26" height="24" cssclass="btn_WF_grdAdd" tooltiptext="행추가" right="btn_delRow_ds_basIdclass:-2" initvalueid="x"/>
+              <Button id="btn_xlDn_grd_basIdclass" taborder="4" top="2" width="29" height="24" cssclass="btn_WF_grdExcelDown" tooltiptext="엑셀다운로드" right="btn_addRow_ds_basIdclass:-2" initvalueid="x"/>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Grid id="grd_message" left="10" top="div_title:0" right="10" bottom="10" taborder="7" binddataset="ds_message" selecttype="row" autoenter="select" autofittype="none" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="44"/>
+                <Column size="42"/>
+                <Column size="85"/>
+                <Column size="85"/>
+                <Column size="95"/>
+                <Column size="300"/>
+                <Column size="280"/>
+                <Column size="250"/>
+                <Column size="250"/>
+                <Column size="250"/>
+              </Columns>
+              <Rows>
+                <Row size="28" band="head"/>
+                <Row size="28"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="No" font="bold 11px/1.1 &quot;Malgun Gothic&quot;,&quot;맑은 고딕&quot;,&quot;Arial&quot;"/>
+                <Cell col="1" text="V" edittype="checkbox" displaytype="checkboxcontrol"/>
+                <Cell col="2" text="*메시지분류" font="bold 11px/1.1 &quot;Malgun Gothic&quot;,&quot;맑은 고딕&quot;,&quot;Arial&quot;"/>
+                <Cell col="3" text="*메시지유형" font="bold 11px/1.1 &quot;Malgun Gothic&quot;,&quot;맑은 고딕&quot;,&quot;Arial&quot;"/>
+                <Cell col="4" text="*메시지번호" font="bold 11px/1.1 &quot;Malgun Gothic&quot;,&quot;맑은 고딕&quot;,&quot;Arial&quot;"/>
+                <Cell col="5" text="*메시지(한글)" font="bold 11px/1.1 &quot;Malgun Gothic&quot;,&quot;맑은 고딕&quot;,&quot;Arial&quot;"/>
+                <Cell col="6" text="메시지(영문)" font="bold 11px/1.1 &quot;Malgun Gothic&quot;,&quot;맑은 고딕&quot;,&quot;Arial&quot;"/>
+                <Cell col="7" text="메시지(중국)" font="bold 11px/1.1 &quot;Malgun Gothic&quot;,&quot;맑은 고딕&quot;,&quot;Arial&quot;"/>
+                <Cell col="8" text="메시지(일본)" font="bold 11px/1.1 &quot;Malgun Gothic&quot;,&quot;맑은 고딕&quot;,&quot;Arial&quot;"/>
+                <Cell col="9" text="메시지(기타)" font="bold 11px/1.1 &quot;Malgun Gothic&quot;,&quot;맑은 고딕&quot;,&quot;Arial&quot;"/>
+              </Band>
+              <Band id="body">
+                <Cell text="expr:currow+1" edittype="none" textAlign="center"/>
+                <Cell col="1" text="bind:select_yn" displaytype="checkboxcontrol" edittype="checkbox" textAlign="center"/>
+                <Cell col="2" text="bind:message_class_cd" displaytype="combocontrol" edittype="combo" combodataset="ds_cbo_grid_message_class_cd" combocodecol="code" combodatacol="name"/>
+                <Cell col="3" text="bind:message_type_cd" displaytype="combocontrol" edittype="combo" combodataset="ds_cbo_grid_message_type_cd" combocodecol="code" combodatacol="name"/>
+                <Cell col="4" text="bind:message_num" edittype="none"/>
+                <Cell col="5" text="bind:message_text_ko" edittype="text"/>
+                <Cell col="6" text="bind:message_text_en" edittype="text"/>
+                <Cell col="7" text="bind:message_text_zh" edittype="text"/>
+                <Cell col="8" text="bind:message_text_ja" edittype="text"/>
+                <Cell col="9" text="bind:message_text_ot" edittype="text"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="ds_search">
+        <ColumnInfo>
+          <Column id="MESSAGE_CLASS_CD" type="STRING" size="256"/>
+          <Column id="MESSAGE_TYPE_CD" type="STRING" size="256"/>
+          <Column id="MESSAGE_TEXT_KO" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_cbo_message_class_cd">
+        <ColumnInfo>
+          <Column id="CODE" type="STRING" size="256"/>
+          <Column id="CODE_NM" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="CODE_NM">전체</Col>
+          </Row>
+          <Row>
+            <Col id="CODE">DM</Col>
+            <Col id="CODE_NM">화면메시지</Col>
+          </Row>
+          <Row>
+            <Col id="CODE">JM</Col>
+            <Col id="CODE_NM">시스템메시지</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="ds_cbo_message_type_cd">
+        <ColumnInfo>
+          <Column id="CODE" type="STRING" size="256"/>
+          <Column id="CODE_NM" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="CODE_NM">전체</Col>
+          </Row>
+          <Row>
+            <Col id="CODE">A</Col>
+            <Col id="CODE_NM">알림</Col>
+          </Row>
+          <Row>
+            <Col id="CODE">E</Col>
+            <Col id="CODE_NM">오류</Col>
+          </Row>
+          <Row>
+            <Col id="CODE">I</Col>
+            <Col id="CODE_NM">정보</Col>
+          </Row>
+          <Row>
+            <Col id="CODE">W</Col>
+            <Col id="CODE_NM">경고</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="ds_grd_message_class_cd">
+        <ColumnInfo>
+          <Column id="CODE" type="STRING" size="256"/>
+          <Column id="CODE_NM" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_grd_message_type_cd">
+        <ColumnInfo>
+          <Column id="CODE" type="STRING" size="256"/>
+          <Column id="CODE_NM" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_message">
+        <ColumnInfo>
+          <Column id="MESSAGE_NUM" type="STRING" size="256"/>
+          <Column id="MESSAGE_TYPE_CD" type="STRING" size="256"/>
+          <Column id="MESSAGE_TEXT_KO" type="STRING" size="256"/>
+          <Column id="MESSAGE_TEXT_EN" type="STRING" size="256"/>
+          <Column id="MESSAGE_TEXT_ZH" type="STRING" size="256"/>
+          <Column id="MESSAGE_TEXT_JA" type="STRING" size="256"/>
+          <Column id="MESSAGE_TEXT_OT" type="STRING" size="256"/>
+          <Column id="REMARK" type="STRING" size="256"/>
+          <Column id="CREATE_DATE" type="STRING" size="256"/>
+          <Column id="CREATE_BY" type="STRING" size="256"/>
+          <Column id="UPDATE_DATE" type="STRING" size="256"/>
+          <Column id="UPDATE_BY" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="MESSAGE_NUM">NM-CNF-10000</Col>
+            <Col id="MESSAGE_TYPE_CD">C</Col>
+            <Col id="MESSAGE_TEXT_KO">선택된 데이터를 삭제하시겠습니까?</Col>
+            <Col id="MESSAGE_TEXT_EN">Would you like to delete the selected data?</Col>
+            <Col id="MESSAGE_TEXT_ZH">중</Col>
+            <Col id="MESSAGE_TEXT_JA">일</Col>
+            <Col id="MESSAGE_TEXT_OT">기</Col>
+            <Col id="REMARK">시스템 등록 데이터</Col>
+            <Col id="CREATE_DATE">1900-01-01</Col>
+            <Col id="CREATE_BY">admin</Col>
+            <Col id="UPDATE_DATE">1900-01-02</Col>
+            <Col id="UPDATE_BY">admin</Col>
+          </Row>
+          <Row>
+            <Col id="MESSAGE_NUM">NM-ALT-10000</Col>
+            <Col id="MESSAGE_TYPE_CD">A</Col>
+            <Col id="MESSAGE_TEXT_KO">정상적으로 저장 되었습니다.</Col>
+            <Col id="MESSAGE_TEXT_EN">It was saved normally.</Col>
+            <Col id="MESSAGE_TEXT_ZH">중</Col>
+            <Col id="MESSAGE_TEXT_JA">일</Col>
+            <Col id="MESSAGE_TEXT_OT">기</Col>
+            <Col id="REMARK">시스템 등록 데이터</Col>
+            <Col id="CREATE_DATE">1900-01-01</Col>
+            <Col id="CREATE_BY">admin</Col>
+            <Col id="UPDATE_DATE">1900-01-02</Col>
+            <Col id="UPDATE_BY">admin</Col>
+          </Row>
+          <Row>
+            <Col id="MESSAGE_NUM">NM-ALT-10010</Col>
+            <Col id="MESSAGE_TYPE_CD">A</Col>
+            <Col id="MESSAGE_TEXT_KO">{1} 항목은 필수입니다.</Col>
+            <Col id="MESSAGE_TEXT_EN">Item {1} is required.</Col>
+            <Col id="MESSAGE_TEXT_ZH">중</Col>
+            <Col id="MESSAGE_TEXT_JA">일</Col>
+            <Col id="MESSAGE_TEXT_OT">기</Col>
+            <Col id="REMARK">시스템 등록 데이터</Col>
+            <Col id="CREATE_DATE">1900-01-01</Col>
+            <Col id="CREATE_BY">admin</Col>
+            <Col id="UPDATE_DATE">1900-01-02</Col>
+            <Col id="UPDATE_BY">admin</Col>
+          </Row>
+          <Row>
+            <Col id="MESSAGE_NUM">NM-ALT-10020</Col>
+            <Col id="MESSAGE_TYPE_CD">A</Col>
+            <Col id="MESSAGE_TEXT_KO">변경된 데이터가 존재하지 않습니다.</Col>
+            <Col id="MESSAGE_TEXT_EN">There is no changed data.</Col>
+            <Col id="MESSAGE_TEXT_ZH">중</Col>
+            <Col id="MESSAGE_TEXT_JA">일</Col>
+            <Col id="MESSAGE_TEXT_OT">기</Col>
+            <Col id="REMARK">시스템 등록 데이터</Col>
+            <Col id="CREATE_DATE">1900-01-01</Col>
+            <Col id="CREATE_BY">admin</Col>
+            <Col id="UPDATE_DATE">1900-01-02</Col>
+            <Col id="UPDATE_BY">admin</Col>
+          </Row>
+          <Row>
+            <Col id="MESSAGE_NUM">NM-ALT-10030</Col>
+            <Col id="MESSAGE_TYPE_CD">A</Col>
+            <Col id="MESSAGE_TEXT_KO">조회 조건에 일치하는 데이터가 존재하지 않습니다.</Col>
+            <Col id="MESSAGE_TEXT_EN">No data matching the search criteria exists.</Col>
+            <Col id="MESSAGE_TEXT_ZH">중</Col>
+            <Col id="MESSAGE_TEXT_JA">일</Col>
+            <Col id="MESSAGE_TEXT_OT">기</Col>
+            <Col id="REMARK">시스템 등록 데이터</Col>
+            <Col id="CREATE_DATE">1900-01-01</Col>
+            <Col id="CREATE_BY">admin</Col>
+            <Col id="UPDATE_DATE">1900-01-02</Col>
+            <Col id="UPDATE_BY">admin</Col>
+          </Row>
+          <Row>
+            <Col id="MESSAGE_NUM">NM-ALT-10040</Col>
+            <Col id="MESSAGE_TYPE_CD">A</Col>
+            <Col id="MESSAGE_TEXT_KO">공통 메시지정보(gds_message)가 생성되지 않았습니다.</Col>
+            <Col id="MESSAGE_TEXT_EN">Common message information (gds_message) was not generated.</Col>
+            <Col id="MESSAGE_TEXT_ZH">중</Col>
+            <Col id="MESSAGE_TEXT_JA">일</Col>
+            <Col id="MESSAGE_TEXT_OT">기</Col>
+            <Col id="REMARK">시스템 등록 데이터</Col>
+            <Col id="CREATE_DATE">1900-01-01</Col>
+            <Col id="CREATE_BY">admin</Col>
+            <Col id="UPDATE_DATE">1900-01-02</Col>
+            <Col id="UPDATE_BY">admin</Col>
+          </Row>
+          <Row>
+            <Col id="MESSAGE_NUM">NM-ALT-10050</Col>
+            <Col id="MESSAGE_TYPE_CD">A</Col>
+            <Col id="MESSAGE_TEXT_KO">공통 사용자정보(gds_user)가 생성되지 않았습니다.</Col>
+            <Col id="MESSAGE_TEXT_EN">Common user information (gds_user) was not created.</Col>
+            <Col id="MESSAGE_TEXT_ZH">중</Col>
+            <Col id="MESSAGE_TEXT_JA">일</Col>
+            <Col id="MESSAGE_TEXT_OT">기</Col>
+            <Col id="REMARK">시스템 등록 데이터</Col>
+            <Col id="CREATE_DATE">1900-01-01</Col>
+            <Col id="CREATE_BY">admin</Col>
+            <Col id="UPDATE_DATE">1900-01-02</Col>
+            <Col id="UPDATE_BY">admin</Col>
+          </Row>
+          <Row>
+            <Col id="MESSAGE_NUM">JM-ALT-10000</Col>
+            <Col id="MESSAGE_TYPE_CD">A</Col>
+            <Col id="MESSAGE_TEXT_KO">데이터맵 저장시 키 값이 존재하지 않습니다.</Col>
+            <Col id="MESSAGE_TEXT_EN">The key value does not exist when saving the data map.</Col>
+            <Col id="MESSAGE_TEXT_ZH">중</Col>
+            <Col id="MESSAGE_TEXT_JA">일</Col>
+            <Col id="MESSAGE_TEXT_OT">기</Col>
+            <Col id="REMARK">시스템 등록 데이터</Col>
+            <Col id="CREATE_DATE">1900-01-01</Col>
+            <Col id="CREATE_BY">admin</Col>
+            <Col id="UPDATE_DATE">1900-01-02</Col>
+            <Col id="UPDATE_BY">admin</Col>
+          </Row>
+          <Row>
+            <Col id="MESSAGE_NUM">JM-ALT-10010</Col>
+            <Col id="MESSAGE_TYPE_CD">A</Col>
+            <Col id="MESSAGE_TEXT_KO">변수명은 필수입니다.</Col>
+            <Col id="MESSAGE_TEXT_EN">Variable names are required.</Col>
+            <Col id="MESSAGE_TEXT_ZH">중</Col>
+            <Col id="MESSAGE_TEXT_JA">일</Col>
+            <Col id="MESSAGE_TEXT_OT">기</Col>
+            <Col id="REMARK">시스템 등록 데이터</Col>
+            <Col id="CREATE_DATE">1900-01-01</Col>
+            <Col id="CREATE_BY">admin</Col>
+            <Col id="UPDATE_DATE">1900-01-02</Col>
+            <Col id="UPDATE_BY">admin</Col>
+          </Row>
+          <Row>
+            <Col id="MESSAGE_NUM">JM-ALT-10040</Col>
+            <Col id="MESSAGE_TYPE_CD">A</Col>
+            <Col id="MESSAGE_TEXT_KO">Oracle TIMESTAMP 변환 중 오류가 발생하였습니다.</Col>
+            <Col id="MESSAGE_TEXT_EN">An error occurred during Oracle TIMESTAMP conversion.</Col>
+            <Col id="MESSAGE_TEXT_ZH">중</Col>
+            <Col id="MESSAGE_TEXT_JA">일</Col>
+            <Col id="MESSAGE_TEXT_OT">기</Col>
+            <Col id="REMARK">시스템 등록 데이터</Col>
+            <Col id="CREATE_DATE">1900-01-01</Col>
+            <Col id="CREATE_BY">admin</Col>
+            <Col id="UPDATE_DATE">1900-01-02</Col>
+            <Col id="UPDATE_BY">admin</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>
