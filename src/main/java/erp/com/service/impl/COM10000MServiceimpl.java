@@ -6,9 +6,11 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import erp.com.service.COM10000MService;
+import erp.core.exh.DbException;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -34,39 +36,42 @@ public class COM10000MServiceimpl implements COM10000MService {
 	* @methodName     		: selectCodeTypeList
 	* @author         		: built1
 	* @date           		: 2026.10.15
-	* @description    		: 코드유형 데이터를 조회하는 상속메소드
-	* @param searchParamMap
-	* @param userId
-	* @return
+	* @description    		: 코드유형 및 코드 데이터를 조회하는 구현메소드
+	* @param searchParamMap : 화면에서 전달한 검색조건
+	* @param userId         : 사용자ID
+	* @return               : selectCodeTypeList(코드유형), selectCodeList(코드)
 	* @throws Exception
 	*/
 	@Override
 	public Map<String, Object> selectCodeTypeList(Map<String, Object> searchParamMap, String userId) throws Exception {
 		
-		//검색조건(데이터셋 및 매개변수) 병합처리를 위한 변수(Map) 선언
+		// 검색조건(데이터셋 및 매개변수) 병합처리를 위한 변수(Map) 선언
 		Map<String, Object> mapperParamMap = new HashMap<>();
 		
-		//검색조건 복사
+		// 검색조건 복사
         if (searchParamMap != null) {
             mapperParamMap.putAll(searchParamMap);
         }
 
-        //사용자 ID 추가
+        // 사용자 ID 추가
         mapperParamMap.put("user_id", userId);
         
         
-        //코드유형 및 코드 조회
-        List<Map<String, Object>> selectCodeTypeList = mapper.selectCodeTypeList(mapperParamMap);
-        List<Map<String, Object>> selectCodeList     = mapper.selectCodeList(mapperParamMap);
-        
-        
-        //조회결과(코드유형 및 코드) 병합하기 위한 변수(Map) 선언
-        Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("selectCodeTypeList", selectCodeTypeList);
-        resultMap.put("selectCodeList"    , selectCodeList);
-        
+        // 코드유형 및 코드 조회
+        try {			
+        	List<Map<String, Object>> selectCodeTypeList = mapper.selectCodeTypeList(mapperParamMap);
+        	List<Map<String, Object>> selectCodeList     = mapper.selectCodeList(mapperParamMap);
+        	
+        	//조회결과(코드유형 및 코드) 병합하기 위한 변수(Map) 선언
+        	Map<String, Object> resultMap = new HashMap<>();
+        	resultMap.put("selectCodeTypeList", selectCodeTypeList);
+        	resultMap.put("selectCodeList"    , selectCodeList);
+        	
+        	return resultMap;
+		} catch (DataAccessException e) {
+			throw new DbException(e);
+		}
 		
-		return resultMap;
 	}
 
 }

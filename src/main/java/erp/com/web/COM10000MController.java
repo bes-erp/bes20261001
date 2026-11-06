@@ -1,6 +1,5 @@
 package erp.com.web;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -35,19 +34,21 @@ public class COM10000MController {
 	@Resource
 	private COM10000MService service;
 	
-	/**
-	* @methodName     		: selectCodeList
-	* @author         		: built1
-	* @date           		: 2026.10.15
-	* @description    		: 코드유형 데이터를 조회하는 메소드
-	* @param searchParamMap
-	* @return
-	 * @throws Exception 
-	*/
+	
+    /**
+    * @methodName     		: selectCodeList
+    * @author         		: built1
+    * @date           		: 2026.11.07
+    * @description    		: 코드유형 및 코드 데이터를 조회하는 메소드
+    * @param 	            : searchParamMap(조회조건)
+    * @param userId         : 사용자ID
+    * @return               : outSelectCodeTypeList(코드유형), outSelectCodeList(코드)
+    * @throws Exception
+    */
     @RequestMapping(value = "selectCodeList.do")
 	public NexacroResult selectCodeList(@ParamDataSet(name = "inSearch") Map<String, Object> searchParamMap
 			                           ,@ParamVariable(name = "userId") String userId) throws Exception {
-		
+
     	log.debug("## [ MSG10000MController     ] : {}", "selectCodeList");
     	
     	log.debug("## [ searchParamMap          ] : {}", searchParamMap);

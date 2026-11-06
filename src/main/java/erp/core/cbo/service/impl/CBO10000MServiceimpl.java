@@ -6,8 +6,10 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import erp.core.cbo.service.CBO10000MService;
+import erp.core.exh.DbException;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -34,25 +36,29 @@ public class CBO10000MServiceimpl implements CBO10000MService {
 	* @author         		: built1
 	* @date           		: 2026.11.05
 	* @description    		: [콤보박스] 코드유형에 따른 코드 데이터를 조회하는 메소드
-	* @param codeType
-	* @param activeType
-	* @param addAllRow
-	* @return
+	* @param 				: codeType(코드유형)
+	* @param 				: activeType(활성여부)
+	* @param 				: addAllRow(전체추가)
+	* @return	            : selectComboCodeList(코드목록)
 	* @throws Exception
 	*/
 	@Override
 	public List<Map<String, Object>> selectComboCodeList(String codeType, String activeType, String addAllRow) throws Exception {
 		
-		//매퍼로 전달할 변수(Map) 선언
+		// 매퍼로 전달할 변수(Map) 선언
 		Map<String, Object> mapperParamMap = new HashMap<>();
 		
-		//매퍼로 전달할 Map 변수에 매개변수 할당
+		// 매퍼로 전달할 Map 변수에 매개변수 할당
 		mapperParamMap.put("code_type", codeType.toUpperCase());
 		mapperParamMap.put("active_type" , activeType.toUpperCase());
 		mapperParamMap.put("add_all_row" , addAllRow.toUpperCase());
 		
-		//코드 조회 및 결과 리턴		
-		return mapper.selectComboCodeList(mapperParamMap);
+		// 코드 조회 및 결과 리턴
+		try {
+			return mapper.selectComboCodeList(mapperParamMap);			
+		} catch (DataAccessException e) {
+			throw new DbException(e);
+		}
 	}
 
 }

@@ -5,8 +5,10 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
+import erp.core.exh.DbException;
 import erp.core.msg.service.MSG10000MService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,15 +35,19 @@ public class MSG10000MServiceimpl implements MSG10000MService {
 	* @methodName     		: selectMessageList
 	* @author         		: built1
 	* @date           		: 2026.11.06
-	* @description    		: [메시지] 데이터를 조회하는 상속메소드
-	* @return
+	* @description    		: [메시지] 데이터를 조회하는 구현메소드
+	* @return	            : selectMessageList(메시지목록)
 	* @throws Exception
 	*/
 	@Override
 	public List<Map<String, Object>> selectMessageList() throws Exception {
 		
-		//메시지 데이터 조회 및 결과 리턴		
-		return mapper.selectMessageList();
+		// 메시지 데이터 조회 및 결과 리턴
+		try {
+			return mapper.selectMessageList();			
+		} catch (DataAccessException e) {
+			throw new DbException(e);
+		}
 	}
 
 }
