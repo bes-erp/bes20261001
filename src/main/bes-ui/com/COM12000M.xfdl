@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="COM12000M" width="1280" height="720" titletext="메시지등록">
+  <Form id="COM12000M" width="1280" height="720" titletext="메시지등록" onload="COM12000M_onload">
     <Objects>
       <!-- 조회 조건: 설계서의 컬럼명 사용 -->
       <Dataset id="ds_search">
@@ -32,82 +32,26 @@
       <Dataset id="ds_cbo_message_class_cd">
         <ColumnInfo>
           <Column id="code" type="STRING" size="30"/>
-          <Column id="name" type="STRING" size="100"/>
+          <Column id="code_nm" type="STRING" size="100"/>
         </ColumnInfo>
-        <Rows>
-          <Row>
-            <Col id="code">ALL</Col>
-            <Col id="name">전체</Col>
-          </Row>
-          <Row>
-            <Col id="code">FM</Col>
-            <Col id="name">화면</Col>
-          </Row>
-          <Row>
-            <Col id="code">NM</Col>
-            <Col id="name">시스템</Col>
-          </Row>
-        </Rows>
       </Dataset>
       <Dataset id="ds_cbo_message_type_cd">
         <ColumnInfo>
           <Column id="code" type="STRING" size="30"/>
-          <Column id="name" type="STRING" size="100"/>
+          <Column id="code_nm" type="STRING" size="100"/>
         </ColumnInfo>
-        <Rows>
-          <Row>
-            <Col id="code">ALL</Col>
-            <Col id="name">전체</Col>
-          </Row>
-          <Row>
-            <Col id="code">A</Col>
-            <Col id="name">경고</Col>
-          </Row>
-          <Row>
-            <Col id="code">C</Col>
-            <Col id="name">확인</Col>
-          </Row>
-          <Row>
-            <Col id="code">I</Col>
-            <Col id="name">정보</Col>
-          </Row>
-        </Rows>
       </Dataset>
-      <Dataset id="ds_cbo_grid_message_class_cd">
+      <Dataset id="ds_cbo_grid_message_class_cd" onrowsetchanged="ds_cbo_message_class_cd_onrowsetchanged">
         <ColumnInfo>
           <Column id="code" type="STRING" size="30"/>
-          <Column id="name" type="STRING" size="100"/>
+          <Column id="code_nm" type="STRING" size="100"/>
         </ColumnInfo>
-        <Rows>
-          <Row>
-            <Col id="code">FM</Col>
-            <Col id="name">화면</Col>
-          </Row>
-          <Row>
-            <Col id="code">NM</Col>
-            <Col id="name">시스템</Col>
-          </Row>
-        </Rows>
       </Dataset>
       <Dataset id="ds_cbo_grid_message_type_cd">
         <ColumnInfo>
           <Column id="code" type="STRING" size="30"/>
-          <Column id="name" type="STRING" size="100"/>
+          <Column id="code_nm" type="STRING" size="100"/>
         </ColumnInfo>
-        <Rows>
-          <Row>
-            <Col id="code">A</Col>
-            <Col id="name">경고</Col>
-          </Row>
-          <Row>
-            <Col id="code">C</Col>
-            <Col id="name">확인</Col>
-          </Row>
-          <Row>
-            <Col id="code">I</Col>
-            <Col id="name">정보</Col>
-          </Row>
-        </Rows>
       </Dataset>
     </Objects>
     <Script type="xscript5.1"><![CDATA[/***************************************************************************************
@@ -138,6 +82,20 @@
 this.COM12000M_onload = function(obj:nexacro.Form, e:nexacro.LoadEventInfo)
 {
     this.fn_init();
+
+    // 메시지분류 공통코드 조회
+    this.gfn_code(this, "cbo_message_class_cd", "ds_cbo_message_class_cd", "MESSAGE_CLASS_CD", "");
+	
+	this.ds_cbo_message_class_cd_onrowsetchanged = function(obj, e)
+	{
+		trace("### 메시지 분류 데이터 건수: " + obj.getRowCount());
+
+		for (var i = 0; i < obj.getRowCount(); i++)
+		{
+			trace("code=" + obj.getColumn(i, "code")
+				+ ", code_nm=" + obj.getColumn(i, "code_nm"));
+		}
+	};
 };
 
 /*
@@ -150,7 +108,7 @@ this.fn_init = function()
     this.ds_search.addRow();
 
     // 조회조건 기본값 설정
-    this.cbo_message_class_cd.set_value("ALL");
+    //this.cbo_message_class_cd.set_value("ALL");
     this.cbo_message_type_cd.set_value("ALL");
     this.edt_message_text_ko.set_value("");
 
@@ -202,7 +160,7 @@ this.fn_search = function()
  */
 this.fn_reset = function()
 {
-    this.cbo_message_class_cd.set_value("ALL");
+    //this.cbo_message_class_cd.set_value("ALL");
     this.cbo_message_type_cd.set_value("ALL");
     this.edt_message_text_ko.set_value("");
 
@@ -414,9 +372,9 @@ this.fn_callback = function(sSvcID, nErrCd, sErrMsg)
         <!-- 상단 저장 -->
         <Button id="btn_save" text="저장" right="20" top="12" width="76" height="28" taborder="0"/>
         <!-- 조회 조건 박스 -->
-        <Static id="sta_search_bg" left="16" top="49" right="16" height="60" background="#E4E9F8" border="1px solid #CDD5E8"/>
+        <Static id="sta_search_bg" left="16" top="49" right="16" height="60" background="#E4E9F8" border="1px solid #CDD5E8" text=""/>
         <Static id="sta_message_class_cd" text="메시지분류" left="31" top="66" width="82" height="26" verticalAlign="middle"/>
-        <Combo id="cbo_message_class_cd" left="114" top="65" width="150" height="28" taborder="1" innerdataset="ds_cbo_message_class_cd" codecolumn="code" datacolumn="name" value="ALL" index="0"/>
+        <Combo id="cbo_message_class_cd" left="114" top="65" width="150" height="28" taborder="1" innerdataset="ds_cbo_message_class_cd" codecolumn="code" datacolumn="code_nm" value="ALL" index="0"/>
         <Static id="sta_message_type_cd" text="메시지유형" left="294" top="66" width="81" height="26" verticalAlign="middle"/>
         <Combo id="cbo_message_type_cd" left="377" top="65" width="150" height="28" taborder="2" innerdataset="ds_cbo_message_type_cd" codecolumn="code" datacolumn="name" value="ALL" index="0"/>
         <Static id="sta_message_text_ko" text="메시지(한글)" left="557" top="66" width="98" height="26" verticalAlign="middle"/>
