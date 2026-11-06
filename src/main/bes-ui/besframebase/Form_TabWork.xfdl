@@ -3,7 +3,7 @@
   <Form id="Form_TabWork" width="1080" height="670" titletext="업무 화면 컨테이너" cssclass="besTabWorkForm" scrollbartype="none" onload="Form_TabWork_onload">
     <Layouts>
       <Layout width="1080" height="670" screenid="Desktop_screen">
-        <Div id="div_home" taborder="0" left="0" top="0" right="0" bottom="0" url="FrameBase::Form_Work.xfdl" scrollbartype="none"/>
+        <Div id="div_home" taborder="0" left="0" top="0" right="0" bottom="0" url="besframebase::Form_Work.xfdl" scrollbartype="none"/>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/***************************************************************************************
