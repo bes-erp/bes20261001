@@ -8,6 +8,7 @@
    ,"besLib/libUtil.js"
    ,"besLib/libDataSet.js"
    ,"besLib/libCombo.js"
+   ,"besLib/libMessage.js"
 
   ],
   "scriptsfilter": [    

@@ -9,7 +9,7 @@ import org.egovframe.rte.psl.dataaccess.mapper.Mapper;
 /**
 * =====================================================================================
 * @packageName    		: erp.core.cbo.service.impl
-* @fileName       		: CBO10000MMapper.java
+* @fileName       		: MSG10000MMapper.java
 * @author         		: Built1
 * @date           		: 2026.11.05
 * @description    		: [콤보박스] 코드유형에 따른 코드 데이터를 조회하는 인터페이스

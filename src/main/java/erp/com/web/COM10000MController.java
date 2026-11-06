@@ -48,7 +48,7 @@ public class COM10000MController {
 	public NexacroResult selectCodeList(@ParamDataSet(name = "inSearch") Map<String, Object> searchParamMap
 			                           ,@ParamVariable(name = "userId") String userId) throws Exception {
 		
-    	log.debug("## [ CBO10000MController     ] : {}", "selectCodeList");
+    	log.debug("## [ MSG10000MController     ] : {}", "selectCodeList");
     	
     	log.debug("## [ searchParamMap          ] : {}", searchParamMap);
     	log.debug("## [ code_type               ] : {}", searchParamMap.get("code_type"));

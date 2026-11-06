@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="erp.core.msg.service.impl.CBO10000MMapper">
+
+	<!-- ******************************************************************************
+	     * [메시지] 넥사크로 애플리케이션의 gds_message 데이터셋 데이터 적재를 위한 메시지 데이티 조회 
+	     * 특수문자 : <![CDATA[  ]]>
+	******************************************************************************* -->
+	<select id="selectMessageList" resultType="map">
+	    select /* MSG10000MMapperSQL.selectMessageList */
+	           sm.message_num
+		      ,sm.message_type_cd
+		      ,sm.message_text_ko
+		      ,sm.message_text_en
+		      ,sm.message_text_zh
+		      ,sm.message_text_ja
+		      ,sm.message_text_ot
+		      ,sm.remark
+		      ,sm.create_date
+		      ,sm.create_by
+		      ,sm.update_date
+		      ,sm.update_by
+		  from sys_message sm
+		 where 1=1	    
+		 order by sm.message_num
+	</select>
+
+
+</mapper>

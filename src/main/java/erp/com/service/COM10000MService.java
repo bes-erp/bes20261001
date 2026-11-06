@@ -5,7 +5,7 @@ import java.util.Map;
 /**
 * =====================================================================================
 * @packageName    		: erp.com.service.impl
-* @fileName       		: CBO10000MService.java
+* @fileName       		: MSG10000MService.java
 * @author         		: Built1
 * @date           		: 2026.10.15
 * @description    		: 코드유형 데이터를 조회/저장하는 인터페이스 클래스

@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
 * =====================================================================================
 * @packageName    		: erp.core.cbo.service.impl
-* @fileName       		: CBO10000MServiceimpl.java
+* @fileName       		: MSG10000MServiceimpl.java
 * @author         		: Built1
 * @date           		: 2026.11.05
 * @description    		: [콤보박스] 코드유형에 따른 코드 데이터를 조회하는 클래스
