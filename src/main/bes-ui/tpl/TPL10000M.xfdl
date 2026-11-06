@@ -7,16 +7,16 @@
         <Static id="sta_margin_top" taborder="1" text="10" left="0" top="0" width="1007" height="10" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;"/>
         <Static id="sta_margin_right" taborder="2" text="10" left="997" top="0" width="10" height="720" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;맑은 고딕&quot;"/>
         <Static id="sta_margin_bottom" taborder="3" text="10" left="0" top="710" width="1007" height="10" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;맑은 고딕&quot;"/>
-        <Div id="div_com_btn" taborder="4" text="28" left="10" top="sta_margin_top:0" height="28" right="10" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;">
+        <Div id="div_com" taborder="4" text="28" left="10" top="sta_margin_top:0" height="28" right="10" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;">
           <Layouts>
             <Layout>
               <Button id="btn_searchOpen" taborder="0" left="0" top="2" width="30" height="24" cssclass="btn_WF_searchOpen" onclick="nfn_searchOpen_onclick"/>
               <Static id="sta_title" taborder="1" text="메시지 등록" left="btn_searchOpen:5" top="2" width="229" height="24" cssclass="sta_WF_title" fittocontents="width" font="bold 14px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;"/>
-              <Button id="btn_save" taborder="2" text="저장" top="0" height="28" right="0" width="80" icon="url('theme://images/btn_TF_Max_O.png')" textPadding="0px 0px 0px 1px" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;"/>
+              <Button id="btn_save" taborder="2" top="0" height="28" right="4" width="34" icon="url('theme://bes_icon/16/bes_icon_save_red.png')" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" onclick="fn_save" tooltiptext="저장" background="" cssclass="btn_WF_save"/>
             </Layout>
           </Layouts>
         </Div>
-        <Div id="div_search" taborder="5" left="10" top="div_com_btn:5" height="46" background="#f6f6f6" right="10" font="12px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" formscrolltype="none" formscrollbartype="none">
+        <Div id="div_search" taborder="5" left="10" top="div_com:5" height="46" background="#f6f6f6" right="10" font="12px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" formscrolltype="none" formscrollbartype="none">
           <Layouts>
             <Layout>
               <Combo id="cbo_message_class_cd" left="114" top="9" width="150" height="24" taborder="0" innerdataset="ds_cbo_message_class_cd" codecolumn="CODE" datacolumn="CODE_NM" value="ALL" index="0" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;"/>
@@ -28,20 +28,21 @@
               <Static id="sta_message_text_ko" text="메시지(한글)" left="557" top="10" width="100" height="24" verticalAlign="middle" taborder="4" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" textAlign="right"/>
               <Edit id="edt_message_text_ko" left="sta_message_text_ko:5" top="10" width="200" height="24" taborder="5" maxlength="300" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;"/>
               <Static id="sta_margin_left00_00" taborder="8" text="10" left="cbo_message_type_cd:0" top="0" width="10" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" bottom="0"/>
-              <Button id="Button45_00" taborder="9" top="9" width="26" height="28" cssclass="btn_SA_search" tooltiptext="조회" icon="url('theme://images_ifc/btn_TF_search_O.png')" right="33"/>
-              <Button id="Button44_00_01" taborder="10" top="9" height="28" cssclass="btn_SA_reset" tooltiptext="초기화" width="26" right="5"/>
-              <Static id="sta_margin_left00_00_00" taborder="11" text="10" top="0" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" bottom="0" width="10" right="0"/>
+              <Button id="btn_searchClear" taborder="10" top="9" height="28" tooltiptext="초기화" width="34" right="4" onclick="fn_searchClear" icon="url('theme://bes_icon/16/bes_icon_reset_navy.png')" cssclass="btn_WF_searchClear"/>
+              <Button id="btn_search" taborder="9" top="9" width="34" height="28" tooltiptext="조회" icon="url('theme://bes_icon/14/bes_icon_search_navy_14.png')" onclick="fn_search" right="btn_searchClear:2" cssclass="btn_WF_search"/>
+              <Static id="sta_margin_left00_00_00" taborder="11" text="10" top="0" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" bottom="0" width="4" right="0"/>
             </Layout>
           </Layouts>
         </Div>
-        <Div id="div_title" taborder="6" text="30" left="10" top="div_search:5" height="28" right="10" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;">
+        <Div id="div_title" taborder="6" text="30" left="10" top="div_search:5" height="32" right="10" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;">
           <Layouts>
             <Layout>
               <Button id="btn_favorite" taborder="1" left="0" top="2" width="24" height="24" cssclass="btn_WF_favorite"/>
-              <Static id="sta_title" taborder="0" text="메시지 목록" left="btn_favorite:5" top="2" width="229" height="24" cssclass="sta_WF_title" fittocontents="width" font="bold 12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;"/>
-              <Button id="btn_delRow_ds_basIdclass" taborder="3" top="2" width="26" height="24" cssclass="btn_WF_grdDel" tooltiptext="행삭제" right="2" initvalueid="x"/>
-              <Button id="btn_addRow_ds_basIdclass" taborder="2" top="2" width="26" height="24" cssclass="btn_WF_grdAdd" tooltiptext="행추가" right="btn_delRow_ds_basIdclass:-2" initvalueid="x"/>
-              <Button id="btn_xlDn_grd_basIdclass" taborder="4" top="2" width="29" height="24" cssclass="btn_WF_grdExcelDown" tooltiptext="엑셀다운로드" right="btn_addRow_ds_basIdclass:-2" initvalueid="x"/>
+              <Static id="sta_title" taborder="0" text="메시지 목록" left="btn_favorite:5" top="1" width="68" height="24" cssclass="sta_WF_title" font="bold 12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" fittocontents="width"/>
+              <Button id="btn_delRow" taborder="3" top="2" width="34" height="28" tooltiptext="행삭제" right="4" icon="url('theme://bes_icon/16/bes_icon_delrow_navy.png')" onclick="fn_del_row" cssclass="btn_WF_delRow"/>
+              <Button id="btn_addRow" taborder="2" top="2" width="34" height="28" tooltiptext="행추가" right="btn_delRow:2" onclick="fn_add_row" icon="url('theme://bes_icon/16/bes_icon_addrow_navy.png')" cssclass="btn_WF_addRow"/>
+              <Button id="btn_excel_down" taborder="4" top="2" width="34" height="28" tooltiptext="엑셀다운로드" right="btn_addRow:2" icon="url('theme://bes_icon/16/bes_icon_exceldown_navy.png')" background="" onclick="fn_excel_down" cssclass="btn_WF_excelDown"/>
+              <Static id="sta_titleCnt" taborder="5" text="| 1,000건" left="sta_title:1" top="1" width="70" height="24" cssclass="sta_WF_titleCnt" font="10px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" fittocontents="width"/>
             </Layout>
           </Layouts>
         </Div>
@@ -318,5 +319,194 @@
         </Rows>
       </Dataset>
     </Objects>
+    <Script type="xscript5.1"><![CDATA[/***************************************************************************************
+ * 프로젝트        : Built1 Enterprise System 구축 프로젝트
+ * 업무구분        : 시스템관리
+ * 파일명          : TPL10000M.xfdl
+ * 작성자          : Built1
+ * 작성일          : 2026-11-01
+ *
+ * 화면            : 메시지등록
+ * 설명            : 애플리케이션에서 공통적으로 사용할 메지를 등록하고 관리하는 기능
+ *---------------------------------------------------------------------------------------
+ * 변경일            변경자            변경내역
+ *---------------------------------------------------------------------------------------
+ * 2026-11-01        Built1            최초작성
+ ***************************************************************************************/
+
+
+/***************************************************************************************
+ * 1. 폼 변수
+ * : 폼에서 사용할 공통 변수를 선언
+ **************************************************************************************/
+
+
+/***************************************************************************************
+ * 2. 폼 오픈
+ * : 화면을 로딩시 기본적으로 처리할 기능 또는 초기값 할당
+ **************************************************************************************/
+this.fn_init = function (obj:Form, e:nexacro.LoadEventInfo)
+{
+
+};
+
+
+/***************************************************************************************
+ * 3. 공통 버튼
+ * : 조회, 조회초기화, 저장, 신규, 삭제, 도움말, 출력 
+ **************************************************************************************/
+/*
+ * 기능 : 조회
+ * : 조회조건 항목별 값을 기준으로 데이터를 조회하는 기능
+ */
+this.fn_search = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+
+};
+
+
+/*
+ * 기능 : 조회초기화
+ * : 조회 조건의 항목별 값을 초기화하는 기능
+ */
+this.fn_searchClear = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+
+};
+
+
+/*
+ * 기능 : 저장
+ * : 신규, 수정, 삭제된 데이터를 저장하는 기능
+ */
+this.fn_save = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+
+};
+
+
+/*
+ * 기능 : 신규
+ * : 폼 입력화면에서 데이터를 신규로 등록하는 기능
+ */
+this.fn_new = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+
+};
+
+
+/*
+ * 기능 : 삭제
+ * : 폼 입력화면에서 데이터를 삭제하는 기능
+ */
+this.fn_delelete = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+
+};
+
+
+/*
+ * 기능 : 도움말
+ * : 화면에 대한 상세기능 및 절차를 설명하는 기능
+ */
+this.fn_help = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+
+};
+
+
+/*
+ * 기능 : 출력
+ * : 보고서를 출력하는 기능
+ */
+this.fn_print = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+
+};
+
+
+/***************************************************************************************
+ * 4. 추가 공통 버튼
+ * - 행추가, 행삭제, 엑셀다운로드, 엑셀업로드
+ **************************************************************************************/
+/*
+ * 기능 : 행추가
+ * : 그리드에 첫 행을 추가하는 기능
+ */
+this.fn_add_row = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+
+};
+
+
+/*
+ * 기능 : 행삭제
+ * : 그리드에서 선택된 행을 삭제하는 기능
+ */
+this.fn_del_row = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+
+};
+
+
+/*
+ * 기능 : 엑셀다운로드
+ * : 그리드에 조회된 데이터를 엑셀로 다운로드하는 기능
+ */
+this.fn_excel_down = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+
+};
+
+
+/*
+ * 기능 : 엑셀업로드
+ * : 엑셀로 작성된 데이터를 그리드에 업로드하는 기능
+ */
+this.fn_excel_up = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+
+};
+
+
+/***************************************************************************************
+ * 5. 콜백
+ * : 데이터 조회, 저장, 삭제 등 트랜잭션 처리에 따른 결과를 관리하는 기능
+ **************************************************************************************/
+this.fn_callBack = function (sSvcID, nErrCd, sErrMsg)
+{
+	if(nErrCd < 0) 
+	{
+		alert(sErrMsg);
+		return;
+	}
+
+	switch(sSvcID) 
+	{	
+		// 코드조회 : 수정바랍니다.
+		case "selectCodeList":
+			break;
+	}
+};
+
+
+/***************************************************************************************
+ * 6. 팝업 호출 및 콜백
+ * : 팝업화면 오픈 및 리턴된 결과를 콜백 처리하는 기능
+ **************************************************************************************/
+
+
+/***************************************************************************************
+ * 7. 기타 함수
+ * : 화면에 특화된 함수를 사용하기 위한 기능
+ **************************************************************************************/
+
+
+/***************************************************************************************
+ * 8. 이벤트
+ * : 화면에서 각 컴포런트별 이벤트를 작성하는 기능
+ **************************************************************************************/
+
+]]></Script>
   </Form>
 </FDL>

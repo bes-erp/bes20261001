@@ -9,6 +9,8 @@
    ,"besLib/libDataSet.js"
    ,"besLib/libCombo.js"
    ,"besLib/libMessage.js"
+   ,"besLib/libLang.js"
+
 
   ],
   "scriptsfilter": [    

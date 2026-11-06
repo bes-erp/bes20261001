@@ -77,8 +77,8 @@
  * 2026-11-06        Built1            IFC 로그인 레이아웃 및 다국어 적용
  ***************************************************************************************/
 
-include "besLib::libLang.xjs";
-include "besLib::libMessage.xjs";
+// include "besLib::libLang.xjs";
+// include "besLib::libMessage.xjs";
 
 /***************************************************************************************
  * 1. FORM 변수 선언
