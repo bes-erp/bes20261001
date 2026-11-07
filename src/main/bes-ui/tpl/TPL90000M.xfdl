@@ -5,7 +5,7 @@
       <Layout width="1080" height="670" screenid="Desktop_screen">
         <!-- 상단 조회 영역 -->
         <Button id="btn_search" taborder="0" text="조회" left="20" top="20" width="120" height="40" onclick="btn_search_onclick"/>
-        <Static id="stc_code_type" taborder="23" text="코드유형" left="160" top="33" width="92" height="14" textAlign="right"/>
+        <Static id="stc_code_type" taborder="23" text="*코드유형" left="160" top="33" width="92" height="14" textAlign="right" cssclass="txt_WF_Essential"/>
         <Edit id="edt_code_type" taborder="22" left="257" top="30" width="160" height="20" inputmode="upper"/>
         <Button id="btn_alert" taborder="2" text="alert test" right="20" top="20" width="120" height="30" onclick="btn_alert_onclick"/>
         <!-- 코드유형 그리드: 왼쪽 절반 / 높이는 화면의 35% -->
@@ -24,9 +24,9 @@
                 <Row size="24"/>
               </Rows>
               <Band id="head">
-                <Cell text="CODE_TYPE"/>
-                <Cell col="1" text="CODE_TYPE_NM"/>
-                <Cell col="2" text="START_DATE"/>
+                <Cell text="*CODE_TYPE"/>
+                <Cell col="1" text="*CODE_TYPE_NM"/>
+                <Cell col="2" text="*START_DATE"/>
                 <Cell col="3" text="END_DATE"/>
                 <Cell col="4" text="CREATE_TYPE_CD"/>
               </Band>
@@ -281,13 +281,13 @@
 /***************************************************************************************
  * 2. FORM LOAD
  ***************************************************************************************/
-
 /*
  * 기능 : 기본 업무 화면 초기화
  * 설명 : 공통함수 등록 여부 확인, Dataset 초기화, 날짜 및 콤보박스 초기값 설정
  */
 this.Form_Work_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
+	this.gfn_essential(this);
 	    //공통함수 등록 여부 확인
     trace("## gfn_getDate : " + typeof this.gfn_getDate);
     trace("## gfn_isNull  : " + typeof this.gfn_isNull);
