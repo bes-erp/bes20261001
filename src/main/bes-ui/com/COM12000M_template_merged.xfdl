@@ -1,0 +1,329 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="COM12000M" width="1007" height="720" titletext="메시지등록" font="bold 12px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" onload="COM12000M_onload">
+    <Script type="xscript5.1"><![CDATA[
+/***************************************************************************************
+ * 프로젝트        : Built1 Enterprise System 구축 프로젝트
+ * 업무구분        : 공통관리
+ * 파일명          : COM12000M.xfdl
+ * 화면            : 메시지등록
+ * 설명            : 메시지 목록 조회 및 관리 (디자인 템플릿 적용)
+ ***************************************************************************************/
+
+this.COM12000M_onload = function(obj:nexacro.Form, e:nexacro.LoadEventInfo)
+{
+    this.fn_init();
+
+    // 검색 Combo는 이제 div_search 안에 있으므로 해당 Form을 전달
+    this.gfn_code(this, "cbo_message_class_cd", "ds_cbo_message_class_cd", "MESSAGE_CLASS_CD", "", "Y");
+    this.gfn_code(this, "cbo_message_type_cd", "ds_cbo_message_type_cd", "MESSAGE_TYPE_CD", "", "Y");
+    this.gfn_code(this, "", "ds_cbo_grid_message_class_cd", "MESSAGE_CLASS_CD", "", "N");
+    this.gfn_code(this, "", "ds_cbo_grid_message_type_cd", "MESSAGE_TYPE_CD", "", "N");
+};
+
+this.fn_init = function()
+{
+    this.ds_search.clearData();
+    this.ds_search.addRow();
+	this.div_search.form.cbo_message_type_cd.set_index(0);
+	this.div_search.form.edt_message_text_ko.set_value("");
+    this.ds_message.clearData();
+    this.fn_setMessageCount();
+};
+
+this.fn_search = function()
+{
+    this.ds_search.clearData();
+    var nRow = this.ds_search.addRow();
+    this.ds_search.setColumn(nRow, "message_class_cd", this.div_search.form.cbo_message_class_cd.value);
+    this.ds_search.setColumn(nRow, "message_type_cd", this.div_search.form.cbo_message_type_cd.value);
+    this.ds_search.setColumn(nRow, "message_text_ko", this.div_search.form.edt_message_text_ko.value);
+
+    var sUserId = nexacro.getApplication().gvUserId;
+    var sSvcID = "selectMessageList";
+    var sSvcURL = "svcUrl::com/COM12000M/selectMessageList.do";
+    var sInDatasets = "inSearch=ds_search";
+    var sOutDatasets = "ds_message=outSelectMessageList";
+    var sArgument = "userId=" + nexacro.wrapQuote(sUserId || "");
+    var sCallbackFunc = "fn_callback";
+    this.gfn_transaction(sSvcID, sSvcURL, sInDatasets, sOutDatasets, sArgument, sCallbackFunc);
+};
+
+this.fn_reset = function()
+{
+    this.div_search.form.cbo_message_class_cd.set_index(0);
+    this.div_search.form.cbo_message_type_cd.set_index(0);
+    this.div_search.form.edt_message_text_ko.set_value("");
+    this.ds_search.clearData();
+    this.ds_search.addRow();
+};
+
+this.fn_setMessageCount = function()
+{
+    this.div_title.form.sta_titleCnt.set_text("| " + this.ds_message.rowcount + "건");
+};
+
+this.fn_addRow = function()
+{
+    var nRow = this.ds_message.insertRow(0);
+    this.ds_message.setColumn(nRow, "select_yn", "N");
+    this.ds_message.setColumn(nRow, "message_class_cd", "NM");
+    this.ds_message.setColumn(nRow, "message_type_cd", "A");
+    this.ds_message.set_rowposition(nRow);
+    this.fn_setMessageCount();
+};
+
+this.fn_deleteRow = function()
+{
+    var nDeleteCnt = 0;
+    for (var i = this.ds_message.rowcount - 1; i >= 0; i--)
+    {
+        if (this.ds_message.getColumn(i, "select_yn") == "Y")
+        {
+            this.ds_message.deleteRow(i);
+            nDeleteCnt++;
+        }
+    }
+    if (nDeleteCnt == 0)
+    {
+        this.alert("삭제할 행을 선택해주세요.");
+        return;
+    }
+    this.fn_setMessageCount();
+};
+
+this.fn_validate = function()
+{
+    for (var i = 0; i < this.ds_message.rowcount; i++)
+    {
+        var nRowType = this.ds_message.getRowType(i);
+        if (nRowType == 2 || nRowType == 4)
+        {
+            var sClassCd = this.ds_message.getColumn(i, "message_class_cd");
+            var sTypeCd = this.ds_message.getColumn(i, "message_type_cd");
+            var sTextKo = this.ds_message.getColumn(i, "message_text_ko");
+            if (this.gfn_isNull(sClassCd))
+            {
+                this.alert("메시지분류는 필수 항목입니다.");
+                this.ds_message.set_rowposition(i);
+                return false;
+            }
+            if (this.gfn_isNull(sTypeCd))
+            {
+                this.alert("메시지유형은 필수 항목입니다.");
+                this.ds_message.set_rowposition(i);
+                return false;
+            }
+            if (this.gfn_isNull(sTextKo) || String(sTextKo).trim() == "")
+            {
+                this.alert("메시지(한글)는 필수 항목입니다.");
+                this.ds_message.set_rowposition(i);
+                return false;
+            }
+        }
+    }
+    return true;
+};
+
+this.fn_isChanged = function()
+{
+    if (this.ds_message.getDeletedRowCount() > 0) return true;
+    for (var i = 0; i < this.ds_message.rowcount; i++)
+    {
+        var nRowType = this.ds_message.getRowType(i);
+        if (nRowType == 2 || nRowType == 4) return true;
+    }
+    return false;
+};
+
+this.fn_save = function()
+{
+    if (!this.fn_isChanged())
+    {
+        this.alert("변경된 데이터가 없습니다.");
+        return;
+    }
+    if (!this.fn_validate()) return;
+    // 기존 코드와 동일: 저장 Controller 및 Transaction은 아직 연결되지 않음.
+    this.alert("저장 서버 기능 연결 후 테스트할 예정입니다.");
+};
+
+this.fn_callback = function(sSvcID, nErrCd, sErrMsg)
+{
+    if (nErrCd < 0)
+    {
+        this.alert(sErrMsg);
+        return;
+    }
+    switch (sSvcID)
+    {
+        case "selectMessageList":
+            var nCnt = this.ds_message.rowcount;
+            this.fn_setMessageCount();
+            if (nCnt == 0) this.alert("조회조건에 일치하는 데이터가 존재하지 않습니다.");
+            break;
+        case "saveMessage":
+            this.alert("정상적으로 저장되었습니다.");
+            this.fn_search();
+            break;
+    }
+};
+
+this.grd_message_onheadclick = function(obj, e)
+{
+    if (e.cell != 1) return;
+    var sCheck = obj.getCellProperty("head", 1, "text");
+    var sValue = (sCheck == "1") ? "N" : "Y";
+    for (var i = 0; i < this.ds_message.getRowCount(); i++)
+    {
+        this.ds_message.setColumn(i, "select_yn", sValue);
+    }
+    obj.setCellProperty("head", 1, "text", (sValue == "Y") ? "1" : "0");
+};
+
+]]></Script>
+    <Layouts>
+      <Layout height="720" mobileorientation="landscape" width="1007">
+        <Static id="sta_margin_left" taborder="0" text="10" left="0" top="0" width="10" height="720" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;"/>
+        <Static id="sta_margin_top" taborder="1" text="10" left="0" top="0" width="1007" height="10" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;"/>
+        <Static id="sta_margin_right" taborder="2" text="10" left="997" top="0" width="10" height="720" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;맑은 고딕&quot;"/>
+        <Static id="sta_margin_bottom" taborder="3" text="10" left="0" top="710" width="1007" height="10" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;맑은 고딕&quot;"/>
+        <Div id="div_com" taborder="4" text="28" left="10" top="sta_margin_top:0" height="28" right="10" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;">
+          <Layouts>
+            <Layout>
+              <Button id="btn_searchOpen" taborder="0" left="0" top="2" width="30" height="24" cssclass="btn_WF_searchOpen" onclick="nfn_searchOpen_onclick"/>
+              <Static id="sta_title" taborder="1" text="메시지 등록" left="btn_searchOpen:5" top="2" width="229" height="24" cssclass="sta_WF_title" fittocontents="width" font="bold 14px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;"/>
+              <Button id="btn_save" taborder="2" top="0" height="28" right="4" width="34" icon="url('theme://bes_icon/16/bes_icon_save_red.png')" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" onclick="fn_save" tooltiptext="저장" background="" cssclass="btn_WF_save"/>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="div_search" taborder="5" left="10" top="div_com:5" height="46" background="#f6f6f6" right="10" font="12px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" formscrolltype="none" formscrollbartype="none">
+          <Layouts>
+            <Layout>
+              <Combo id="cbo_message_class_cd" left="114" top="9" width="150" height="24" taborder="0" innerdataset="ds_cbo_message_class_cd" codecolumn="CODE" datacolumn="CODE_NM" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;"/>
+              <Static id="sta_margin_left" taborder="6" text="10" left="0" top="0" width="10" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" bottom="0"/>
+              <Static id="sta_message_class_cd" text="메시지분류" left="sta_margin_left:0" top="10" width="100" height="24" verticalAlign="middle" taborder="1" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" textAlign="right"/>
+              <Static id="sta_margin_left00" taborder="7" text="10" left="cbo_message_class_cd:10" top="0" width="10" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" bottom="0"/>
+              <Static id="sta_message_type_cd" text="메시지유형" left="sta_margin_left00:0" top="10" width="100" height="24" verticalAlign="middle" taborder="2" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" textAlign="right"/>
+              <Combo id="cbo_message_type_cd" left="sta_message_type_cd:5" top="10" width="150" height="24" taborder="3" innerdataset="ds_cbo_message_type_cd" codecolumn="CODE" datacolumn="CODE_NM" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;"/>
+              <Static id="sta_message_text_ko" text="메시지(한글)" left="557" top="10" width="100" height="24" verticalAlign="middle" taborder="4" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" textAlign="right"/>
+              <Edit id="edt_message_text_ko" left="sta_message_text_ko:5" top="10" width="200" height="24" taborder="5" maxlength="300" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;"/>
+              <Static id="sta_margin_left00_00" taborder="8" text="10" left="cbo_message_type_cd:0" top="0" width="10" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" bottom="0"/>
+              <Button id="btn_searchClear" taborder="10" top="9" height="28" tooltiptext="초기화" width="34" right="4" onclick="fn_reset" icon="url('theme://bes_icon/16/bes_icon_reset_navy.png')" cssclass="btn_WF_searchClear"/>
+              <Button id="btn_search" taborder="9" top="9" width="34" height="28" tooltiptext="조회" icon="url('theme://bes_icon/14/bes_icon_search_navy_14.png')" onclick="fn_search" right="btn_searchClear:2" cssclass="btn_WF_search"/>
+              <Static id="sta_margin_left00_00_00" taborder="11" text="10" top="0" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" bottom="0" width="4" right="0"/>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Div id="div_title" taborder="6" text="30" left="10" top="div_search:5" height="32" right="10" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;">
+          <Layouts>
+            <Layout>
+              <Button id="btn_favorite" taborder="1" left="0" top="2" width="24" height="24" cssclass="btn_WF_favorite"/>
+              <Static id="sta_title" taborder="0" text="메시지 목록" left="btn_favorite:5" top="1" width="68" height="24" cssclass="sta_WF_title" font="bold 12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" fittocontents="width"/>
+              <Button id="btn_delRow" taborder="3" top="2" width="34" height="28" tooltiptext="행삭제" right="4" icon="url('theme://bes_icon/16/bes_icon_delrow_navy.png')" onclick="fn_deleteRow" cssclass="btn_WF_delRow"/>
+              <Button id="btn_addRow" taborder="2" top="2" width="34" height="28" tooltiptext="행추가" right="btn_delRow:2" onclick="fn_addRow" icon="url('theme://bes_icon/16/bes_icon_addrow_navy.png')" cssclass="btn_WF_addRow"/>
+              <Button id="btn_excel_down" taborder="4" top="2" width="34" height="28" tooltiptext="엑셀다운로드" right="btn_addRow:2" icon="url('theme://bes_icon/16/bes_icon_exceldown_navy.png')" background="" onclick="fn_excel_down" cssclass="btn_WF_excelDown"/>
+              <Static id="sta_titleCnt" taborder="5" text="| 1,000건" left="sta_title:1" top="1" width="70" height="24" cssclass="sta_WF_titleCnt" font="10px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" fittocontents="width"/>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Grid id="grd_message" left="10" top="div_title:0" right="10" bottom="10" taborder="7" binddataset="ds_message" selecttype="row" autoenter="select" autofittype="none" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" onheadclick="grd_message_onheadclick">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="44"/>
+                <Column size="42"/>
+                <Column size="85"/>
+                <Column size="85"/>
+                <Column size="95"/>
+                <Column size="300"/>
+                <Column size="280"/>
+                <Column size="250"/>
+                <Column size="250"/>
+                <Column size="250"/>
+              </Columns>
+              <Rows>
+                <Row size="28" band="head"/>
+                <Row size="28"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="No" font="bold 11px/1.1 &quot;Malgun Gothic&quot;,&quot;맑은 고딕&quot;,&quot;Arial&quot;"/>
+                <Cell col="1" text="0" edittype="checkbox" displaytype="checkboxcontrol" checkboxtruevalue="1" checkboxfalsevalue="0"/>
+                <Cell col="2" text="*메시지분류" font="bold 11px/1.1 &quot;Malgun Gothic&quot;,&quot;맑은 고딕&quot;,&quot;Arial&quot;"/>
+                <Cell col="3" text="*메시지유형" font="bold 11px/1.1 &quot;Malgun Gothic&quot;,&quot;맑은 고딕&quot;,&quot;Arial&quot;"/>
+                <Cell col="4" text="*메시지번호" font="bold 11px/1.1 &quot;Malgun Gothic&quot;,&quot;맑은 고딕&quot;,&quot;Arial&quot;"/>
+                <Cell col="5" text="*메시지(한글)" font="bold 11px/1.1 &quot;Malgun Gothic&quot;,&quot;맑은 고딕&quot;,&quot;Arial&quot;"/>
+                <Cell col="6" text="메시지(영문)" font="bold 11px/1.1 &quot;Malgun Gothic&quot;,&quot;맑은 고딕&quot;,&quot;Arial&quot;"/>
+                <Cell col="7" text="메시지(중국)" font="bold 11px/1.1 &quot;Malgun Gothic&quot;,&quot;맑은 고딕&quot;,&quot;Arial&quot;"/>
+                <Cell col="8" text="메시지(일본)" font="bold 11px/1.1 &quot;Malgun Gothic&quot;,&quot;맑은 고딕&quot;,&quot;Arial&quot;"/>
+                <Cell col="9" text="메시지(기타)" font="bold 11px/1.1 &quot;Malgun Gothic&quot;,&quot;맑은 고딕&quot;,&quot;Arial&quot;"/>
+              </Band>
+              <Band id="body">
+                <Cell text="expr:currow+1" edittype="none" textAlign="center"/>
+                <Cell col="1" text="bind:select_yn" displaytype="checkboxcontrol" edittype="checkbox" textAlign="center" checkboxtruevalue="Y" checkboxfalsevalue="N"/>
+                <Cell col="2" text="bind:message_class_cd" displaytype="combocontrol" edittype="combo" combodataset="ds_cbo_grid_message_class_cd" combocodecol="CODE" combodatacol="CODE_NM"/>
+                <Cell col="3" text="bind:message_type_cd" displaytype="combocontrol" edittype="combo" combodataset="ds_cbo_grid_message_type_cd" combocodecol="CODE" combodatacol="CODE_NM"/>
+                <Cell col="4" text="bind:message_num" edittype="none"/>
+                <Cell col="5" text="bind:message_text_ko" edittype="text"/>
+                <Cell col="6" text="bind:message_text_en" edittype="text"/>
+                <Cell col="7" text="bind:message_text_zh" edittype="text"/>
+                <Cell col="8" text="bind:message_text_ja" edittype="text"/>
+                <Cell col="9" text="bind:message_text_ot" edittype="text"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="ds_search">
+        <ColumnInfo>
+          <Column id="message_class_cd" type="STRING" size="30"/>
+          <Column id="message_type_cd" type="STRING" size="30"/>
+          <Column id="message_text_ko" type="STRING" size="300"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
+      <Dataset id="ds_message">
+        <ColumnInfo>
+          <Column id="select_yn" type="STRING" size="1"/>
+          <Column id="message_class_cd" type="STRING" size="30"/>
+          <Column id="message_type_cd" type="STRING" size="30"/>
+          <Column id="message_num" type="STRING" size="30"/>
+          <Column id="message_text_ko" type="STRING" size="300"/>
+          <Column id="message_text_en" type="STRING" size="300"/>
+          <Column id="message_text_zh" type="STRING" size="300"/>
+          <Column id="message_text_ja" type="STRING" size="300"/>
+          <Column id="message_text_ot" type="STRING" size="300"/>
+          <Column id="remark" type="STRING" size="4000"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_cbo_message_class_cd">
+        <ColumnInfo>
+          <Column id="CODE" type="STRING" size="30"/>
+          <Column id="CODE_NM" type="STRING" size="100"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_cbo_message_type_cd">
+        <ColumnInfo>
+          <Column id="CODE" type="STRING" size="30"/>
+          <Column id="CODE_NM" type="STRING" size="100"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_cbo_grid_message_class_cd">
+        <ColumnInfo>
+          <Column id="CODE" type="STRING" size="30"/>
+          <Column id="CODE_NM" type="STRING" size="100"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_cbo_grid_message_type_cd">
+        <ColumnInfo>
+          <Column id="CODE" type="STRING" size="30"/>
+          <Column id="CODE_NM" type="STRING" size="100"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>

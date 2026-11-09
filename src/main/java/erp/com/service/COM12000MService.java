@@ -29,5 +29,5 @@ public interface COM12000MService {
     * @throws Exception
     */
     public abstract List<Map<String, Object>> selectMessageList(Map<String, Object> searchParamMap, String userId) throws Exception;
-
+    
 }

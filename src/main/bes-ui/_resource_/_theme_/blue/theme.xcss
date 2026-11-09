@@ -507,16 +507,16 @@
 
 .Grid .head
 {
-	-nexa-border : 0px none,0px none,1px solid #e0e0e0;
-	background : #f5f5f5;
+	-nexa-border : 0px none,0px none,1px solid #D6E0F0;
+	background : #1F3F73;
 }
 
 .Grid .head .row .cell
 {
 	font : normal 400 11px/1.1 "Malgun Gothic","맑은 고딕","Arial";
-	color : #333333;
-	background : #f5f5f5;
-	-nexa-border : 1px solid #e0e0e0;
+	color : #FFFFFF;
+	background : #1F3F73;
+	-nexa-border : 1px solid #D6DFEC;
 	-nexa-padding : 1px 3px 0px;
 	-nexa-text-align : center;
 }
@@ -566,12 +566,12 @@
 }
 .Grid .body .row .cell[status=mouseover]
 {
-	background : #f0f0f0;
+	background : #EEF2F9;
 }
 
 .Grid .body .row .cell[userstatus=selected]
 {
-	background : #daf1fd;
+	background : #D6E0F0;
 	color : #000000;
 }
 
@@ -603,14 +603,14 @@
 
 .Grid .body .row .cell .subcell[status=mouseover]
 {
-	background : #f0f0f0;
+	background : #EEF2F9;
 }
 
 .Grid .body .row .cell .subcell[userstatus=selected]
 {
-	background : #daf1fd;
+	background : #D6E0F0;
 	color : #000000;
-}
+}	
 
 .Grid .body .row .cell .subcell[status=disabled]
 {

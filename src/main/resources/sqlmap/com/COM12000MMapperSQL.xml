@@ -10,17 +10,18 @@
 
     <select id="selectMessageList" resultType="map">
 
-        select substr(sm.message_num, 1, 2) as "message_class_cd"
-		      ,sm.message_type_cd           as "message_type_cd"
-		      ,sm.message_num               as "message_num"
-		      ,sm.message_text_ko           as "message_text_ko"
-		      ,sm.message_text_en           as "message_text_en"
-		      ,sm.message_text_zh           as "message_text_zh"
-		      ,sm.message_text_ja           as "message_text_ja"
-		      ,sm.message_text_ot           as "message_text_ot"
-		      ,sm.remark                    as "remark"
-		  from sys_message sm
-		 where 1=1
+        select 'N' 							as "select_yn"
+	          ,substr(sm.message_num, 1, 2) as "message_class_cd"
+	          ,sm.message_type_cd           as "message_type_cd"
+	          ,sm.message_num               as "message_num"
+	          ,sm.message_text_ko           as "message_text_ko"
+	          ,sm.message_text_en           as "message_text_en"
+	          ,sm.message_text_zh           as "message_text_zh"
+	          ,sm.message_text_ja           as "message_text_ja"
+	          ,sm.message_text_ot           as "message_text_ot"
+	          ,sm.remark                    as "remark"
+	      from sys_message sm
+	     where 1=1
 
         <!-- 메시지분류 -->
         <if test='message_class_cd != null and message_class_cd != "" and message_class_cd != "ALL"'>
