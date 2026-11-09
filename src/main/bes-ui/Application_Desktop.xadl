@@ -2,32 +2,36 @@
 <ADL version="2.0">
   <Application id="Application_Desktop" screenid="Desktop_screen">
     <Layout>
-      <!-- mainframe : BES 애플리케이션의 최상위 메인 프레임 -->
-      <!-- 로그인 화면과 로그인 성공 후 업무 화면을 포함 -->
+      <!-- BES 최상위 메인 프레임 -->
       <MainFrame id="mainframe" showtitlebar="true" showstatusbar="true" left="0" top="0" width="1280" height="720" titletext="Built1 Enterprise System">
-        <!-- VFrameSetMain : 로그인 화면과 메인 업무 화면을 세로로 구분 -->
-        <!-- separatesize="*,0" : 최초 실행 시 로그인 화면만 표시 -->
-        <!-- 로그인 성공 시 "0,*"로 변경하여 메인 업무 화면 표시 -->
+        <!-- 로그인 영역과 업무 영역 구분 -->
         <VFrameSet id="VFrameSetMain" separatesize="*,0" border="0px none">
           <Frames>
-            <!-- LoginFrame : 사용자 로그인 화면 -->
+            <!-- 로그인 화면 -->
             <ChildFrame id="LoginFrame" showtitlebar="false" showstatusbar="false" formurl="sys::SYS10000M.xfdl" dragmovetype="none"/>
-            <!-- VFrameSetWork : 로그인 성공 후 표시하는 메인 업무 프레임 -->
-            <VFrameSet id="VFrameSetWork" separatesize="50,42,30,*" border="0px none">
+            <!-- 로그인 후 메인 업무 영역 -->
+            <VFrameSet id="VFrameSetWork" separatesize="50,42,*" border="0px none">
               <Frames>
-                <!-- TopFrame : BES 로고, 로그인 사용자 정보, 로그아웃 영역 -->
+                <!-- 시스템 로고 및 사용자 정보 -->
                 <ChildFrame id="TopFrame" showtitlebar="false" showstatusbar="false" border="0px none" formurl="besframebase::Form_Top.xfdl" dragmovetype="none"/>
-                <!-- MenuFrame : DB 메뉴정보를 이용한 1레벨 상단 메뉴 영역 -->
+                <!-- 상단 대분류 메뉴 -->
                 <ChildFrame id="MenuFrame" showtitlebar="false" showstatusbar="false" border="0px none" formurl="besframebase::Form_Menu.xfdl" dragmovetype="none"/>
-                <!-- MdiFrame : 현재 열려 있는 업무 화면의 탭 관리 영역 -->
-                <ChildFrame id="MdiFrame" showtitlebar="false" showstatusbar="false" border="0px none" formurl="besframebase::Form_Mdi.xfdl" dragmovetype="none"/>
-                <!-- HFrameSetWork : 왼쪽 메뉴와 오른쪽 업무 화면을 가로로 구분 -->
+                <!-- 좌측 메뉴 및 업무 영역 -->
                 <HFrameSet id="HFrameSetWork" separatesize="200,*" border="0px none">
                   <Frames>
-                    <!-- LeftFrame : 선택한 상단 메뉴의 2·3레벨 하위 메뉴 표시 -->
+                    <!-- 2·3레벨 좌측 메뉴 -->
                     <ChildFrame id="LeftFrame" showtitlebar="false" showstatusbar="false" border="0px none" formurl="besframebase::Form_Left.xfdl" dragmovetype="none"/>
-                    <!-- WorkFrame : 홈 화면 및 실제 업무 화면을 표시하는 영역 -->
-                    <ChildFrame id="WorkFrame" showtitlebar="false" showstatusbar="false" border="0px none" formurl="besframebase::Form_TabWork.xfdl" dragmovetype="none"/>
+                    <!-- IFC의 VFrameSet0에 대응 -->
+                    <VFrameSet id="VFrameSetContent" separatesize="30,*,0" border="0px none">
+                      <Frames>
+                        <!-- 업무 탭 영역 -->
+                        <ChildFrame id="MdiFrame" showtitlebar="false" showstatusbar="false" border="0px none" formurl="besframebase::Form_Mdi.xfdl" dragmovetype="none"/>
+                        <!-- 기존 기본 홈 화면 -->
+                        <ChildFrame id="WorkFrame" showtitlebar="false" showstatusbar="false" border="0px none" formurl="besframebase::Form_Work.xfdl" dragmovetype="none"/>
+                        <!-- 업무별 ChildFrame을 동적으로 생성할 영역 -->
+                        <FrameSet id="FrameSetWork" border="0px none"/>
+                      </Frames>
+                    </VFrameSet>
                   </Frames>
                 </HFrameSet>
               </Frames>

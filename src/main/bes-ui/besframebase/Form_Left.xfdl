@@ -285,10 +285,10 @@ this.fn_openMenu = function(sMenuCd, sMenuNm, sFormUrl)
     // 메인 프레임 및 MDI 프레임에 접근하기 위해 사용
     var objApp = nexacro.getApplication();
 
-    // objMdiFrame : 업무 탭을 관리하는 MdiFrame 객체
-    // mainframe → VFrameSetMain → VFrameSetWork → MdiFrame 순서로 접근
-    // Form_Mdi에 정의된 업무 탭 생성 함수를 호출하기 위해 사용
-    var objMdiFrame = objApp.mainframe.VFrameSetMain.VFrameSetWork.MdiFrame;
+    
+	// objMdiFrame : VFrameSetContent 내부의 업무 탭 관리 프레임
+	var objMdiFrame = objApp.mainframe.VFrameSetMain.VFrameSetWork.HFrameSetWork.VFrameSetContent.MdiFrame;
+
 
     // MDI 프레임이 존재하는지 확인
     // MDI 프레임 내부 Form이 로드되었는지 확인
@@ -370,7 +370,7 @@ this.divMenu_grdMenu_oncellclick = function(obj, e)
         <Div id="divMenu" taborder="0" left="0" top="0" right="0" bottom="0" cssclass="besLeftMenuDiv" scrollbartype="none">
           <Layouts>
             <Layout>
-              <Grid id="grdMenu" taborder="0" left="8" top="8" right="8" bottom="8" binddataset="ds_menu" autofittype="col" treeinitstatus="expand,all" treeusecheckbox="false" treeuseimage="false" treeusebutton="use" cssclass="besLeftMenuGrid" oncellclick="divMenu_grdMenu_oncellclick">
+              <Grid id="grdMenu" taborder="0" left="0" top="0" right="0" bottom="0" binddataset="ds_menu" autofittype="col" treeinitstatus="expand,all" treeusecheckbox="false" treeuseimage="false" treeusebutton="use" cssclass="besLeftMenuGrid" oncellclick="divMenu_grdMenu_oncellclick">
                 <Formats>
                   <Format id="default">
                     <Columns>

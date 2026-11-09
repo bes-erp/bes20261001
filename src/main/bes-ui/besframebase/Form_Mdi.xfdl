@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="Form_Mdi" width="1280" height="30" titletext="업무 탭 영역" cssclass="besMdiForm" scrollbartype="none" onload="Form_Mdi_onload">
+  <Form id="Form_Mdi" width="1080" height="30" titletext="업무 탭 영역" cssclass="besMdiForm" scrollbartype="none" onload="Form_Mdi_onload">
     <Layouts>
-      <Layout width="1280" height="30" screenid="Desktop_screen">
+      <Layout width="1080" height="30" screenid="Desktop_screen">
         <Button id="btn_home" taborder="0" text="⌂" left="0" top="0" width="42" height="30" cssclass="besMdiHome" cursor="pointer" onclick="btn_home_onclick"/>
       </Layout>
     </Layouts>
@@ -14,13 +14,15 @@
  * 작성일          : 2026-11-05
  *
  * 화면            : 업무 탭 영역
- * 설명            : 업무 화면 탭 생성, 선택, 닫기 및 화면 컨테이너 연동
+ * 설명            : FrameSet 기반 업무 탭 생성, 선택, 닫기 및 전체 초기화
  *---------------------------------------------------------------------------------------
  * 변경일            변경자            변경내역
  *---------------------------------------------------------------------------------------
  * 2026-11-05        Built1            최초작성 및 동적 탭 기능 추가
  * 2026-11-05        Built1            홈 화면 이동 및 상단·왼쪽 메뉴 연동
  * 2026-11-06        Built1            전역 Dataset 및 프레임 ID 변경
+ * 2026-11-09        Built1            FrameSet 기반 업무 ChildFrame 관리
+ * 2026-11-09        Built1            로그아웃 시 전체 업무 탭 초기화 기능 추가
  ***************************************************************************************/
 
 
@@ -28,14 +30,12 @@
  * 1. FORM 변수 선언
  ***************************************************************************************/
 
-// fv_tabList : 현재 열려 있는 업무 탭 정보를 관리하는 배열
-// 각 항목에 메뉴 코드(menuCd), 메뉴명(menuNm), 화면 URL(formUrl)을 저장
-// 신규 탭 생성, 기존 탭 검색, 탭 닫기 시 사용
+// fv_tabList : 현재 열려 있는 업무 탭 관리 배열
+// menuCd, menuNm, formUrl, frameId 저장
 this.fv_tabList = [];
 
-// fv_activeMenuCd : 현재 화면에 표시 중인 업무 메뉴 코드
-// 빈 문자열("")이면 홈 화면이 선택된 상태
-// 업무 탭을 선택하면 해당 메뉴 코드로 변경
+// fv_activeMenuCd : 현재 선택한 업무 메뉴 코드
+// 빈 문자열이면 기본 홈 화면
 this.fv_activeMenuCd = "";
 
 
@@ -45,16 +45,11 @@ this.fv_activeMenuCd = "";
 
 /*
  * 기능 : 업무 탭 초기화
- * 설명 : 열린 업무 탭 목록과 현재 선택된 메뉴 코드를 초기화
+ * 설명 : 최초 로딩 시 탭 목록 및 선택 메뉴 초기화
  */
 this.fn_init = function(obj, e)
 {
-    // 기존 업무 탭 관리 목록 초기화
-    // [] : 데이터를 저장할 수 있는 빈 배열
     this.fv_tabList = [];
-
-    // 현재 선택된 메뉴 코드를 빈 문자열로 초기화
-    // 초기 상태에서는 홈 화면을 의미
     this.fv_activeMenuCd = "";
 };
 
@@ -79,389 +74,390 @@ this.fn_init = function(obj, e)
  ***************************************************************************************/
 
 /*
- * 기능 : 업무 화면 컨테이너 조회
- * 설명 : ADL에 정의된 WorkFrame에 접근하여
- *        Form_TabWork.xfdl의 Form 객체를 반환
+ * 기능 : 업무 컨텐츠 영역 조회
+ * 설명 : MDI, 홈 화면, 업무 FrameSet을 포함하는 VFrameSet 반환
  */
-this.fn_getWorkForm = function()
+this.fn_getContentFrameSet = function()
 {
-    // objApp : Nexacro 애플리케이션 객체
-    // 메인 프레임에 접근하기 위해 사용
     var objApp = nexacro.getApplication();
 
-    // objWorkFrame : 실제 업무 화면이 표시되는 WorkFrame 객체
-    // VFrameSetMain : 로그인 및 메인 업무 화면 구분
-    // VFrameSetWork : 로그인 후 표시되는 메인 업무 프레임
-    // HFrameSetWork : 왼쪽 메뉴 및 업무 화면을 구분하는 프레임
-    // WorkFrame : Form_TabWork.xfdl이 연결된 프레임
-    var objWorkFrame = objApp.mainframe.VFrameSetMain.VFrameSetWork.HFrameSetWork.WorkFrame;
+    return objApp.mainframe.VFrameSetMain.VFrameSetWork.HFrameSetWork.VFrameSetContent;
+};
 
-    // WorkFrame이 없거나 내부 Form이 로드되지 않았으면 null 반환
-    // null : 사용할 수 있는 객체가 없음을 나타내는 값
-    if (!objWorkFrame || !objWorkFrame.form) return null;
 
-    // WorkFrame 내부에 로드된 Form_TabWork의 Form 객체 반환
-    // 반환된 객체를 이용하여 업무 화면 생성, 선택, 삭제 함수 호출
-    return objWorkFrame.form;
+/*
+ * 기능 : 업무 FrameSet 조회
+ * 설명 : 동적으로 생성한 업무 ChildFrame의 부모 객체 반환
+ */
+this.fn_getWorkFrameSet = function()
+{
+    var objContent = this.fn_getContentFrameSet();
+
+    if (!objContent) return null;
+
+    return objContent.FrameSetWork;
+};
+
+
+/*
+ * 기능 : 업무 탭 정보 조회
+ * 설명 : 메뉴 코드에 해당하는 탭 정보 반환
+ */
+this.fn_getTabInfo = function(sMenuCd)
+{
+    for (var i = 0; i < this.fv_tabList.length; i++)
+    {
+        if (this.fv_tabList[i].menuCd == sMenuCd)
+        {
+            return this.fv_tabList[i];
+        }
+    }
+
+    return null;
 };
 
 
 /*
  * 기능 : 업무 탭 생성 및 화면 열기
- * 설명 : 메뉴 코드로 기존 탭 존재 여부를 확인
- *        기존 탭이 있으면 선택하고, 없으면 신규 업무 화면과 탭 생성
+ * 설명 : 동일한 메뉴가 열려 있으면 기존 화면 선택
+ *        신규 메뉴이면 ChildFrame을 생성하여 FrameSet에 등록
  */
 this.fn_openTab = function(sMenuCd, sMenuNm, sFormUrl)
 {
-    // sMenuCd : 실행할 업무 메뉴의 고유 코드
-    // sMenuNm : 업무 탭 버튼에 표시할 메뉴 이름
-    // sFormUrl : 실제 실행할 Nexacro 업무 화면 URL
-
-    // 메뉴 코드 또는 화면 URL이 없으면 업무 화면을 생성하지 않음
+    // 필수 메뉴정보 확인
     if (!sMenuCd || !sFormUrl) return;
 
-    // objWorkForm : Form_TabWork.xfdl의 Form 객체
-    // fn_getWorkForm을 통해 업무 화면 컨테이너 조회
-    var objWorkForm = this.fn_getWorkForm();
+    // 이미 열린 업무 탭이면 기존 화면 활성화
+    var objInfo = this.fn_getTabInfo(sMenuCd);
 
-    // 업무 화면 컨테이너가 없거나 fn_openPage 함수가 없으면 종료
-    // fn_openPage : Form_TabWork에 정의된 업무 화면 생성 함수
-    if (!objWorkForm || !objWorkForm.fn_openPage)
+    if (objInfo)
     {
-        this.alert("업무 화면 컨테이너를 찾을 수 없습니다.");
+        this.fn_selectTab(sMenuCd);
         return;
     }
 
-    // 현재 열려 있는 업무 탭 목록을 순서대로 확인
-    // fv_tabList.length : 열린 업무 탭 개수
-    // i : 현재 확인 중인 배열 인덱스
-    for (var i = 0; i < this.fv_tabList.length; i++)
+    // 업무 FrameSet 조회
+    var objFrameSet = this.fn_getWorkFrameSet();
+
+    if (!objFrameSet)
     {
-        // 배열에 저장된 메뉴 코드와 실행 요청한 메뉴 코드 비교
-        // 두 값이 같으면 해당 업무 화면이 이미 열려 있다는 의미
-        if (this.fv_tabList[i].menuCd == sMenuCd)
-        {
-            // fn_selectTab : 기존 업무 탭을 활성화하는 함수
-            // 동일한 업무 화면을 중복 생성하지 않고 기존 화면 표시
-            this.fn_selectTab(sMenuCd);
-            return;
-        }
+        this.alert("업무 FrameSet을 찾을 수 없습니다.");
+        return;
     }
 
-    // 기존 탭이 없으면 Form_TabWork에 신규 업무 화면 생성 요청
-    // 메뉴 코드, 메뉴명, 화면 URL을 전달하여 화면 컨테이너 구성
-    objWorkForm.fn_openPage(sMenuCd, sMenuNm, sFormUrl);
+    // 메뉴 코드로 ChildFrame ID 생성
+    var sFrameId = "Work_" + String(sMenuCd).replace(/[^a-zA-Z0-9_]/g, "_");
 
-    // push : 배열 마지막에 새로운 항목 추가
-    // 신규 업무 탭의 메뉴 코드, 메뉴명, 화면 URL을 객체로 저장
-    // 이후 탭 생성, 탭 선택, 탭 닫기에서 사용
-    this.fv_tabList.push({ menuCd: sMenuCd, menuNm: sMenuNm, formUrl: sFormUrl });
+    // 프레임 ID 중복 확인
+    if (objFrameSet[sFrameId])
+    {
+        this.alert("업무 프레임 ID가 중복됩니다.");
+        return;
+    }
 
-    // 신규 생성한 업무 탭 활성화
-    // 업무 화면을 표시하고 탭 버튼의 선택 CSS 갱신
+    // 신규 업무 ChildFrame 생성
+    var objChildFrame = new nexacro.ChildFrame();
+
+    objChildFrame.init(sFrameId, 0, 0, null, null, 0, 0);
+
+    // FrameSet에 신규 프레임 등록
+    objFrameSet.addChild(sFrameId, objChildFrame);
+
+    // 프레임 기본 속성 설정
+    objChildFrame.set_titletext(sMenuNm);
+    objChildFrame.set_showtitlebar(false);
+    objChildFrame.set_showstatusbar(false);
+    objChildFrame.set_formurl(sFormUrl);
+
+    // 신규 업무 화면 표시
+    objChildFrame.show();
+
+    // 열린 업무 탭 목록에 추가
+    this.fv_tabList.push({
+        menuCd  : sMenuCd,
+        menuNm  : sMenuNm,
+        formUrl : sFormUrl,
+        frameId : sFrameId
+    });
+
+    // 신규 업무 탭 선택
     this.fn_selectTab(sMenuCd);
 };
 
 
 /*
- * 기능 : 업무 탭 버튼 동적 생성
- * 설명 : fv_tabList에 저장된 업무 탭 개수만큼
- *        업무 탭 버튼과 닫기 버튼을 동적으로 생성
+ * 기능 : 업무 탭 선택
+ * 설명 : 홈 화면과 업무 FrameSet 표시 상태 전환
+ *        선택한 업무 프레임에 포커스 설정
+ */
+this.fn_selectTab = function(sMenuCd)
+{
+    var objContent  = this.fn_getContentFrameSet();
+    var objFrameSet = this.fn_getWorkFrameSet();
+
+    if (!objContent || !objFrameSet) return;
+
+    // 홈 화면 선택
+    if (!sMenuCd)
+    {
+        // MDI 30px, 홈 화면 표시, 업무 FrameSet 숨김
+        objContent.set_separatesize("30,*,0");
+
+        this.fv_activeMenuCd = "";
+
+        this.fn_createTabs();
+        return;
+    }
+
+    // 선택한 업무 탭 확인
+    var objInfo = this.fn_getTabInfo(sMenuCd);
+
+    if (!objInfo) return;
+
+    var objChildFrame = objFrameSet[objInfo.frameId];
+
+    if (!objChildFrame) return;
+
+    // MDI 30px, 홈 화면 숨김, 업무 FrameSet 표시
+    objContent.set_separatesize("30,0,*");
+
+    // 선택한 업무 프레임 활성화
+    objChildFrame.setFocus();
+
+    // 현재 활성 메뉴 코드 저장
+    this.fv_activeMenuCd = sMenuCd;
+
+    // 선택한 업무의 상단 및 왼쪽 메뉴 복원
+    this.fn_syncTopMenu(sMenuCd);
+
+    // 업무 탭 버튼 갱신
+    this.fn_createTabs();
+};
+
+
+/*
+ * 기능 : 상단 및 왼쪽 메뉴 복원
+ * 설명 : 3레벨 업무 메뉴의 상위 1레벨 메뉴를 찾아 선택
+ */
+this.fn_syncTopMenu = function(sMenuCd)
+{
+    var objApp = nexacro.getApplication();
+    var dsMenu = objApp.gds_menu;
+
+    if (!dsMenu) return;
+
+    var sParentCd  = "";
+    var sTopMenuCd = "";
+
+    // 업무 메뉴의 부모 코드 검색
+    for (var i = 0; i < dsMenu.rowcount; i++)
+    {
+        if (dsMenu.getColumn(i, "CHILD_MENU_CD") == sMenuCd)
+        {
+            sParentCd = dsMenu.getColumn(i, "PARENT_MENU_CD");
+            break;
+        }
+    }
+
+    // 부모 메뉴가 속한 최상위 메뉴 코드 검색
+    for (var j = 0; j < dsMenu.rowcount; j++)
+    {
+        if (dsMenu.getColumn(j, "CHILD_MENU_CD") == sParentCd)
+        {
+            sTopMenuCd = dsMenu.getColumn(j, "PARENT_MENU_CD");
+            break;
+        }
+    }
+
+    if (!sTopMenuCd) return;
+
+    // 상단 메뉴 프레임 조회
+    var objMenuFrame = objApp.mainframe.VFrameSetMain.VFrameSetWork.MenuFrame;
+
+    if (!objMenuFrame || !objMenuFrame.form || !objMenuFrame.form.fn_selectTopMenu) return;
+
+    // 상단 메뉴 선택 시 왼쪽 메뉴도 함께 갱신
+    objMenuFrame.form.fn_selectTopMenu(sTopMenuCd);
+};
+
+
+/*
+ * 기능 : 업무 탭 버튼 생성
+ * 설명 : 열린 업무 탭 목록을 기준으로 선택 및 닫기 버튼 구성
  */
 this.fn_createTabs = function()
 {
-    // 현재 Form에 등록된 컴포넌트를 마지막부터 확인
-    // components.length : 현재 Form의 컴포넌트 개수
-    // 뒤에서부터 제거하면 삭제 과정에서 인덱스가 변경되어도
-    // 아직 확인하지 않은 앞쪽 컴포넌트의 인덱스에 영향을 주지 않음
+    // 기존 동적 업무 탭 버튼 제거
     for (var i = this.components.length - 1; i >= 0; i--)
     {
-        // objComp : 현재 확인 중인 Form 컴포넌트
         var objComp = this.components[i];
 
-        // indexOf("btn_tab_") == 0 : 이름이 btn_tab_으로 시작하는지 확인
-        // indexOf("btn_close_") == 0 : 이름이 btn_close_로 시작하는지 확인
-        // 두 조건 중 하나라도 만족하면 동적으로 생성한 버튼
-        // 홈 버튼은 해당 접두어가 없으므로 제거하지 않음
-        if (objComp.name.indexOf("btn_tab_") == 0 || objComp.name.indexOf("btn_close_") == 0)
+        if (objComp.name.indexOf("btn_tab_") == 0 ||
+            objComp.name.indexOf("btn_close_") == 0)
         {
-            // removeChild : 현재 Form에서 컴포넌트 등록 해제
             this.removeChild(objComp.name);
-
-            // destroy : 등록 해제한 컴포넌트 객체 제거
             objComp.destroy();
         }
     }
 
-    // nLeft : 첫 번째 업무 탭 버튼의 시작 X좌표
-    // 홈 버튼 오른쪽부터 업무 탭을 배치하기 위해 42로 설정
-    var nLeft = 42;
-
-    // nTabWidth : 업무 탭 버튼 하나의 너비
-    // 모든 업무 탭을 155px 간격으로 배치
+    var nLeft     = 42;
     var nTabWidth = 155;
 
-    // 열린 업무 탭 개수만큼 탭 버튼과 닫기 버튼 생성
-    for (var i = 0; i < this.fv_tabList.length; i++)
+    // 열린 업무 탭 수만큼 버튼 생성
+    for (var j = 0; j < this.fv_tabList.length; j++)
     {
-        // objInfo : 현재 생성할 업무 탭의 정보 객체
-        // menuCd, menuNm, formUrl 속성을 가지고 있음
-        var objInfo = this.fv_tabList[i];
+        var objInfo = this.fv_tabList[j];
 
-        // sTabId : 업무 탭 버튼의 고유 ID
-        // 예 : btn_tab_0, btn_tab_1, btn_tab_2
-        var sTabId = "btn_tab_" + i;
+        // 업무 탭 선택 버튼
+        var sTabId = "btn_tab_" + j;
 
-        // objTab : 동적으로 생성한 Nexacro Button 객체
-        // sTabId : 버튼 ID
-        // nLeft : 버튼의 왼쪽 위치
-        // 0 : 버튼의 위쪽 위치
-        // nTabWidth : 버튼 너비
-        // 30 : 버튼 높이
-        // this : 버튼을 생성할 부모 Form
-        var objTab = new nexacro.Button(sTabId, nLeft, 0, nTabWidth, 30, null, null, null, null, null, null, this);
+        var objTab = new nexacro.Button(
+            sTabId, nLeft, 0, nTabWidth, 30,
+            null, null, null, null, null, null, this
+        );
 
-        // addChild : 생성한 버튼을 현재 Form의 자식 컴포넌트로 등록
         this.addChild(sTabId, objTab);
 
-        // set_text : 버튼에 표시할 텍스트 설정
-        // DB에서 조회한 업무 메뉴명을 탭 이름으로 표시
         objTab.set_text(objInfo.menuNm);
-
-        // set_cssclass : 버튼에 적용할 CSS 클래스 설정
-        // 현재 활성 메뉴이면 선택 스타일, 아니면 기본 스타일 적용
-        objTab.set_cssclass(objInfo.menuCd == this.fv_activeMenuCd ? "besMdiTabSelected" : "besMdiTab");
-
+        objTab.set_cssclass(
+            objInfo.menuCd == this.fv_activeMenuCd
+                ? "besMdiTabSelected"
+                : "besMdiTab"
+        );
         objTab.set_cursor("pointer");
-
-        // 동적 버튼에 menuCd 속성으로 업무 메뉴 코드 저장
-        // 클릭 이벤트에서 어떤 업무 탭인지 확인하기 위해 사용
         objTab.menuCd = objInfo.menuCd;
 
-        // addEventHandler : 동적으로 생성한 버튼에 이벤트 연결
-        // onclick : 버튼 클릭 이벤트
-        // fn_tab_onclick : 클릭 시 실행할 이벤트 함수
-        // this : 이벤트 함수가 실행될 Form 객체
         objTab.addEventHandler("onclick", this.fn_tab_onclick, this);
-
-        // 생성한 업무 탭 버튼을 화면에 표시
         objTab.show();
 
-        // sCloseId : 업무 탭 닫기 버튼의 고유 ID
-        // 예 : btn_close_0, btn_close_1
-        var sCloseId = "btn_close_" + i;
+        // 업무 탭 닫기 버튼
+        var sCloseId = "btn_close_" + j;
 
-        // objClose : 업무 탭 오른쪽에 표시할 닫기 버튼
-        // nLeft + nTabWidth - 28 : 현재 탭 오른쪽 안쪽 위치
-        // 4 : 버튼의 위쪽 위치
-        // 22, 22 : 버튼 너비와 높이
-        var objClose = new nexacro.Button(sCloseId, nLeft + nTabWidth - 28, 4, 22, 22, null, null, null, null, null, null, this);
+        var objClose = new nexacro.Button(
+            sCloseId, nLeft + nTabWidth - 28, 4, 22, 22,
+            null, null, null, null, null, null, this
+        );
 
-        // 닫기 버튼을 현재 Form에 등록
         this.addChild(sCloseId, objClose);
 
-        // 닫기 버튼에 × 문자 표시
         objClose.set_text("×");
-
-        // 닫기 버튼 전용 CSS 클래스 적용
         objClose.set_cssclass("besMdiTabClose");
-
-        // 닫기 버튼의 마우스 커서를 포인터로 변경
         objClose.set_cursor("pointer");
-
-        // 닫기 버튼에도 해당 업무 메뉴 코드 저장
-        // 클릭 시 어떤 업무 탭을 닫아야 하는지 확인
         objClose.menuCd = objInfo.menuCd;
 
-        // 닫기 버튼 클릭 이벤트 연결
-        // 클릭하면 fn_close_onclick 함수 실행
         objClose.addEventHandler("onclick", this.fn_close_onclick, this);
-
-        // 닫기 버튼을 화면에 표시
         objClose.show();
 
-        // 다음 업무 탭의 시작 X좌표 계산
-        // 현재 위치에 탭 너비 155px을 더하여 오른쪽에 이어서 배치
+        // 다음 탭 위치
         nLeft += nTabWidth;
     }
 };
 
 
 /*
- * 기능 : 선택한 업무 탭 활성화 및 상단·왼쪽 메뉴 연동
- * 설명 : 선택한 메뉴의 업무 화면을 표시하고
- *        해당 메뉴의 최상위 메뉴를 찾아 상단·왼쪽 메뉴 선택 상태 갱신
- */
-this.fn_selectTab = function(sMenuCd)
-{
-    // sMenuCd : 활성화할 업무 메뉴 코드
-    // 빈 문자열이면 업무 화면 대신 홈 화면 표시
-
-    // objApp : Nexacro 애플리케이션 객체
-    // 전역 메뉴 Dataset과 상단 메뉴 프레임에 접근하기 위해 사용
-    var objApp = nexacro.getApplication();
-
-    // objWorkForm : 실제 업무 화면을 관리하는 Form_TabWork 객체
-    var objWorkForm = this.fn_getWorkForm();
-
-    // 업무 화면 컨테이너가 없거나 화면 선택 함수가 없으면 종료
-    if (!objWorkForm || !objWorkForm.fn_selectPage) return;
-
-    // 현재 활성화된 업무 메뉴 코드를 Form 변수에 저장
-    // 탭 버튼 선택 CSS와 현재 업무 화면 구분에 사용
-    this.fv_activeMenuCd = sMenuCd;
-
-    // fn_selectPage : Form_TabWork의 업무 화면 선택 함수
-    // 메뉴 코드가 있으면 해당 업무 화면 표시
-    // 빈 문자열이면 홈 화면 표시
-    objWorkForm.fn_selectPage(sMenuCd);
-
-    // 업무 메뉴 코드가 있는 경우에만 상단·왼쪽 메뉴 연동
-    // 홈 화면 선택 시에는 메뉴 계층 검색을 수행하지 않음
-    if (sMenuCd)
-    {
-        // dsMenu : 전체 메뉴정보가 저장된 전역 Dataset gds_menu
-        var dsMenu = objApp.gds_menu;
-
-        // sParentCd : 현재 업무 메뉴의 2레벨 상위 메뉴 코드
-        var sParentCd = "";
-
-        // sTopMenuCd : 2레벨 메뉴의 상위에 있는 1레벨 메뉴 코드
-        var sTopMenuCd = "";
-
-        // 전역 메뉴 Dataset이 존재할 때만 메뉴 계층 조회
-        if (dsMenu)
-        {
-            // 전체 메뉴정보에서 현재 선택한 업무 메뉴 검색
-            for (var i = 0; i < dsMenu.rowcount; i++)
-            {
-                // CHILD_MENU_CD가 현재 선택한 업무 메뉴 코드와 같은지 확인
-                if (dsMenu.getColumn(i, "CHILD_MENU_CD") == sMenuCd)
-                {
-                    // 현재 업무 메뉴의 상위 2레벨 메뉴 코드 저장
-                    sParentCd = dsMenu.getColumn(i, "PARENT_MENU_CD");
-
-                    // 해당 업무 메뉴를 찾았으므로 반복문 종료
-                    break;
-                }
-            }
-
-            // 전체 메뉴정보에서 2레벨 상위 메뉴 검색
-            for (var i = 0; i < dsMenu.rowcount; i++)
-            {
-                // CHILD_MENU_CD가 앞에서 조회한 부모 메뉴 코드와 같은지 확인
-                if (dsMenu.getColumn(i, "CHILD_MENU_CD") == sParentCd)
-                {
-                    // 2레벨 메뉴의 부모인 1레벨 최상위 메뉴 코드 저장
-                    sTopMenuCd = dsMenu.getColumn(i, "PARENT_MENU_CD");
-
-                    // 해당 메뉴를 찾았으므로 반복문 종료
-                    break;
-                }
-            }
-
-            // 1레벨 최상위 메뉴 코드가 확인되면 상단 메뉴 선택 상태 갱신
-            if (sTopMenuCd)
-            {
-                // objMenuFrame : Form_Menu.xfdl이 연결된 상단 메뉴 프레임
-                // 변경된 VFrameSetWork 경로를 사용
-                var objMenuFrame = objApp.mainframe.VFrameSetMain.VFrameSetWork.MenuFrame;
-
-                // 상단 메뉴 프레임과 fn_selectTopMenu 함수가 존재하는지 확인
-                if (objMenuFrame && objMenuFrame.form && objMenuFrame.form.fn_selectTopMenu)
-                {
-                    // Form_Menu의 최상위 메뉴 선택 함수 호출
-                    // 상단 메뉴 버튼 CSS 변경
-                    // Form_Menu에서 Form_Left의 fn_selectTopMenu도 호출하여
-                    // 선택한 업무 화면에 맞게 왼쪽 메뉴를 갱신
-                    objMenuFrame.form.fn_selectTopMenu(sTopMenuCd);
-                }
-            }
-        }
-    }
-
-    // 현재 활성 메뉴 코드에 맞게 업무 탭 버튼 다시 생성
-    // 선택한 탭에는 선택 CSS, 나머지 탭에는 기본 CSS 적용
-    this.fn_createTabs();
-};
-
-
-/*
  * 기능 : 업무 탭 닫기
- * 설명 : 선택한 업무 탭과 해당 업무 화면을 제거
- *        현재 활성 탭을 닫으면 다음 탭 또는 홈 화면으로 이동
+ * 설명 : 해당 ChildFrame 제거 후 다음 업무 탭 또는 홈 선택
  */
 this.fn_closeTab = function(sMenuCd)
 {
-    // sMenuCd : 닫을 업무 탭의 메뉴 코드
-
-    // nCloseIndex : 닫을 업무 탭의 배열 인덱스
-    // -1은 아직 해당 탭을 찾지 못했다는 의미
     var nCloseIndex = -1;
 
-    // 현재 열려 있는 업무 탭 목록에서 닫을 메뉴 검색
+    // 닫을 탭 검색
     for (var i = 0; i < this.fv_tabList.length; i++)
     {
-        // 배열에 저장된 메뉴 코드와 닫기 요청한 메뉴 코드 비교
         if (this.fv_tabList[i].menuCd == sMenuCd)
         {
-            // 닫을 탭의 배열 인덱스 저장
             nCloseIndex = i;
             break;
         }
     }
 
-    // 열린 탭 목록에 해당 메뉴가 없으면 종료
     if (nCloseIndex < 0) return;
 
-    // bActive : 닫을 탭이 현재 활성화된 탭인지 확인하는 Boolean 변수
-    // true이면 현재 표시 중인 탭, false이면 비활성 탭
     var bActive = (this.fv_activeMenuCd == sMenuCd);
+    var objInfo = this.fv_tabList[nCloseIndex];
 
-    // objWorkForm : 실제 업무 화면을 관리하는 Form_TabWork 객체
-    var objWorkForm = this.fn_getWorkForm();
+    var objFrameSet = this.fn_getWorkFrameSet();
 
-    // 업무 화면 컨테이너가 존재하면 해당 업무 화면 제거 요청
-    if (objWorkForm)
+    if (!objFrameSet) return;
+
+    // 해당 업무 ChildFrame 제거
+    var objChildFrame = objFrameSet[objInfo.frameId];
+
+    if (objChildFrame)
     {
-        // fn_closePage : Form_TabWork의 업무 화면 삭제 함수
-        // 해당 메뉴에 연결된 업무 화면 Div 제거
-        objWorkForm.fn_closePage(sMenuCd);
+        objFrameSet.removeChild(objInfo.frameId);
+        objChildFrame.destroy();
     }
 
-    // splice(시작인덱스, 삭제개수) : 배열에서 지정한 항목 삭제
-    // nCloseIndex 위치의 업무 탭 정보 1개 제거
+    // 탭 목록에서 제거
     this.fv_tabList.splice(nCloseIndex, 1);
 
-    // 현재 활성화된 업무 탭을 닫은 경우
     if (bActive)
     {
-        // sNextMenuCd : 닫은 후 활성화할 다음 업무 메뉴 코드
-        // 기본값은 빈 문자열이며, 열려 있는 탭이 없으면 홈 화면 선택
         var sNextMenuCd = "";
 
-        // 다른 업무 탭이 남아 있으면 다음에 선택할 탭 결정
+        // 남은 업무 탭이 있으면 다음 탭 선택
         if (this.fv_tabList.length > 0)
         {
-            // Math.min : 전달한 숫자 중 작은 값을 반환
-            // 닫힌 탭의 위치에 다음 탭이 있으면 그 위치를 선택
-            // 마지막 탭을 닫았다면 남은 마지막 탭을 선택
             var nNextIndex = Math.min(nCloseIndex, this.fv_tabList.length - 1);
 
-            // 다음에 활성화할 업무 메뉴 코드 조회
             sNextMenuCd = this.fv_tabList[nNextIndex].menuCd;
         }
 
-        // 다음 업무 탭이 있으면 해당 화면 표시
-        // 남은 업무 탭이 없으면 홈 화면으로 이동
         this.fn_selectTab(sNextMenuCd);
     }
     else
     {
-        // 현재 선택되지 않은 업무 탭을 닫은 경우
-        // 현재 업무 화면은 유지하고 탭 버튼 목록만 다시 생성
         this.fn_createTabs();
     }
+};
+
+
+/*
+ * 기능 : 전체 업무 탭 초기화
+ * 설명 : 로그아웃 시 생성된 업무 ChildFrame을 모두 제거
+ *        탭 관리 배열과 선택 메뉴를 초기화하고 홈 화면 복원
+ */
+this.fn_closeAllTabs = function()
+{
+    // 업무 FrameSet 및 컨텐츠 영역 조회
+    var objFrameSet = this.fn_getWorkFrameSet();
+    var objContent  = this.fn_getContentFrameSet();
+
+    // 업무 FrameSet을 찾지 못하면 초기화 실패
+    if (!objFrameSet || !objContent) return false;
+
+    // 모든 업무 ChildFrame을 역순으로 제거
+    for (var i = this.fv_tabList.length - 1; i >= 0; i--)
+    {
+        // 현재 제거할 업무 탭 정보
+        var objInfo = this.fv_tabList[i];
+
+        // 해당 메뉴의 업무 ChildFrame 조회
+        var objChildFrame = objFrameSet[objInfo.frameId];
+
+        // 실제 업무 프레임 제거
+        if (objChildFrame)
+        {
+            objFrameSet.removeChild(objInfo.frameId);
+            objChildFrame.destroy();
+        }
+    }
+
+    // 전체 업무 탭 목록 초기화
+    this.fv_tabList = [];
+
+    // 현재 선택된 업무 메뉴 초기화
+    this.fv_activeMenuCd = "";
+
+    // MDI 버튼 목록 초기화
+    this.fn_createTabs();
+
+    // 기존 Form_Work 홈 화면 표시
+    objContent.set_separatesize("30,*,0");
+
+    return true;
 };
 
 
@@ -471,47 +467,38 @@ this.fn_closeTab = function(sMenuCd)
 
 /*
  * 기능 : 업무 탭 영역 로딩 이벤트
- * 설명 : Form_Mdi 최초 로드 시 탭 관리 변수 초기화
  */
 this.Form_Mdi_onload = function(obj, e)
 {
-    // fn_init : 열린 탭 목록과 활성 메뉴 코드 초기화
     this.fn_init(obj, e);
 };
 
 
 /*
- * 기능 : 홈 버튼 클릭 시 홈 화면 이동
- * 설명 : 현재 열린 업무 탭을 삭제하지 않고 홈 화면만 표시
+ * 기능 : 홈 버튼 클릭
  */
 this.btn_home_onclick = function(obj, e)
 {
-    // 빈 문자열을 전달하면 Form_TabWork에서 홈 화면 표시
     this.fn_selectTab("");
 };
 
 
 /*
- * 기능 : 업무 탭 클릭 이벤트
- * 설명 : 클릭한 업무 탭에 연결된 화면을 활성화
+ * 기능 : 업무 탭 선택 버튼 클릭
  */
 this.fn_tab_onclick = function(obj, e)
 {
-    // obj : 클릭 이벤트가 발생한 업무 탭 버튼
-    // obj.menuCd : 버튼 생성 시 저장한 업무 메뉴 코드
     this.fn_selectTab(obj.menuCd);
 };
 
 
 /*
- * 기능 : 업무 탭 닫기 이벤트
- * 설명 : 클릭한 업무 탭의 화면과 탭 버튼 제거
+ * 기능 : 업무 탭 닫기 버튼 클릭
  */
 this.fn_close_onclick = function(obj, e)
 {
-    // obj : 클릭 이벤트가 발생한 닫기 버튼
-    // obj.menuCd : 닫기 버튼에 저장된 업무 메뉴 코드
     this.fn_closeTab(obj.menuCd);
-};]]></Script>
+};
+]]></Script>
   </Form>
 </FDL>

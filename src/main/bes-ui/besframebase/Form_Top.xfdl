@@ -19,16 +19,14 @@
  * 작성자          : Built1
  * 작성일          : 2026-11-03
  *
- * 화면            : BES 공통 상단 영역
- * 설명            : 시스템명, 사용자 환영 문구, 패스워드 변경 및 로그아웃
+ * 화면            : 공통 상단 영역
+ * 설명            : BES 로고, 로그인 사용자 정보 및 로그아웃 관리
  *---------------------------------------------------------------------------------------
  * 변경일            변경자            변경내역
  *---------------------------------------------------------------------------------------
  * 2026-11-03        Built1            공통 상단 화면 구성
- * 2026-11-04        Built1            상단 디자인 및 사용자 환영 문구 개선
- * 2026-11-04        Built1            패스워드 변경 버튼 추가
- * 2026-11-05        Built1            BES 로고 클릭 시 MDI 홈 화면 연동
- * 2026-11-06        Built1            메인 업무 프레임 ID 변경
+ * 2026-11-09        Built1            IFC 프레임 구조에 맞춰 홈 이동 경로 변경
+ * 2026-11-09        Built1            로그아웃 시 전체 업무 탭 초기화 연동
  ***************************************************************************************/
 
 
@@ -42,20 +40,79 @@
  ***************************************************************************************/
 
 /*
- * 기능 : 공통 상단 화면 최초 로딩
- * 설명 : 로그인 사용자 정보를 조회하여 상단 환영 문구 표시
+ * 기능 : 상단 영역 초기화
+ * 설명 : 로그인 사용자 정보 표시 상태 설정
  */
-this.Form_Top_onload = function(obj, e)
+this.fn_init = function(obj, e)
 {
-    // fn_setUserInfo : 전역 변수 gvUserId를 조회하여
-    // 현재 로그인한 사용자의 환영 문구를 설정하는 함수
-    this.fn_setUserInfo();
+    var objApp = nexacro.getApplication();
+
+    // 로그인 사용자 정보가 있으면 표시
+    if (objApp.gvUserId)
+    {
+        this.fn_setUserInfo(objApp.gvUserId);
+    }
 };
 
 
 /***************************************************************************************
  * 3. 공통 버튼
  ***************************************************************************************/
+
+/*
+ * 기능 : 로그아웃
+ * 설명 : 업무 탭과 ChildFrame을 제거한 후 로그인 화면으로 이동
+ */
+this.fn_logout = function()
+{
+    var objApp = nexacro.getApplication();
+
+    // objFrameSet : 로그인 및 업무 영역을 구분하는 최상위 프레임
+    var objFrameSet = objApp.mainframe.VFrameSetMain;
+
+    if (!objFrameSet)
+    {
+        this.alert("메인 프레임을 찾을 수 없습니다.");
+        return;
+    }
+
+    // objMdiFrame : IFC형 업무 탭 관리 프레임
+    var objMdiFrame = objFrameSet.VFrameSetWork.HFrameSetWork.VFrameSetContent.MdiFrame;
+
+    // 업무 탭 관리 함수 존재 여부 확인
+    if (!objMdiFrame || !objMdiFrame.form || !objMdiFrame.form.fn_closeAllTabs)
+    {
+        this.alert("업무 탭 초기화 함수를 찾을 수 없습니다.");
+        return;
+    }
+
+    // 로그아웃 전 열린 업무 ChildFrame 및 탭 전체 제거
+    if (!objMdiFrame.form.fn_closeAllTabs())
+    {
+        this.alert("업무 화면 초기화에 실패했습니다.");
+        return;
+    }
+
+    // 로그인 화면 입력값 및 메시지 초기화
+    var objLoginFrame = objFrameSet.LoginFrame;
+
+    if (objLoginFrame && objLoginFrame.form && objLoginFrame.form.fn_resetLogin)
+    {
+        objLoginFrame.form.fn_resetLogin();
+    }
+
+    // 로그인 사용자 ID 초기화
+    objApp.gvUserId = "";
+
+    // 상단 사용자 표시 정보 초기화
+    this.fn_setUserInfo("");
+
+    // 로그인 프레임 표시 및 업무 영역 숨김
+    objFrameSet.set_separatesize("*,0");
+
+    // 로그아웃 완료 안내
+    this.alert("로그아웃되었습니다.");
+};
 
 
 /***************************************************************************************
@@ -73,73 +130,23 @@ this.Form_Top_onload = function(obj, e)
  ***************************************************************************************/
 
 /*
- * 기능 : 로그아웃 처리 및 로그인 화면 이동
- * 설명 : 로그인 정보 초기화 후 메인 업무 화면을 숨기고 로그인 화면 표시
+ * 기능 : 로그인 사용자 정보 표시
+ * 설명 : 사용자 ID 또는 사용자명을 상단 영역에 반영
  */
-this.fn_logout = function()
+this.fn_setUserInfo = function(sUserName)
 {
-    // objApp : Nexacro 애플리케이션 객체
-    // 전역 로그인 사용자 정보 및 메인 프레임에 접근하기 위해 사용
-    var objApp = nexacro.getApplication();
+    // 기존 상단 사용자 표시 컴포넌트
+    if (!this.sta_UserName) return;
 
-    // objFrameSet : 로그인 화면과 메인 업무 화면을 관리하는 VFrameSetMain
-    // 로그아웃 시 메인 업무 화면을 숨기고 로그인 화면을 표시하기 위해 사용
-    var objFrameSet = objApp.mainframe.VFrameSetMain;
-
-    // 메인 프레임이 없으면 화면 전환이 불가능하므로 처리 중단
-    if (!objFrameSet)
+    // 사용자 정보가 없으면 안내 문구 초기화
+    if (!sUserName)
     {
-        this.alert("메인 프레임을 찾을 수 없습니다.");
+        this.sta_UserName.set_text("");
         return;
     }
 
-    // objLoginFrame : VFrameSetMain 내부의 로그인 화면 프레임
-    // 로그인 화면에 정의된 초기화 함수를 호출하기 위해 사용
-    var objLoginFrame = objFrameSet.LoginFrame;
-
-    // 로그인 프레임과 내부 Form 및 fn_resetLogin 함수 존재 여부 확인
-    if (objLoginFrame && objLoginFrame.form && objLoginFrame.form.fn_resetLogin)
-    {
-        // fn_resetLogin : 로그인 화면의 인증 결과 및 메뉴 Dataset 등을
-        // 초기화하는 함수 (실제 초기화 범위는 로그인 화면 소스에서 확인)
-        objLoginFrame.form.fn_resetLogin();
-    }
-
-    // gvUserId : 애플리케이션에 저장된 로그인 사용자 ID
-    // 로그아웃 시 사용자 ID 초기화
-    objApp.gvUserId = "";
-
-    // sta_UserName : 상단 사용자 환영 문구 Static
-    // 로그아웃 시 기존 사용자 환영 문구 제거
-    this.sta_UserName.set_text("");
-
-    // VFrameSetMain의 화면 영역 크기 변경
-    // "*,0" : 첫 번째 영역(로그인)은 표시하고 두 번째 영역(메인)은 숨김
-    objFrameSet.set_separatesize("*,0");
-
-    // 로그아웃 완료 메시지 표시
-    this.alert("로그아웃 되었습니다.");
-};
-
-
-/*
- * 기능 : 로그인 사용자 환영 문구 설정
- * 설명 : 전역 변수 gvUserId를 조회하여 사용자 ID와 환영 문구 표시
- */
-this.fn_setUserInfo = function()
-{
-    // objApp : Nexacro 애플리케이션 객체
-    // 로그인 성공 시 저장한 전역 변수 gvUserId를 조회하기 위해 사용
-    var objApp = nexacro.getApplication();
-
-    // sUserId : 현재 로그인한 사용자 ID
-    // 로그인하지 않았거나 로그아웃한 상태에서는 빈 문자열 사용
-    var sUserId = objApp.gvUserId || "";
-
-    // sta_UserName : 상단 사용자 환영 문구를 표시하는 Static 컴포넌트
-    // 사용자 ID가 존재하면 "사용자ID님 환영합니다." 표시
-    // 사용자 ID가 없으면 기존 환영 문구 제거
-    this.sta_UserName.set_text(sUserId ? sUserId + "님 환영합니다." : "");
+    // 로그인 사용자 정보 표시
+    this.sta_UserName.set_text(sUserName);
 };
 
 
@@ -148,53 +155,43 @@ this.fn_setUserInfo = function()
  ***************************************************************************************/
 
 /*
- * 기능 : 로그아웃 버튼 클릭
- * 설명 : 로그아웃 처리 함수를 호출하여 로그인 화면으로 이동
+ * 기능 : 상단 영역 로딩 이벤트
  */
-this.btn_logout_onclick = function(obj, e)
+this.Form_Top_onload = function(obj, e)
 {
-    // fn_logout : 로그인 정보 초기화 및 로그인 화면 전환 처리 함수
-    this.fn_logout();
+    this.fn_init(obj, e);
 };
 
 
 /*
- * 기능 : 패스워드 변경 버튼 클릭
- * 설명 : 패스워드 변경 기능 구현 전 안내 메시지 표시
- */
-this.btn_changePw_onclick = function(obj, e)
-{
-    // 패스워드 변경 기능은 아직 구현되지 않아 안내 메시지만 표시
-    this.alert("패스워드 변경 기능 개발 예정");
-};
-
-
-/*
- * 기능 : BES 로고 클릭 시 홈 화면 이동
- * 설명 : MDI 프레임의 fn_selectTab 함수를 호출하여 홈 화면 표시
+ * 기능 : BES 로고 클릭
+ * 설명 : 업무 탭은 유지하고 기존 Form_Work 홈 화면 표시
  */
 this.sta_Brand_onclick = function(obj, e)
 {
-    // objApp : Nexacro 애플리케이션 객체
-    // 메인 프레임에 접근하기 위해 사용
     var objApp = nexacro.getApplication();
 
-    // objMdiFrame : VFrameSetWork 내부의 MDI 업무 탭 관리 프레임
-    // mainframe → VFrameSetMain → VFrameSetWork → MdiFrame
-    // 업무 탭 선택 및 홈 화면 전환 함수를 호출하기 위해 사용
-    var objMdiFrame = objApp.mainframe.VFrameSetMain.VFrameSetWork.MdiFrame;
+    // IFC형 MDI 프레임 접근
+    var objMdiFrame = objApp.mainframe.VFrameSetMain.VFrameSetWork.HFrameSetWork.VFrameSetContent.MdiFrame;
 
-    // MDI 프레임, 내부 Form, fn_selectTab 함수 존재 여부 확인
     if (!objMdiFrame || !objMdiFrame.form || !objMdiFrame.form.fn_selectTab)
     {
         this.alert("MdiFrame을 찾을 수 없습니다.");
         return;
     }
 
-    // fn_selectTab : Form_Mdi에 정의된 업무 탭 선택 함수
-    // 빈 문자열("")을 전달하면 Form_TabWork의 fn_selectPage("") 호출
-    // 기존 업무 화면은 삭제하지 않고 숨긴 후 홈 화면 Div 표시
+    // 기본 홈 화면 선택
     objMdiFrame.form.fn_selectTab("");
+};
+
+
+/*
+ * 기능 : 로그아웃 버튼 클릭
+ * 설명 : 공통 로그아웃 함수 호출
+ */
+this.btn_logout_onclick = function(obj, e)
+{
+    this.fn_logout();
 };
 ]]></Script>
   </Form>
