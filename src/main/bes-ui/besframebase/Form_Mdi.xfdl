@@ -117,10 +117,12 @@ this.fn_getTabInfo = function(sMenuCd)
 };
 
 
+
 /*
  * 기능 : 업무 탭 생성 및 화면 열기
  * 설명 : 동일한 메뉴가 열려 있으면 기존 화면 선택
- *        신규 메뉴이면 ChildFrame을 생성하여 FrameSet에 등록
+ *        신규 메뉴이면 업무 영역을 먼저 확보한 후
+ *        ChildFrame을 생성하여 FrameSet에 등록
  */
 this.fn_openTab = function(sMenuCd, sMenuNm, sFormUrl)
 {
@@ -155,6 +157,12 @@ this.fn_openTab = function(sMenuCd, sMenuNm, sFormUrl)
         return;
     }
 
+    // 업무 화면을 먼저 표시하여 FrameSetWork 높이 확보
+    var objApp = nexacro.getApplication();
+    var objContent = objApp.mainframe.VFrameSetMain.VFrameSetWork.HFrameSetWork.VFrameSetContent;
+
+    objContent.set_separatesize("30,0,*");
+
     // 신규 업무 ChildFrame 생성
     var objChildFrame = new nexacro.ChildFrame();
 
@@ -173,17 +181,11 @@ this.fn_openTab = function(sMenuCd, sMenuNm, sFormUrl)
     objChildFrame.show();
 
     // 열린 업무 탭 목록에 추가
-    this.fv_tabList.push({
-        menuCd  : sMenuCd,
-        menuNm  : sMenuNm,
-        formUrl : sFormUrl,
-        frameId : sFrameId
-    });
+    this.fv_tabList.push({ menuCd: sMenuCd, menuNm: sMenuNm, formUrl: sFormUrl, frameId: sFrameId });
 
     // 신규 업무 탭 선택
     this.fn_selectTab(sMenuCd);
 };
-
 
 /*
  * 기능 : 업무 탭 선택
