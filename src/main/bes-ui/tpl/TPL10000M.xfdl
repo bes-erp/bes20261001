@@ -177,8 +177,8 @@ this.fn_init = function (obj:Form, e:nexacro.LoadEventInfo)
 	this.gfn_code(this, "ds_cbo_message_type_cd" , "MESSAGE_TYPE_CD" , "", "Y");		// 메시지유형(전체포함)
 	
 	// 그리드
-    this.gfn_code(this, "ds_grd_message_class_cd", "MESSAGE_CLASS_CD", "", "N"); 		// 메시지분류
-	this.gfn_code(this, "ds_grd_message_type_cd" , "MESSAGE_TYPE_CD" , "", "N"); 		// 메시지유형
+    this.gfn_code(this, "ds_grd_message_class_cd", "MESSAGE_CLASS_CD", "", "S"); 		// 메시지분류(선택포함)
+	this.gfn_code(this, "ds_grd_message_type_cd" , "MESSAGE_TYPE_CD" , "", "S"); 		// 메시지유형(선택포함)
 };
 
 
@@ -266,15 +266,16 @@ this.fn_print = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
  */
 this.fn_add_row = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	var nRow = this.ds_message.insertRow(0);
+	this.ds_message.insertRow(0);
+	//var nRow = 
 
-    this.ds_message.setColumn(nRow, "select_yn"       , "N");
-    this.ds_message.setColumn(nRow, "message_class_cd", "NM");
-    this.ds_message.setColumn(nRow, "message_type_cd" , "A");
+    //this.ds_message.setColumn(nRow, "select_yn"       , "N");
+    //this.ds_message.setColumn(nRow, "message_class_cd", "NM");
+    //this.ds_message.setColumn(nRow, "message_type_cd" , "A");
 
-    this.ds_message.set_rowposition(nRow);
+    //this.ds_message.set_rowposition(nRow);
 
-    this.fn_setMessageCount();
+    //this.fn_setMessageCount();
 };
 
 

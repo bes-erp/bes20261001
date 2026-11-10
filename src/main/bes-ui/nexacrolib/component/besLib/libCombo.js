@@ -15,7 +15,7 @@
  * @param           {sComboDataSetId    : String                }   콤보데이터셋ID    : ds_cbo_repeat_cd
  * @param           {sCodeType          : String                }   코드유형          : REPEAT_TYPE_CD
  * @param           {sAactiveType       : String                }   활성여부코드      : Y(유효한데이터), N(유효하지않은데이터), ""(전체)
- * @param           {sAddAllRow         : String                }   전체로우추가      : Y(전체추가), N(전체추가하지않음)
+ * @param           {sAddAllRow         : String                }   전체로우추가      : Y(전체추가), S(선택추가), N(실데이터)
  */
 pForm.gfn_code = function(objForm, sComboDataSetId, sCodeType, sAactiveType, sAddAllRow)
 {

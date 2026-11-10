@@ -22,6 +22,16 @@
 				  from dual
 				union all
 				</if>
+				<if test='add_all_row =="S"'>
+				select #{code_type}                                                 as code_type
+				      ,''                                                           as code
+				      ,'선택'         	                                            as code_nm
+				      ,to_date('1900-01-01', 'yyyy-mm-dd')                          as start_date
+				      ,to_date('9999-12-31', 'yyyy-mm-dd')                          as end_date
+				      ,0                                                            as sort_order
+				  from dual
+				union all
+				</if>
 				
 				select cc.code_type                                                 as code_type
 				      ,cc.code                                                      as code     
