@@ -21,15 +21,15 @@
         </ColumnInfo>
         <Rows>
           <Row>
-            <Col id="LANG_CD">ko-KR</Col>
+            <Col id="LANG_CD">KO</Col>
             <Col id="LANG_NM">한국어(KOR)</Col>
           </Row>
           <Row>
-            <Col id="LANG_CD">en-US</Col>
+            <Col id="LANG_CD">EN</Col>
             <Col id="LANG_NM">English(ENG)</Col>
           </Row>
           <Row>
-            <Col id="LANG_CD">zh-CN</Col>
+            <Col id="LANG_CD">ZH</Col>
             <Col id="LANG_NM">中文(CHN)</Col>
           </Row>
         </Rows>
@@ -97,7 +97,7 @@ this.fv_savePwKey   = "BES_DEV_SAVE_PW";
 this.fv_passwordKey = "BES_DEV_PASSWORD";
 
 // 현재 로그인 화면에 적용된 언어 코드
-this.fv_language    = "ko-KR";
+this.fv_language = "KO";
 
 
 /***************************************************************************************
@@ -144,14 +144,16 @@ this.fn_login = function()
 
     // 아이디 입력 여부 확인
     if (this.gfn_isNull(sUserId))
-    {
-        // 아이디 미입력 안내 메시지 출력
-        this.fn_showLoginMessage("INPUT_ID", "아이디를 입력해 주세요.");
+	{
+		// DB 공통 메시지 다국어 테스트
+		//trace("[메시지 테스트] 현재 언어: " + nexacro.getApplication().gv_lang);
 
-        // 아이디 입력창으로 포커스 이동
-        objLogin.edt_userId.setFocus();
-        return;
-    }
+		this.gfn_message("MSG-A-TEST01");
+
+		// 아이디 입력창으로 포커스 이동
+		objLogin.edt_userId.setFocus();
+		return;
+	}
 
     // 비밀번호 입력 여부 확인
     if (this.gfn_isNull(sPassword))
@@ -496,7 +498,7 @@ this.fn_loadLanguage = function()
 
 /**
  * @description 선택한 언어에 맞춰 로그인 화면 문구 변경
- * @param       {sLanguage : String} 언어 코드 (ko-KR, en-US, zh-CN)
+ * @param       {sLanguage : String} 언어 코드 (KO, EN, ZH)
  */
 this.fn_setLanguage = function(sLanguage)
 {
@@ -510,7 +512,7 @@ this.fn_setLanguage = function(sLanguage)
     switch (sLanguage)
     {
         // 영어
-        case "en-US":
+        case "EN":
 
             // 로그인 화면 제목
             objLogin.sta_loginTitle.set_text("Login");
@@ -529,8 +531,8 @@ this.fn_setLanguage = function(sLanguage)
             break;
 
         // 중국어
-        case "zh-CN":
-
+        case "ZH":
+ 
             // 로그인 화면 제목
             objLogin.sta_loginTitle.set_text("登录");
 
@@ -732,6 +734,8 @@ this.cbo_lang_onitemchanged = function(obj, e)
 {
     // Combo에서 새로 선택한 언어 코드
     var sLanguage = e.postvalue;
+
+    //trace("[언어변경] 선택값: " + sLanguage);
 
     // 공통 LIB를 이용하여 언어 설정 저장 및 전역 변수 반영
     sLanguage = this.gfn_setLanguage(sLanguage);
