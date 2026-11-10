@@ -7,7 +7,7 @@ import java.util.Map;
 /**
 * =====================================================================================
 * @packageName    		: erp.core.msg.service
-* @fileName       		: MSG10000MService.java
+* @fileName       		: DTL10000MService.java
 * @author         		: Built1
 * @date           		: 2026.11.06
 * @description    		: [메시지] 데이터를 조회하는 인터페이스

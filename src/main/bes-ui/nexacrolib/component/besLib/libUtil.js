@@ -4,10 +4,12 @@
  ===============================================================================
  ==  Util 관련 공통 함수
  ===============================================================================
- ● this.gfn_isNull                      :  null 체크 함수
- ● this.gfn_msgBox						:  메시지ID를 기준으로 alert, confirm 메시지 출력
- ● this.gfn_center                     	:  대상 컴포넌트를 기준 영역의 중앙에 배치
- ● this.gfn_essential                  	:  필수 항목에 * and class = 'txt_WF_Essential' 표시하면 붉은색으로 *로 전환
+ ● this.gfn_isNull                      : null 체크 함수
+ ● this.gfn_msgBox						: 메시지ID를 기준으로 alert, confirm 메시지 출력
+ ● this.gfn_center                     	: 대상 컴포넌트를 기준 영역의 중앙에 배치
+ ● this.gfn_essential           		: 필수항목 * 붉은색 표시 함수 (Div, Tab 재귀 처리)
+ ● this.gfn_essentialStatic     		: Static 필수항목 * 붉은색 표시 함수
+ ● this.gfn_essentialGrid       		: Grid 헤더 필수항목 * 붉은색 표시 함수
 */
 
 /**
@@ -112,57 +114,82 @@ pForm.gfn_center = function(objTarget, objParent, nOffsetX, nOffsetY)
 };
 
 /**
- * @description     필수 항목에 * and class = 'txt_WF_Essential' 표시하면 붉은색으로 *로 전환             
- * 					- Static : text * 시작하면 변환
- * 					- Grid   : 헤더 text * 시작하면 변환
- * @param 			{objForm : this}  대상 폼 (this)
+ * @description     필수항목 * 붉은색 표시 함수
+ *                  - Static : cssclass에 txt_WF_Essential 지정 + text가 * 로 시작하면 변환
+ *                  - Grid   : 헤더 text가 * 로 시작하면 변환
+ *                  - Div, Tab 내부는 재귀 처리
+ * @param           {objForm    : object    }   대상 Form   : this
+ * @example         this.gfn_essential(this);
  */
 pForm.gfn_essential = function(objForm)
 {
-    var MARK = "<fc v='#D64545'>*</fc>";
     var arrComp = objForm.components;
 
-    for (var i = 0; i < arrComp.length; i++) {
+    for (var i = 0; i < arrComp.length; i++) 
+    {
         var obj = arrComp[i];
 
-        // Div 내부 (검색 영역, 등록 폼 등)
-        if (obj instanceof nexacro.Div) {
-            this.gfnSetEssentialMark(obj.form);
-            continue;
+        if (obj instanceof nexacro.Div)             // Div 내부 (검색 영역, 등록 폼 등)
+        {
+            this.gfn_essential(obj.form);
         }
-
-        // Tab 내부
-        if (obj instanceof nexacro.Tab) {
-            for (var j = 0; j < obj.tabpages.length; j++) {
-                this.gfnSetEssentialMark(obj.tabpages[j].form);
+        else if (obj instanceof nexacro.Tab)        // Tab 내부
+        {
+            for (var j = 0; j < obj.tabpages.length; j++) 
+            {
+                this.gfn_essential(obj.tabpages[j].form);
             }
-            continue;
         }
-
-        // 필수 라벨
-        if (obj instanceof nexacro.Static) {
-            var arrClass = String(obj.cssclass || "").split(",");
-            var sText    = String(obj.text || "").trim();
-
-            if (arrClass.indexOf("txt_WF_Essential") > -1 && sText.charAt(0) == "*") {
-                obj.set_usedecorate(true);
-                obj.set_text(MARK + sText.substr(1).trim());
-            }
-            continue;
+        else if (obj instanceof nexacro.Static)     // 필수 라벨
+        {
+            this.gfn_essentialStatic(obj);
         }
+        else if (obj instanceof nexacro.Grid)       // 그리드 필수 헤더
+        {
+            this.gfn_essentialGrid(obj);
+        }
+    }
+};
 
-        // 그리드 필수 헤더
-        if (obj instanceof nexacro.Grid) {
-            var nCnt = obj.getCellCount("head");
 
-            for (var k = 0; k < nCnt; k++) {
-                var sHead = String(obj.getCellProperty("head", k, "text") || "").trim();
+/**
+ * @description     Static 필수항목 * 붉은색 표시 함수
+ *                  - cssclass에 txt_WF_Essential 지정 + text가 * 로 시작하면 변환
+ * @param           {objStatic  : object    }   대상 Static     : this.sta_msgCls
+ */
+pForm.gfn_essentialStatic = function(objStatic)
+{
+    var MARK  = "<fc v='#D64545'>*</fc>";
+    var sText = String(objStatic.text || "").trim();
 
-                if (sHead.charAt(0) == "*") {
-                    obj.setCellProperty("head", k, "displaytype", "decoratetext");
-                    obj.setCellProperty("head", k, "text", MARK + sHead.substr(1).trim());
-                }
-            }
+    // * 붉은색 변환
+    if (sText.charAt(0) == "*") 
+    {
+        objStatic.set_usedecorate(true);
+        objStatic.set_text(MARK + sText.substr(1).trim());
+    }
+};
+
+/**
+ * @description     Grid 헤더 필수항목 * 붉은색 표시 함수
+ *                  - 헤더 text가 * 로 시작하면 변환
+ *                  - 그리드 포맷 변경 후 해당 그리드만 다시 적용할 때 단독 호출 가능
+ * @param           {objGrid    : object    }   대상 Grid       : this.grd_message
+ */
+pForm.gfn_essentialGrid = function(objGrid)
+{
+    var MARK = "<fc v='#D64545'>*</fc>";
+    var nCnt = objGrid.getCellCount("head");
+
+    for (var i = 0; i < nCnt; i++) 
+    {
+        var sHead = String(objGrid.getCellProperty("head", i, "text") || "").trim();
+
+        // * 붉은색 변환
+        if (sHead.charAt(0) == "*") 
+        {
+            objGrid.setCellProperty("head", i, "displaytype", "decoratetext");
+            objGrid.setCellProperty("head", i, "text", MARK + sHead.substr(1).trim());
         }
     }
 };

@@ -10,7 +10,8 @@
    ,"besLib/libCombo.js"
    ,"besLib/libMessage.js"
    ,"besLib/libLang.js"
-
+   ,"besLib/libGrid.js"
+   ,"besLib/libEvent.js"
 
   ],
   "scriptsfilter": [    

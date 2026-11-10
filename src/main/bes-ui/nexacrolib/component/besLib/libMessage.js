@@ -14,16 +14,15 @@
 
 /**
  * @description     공통 메시지 조회 (로그인 후 또는 메인화면 onload에서 1회 호출)
- * @param           {objForm    : object    }   해당화면    : this
  */
-pForm.gfn_loadMessage = function(objForm)
+pForm.gfn_loadMessage = function()
 {
     // 메시지 조회 : 임시 Dataset
     var gdsMessage = nexacro.getApplication().gds_message;
  
     if (!gdsMessage)
     {
-        trace("[메시지] Application에 gds_message가 정의되지 않았습니다.");
+        trace("[메시지] gds_message가 정의되지 않았습니다.");
         return;
     }
  
@@ -37,7 +36,7 @@ pForm.gfn_loadMessage = function(objForm)
     var sArgument       = "";                                                   // 매개변수
     var sCallbackFunc   = "fn_messageCallback";                                 // 콜백함수
  
-    objForm.gfn_transaction(sSvcID, sSvcURL, sInDatasets, sOutDatasets, sArgument, sCallbackFunc);
+    this.gfn_transaction(sSvcID, sSvcURL, sInDatasets, sOutDatasets, sArgument, sCallbackFunc);
 };
  
 /**

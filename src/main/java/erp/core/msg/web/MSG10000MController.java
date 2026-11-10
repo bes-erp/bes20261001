@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
 * =====================================================================================
 * @packageName    		: erp.core.msg.web
-* @fileName       		: MSG10000MController.java
+* @fileName       		: DTL10000MController.java
 * @author         		: Built1
 * @date           		: 2026.11.06
 * @description    		: [메시지] 데이터를 조회하는 클래스

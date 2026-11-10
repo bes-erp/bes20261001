@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+﻿﻿<?xml version="1.0" encoding="utf-8"?>
 <AppVariables version="2.0">
   <Datasets>
     <Dataset id="gds_menu">
@@ -43,9 +43,14 @@
         <Column id="UPDATE_BY" type="STRING" size="256"/>
       </ColumnInfo>
     </Dataset>
+    <Dataset id="gds_date">
+      <ColumnInfo>
+        <Column id="CURRENT_DATE" type="STRING" size="256"/>
+      </ColumnInfo>
+    </Dataset>
   </Datasets>
   <Variables>
-    <Variable id="gv_userid"/>
+    <Variable id="gvUserId"/>
     <Variable id="gv_lang"/>
   </Variables>
   <DataObjects/>

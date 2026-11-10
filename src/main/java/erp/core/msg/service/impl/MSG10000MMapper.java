@@ -9,7 +9,7 @@ import org.egovframe.rte.psl.dataaccess.mapper.Mapper;
 /**
 * =====================================================================================
 * @packageName    		: erp.core.msg.service.impl
-* @fileName       		: MSG10000MMapper.java
+* @fileName       		: DTL10000MMapper.java
 * @author         		: Built1
 * @date           		: 2026.11.06
 * @description    		: [메시지] 데이터를 조회하는 인터페이스

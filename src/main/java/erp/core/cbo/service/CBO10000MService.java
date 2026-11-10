@@ -7,7 +7,7 @@ import java.util.Map;
 /**
 * =====================================================================================
 * @packageName    		: erp.core.cbo.service
-* @fileName       		: MSG10000MService.java
+* @fileName       		: DTL10000MService.java
 * @author         		: Built1
 * @date           		: 2026.11.05
 * @description    		: [콤보박스] 코드유형에 따른 코드 데이터를 조회하는 인터페이스

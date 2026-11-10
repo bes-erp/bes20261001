@@ -161,6 +161,7 @@
         <Button id="btn_gfn_message" taborder="29" text="gfn_message 함수 호출" left="868" top="372" width="192" height="30" onclick="btn_gfn_message_onclick"/>
         <Button id="btn_gfn_message2" taborder="30" text="gfn_message 함수 호출(변수)" left="868" top="407" width="192" height="30" onclick="btn_gfn_message2_onclick"/>
         <Button id="btn_gfn_message3" taborder="31" text="gfn_message 함수 호출(Confirm)" left="850" top="444" width="210" height="30" onclick="btn_gfn_message3_onclick"/>
+        <Button id="gfn_getDate1" taborder="32" text="gfn_getDate 함수 호출" left="610" top="464" width="210" height="30" onclick="gfn_getDate1_onclick"/>
       </Layout>
     </Layouts>
     <Objects>
@@ -287,10 +288,7 @@
  */
 this.Form_Work_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 {
-	this.gfn_essential(this);
-	    //공통함수 등록 여부 확인
-    trace("## gfn_getDate : " + typeof this.gfn_getDate);
-    trace("## gfn_isNull  : " + typeof this.gfn_isNull);
+	//this.gfn_essential(this);
 	
 	//데이터셋 초기화
 	this.ds_search.clearData();
@@ -301,8 +299,8 @@ this.Form_Work_onload = function(obj:nexacro.Form,e:nexacro.LoadEventInfo)
 	this.msk_startTime.set_value("000000");
 	
 	//콤보박스 값 초기화 :: 화면객체, 콤보ID, 콤보데이터셋ID, 코드유형, 활성여부코드, 전체추가코드
-	this.gfn_code(this, "cbo_repeat_cd", "ds_cbo_repeat_cd", "REPEAT_TYPE_CD", "Y", "N");		//반복유형코드(전체추가)
-	this.gfn_code(this, "cbo_repeat_cd2", "ds_cbo_repeat_cd2", "REPEAT_TYPE_CD", "", "Y");		//반복유형코드(전체없음+비활성포함)
+	this.gfn_code(this, "ds_cbo_repeat_cd", "REPEAT_TYPE_CD", "Y", "N");		//반복유형코드(전체추가)
+	this.gfn_code(this, "ds_cbo_repeat_cd2", "REPEAT_TYPE_CD", "", "Y");		//반복유형코드(전체없음+비활성포함)
 	
 };
 
@@ -572,7 +570,7 @@ this.btn_00_00_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 
 this.btn_gds_message_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.gfn_loadMessage(this);
+	this.gfn_loadMessage();
 };
 
 this.btn_gfn_message_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
@@ -588,6 +586,19 @@ this.btn_gfn_message2_onclick = function(obj:nexacro.Button,e:nexacro.ClickEvent
 this.btn_gfn_message3_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
 	this.gfn_message("NM-CNF-10000");
+};
+
+this.gfn_getDate1_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{	
+	// 날짜 형식에 준하여 출력
+	var arrType = ["yyyy-mm-dd", "yyyymmdd", "yyyy-mm-01", "yyyymm01", "yyyy-mm", "yyyymm", "yyyy-01", "yyyy01", "yyyy", "mm", "dd"];
+
+    trace("[원본] " + nexacro.getApplication().gds_date.getColumn(0, "CURRENT_DATE"));
+
+    for (var i = 0; i < arrType.length; i++) 
+    {
+        trace("[" + arrType[i] + "] " + this.gfn_getDate(arrType[i]));
+    }
 };
 ]]></Script>
     <Bind>

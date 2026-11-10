@@ -23,7 +23,7 @@
               <Static id="sta_margin_left" taborder="6" text="10" left="0" top="0" width="10" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" bottom="0"/>
               <Static id="sta_message_class_cd" text="메시지분류" left="sta_margin_left:0" top="10" width="100" height="24" verticalAlign="middle" taborder="1" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" textAlign="right"/>
               <Static id="sta_margin_left00" taborder="7" text="10" left="cbo_message_class_cd:10" top="0" width="10" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" bottom="0"/>
-              <Static id="sta_message_type_cd" text="메시지유형" left="sta_margin_left00:0" top="10" width="100" height="24" verticalAlign="middle" taborder="2" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" textAlign="right"/>
+              <Static id="sta_message_type_cd" text="*메시지유형" left="sta_margin_left00:0" top="10" width="100" height="24" verticalAlign="middle" taborder="2" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" textAlign="right"/>
               <Combo id="cbo_message_type_cd" left="sta_message_type_cd:5" top="10" width="150" height="24" taborder="3" innerdataset="ds_cbo_message_type_cd" codecolumn="CODE" datacolumn="CODE_NM" value="ALL" index="0" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;"/>
               <Static id="sta_message_text_ko" text="메시지(한글)" left="557" top="10" width="100" height="24" verticalAlign="middle" taborder="4" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" textAlign="right"/>
               <Edit id="edt_message_text_ko" left="sta_message_text_ko:5" top="10" width="200" height="24" taborder="5" maxlength="300" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;"/>
@@ -31,6 +31,7 @@
               <Button id="btn_searchClear" taborder="10" top="9" height="28" tooltiptext="초기화" width="34" right="4" onclick="fn_searchClear" icon="url('theme://bes_icon/16/bes_icon_reset_navy.png')" cssclass="btn_WF_searchClear"/>
               <Button id="btn_search" taborder="9" top="9" width="34" height="28" tooltiptext="조회" icon="url('theme://bes_icon/14/bes_icon_search_navy_14.png')" onclick="fn_search" right="btn_searchClear:2" cssclass="btn_WF_search"/>
               <Static id="sta_margin_left00_00_00" taborder="11" text="10" top="0" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" bottom="0" width="4" right="0"/>
+              <Calendar id="cal_currentDate" taborder="12" left="735" top="17" width="150" height="20" dateformat="yyyy-MM-dd"/>
             </Layout>
           </Layouts>
         </Div>
@@ -46,7 +47,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Grid id="grd_message" left="10" top="div_title:0" right="10" bottom="10" taborder="7" binddataset="ds_message" selecttype="row" autoenter="select" autofittype="none" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;">
+        <Grid id="grd_message" left="10" top="div_title:0" right="10" bottom="10" taborder="7" binddataset="ds_message" selecttype="row" autoenter="select" autofittype="none" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" oncellclick="fn_grd_oncellclick">
           <Formats>
             <Format id="default">
               <Columns>
@@ -79,15 +80,15 @@
               </Band>
               <Band id="body">
                 <Cell text="expr:currow+1" edittype="none" textAlign="center"/>
-                <Cell col="1" text="bind:select_yn" displaytype="checkboxcontrol" edittype="checkbox" textAlign="center"/>
-                <Cell col="2" text="bind:message_class_cd" displaytype="combocontrol" edittype="combo" combodataset="ds_grd_message_class_cd" combocodecol="CODE" combodatacol="CODE_NM"/>
-                <Cell col="3" text="bind:message_type_cd" displaytype="combocontrol" edittype="combo" combodataset="ds_grd_message_type_cd" combocodecol="CODE" combodatacol="CODE_NM"/>
-                <Cell col="4" text="bind:message_num" edittype="none"/>
-                <Cell col="5" text="bind:message_text_ko" edittype="text"/>
-                <Cell col="6" text="bind:message_text_en" edittype="text"/>
-                <Cell col="7" text="bind:message_text_zh" edittype="text"/>
-                <Cell col="8" text="bind:message_text_ja" edittype="text"/>
-                <Cell col="9" text="bind:message_text_ot" edittype="text"/>
+                <Cell col="1" text="bind:SELECT_YN" displaytype="checkboxcontrol" edittype="checkbox" textAlign="center"/>
+                <Cell col="2" text="bind:MESSAGE_CLASS_CD" displaytype="combocontrol" edittype="combo" combodataset="ds_grd_message_class_cd" combocodecol="CODE" combodatacol="CODE_NM"/>
+                <Cell col="3" text="bind:MESSAGE_TYPE_CD" displaytype="combocontrol" edittype="combo" combodataset="ds_grd_message_type_cd" combocodecol="CODE" combodatacol="CODE_NM"/>
+                <Cell col="4" text="bind:MESSAGE_NUM" edittype="none"/>
+                <Cell col="5" text="bind:MESSAGE_TEXT_KO" edittype="text"/>
+                <Cell col="6" text="bind:MESSAGE_TEXT_EN" edittype="text"/>
+                <Cell col="7" text="bind:MESSAGE_TEXT_ZH" edittype="text"/>
+                <Cell col="8" text="bind:MESSAGE_TEXT_JA" edittype="text"/>
+                <Cell col="9" text="bind:MESSAGE_TEXT_OT" edittype="text"/>
               </Band>
             </Format>
           </Formats>
@@ -128,8 +129,10 @@
       </Dataset>
       <Dataset id="ds_message">
         <ColumnInfo>
-          <Column id="MESSAGE_NUM" type="STRING" size="256"/>
+          <Column id="SELECT_YN" type="STRING" size="256"/>
+          <Column id="MESSAGE_CLASS_CD" type="STRING" size="256"/>
           <Column id="MESSAGE_TYPE_CD" type="STRING" size="256"/>
+          <Column id="MESSAGE_NUM" type="STRING" size="256"/>
           <Column id="MESSAGE_TEXT_KO" type="STRING" size="256"/>
           <Column id="MESSAGE_TEXT_EN" type="STRING" size="256"/>
           <Column id="MESSAGE_TEXT_ZH" type="STRING" size="256"/>
@@ -179,6 +182,12 @@ this.fn_init = function (obj:Form, e:nexacro.LoadEventInfo)
 	// 그리드
     this.gfn_code(this, "ds_grd_message_class_cd", "MESSAGE_CLASS_CD", "", "S"); 		// 메시지분류(선택포함)
 	this.gfn_code(this, "ds_grd_message_type_cd" , "MESSAGE_TYPE_CD" , "", "S"); 		// 메시지유형(선택포함)
+	
+	// 조회조건 초기화
+	this.fn_searchClear();
+	
+	// 필수항목 * 붉은색 표기
+	this.gfn_essential(this);
 };
 
 
@@ -202,7 +211,8 @@ this.fn_search = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
  */
 this.fn_searchClear = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-
+    // 조회조건 기본값 설정
+    this.gfn_searchClear(this.div_search);
 };
 
 
@@ -266,16 +276,7 @@ this.fn_print = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
  */
 this.fn_add_row = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-	this.ds_message.insertRow(0);
-	//var nRow = 
-
-    //this.ds_message.setColumn(nRow, "select_yn"       , "N");
-    //this.ds_message.setColumn(nRow, "message_class_cd", "NM");
-    //this.ds_message.setColumn(nRow, "message_type_cd" , "A");
-
-    //this.ds_message.set_rowposition(nRow);
-
-    //this.fn_setMessageCount();
+	this.gfn_addRow(this.grd_message, "MESSAGE_CLASS_CD");   // 메시지(한글) 포커스
 };
 
 
@@ -346,7 +347,15 @@ this.fn_callBack = function (sSvcID, nErrCd, sErrMsg)
  * 8. 이벤트
  * : 화면에서 각 컴포런트별 이벤트를 작성하는 기능
  **************************************************************************************/
-
+ 
+/*
+ * 기능 : 그리드 에디팅 상태에서 콤보박스 한번에 편집
+ * : Grid oncellclick 이벤트에 적용
+ */
+this.fn_grd_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
+{
+	this.gfn_gridComboDropdown(obj, e);
+};
 ]]></Script>
   </Form>
 </FDL>
