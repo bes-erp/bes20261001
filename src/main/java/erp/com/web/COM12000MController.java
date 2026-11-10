@@ -1,4 +1,3 @@
-
 package erp.com.web;
 
 import java.util.List;
@@ -28,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 * -------------------------------------------------------------------------------------
 * 2026.11.04        	Built1             최초 생성
 * 2026.11.05        	Built1             수정
+* 2026.11.10			Built1			   데이터 저장 기능 추가
 */
 @Slf4j
 @Controller
@@ -73,4 +73,33 @@ public class COM12000MController {
         // 조회결과 리턴
         return result;
     }
+
+	/**
+	* @methodName     		: saveMessage
+	* @author         		: built1
+	* @date           		: 2026.11.10
+	* @description    		: 메시지 데이터를 등록, 수정, 삭제하는 메소드
+	* @param messageList
+	* @param userId
+	* @return
+	* @throws Exception
+	*/
+	@RequestMapping(value = "saveMessage.do")
+	public NexacroResult saveMessage(@ParamDataSet(name = "inMessage") List<Map<String, Object>> messageList
+	                                ,@ParamVariable(name = "userId") String userId) throws Exception {
+	
+	    log.debug("## [ COM12000MController ] : {}", "saveMessage");
+	    log.debug("## [ 수신 건수 ] : {}", messageList == null ? 0 : messageList.size());
+	
+	    // 메시지 데이터 저장
+	    int nSaveCnt = service.saveMessage(messageList, userId);
+	
+	    log.debug("## [ 저장 건수 ] : {}", nSaveCnt);
+	
+	    // 저장결과 리턴
+	    NexacroResult result = new NexacroResult();
+	
+	    return result;
+	}
 }
+

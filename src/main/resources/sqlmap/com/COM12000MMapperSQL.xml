@@ -42,4 +42,70 @@
 
     </select>
 
+	<!-- =========================================================
+	     메시지 데이터 등록: 분류 + 유형별 MAX 번호 + 1
+	========================================================= -->
+	<insert id="insertMessage" parameterType="map">
+	    insert into sys_message ( 
+						          message_num
+						         ,message_type_cd
+						         ,message_text_ko
+						         ,message_text_en
+						         ,message_text_zh
+						         ,message_text_ja
+						         ,message_text_ot
+						         ,remark
+						         ,create_date
+						         ,create_by
+						  		)
+	    select p.prefix || to_char(nvl((select max(to_number(substr(sm.message_num,length(p.prefix) + 1)))
+						                  from sys_message sm
+						                 where regexp_like(sm.message_num,'^' || p.prefix || '[0-9]+$')),9999) + 1)
+	          ,#{message_type_cd}
+	          ,#{message_text_ko}
+	          ,#{message_text_en,jdbcType=VARCHAR}
+			  ,#{message_text_zh,jdbcType=VARCHAR}
+			  ,#{message_text_ja,jdbcType=VARCHAR}
+			  ,#{message_text_ot,jdbcType=VARCHAR}
+		   	  ,#{remark,jdbcType=VARCHAR}
+	          ,sysdate
+	          ,#{user_id}
+	      from ( select #{message_class_cd} || '-' ||
+	                  	case #{message_type_cd}
+	                    when 'A' then 'ALT'
+	                    when 'C' then 'CNF'
+	                    when 'I' then 'INF'
+	                    when 'E' then 'ERR'
+    					when 'W' then 'WRN'
+	                     end || '-' as prefix
+	               from dual
+	              where #{message_class_cd} in ('NM','JM')
+	                and #{message_type_cd} in ('A','C','I','E','W') ) p
+	</insert>
+	
+	<!-- =========================================================
+	     메시지 데이터 수정
+	========================================================= -->
+	<update id="updateMessage" parameterType="map">
+	    update sys_message
+	       set message_text_ko = #{message_text_ko}
+	          ,message_text_en = #{message_text_en,jdbcType=VARCHAR}
+			  ,message_text_zh = #{message_text_zh,jdbcType=VARCHAR}
+			  ,message_text_ja = #{message_text_ja,jdbcType=VARCHAR}
+			  ,message_text_ot = #{message_text_ot,jdbcType=VARCHAR}
+			  ,remark          = #{remark,jdbcType=VARCHAR}
+	          ,update_date     = sysdate
+	          ,update_by       = #{user_id}
+	     where message_num     = #{message_num}
+	</update>
+	
+	
+	<!-- =========================================================
+	     메시지 데이터 삭제
+	========================================================= -->
+	<delete id="deleteMessage" parameterType="map">
+	    delete from sys_message
+	     where message_num = #{message_num}
+	</delete>
+
 </mapper>

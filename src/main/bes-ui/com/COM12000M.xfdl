@@ -28,7 +28,7 @@
               <Static id="sta_message_text_ko" text="메시지(한글)" left="557" top="10" width="100" height="24" verticalAlign="middle" taborder="4" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" textAlign="right"/>
               <Edit id="edt_message_text_ko" left="sta_message_text_ko:5" top="10" width="200" height="24" taborder="5" maxlength="300" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;"/>
               <Static id="sta_margin_left00_00" taborder="8" text="10" left="cbo_message_type_cd:0" top="0" width="10" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" bottom="0"/>
-              <Button id="btn_searchClear" taborder="10" top="9" height="28" tooltiptext="초기화" width="34" right="4" onclick="fn_reset" icon="url('theme://bes_icon/16/bes_icon_reset_navy.png')" cssclass="btn_WF_searchClear"/>
+              <Button id="btn_searchClear" taborder="10" top="9" height="28" tooltiptext="초기화" width="34" right="4" onclick="fn_searchClear" icon="url('theme://bes_icon/16/bes_icon_reset_navy.png')" cssclass="btn_WF_searchClear"/>
               <Button id="btn_search" taborder="9" top="9" width="34" height="28" tooltiptext="조회" icon="url('theme://bes_icon/14/bes_icon_search_navy_14.png')" onclick="fn_search" right="btn_searchClear:2" cssclass="btn_WF_search"/>
               <Static id="sta_margin_left00_00_00" taborder="11" text="10" top="0" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" bottom="0" width="4" right="0"/>
             </Layout>
@@ -39,8 +39,8 @@
             <Layout>
               <Button id="btn_favorite" taborder="1" left="0" top="2" width="24" height="24" cssclass="btn_WF_favorite"/>
               <Static id="sta_title" taborder="0" text="메시지 목록" left="btn_favorite:5" top="1" width="68" height="24" cssclass="sta_WF_title" font="bold 12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" fittocontents="width"/>
-              <Button id="btn_delRow" taborder="3" top="2" width="34" height="28" tooltiptext="행삭제" right="4" icon="url('theme://bes_icon/16/bes_icon_delrow_navy.png')" onclick="fn_deleteRow" cssclass="btn_WF_delRow"/>
-              <Button id="btn_addRow" taborder="2" top="2" width="34" height="28" tooltiptext="행추가" right="btn_delRow:2" onclick="fn_addRow" icon="url('theme://bes_icon/16/bes_icon_addrow_navy.png')" cssclass="btn_WF_addRow"/>
+              <Button id="btn_delRow" taborder="3" top="2" width="34" height="28" tooltiptext="행삭제" right="4" icon="url('theme://bes_icon/16/bes_icon_delrow_navy.png')" onclick="fn_del_row" cssclass="btn_WF_delRow"/>
+              <Button id="btn_addRow" taborder="2" top="2" width="34" height="28" tooltiptext="행추가" right="btn_delRow:2" onclick="fn_add_row" icon="url('theme://bes_icon/16/bes_icon_addrow_navy.png')" cssclass="btn_WF_addRow"/>
               <Button id="btn_excel_down" taborder="4" top="2" width="34" height="28" tooltiptext="엑셀다운로드" right="btn_addRow:2" icon="url('theme://bes_icon/16/bes_icon_exceldown_navy.png')" background="" onclick="fn_excel_down" cssclass="btn_WF_excelDown"/>
               <Static id="sta_titleCnt" taborder="5" text="| 1,000건" left="sta_title:1" top="1" width="70" height="24" cssclass="sta_WF_titleCnt" font="10px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" fittocontents="width"/>
             </Layout>
@@ -80,97 +80,79 @@
               <Band id="body">
                 <Cell text="expr:currow+1" edittype="none" textAlign="center"/>
                 <Cell col="1" text="bind:select_yn" displaytype="checkboxcontrol" edittype="checkbox" textAlign="center" checkboxtruevalue="Y" checkboxfalsevalue="N"/>
-                <Cell col="2" text="bind:message_class_cd" displaytype="combocontrol" edittype="combo" combodataset="ds_cbo_grid_message_class_cd" combocodecol="CODE" combodatacol="CODE_NM"/>
-                <Cell col="3" text="bind:message_type_cd" displaytype="combocontrol" edittype="combo" combodataset="ds_cbo_grid_message_type_cd" combocodecol="CODE" combodatacol="CODE_NM"/>
-                <Cell col="4" text="bind:message_num" edittype="none"/>
-                <Cell col="5" text="bind:message_text_ko" edittype="text"/>
-                <Cell col="6" text="bind:message_text_en" edittype="text"/>
-                <Cell col="7" text="bind:message_text_zh" edittype="text"/>
-                <Cell col="8" text="bind:message_text_ja" edittype="text"/>
-                <Cell col="9" text="bind:message_text_ot" edittype="text"/>
+                <Cell col="2" text="bind:message_class_cd" displaytype="combocontrol" edittype="expr:expr:dataset.getRowType(currow)==2?'combo':'none'" combodataset="ds_grd_message_class_cd" combocodecol="CODE" combodatacol="CODE_NM"/>
+                <Cell col="3" text="bind:message_type_cd" displaytype="combocontrol" edittype="expr:expr:dataset.getRowType(currow)==2?'combo':'none'" combodataset="ds_grd_message_type_cd" combocodecol="CODE" combodatacol="CODE_NM"/>
+                <Cell col="4" text="bind:message_num" edittype="none" textAlign="center"/>
+                <Cell col="5" text="bind:message_text_ko" edittype="text" textAlign="left"/>
+                <Cell col="6" text="bind:message_text_en" edittype="text" textAlign="left"/>
+                <Cell col="7" text="bind:message_text_zh" edittype="text" textAlign="left"/>
+                <Cell col="8" text="bind:message_text_ja" edittype="text" textAlign="left"/>
+                <Cell col="9" text="bind:message_text_ot" edittype="text" textAlign="left"/>
               </Band>
             </Format>
           </Formats>
         </Grid>
       </Layout>
     </Layouts>
-    <Script type="xscript5.1"><![CDATA[
-/***************************************************************************************
+    <Script type="xscript5.1"><![CDATA[/***************************************************************************************
  * 프로젝트        : Built1 Enterprise System 구축 프로젝트
  * 업무구분        : 공통관리
  * 파일명          : COM12000M.xfdl
+ * 작성자          : Built1
+ * 작성일          : 2026-11-05
+ *
  * 화면            : 메시지등록
  * 설명            : 메시지 목록 조회 및 관리
  *---------------------------------------------------------------------------------------
  * 변경일            변경자            변경내역
  *---------------------------------------------------------------------------------------
- * 2026-11-05        Built1            화면 및 스크립트 재작성
+ * 2026-11-05        Built1            화면 및 스크립트 작성
  * 2026-11-09        Built1            디자인 템플릿 적용
+ * 2026-11-10        Built1            gfn_code 함수 매개변수 변경 및스크립트 템플릿 적용
  ***************************************************************************************/
 
 
 /***************************************************************************************
- * 1. FORM 변수 선언
- ***************************************************************************************/
+ * 1. 폼 변수
+ * : 폼에서 사용할 공통 변수를 선언
+ **************************************************************************************/
 
 
 /***************************************************************************************
- * 2. FORM LOAD
- ***************************************************************************************/
-
+ * 2. 폼 오픈
+ * : 화면을 로딩시 기본적으로 처리할 기능 또는 초기값 할당
+ **************************************************************************************/
 /*
  * 기능 : 화면 초기화
+ * : 조회조건 및 공통코드, 메시지 목록 초기화
  */
-this.COM12000M_onload = function(obj:nexacro.Form, e:nexacro.LoadEventInfo)
+this.fn_init = function(obj:Form, e:nexacro.LoadEventInfo)
 {
-    this.fn_init();
+    // 조회조건 공통코드
+    this.gfn_code(this, "ds_cbo_message_class_cd", "MESSAGE_CLASS_CD", "", "Y");  // 메시지 분류 (전체 포함)
+    this.gfn_code(this, "ds_cbo_message_type_cd" , "MESSAGE_TYPE_CD" , "", "Y");  // 메시지 유형 (전체 포함)
 
-    // 조회조건 - 메시지 분류 (전체 포함)
-    this.gfn_code(this, "",
-        "ds_cbo_message_class_cd", "MESSAGE_CLASS_CD", "", "Y");
+    // 그리드 공통코드
+    this.gfn_code(this, "ds_grd_message_class_cd", "MESSAGE_CLASS_CD", "", "N");  // 메시지 분류
+    this.gfn_code(this, "ds_grd_message_type_cd" , "MESSAGE_TYPE_CD" , "", "N");  // 메시지 유형
 
-    // 조회조건 - 메시지 유형 (전체 포함)
-    this.gfn_code(this, "",
-        "ds_cbo_message_type_cd", "MESSAGE_TYPE_CD", "", "Y");
-
-    // 그리드 - 메시지 분류
-    this.gfn_code(this, "", "ds_cbo_grid_message_class_cd", "MESSAGE_CLASS_CD", "", "N");
-
-    // 그리드 - 메시지 유형
-    this.gfn_code(this, "", "ds_cbo_grid_message_type_cd", "MESSAGE_TYPE_CD", "", "N");
-};
-
-/*
- * 기능 : 조회조건 및 메시지 목록 초기화
- */
-this.fn_init = function()
-{
-    // 검색조건 Dataset 초기화
-    this.ds_search.clearData();
-    this.ds_search.addRow();
-
-    // 조회조건 기본값 설정
-    this.div_search.form.cbo_message_class_cd.set_index(0);
-    this.div_search.form.cbo_message_type_cd.set_index(0);
+    // 초기화
     this.div_search.form.edt_message_text_ko.set_value("");
 
-    // 목록 초기화
     this.ds_message.clearData();
     this.fn_setMessageCount();
-
-    // 서버 조회 기능 연결 후 최초 조회 사용
-    // this.fn_search();
 };
 
 
 /***************************************************************************************
  * 3. 공통 버튼
- ***************************************************************************************/
-
+ * : 조회, 조회초기화, 저장, 신규, 삭제, 도움말, 출력
+ **************************************************************************************/
 /*
- * 기능 : 메시지 목록 조회
+ * 기능 : 조회
+ * : 조회조건 항목별 값을 기준으로 데이터를 조회하는 기능
  */
-this.fn_search = function()
+this.fn_search = function(obj:nexacro.Button, e:nexacro.ClickEventInfo)
 {
     // 조회조건 Dataset 초기화
     this.ds_search.clearData();
@@ -180,10 +162,10 @@ this.fn_search = function()
     // 조회조건 설정
     this.ds_search.setColumn(nRow, "message_class_cd", this.div_search.form.cbo_message_class_cd.value);
     this.ds_search.setColumn(nRow, "message_type_cd" , this.div_search.form.cbo_message_type_cd.value);
-    this.ds_search.setColumn(nRow, "message_text_ko", this.div_search.form.edt_message_text_ko.value);
+    this.ds_search.setColumn(nRow, "message_text_ko" , this.div_search.form.edt_message_text_ko.value);
 
     // 사용자 정보
-    var sUserId = nexacro.getApplication().gvUserId;
+    var sUserId = nexacro.getApplication().gv_userId;
 
     // Transaction 설정
     var sSvcID        = "selectMessageList";
@@ -191,58 +173,91 @@ this.fn_search = function()
     var sInDatasets   = "inSearch=ds_search";
     var sOutDatasets  = "ds_message=outSelectMessageList";
     var sArgument     = "userId=" + nexacro.wrapQuote(sUserId || "");
-    var sCallbackFunc = "fn_callback";
+    var sCallbackFunc = "fn_callBack";
 
     // 메시지 목록 조회
     this.gfn_transaction(sSvcID, sSvcURL, sInDatasets, sOutDatasets, sArgument, sCallbackFunc);
 };
 
-/*
- * 기능 : 조회조건 초기화
- */
-this.fn_reset = function()
-{
-    this.div_search.form.cbo_message_class_cd.set_index(0);
-    this.div_search.form.cbo_message_type_cd.set_index(0);
-    this.div_search.form.edt_message_text_ko.set_value("");
 
-    this.ds_search.clearData();
-    this.ds_search.addRow();
+/*
+ * 기능 : 조회초기화
+ * : 조회 조건의 항목별 값을 초기화하는 기능
+ */
+this.fn_searchClear = function(obj:nexacro.Button, e:nexacro.ClickEventInfo)
+{
+    this.div_search.form.cbo_message_class_cd.set_index(0);   // 메시지 분류 초기화
+    this.div_search.form.cbo_message_type_cd.set_index(0);    // 메시지 유형 초기화
+    this.div_search.form.edt_message_text_ko.set_value("");   // 메시지 내용 초기화
 };
 
-/*
- * 기능 : 메시지 목록 건수 표시
- */
-this.fn_setMessageCount = function()
-{
-    var nCnt = this.ds_message.rowcount;
 
-    this.div_title.form.sta_titleCnt.set_text("| " + nCnt + "건");
+/*
+ * 기능 : 저장
+ * : 신규, 수정, 삭제된 데이터를 저장하는 기능
+ */
+this.fn_save = function(obj:nexacro.Button, e:nexacro.ClickEventInfo)
+{
+    // 체크박스만 변경된 행의 상태 정리
+    this.fn_resetSelectionOnlyRows();
+
+    if (!this.gfn_dataSetChange(this.ds_message))
+    {
+        this.alert("변경된 데이터가 없습니다.");
+        return;
+    }
+
+    // 필수 항목 검증
+    if (!this.fn_validate())
+    {
+        return;
+    }
+	
+	var sSvcID        = "saveMessage";
+    var sSvcURL       = "svcUrl::com/COM12000M/saveMessage.do";
+    var sInDatasets   = "inMessage=ds_message:U";
+    var sOutDatasets  = "";
+    var sArgument     = "userId=" + nexacro.wrapQuote(nexacro.getApplication().gv_userId || "");
+    var sCallbackFunc = "fn_callBack";
+
+    this.gfn_transaction(sSvcID, sSvcURL, sInDatasets, sOutDatasets, sArgument, sCallbackFunc);
 };
 
+/***************************************************************************************
+ * 4. 추가 공통 버튼
+ * : 행추가, 행삭제, 엑셀다운로드, 엑셀업로드
+ **************************************************************************************/
 /*
- * 기능 : 메시지 목록 첫 번째 행 추가
+ * 기능 : 행추가
+ * : 그리드에 첫 행을 추가하는 기능
  */
-this.fn_addRow = function()
+this.fn_add_row = function(obj:nexacro.Button, e:nexacro.ClickEventInfo)
 {
+    // 첫 번째 행에 신규 데이터 추가
     var nRow = this.ds_message.insertRow(0);
 
+    // 신규 행 기본값 설정
     this.ds_message.setColumn(nRow, "select_yn"       , "N");
     this.ds_message.setColumn(nRow, "message_class_cd", "NM");
     this.ds_message.setColumn(nRow, "message_type_cd" , "A");
 
+    // 신규 행 선택
     this.ds_message.set_rowposition(nRow);
 
+    // 메시지 목록 건수 갱신
     this.fn_setMessageCount();
 };
 
+
 /*
- * 기능 : 선택된 메시지 행 삭제
+ * 기능 : 행삭제
+ * : 그리드에서 선택된 행을 삭제하는 기능
  */
-this.fn_deleteRow = function()
+this.fn_del_row = function(obj:nexacro.Button, e:nexacro.ClickEventInfo)
 {
     var nDeleteCnt = 0;
 
+    // 선택된 행을 역순으로 삭제
     for (var i = this.ds_message.rowcount - 1; i >= 0; i--)
     {
         if (this.ds_message.getColumn(i, "select_yn") == "Y")
@@ -261,8 +276,76 @@ this.fn_deleteRow = function()
     this.fn_setMessageCount();
 };
 
+
 /*
- * 기능 : 저장 전 필수 입력값 검사
+ * 기능 : 엑셀다운로드
+ * : 그리드에 조회된 데이터를 엑셀로 다운로드하는 기능
+ */
+this.fn_excel_down = function(obj:nexacro.Button, e:nexacro.ClickEventInfo)
+{
+    // 엑셀다운로드 기능 추후 구현
+    this.alert("엑셀다운로드 기능 연결 후 테스트할 예정입니다.");
+};
+
+
+/***************************************************************************************
+ * 5. 콜백
+ * : 데이터 조회, 저장, 삭제 등 트랜잭션 처리에 따른 결과를 관리하는 기능
+ **************************************************************************************/
+this.fn_callBack = function(sSvcID, nErrCd, sErrMsg)
+{
+    if (nErrCd < 0)
+    {
+        this.alert(sErrMsg);
+        return;
+    }
+
+    switch (sSvcID)
+    {
+        // 메시지 목록 조회
+        case "selectMessageList":
+
+            this.fn_setMessageCount();
+
+            // 조회 결과가 없는 경우
+            if (this.ds_message.rowcount == 0)
+            {
+                this.alert("조회조건에 일치하는 데이터가 존재하지 않습니다.");
+            }
+            break;
+
+        // 메시지 저장 (추후 서버 기능 연결)
+        case "saveMessage":
+            this.alert("정상적으로 저장되었습니다.");
+            this.fn_search();
+            break;
+    }
+};
+
+
+/***************************************************************************************
+ * 6. 팝업 호출 및 콜백
+ * : 팝업화면 오픈 및 리턴된 결과를 콜백 처리하는 기능
+ **************************************************************************************/
+
+
+/***************************************************************************************
+ * 7. 기타 함수
+ * : 화면에 특화된 함수를 사용하기 위한 기능
+ **************************************************************************************/
+/*
+ * 기능 : 메시지 목록 건수 표시   
+ * : 조회 및 행추가, 행삭제 시 건수 갱신
+ */
+this.fn_setMessageCount = function()
+{
+    this.div_title.form.sta_titleCnt.set_text("| " + this.ds_message.rowcount + "건");
+};
+
+
+/*
+ * 기능 : 필수 항목 검증
+ * : 신규 및 수정된 행의 필수 입력값 확인
  */
 this.fn_validate = function()
 {
@@ -277,6 +360,7 @@ this.fn_validate = function()
             var sTypeCd  = this.ds_message.getColumn(i, "message_type_cd");
             var sTextKo  = this.ds_message.getColumn(i, "message_text_ko");
 
+            // 메시지 분류 필수 확인
             if (this.gfn_isNull(sClassCd))
             {
                 this.alert("메시지분류는 필수 항목입니다.");
@@ -284,6 +368,7 @@ this.fn_validate = function()
                 return false;
             }
 
+            // 메시지 유형 필수 확인
             if (this.gfn_isNull(sTypeCd))
             {
                 this.alert("메시지유형은 필수 항목입니다.");
@@ -291,6 +376,7 @@ this.fn_validate = function()
                 return false;
             }
 
+            // 메시지 내용 필수 확인
             if (this.gfn_isNull(sTextKo) || String(sTextKo).trim() == "")
             {
                 this.alert("메시지(한글)는 필수 항목입니다.");
@@ -303,118 +389,69 @@ this.fn_validate = function()
     return true;
 };
 
+
 /*
- * 기능 : 변경 데이터 존재 여부 확인
+ * 기능 : 체크박스 선택으로 발생한 변경 상태 정리
+ * : select_yn만 변경된 기존 행은 저장 대상에서 제외
  */
-this.fn_isChanged = function()
+this.fn_resetSelectionOnlyRows = function()
 {
-    if (this.ds_message.getDeletedRowCount() > 0)
-    {
-        return true;
-    }
+    var ds = this.ds_message;
 
-    for (var i = 0; i < this.ds_message.rowcount; i++)
+    for (var i = 0; i < ds.rowcount; i++)
     {
-        var nRowType = this.ds_message.getRowType(i);
+        if (ds.getRowType(i) != Dataset.ROWTYPE_UPDATE) continue;
 
-        if (nRowType == 2 || nRowType == 4)
+        var bDataChanged = false;
+
+        for (var j = 0; j < ds.getColCount(); j++)
         {
-            return true;
+            var sColId = ds.getColID(j);
+
+            if (sColId == "select_yn") continue;
+
+            if (ds.getColumn(i, sColId) !== ds.getOrgColumn(i, sColId))
+            {
+                bDataChanged = true;
+                break;
+            }
+        }
+
+        if (!bDataChanged)
+        {
+            var bUpdateControl = ds.updatecontrol;
+            ds.set_updatecontrol(false);
+
+            try
+            {
+                ds.setRowType(i, Dataset.ROWTYPE_NORMAL);
+            }
+            finally
+            {
+                ds.set_updatecontrol(bUpdateControl);
+            }
         }
     }
-
-    return false;
 };
 
+
+/***************************************************************************************
+ * 8. 이벤트
+ * : 화면에서 각 컴포넌트별 이벤트를 작성하는 기능
+ **************************************************************************************/
 /*
- * 기능 : 메시지 저장
+ * 기능 : 화면 로딩
+ * : 화면 로딩 시 초기화 함수 호출
  */
-this.fn_save = function()
+this.COM12000M_onload = function(obj:nexacro.Form, e:nexacro.LoadEventInfo)
 {
-    if (!this.fn_isChanged())
-    {
-        this.alert("변경된 데이터가 없습니다.");
-        return;
-    }
-
-    if (!this.fn_validate())
-    {
-        return;
-    }
-
-    // DB 저장 Controller 및 트랜잭션 구현 전에는 호출하지 않음
-    this.alert("저장 서버 기능 연결 후 테스트할 예정입니다.");
+    this.fn_init(obj, e);
 };
 
-
-/***************************************************************************************
- * 4. TRANSACTION, CALLBACK
- ***************************************************************************************/
-
-/*
- * 기능 : Transaction 결과 처리
- */
-//콜백
-this.fn_callback = function(sSvcID, nErrCd, sErrMsg)
-{
-    if(nErrCd < 0) {
-        this.alert(sErrMsg);
-        return;
-    }
-
-    switch(sSvcID) {
-
-        //메시지 목록 조회
-        case "selectMessageList":
-
-            var nCnt = this.ds_message.rowcount;
-
-            //조회 건수 표시
-            this.fn_setMessageCount();
-
-            if (nCnt == 0) {
-                this.alert("조회조건에 일치하는 데이터가 존재하지 않습니다.");
-                //this.gfn_msgBox('MSG-A-10030');
-            }
-            break;
-
-        //메시지 저장 (추후 서버 기능 연결)
-        case "saveMessage":
-
-            this.alert("정상적으로 저장되었습니다.");
-
-            //저장 후 재조회
-            this.fn_search();
-            break;
-    }
-};
-
-
-/***************************************************************************************
- * 5. 팝업 호출 및 콜백
- ***************************************************************************************/
-
-
-/***************************************************************************************
- * 6. 기타 함수
- ***************************************************************************************/
-
-
-/***************************************************************************************
- * 7. 이벤트
- ***************************************************************************************/
-
-/*
- * 기능 : 메시지 목록 엑셀다운로드 버튼 이벤트
- */
-this.fn_excel_down = function(obj, e)
-{
-    // 엑셀다운로드 기능 추후 구현
-    this.alert("엑셀다운로드 기능 연결 후 테스트할 예정입니다.");
-};
 
 /*
  * 기능 : 메시지 목록 전체 선택 / 해제
+ * : 그리드 헤더 체크박스 클릭 시 전체 행 선택 상태 변경
  */
 this.grd_message_onheadclick = function(obj, e)
 {
@@ -432,8 +469,7 @@ this.grd_message_onheadclick = function(obj, e)
 
     // 헤더 체크박스 상태 변경
     obj.setCellProperty("head", 1, "text", (sValue == "Y") ? "1" : "0");
-};
-]]></Script>
+};]]></Script>
     <Objects>
       <Dataset id="ds_search">
         <ColumnInfo>
@@ -471,13 +507,13 @@ this.grd_message_onheadclick = function(obj, e)
           <Column id="CODE_NM" type="STRING" size="100"/>
         </ColumnInfo>
       </Dataset>
-      <Dataset id="ds_cbo_grid_message_class_cd">
+      <Dataset id="ds_grd_message_class_cd">
         <ColumnInfo>
           <Column id="CODE" type="STRING" size="30"/>
           <Column id="CODE_NM" type="STRING" size="100"/>
         </ColumnInfo>
       </Dataset>
-      <Dataset id="ds_cbo_grid_message_type_cd">
+      <Dataset id="ds_grd_message_type_cd">
         <ColumnInfo>
           <Column id="CODE" type="STRING" size="30"/>
           <Column id="CODE_NM" type="STRING" size="100"/>

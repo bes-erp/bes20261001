@@ -15,6 +15,7 @@ import java.util.Map;
 * -------------------------------------------------------------------------------------
 * 2026.11.04        	Built1             최초 생성
 * 2026.11.05        	Built1             수정
+* 2026.11.10			Built1			   데이터 저장 기능 추가
 */
 public interface COM12000MService {
 
@@ -30,4 +31,15 @@ public interface COM12000MService {
     */
     public abstract List<Map<String, Object>> selectMessageList(Map<String, Object> searchParamMap, String userId) throws Exception;
     
+    /**
+    * @methodName     		: saveMessage
+    * @author         		: built1
+    * @date           		: 2026.11.10
+    * @description    		: 메시지 데이터를 저장하는 메소드
+    * @param messageList
+    * @param userId
+    * @return
+    * @throws Exception
+    */
+    public abstract int saveMessage(List<Map<String, Object>> messageList, String userId) throws Exception;
 }
