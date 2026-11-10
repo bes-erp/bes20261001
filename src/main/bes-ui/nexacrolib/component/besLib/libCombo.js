@@ -12,17 +12,16 @@
 /**
  * @description     콤보박스 데이터 조회 함수
  * @param           {objForm            : object                }   해당화면          : this
- * @param           {sComboId           : String                }   콤보ID            : cbo_repeat_cd
  * @param           {sComboDataSetId    : String                }   콤보데이터셋ID    : ds_cbo_repeat_cd
  * @param           {sCodeType          : String                }   코드유형          : REPEAT_TYPE_CD
  * @param           {sAactiveType       : String                }   활성여부코드      : Y(유효한데이터), N(유효하지않은데이터), ""(전체)
  * @param           {sAddAllRow         : String                }   전체로우추가      : Y(전체추가), N(전체추가하지않음)
  */
-pForm.gfn_code = function(objForm, sComboId, sComboDataSetId, sCodeType, sAactiveType, sAddAllRow)
+pForm.gfn_code = function(objForm, sComboDataSetId, sCodeType, sAactiveType, sAddAllRow)
 {
     if (this.gfn_isNull(sComboDataSetId)) 
     {
-        trace("[공통코드] 대상 Dataset이 존재하지 않습니다.");
+        trace("[공통콤보] 데이터셋ID는 필수 항목입니다.");
         return;
     }
 
@@ -31,7 +30,7 @@ pForm.gfn_code = function(objForm, sComboId, sComboDataSetId, sCodeType, sAactiv
 
     if (!objComboDataSet) 
     {
-        trace("[" + sComboDataSetId + "] Dataset이 존재하지 않습니다.");
+        trace("[공통콤보] " + sComboDataSetId + "가 생성되지 않았습니다.");
         return;
     }
 
@@ -49,13 +48,6 @@ pForm.gfn_code = function(objForm, sComboId, sComboDataSetId, sCodeType, sAactiv
 
     // 데이터셋 초기화
     objComboDataSet.clearData();
-
-    // 데이터셋ID 기준으로 콤보ID 저장 (여러 번 호출해도 덮어쓰지 않음)
-    if (!objForm._comboMap) 
-    {
-        objForm._comboMap = {};
-    }
-    objForm._comboMap[sComboDataSetId] = sComboId;
 
     // 트랜잭션 실행
     var sSvcID          = "comboCode_" + sComboDataSetId;                       // 서비스ID
@@ -79,13 +71,12 @@ pForm.gfn_code = function(objForm, sComboId, sComboDataSetId, sCodeType, sAactiv
  */
 pForm.fn_comboCallback = function(sSvcID, nErrCd, sErrMsg)
 {
-    trace("[서비스ID] " + sSvcID);
-
     // 오류 확인
     if (nErrCd < 0) 
     {
         trace("###########################################################");
-        trace("[공통코드] 조회 오류");
+        trace("[공통콤보] 조회 오류");
+		trace("[서비스ID] "   + sSvcID);
         trace("[오류코드] "   + nErrCd);
         trace("[오류메시지] " + sErrMsg);
         trace("###########################################################");
@@ -108,29 +99,14 @@ pForm.fn_comboCallback = function(sSvcID, nErrCd, sErrMsg)
 
     if (!objTargetDs) 
     {
-        trace("[공통코드] 대상 Dataset이 존재하지 않습니다.");
-        trace("[서비스ID] "  + sSvcID);
-        trace("[DatasetID] " + sComboDataSetId);
+        trace("[공통콤보] " + sComboDataSetId + "가 생성되지 않았습니다.");
         return;
     }
 
     // 조회 결과 확인
     if (objTargetDs.getRowCount() == 0) 
     {
-        trace("[" + sComboDataSetId + "] 데이터가 존재하지 않습니다.");
+        trace("[공통콤보] " + sComboDataSetId + "에 데이터가 존재하지 않습니다.");
         return;
     }
-
-    // 데이터셋ID로 해당 콤보 조회
-    var sComboId = this._comboMap ? this._comboMap[sComboDataSetId] : null;
-    var objCombo = sComboId ? this.components[sComboId] : null;
-
-    if (!objCombo) 
-    {
-        trace("[공통코드] 대상 콤보가 존재하지 않습니다. [" + sComboId + "]");
-        return;
-    }
-
-    // 콤보박스 첫번째 인덱스로 표기
-    objCombo.set_index(0);
 };

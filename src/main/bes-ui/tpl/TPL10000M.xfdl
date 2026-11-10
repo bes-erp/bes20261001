@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="TPL10000M" width="1007" height="720" titletext="템플릿-조회" font="bold 12px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;">
+  <Form id="TPL10000M" width="1007" height="720" titletext="템플릿-조회" font="bold 12px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" onload="fn_init">
     <Layouts>
       <Layout height="720" mobileorientation="landscape" width="1007">
         <Static id="sta_margin_left" taborder="0" text="10" left="0" top="0" width="10" height="720" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;"/>
@@ -80,8 +80,8 @@
               <Band id="body">
                 <Cell text="expr:currow+1" edittype="none" textAlign="center"/>
                 <Cell col="1" text="bind:select_yn" displaytype="checkboxcontrol" edittype="checkbox" textAlign="center"/>
-                <Cell col="2" text="bind:message_class_cd" displaytype="combocontrol" edittype="combo" combodataset="ds_cbo_grid_message_class_cd" combocodecol="code" combodatacol="name"/>
-                <Cell col="3" text="bind:message_type_cd" displaytype="combocontrol" edittype="combo" combodataset="ds_cbo_grid_message_type_cd" combocodecol="code" combodatacol="name"/>
+                <Cell col="2" text="bind:message_class_cd" displaytype="combocontrol" edittype="combo" combodataset="ds_grd_message_class_cd" combocodecol="CODE" combodatacol="CODE_NM"/>
+                <Cell col="3" text="bind:message_type_cd" displaytype="combocontrol" edittype="combo" combodataset="ds_grd_message_type_cd" combocodecol="CODE" combodatacol="CODE_NM"/>
                 <Cell col="4" text="bind:message_num" edittype="none"/>
                 <Cell col="5" text="bind:message_text_ko" edittype="text"/>
                 <Cell col="6" text="bind:message_text_en" edittype="text"/>
@@ -107,46 +107,12 @@
           <Column id="CODE" type="STRING" size="256"/>
           <Column id="CODE_NM" type="STRING" size="256"/>
         </ColumnInfo>
-        <Rows>
-          <Row>
-            <Col id="CODE_NM">전체</Col>
-          </Row>
-          <Row>
-            <Col id="CODE">DM</Col>
-            <Col id="CODE_NM">화면메시지</Col>
-          </Row>
-          <Row>
-            <Col id="CODE">JM</Col>
-            <Col id="CODE_NM">시스템메시지</Col>
-          </Row>
-        </Rows>
       </Dataset>
       <Dataset id="ds_cbo_message_type_cd">
         <ColumnInfo>
           <Column id="CODE" type="STRING" size="256"/>
           <Column id="CODE_NM" type="STRING" size="256"/>
         </ColumnInfo>
-        <Rows>
-          <Row>
-            <Col id="CODE_NM">전체</Col>
-          </Row>
-          <Row>
-            <Col id="CODE">A</Col>
-            <Col id="CODE_NM">알림</Col>
-          </Row>
-          <Row>
-            <Col id="CODE">E</Col>
-            <Col id="CODE_NM">오류</Col>
-          </Row>
-          <Row>
-            <Col id="CODE">I</Col>
-            <Col id="CODE_NM">정보</Col>
-          </Row>
-          <Row>
-            <Col id="CODE">W</Col>
-            <Col id="CODE_NM">경고</Col>
-          </Row>
-        </Rows>
       </Dataset>
       <Dataset id="ds_grd_message_class_cd">
         <ColumnInfo>
@@ -175,148 +141,6 @@
           <Column id="UPDATE_DATE" type="STRING" size="256"/>
           <Column id="UPDATE_BY" type="STRING" size="256"/>
         </ColumnInfo>
-        <Rows>
-          <Row>
-            <Col id="MESSAGE_NUM">NM-CNF-10000</Col>
-            <Col id="MESSAGE_TYPE_CD">C</Col>
-            <Col id="MESSAGE_TEXT_KO">선택된 데이터를 삭제하시겠습니까?</Col>
-            <Col id="MESSAGE_TEXT_EN">Would you like to delete the selected data?</Col>
-            <Col id="MESSAGE_TEXT_ZH">중</Col>
-            <Col id="MESSAGE_TEXT_JA">일</Col>
-            <Col id="MESSAGE_TEXT_OT">기</Col>
-            <Col id="REMARK">시스템 등록 데이터</Col>
-            <Col id="CREATE_DATE">1900-01-01</Col>
-            <Col id="CREATE_BY">admin</Col>
-            <Col id="UPDATE_DATE">1900-01-02</Col>
-            <Col id="UPDATE_BY">admin</Col>
-          </Row>
-          <Row>
-            <Col id="MESSAGE_NUM">NM-ALT-10000</Col>
-            <Col id="MESSAGE_TYPE_CD">A</Col>
-            <Col id="MESSAGE_TEXT_KO">정상적으로 저장 되었습니다.</Col>
-            <Col id="MESSAGE_TEXT_EN">It was saved normally.</Col>
-            <Col id="MESSAGE_TEXT_ZH">중</Col>
-            <Col id="MESSAGE_TEXT_JA">일</Col>
-            <Col id="MESSAGE_TEXT_OT">기</Col>
-            <Col id="REMARK">시스템 등록 데이터</Col>
-            <Col id="CREATE_DATE">1900-01-01</Col>
-            <Col id="CREATE_BY">admin</Col>
-            <Col id="UPDATE_DATE">1900-01-02</Col>
-            <Col id="UPDATE_BY">admin</Col>
-          </Row>
-          <Row>
-            <Col id="MESSAGE_NUM">NM-ALT-10010</Col>
-            <Col id="MESSAGE_TYPE_CD">A</Col>
-            <Col id="MESSAGE_TEXT_KO">{1} 항목은 필수입니다.</Col>
-            <Col id="MESSAGE_TEXT_EN">Item {1} is required.</Col>
-            <Col id="MESSAGE_TEXT_ZH">중</Col>
-            <Col id="MESSAGE_TEXT_JA">일</Col>
-            <Col id="MESSAGE_TEXT_OT">기</Col>
-            <Col id="REMARK">시스템 등록 데이터</Col>
-            <Col id="CREATE_DATE">1900-01-01</Col>
-            <Col id="CREATE_BY">admin</Col>
-            <Col id="UPDATE_DATE">1900-01-02</Col>
-            <Col id="UPDATE_BY">admin</Col>
-          </Row>
-          <Row>
-            <Col id="MESSAGE_NUM">NM-ALT-10020</Col>
-            <Col id="MESSAGE_TYPE_CD">A</Col>
-            <Col id="MESSAGE_TEXT_KO">변경된 데이터가 존재하지 않습니다.</Col>
-            <Col id="MESSAGE_TEXT_EN">There is no changed data.</Col>
-            <Col id="MESSAGE_TEXT_ZH">중</Col>
-            <Col id="MESSAGE_TEXT_JA">일</Col>
-            <Col id="MESSAGE_TEXT_OT">기</Col>
-            <Col id="REMARK">시스템 등록 데이터</Col>
-            <Col id="CREATE_DATE">1900-01-01</Col>
-            <Col id="CREATE_BY">admin</Col>
-            <Col id="UPDATE_DATE">1900-01-02</Col>
-            <Col id="UPDATE_BY">admin</Col>
-          </Row>
-          <Row>
-            <Col id="MESSAGE_NUM">NM-ALT-10030</Col>
-            <Col id="MESSAGE_TYPE_CD">A</Col>
-            <Col id="MESSAGE_TEXT_KO">조회 조건에 일치하는 데이터가 존재하지 않습니다.</Col>
-            <Col id="MESSAGE_TEXT_EN">No data matching the search criteria exists.</Col>
-            <Col id="MESSAGE_TEXT_ZH">중</Col>
-            <Col id="MESSAGE_TEXT_JA">일</Col>
-            <Col id="MESSAGE_TEXT_OT">기</Col>
-            <Col id="REMARK">시스템 등록 데이터</Col>
-            <Col id="CREATE_DATE">1900-01-01</Col>
-            <Col id="CREATE_BY">admin</Col>
-            <Col id="UPDATE_DATE">1900-01-02</Col>
-            <Col id="UPDATE_BY">admin</Col>
-          </Row>
-          <Row>
-            <Col id="MESSAGE_NUM">NM-ALT-10040</Col>
-            <Col id="MESSAGE_TYPE_CD">A</Col>
-            <Col id="MESSAGE_TEXT_KO">공통 메시지정보(gds_message)가 생성되지 않았습니다.</Col>
-            <Col id="MESSAGE_TEXT_EN">Common message information (gds_message) was not generated.</Col>
-            <Col id="MESSAGE_TEXT_ZH">중</Col>
-            <Col id="MESSAGE_TEXT_JA">일</Col>
-            <Col id="MESSAGE_TEXT_OT">기</Col>
-            <Col id="REMARK">시스템 등록 데이터</Col>
-            <Col id="CREATE_DATE">1900-01-01</Col>
-            <Col id="CREATE_BY">admin</Col>
-            <Col id="UPDATE_DATE">1900-01-02</Col>
-            <Col id="UPDATE_BY">admin</Col>
-          </Row>
-          <Row>
-            <Col id="MESSAGE_NUM">NM-ALT-10050</Col>
-            <Col id="MESSAGE_TYPE_CD">A</Col>
-            <Col id="MESSAGE_TEXT_KO">공통 사용자정보(gds_user)가 생성되지 않았습니다.</Col>
-            <Col id="MESSAGE_TEXT_EN">Common user information (gds_user) was not created.</Col>
-            <Col id="MESSAGE_TEXT_ZH">중</Col>
-            <Col id="MESSAGE_TEXT_JA">일</Col>
-            <Col id="MESSAGE_TEXT_OT">기</Col>
-            <Col id="REMARK">시스템 등록 데이터</Col>
-            <Col id="CREATE_DATE">1900-01-01</Col>
-            <Col id="CREATE_BY">admin</Col>
-            <Col id="UPDATE_DATE">1900-01-02</Col>
-            <Col id="UPDATE_BY">admin</Col>
-          </Row>
-          <Row>
-            <Col id="MESSAGE_NUM">JM-ALT-10000</Col>
-            <Col id="MESSAGE_TYPE_CD">A</Col>
-            <Col id="MESSAGE_TEXT_KO">데이터맵 저장시 키 값이 존재하지 않습니다.</Col>
-            <Col id="MESSAGE_TEXT_EN">The key value does not exist when saving the data map.</Col>
-            <Col id="MESSAGE_TEXT_ZH">중</Col>
-            <Col id="MESSAGE_TEXT_JA">일</Col>
-            <Col id="MESSAGE_TEXT_OT">기</Col>
-            <Col id="REMARK">시스템 등록 데이터</Col>
-            <Col id="CREATE_DATE">1900-01-01</Col>
-            <Col id="CREATE_BY">admin</Col>
-            <Col id="UPDATE_DATE">1900-01-02</Col>
-            <Col id="UPDATE_BY">admin</Col>
-          </Row>
-          <Row>
-            <Col id="MESSAGE_NUM">JM-ALT-10010</Col>
-            <Col id="MESSAGE_TYPE_CD">A</Col>
-            <Col id="MESSAGE_TEXT_KO">변수명은 필수입니다.</Col>
-            <Col id="MESSAGE_TEXT_EN">Variable names are required.</Col>
-            <Col id="MESSAGE_TEXT_ZH">중</Col>
-            <Col id="MESSAGE_TEXT_JA">일</Col>
-            <Col id="MESSAGE_TEXT_OT">기</Col>
-            <Col id="REMARK">시스템 등록 데이터</Col>
-            <Col id="CREATE_DATE">1900-01-01</Col>
-            <Col id="CREATE_BY">admin</Col>
-            <Col id="UPDATE_DATE">1900-01-02</Col>
-            <Col id="UPDATE_BY">admin</Col>
-          </Row>
-          <Row>
-            <Col id="MESSAGE_NUM">JM-ALT-10040</Col>
-            <Col id="MESSAGE_TYPE_CD">A</Col>
-            <Col id="MESSAGE_TEXT_KO">Oracle TIMESTAMP 변환 중 오류가 발생하였습니다.</Col>
-            <Col id="MESSAGE_TEXT_EN">An error occurred during Oracle TIMESTAMP conversion.</Col>
-            <Col id="MESSAGE_TEXT_ZH">중</Col>
-            <Col id="MESSAGE_TEXT_JA">일</Col>
-            <Col id="MESSAGE_TEXT_OT">기</Col>
-            <Col id="REMARK">시스템 등록 데이터</Col>
-            <Col id="CREATE_DATE">1900-01-01</Col>
-            <Col id="CREATE_BY">admin</Col>
-            <Col id="UPDATE_DATE">1900-01-02</Col>
-            <Col id="UPDATE_BY">admin</Col>
-          </Row>
-        </Rows>
       </Dataset>
     </Objects>
     <Script type="xscript5.1"><![CDATA[/***************************************************************************************
@@ -332,6 +156,7 @@
  * 변경일            변경자            변경내역
  *---------------------------------------------------------------------------------------
  * 2026-11-01        Built1            최초작성
+ * 2026-11-10        Built1            gfn_code 항수 매개변수 변경
  ***************************************************************************************/
 
 
@@ -347,7 +172,13 @@
  **************************************************************************************/
 this.fn_init = function (obj:Form, e:nexacro.LoadEventInfo)
 {
-
+	// 조회조건
+    this.gfn_code(this, "ds_cbo_message_class_cd", "MESSAGE_CLASS_CD", "", "Y");		// 메시지분류(전체포함)
+	this.gfn_code(this, "ds_cbo_message_type_cd" , "MESSAGE_TYPE_CD" , "", "Y");		// 메시지유형(전체포함)
+	
+	// 그리드
+    this.gfn_code(this, "ds_grd_message_class_cd", "MESSAGE_CLASS_CD", "", "N"); 		// 메시지분류
+	this.gfn_code(this, "ds_grd_message_type_cd" , "MESSAGE_TYPE_CD" , "", "N"); 		// 메시지유형
 };
 
 
@@ -435,7 +266,15 @@ this.fn_print = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
  */
 this.fn_add_row = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	var nRow = this.ds_message.insertRow(0);
 
+    this.ds_message.setColumn(nRow, "select_yn"       , "N");
+    this.ds_message.setColumn(nRow, "message_class_cd", "NM");
+    this.ds_message.setColumn(nRow, "message_type_cd" , "A");
+
+    this.ds_message.set_rowposition(nRow);
+
+    this.fn_setMessageCount();
 };
 
 
