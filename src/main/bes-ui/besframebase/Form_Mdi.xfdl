@@ -179,6 +179,9 @@ this.fn_openTab = function(sMenuCd, sMenuNm, sFormUrl)
 
     // 신규 업무 화면 표시
     objChildFrame.show();
+	
+	// 업무 ChildFrame을 부모 FrameSet 영역에 최대화
+	objChildFrame.set_openstatus("maximize");
 
     // 열린 업무 탭 목록에 추가
     this.fv_tabList.push({ menuCd: sMenuCd, menuNm: sMenuNm, formUrl: sFormUrl, frameId: sFrameId });
@@ -187,10 +190,12 @@ this.fn_openTab = function(sMenuCd, sMenuNm, sFormUrl)
     this.fn_selectTab(sMenuCd);
 };
 
+
 /*
  * 기능 : 업무 탭 선택
  * 설명 : 홈 화면과 업무 FrameSet 표시 상태 전환
- *        선택한 업무 프레임에 포커스 설정
+ *        선택한 업무 ChildFrame만 표시하고 나머지는 숨김
+ *        선택한 업무의 상단 및 왼쪽 메뉴 복원
  */
 this.fn_selectTab = function(sMenuCd)
 {
@@ -205,8 +210,10 @@ this.fn_selectTab = function(sMenuCd)
         // MDI 30px, 홈 화면 표시, 업무 FrameSet 숨김
         objContent.set_separatesize("30,*,0");
 
+        // 현재 활성 메뉴 코드 초기화
         this.fv_activeMenuCd = "";
 
+        // 업무 탭 버튼 갱신
         this.fn_createTabs();
         return;
     }
@@ -216,6 +223,7 @@ this.fn_selectTab = function(sMenuCd)
 
     if (!objInfo) return;
 
+    // 선택한 업무 ChildFrame 조회
     var objChildFrame = objFrameSet[objInfo.frameId];
 
     if (!objChildFrame) return;
@@ -223,8 +231,20 @@ this.fn_selectTab = function(sMenuCd)
     // MDI 30px, 홈 화면 숨김, 업무 FrameSet 표시
     objContent.set_separatesize("30,0,*");
 
-    // 선택한 업무 프레임 활성화
-    objChildFrame.setFocus();
+    // 모든 업무 ChildFrame의 표시 상태 변경
+	for (var i = 0; i < objFrameSet.frames.length; i++)
+	{
+		var objFrame = objFrameSet.frames[i];
+
+		// 선택한 업무 프레임만 표시
+		objFrame.set_visible(objFrame.name == objInfo.frameId);
+	}
+
+	// 선택한 업무 프레임을 전체 업무 영역에 최대화
+	objChildFrame.set_openstatus("maximize");
+
+	// 선택한 업무 프레임 활성화
+	objChildFrame.setFocus();
 
     // 현재 활성 메뉴 코드 저장
     this.fv_activeMenuCd = sMenuCd;
@@ -235,6 +255,7 @@ this.fn_selectTab = function(sMenuCd)
     // 업무 탭 버튼 갱신
     this.fn_createTabs();
 };
+
 
 
 /*
