@@ -48,9 +48,9 @@ this.fn_init = function(obj, e)
     var objApp = nexacro.getApplication();
 
     // 로그인 사용자 정보가 있으면 표시
-    if (objApp.gvUserId)
+    if (objApp.gv_userid)
     {
-        this.fn_setUserInfo(objApp.gvUserId);
+        this.fn_setUserInfo(objApp.gv_userid);
     }
 };
 
@@ -102,7 +102,7 @@ this.fn_logout = function()
     }
 
     // 로그인 사용자 ID 초기화
-    objApp.gvUserId = "";
+    objApp.gv_userid = "";
 
     // 상단 사용자 표시 정보 초기화
     this.fn_setUserInfo("");
@@ -131,7 +131,7 @@ this.fn_logout = function()
 
 /*
  * 기능 : 로그인 사용자 정보 표시
- * 설명 : 사용자 ID 또는 사용자명을 상단 영역에 반영
+ * 설명 : 로그인 사용자 ID를 상단 환영 문구에 반영
  */
 this.fn_setUserInfo = function(sUserName)
 {
@@ -145,8 +145,8 @@ this.fn_setUserInfo = function(sUserName)
         return;
     }
 
-    // 로그인 사용자 정보 표시
-    this.sta_UserName.set_text(sUserName);
+    // 로그인 사용자 환영 문구 표시
+    this.sta_UserName.set_text(sUserName + "님 환영합니다.");
 };
 
 

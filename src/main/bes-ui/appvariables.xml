@@ -45,7 +45,7 @@
     </Dataset>
   </Datasets>
   <Variables>
-    <Variable id="gvUserId"/>
+    <Variable id="gv_userid"/>
     <Variable id="gv_lang"/>
   </Variables>
   <DataObjects/>

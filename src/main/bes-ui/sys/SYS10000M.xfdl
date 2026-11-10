@@ -252,7 +252,7 @@ this.fn_callBack = function(sSvcID, nErrCd, sErrMsg)
                 var objApp = nexacro.getApplication();
 
                 // 로그인한 사용자 아이디를 전역 변수에 저장
-                objApp.gvUserId = this.div_login.form.edt_userId.value;
+                objApp.gv_userid = this.div_login.form.edt_userId.value;
 
                 // 공통 언어 LIB를 이용하여 선택 언어 저장
                 this.fv_language = this.gfn_setLanguage(this.fv_language);
@@ -323,10 +323,10 @@ this.fn_callBack = function(sSvcID, nErrCd, sErrMsg)
             var objLeftFrame = objWorkFrame.HFrameSetWork.LeftFrame;
 
             // 로그인 사용자 정보 갱신
-            if (objTopFrame && objTopFrame.form && objTopFrame.form.fn_setUserInfo)
-            {
-                objTopFrame.form.fn_setUserInfo();
-            }
+			if (objTopFrame && objTopFrame.form && objTopFrame.form.fn_setUserInfo)
+			{
+				objTopFrame.form.fn_setUserInfo(objApp.gv_userid);
+			}
 
             // DB 메뉴정보를 이용하여 상단 대분류 메뉴 생성
             if (objMenuFrame && objMenuFrame.form && objMenuFrame.form.fn_createTopMenu)
@@ -661,7 +661,7 @@ this.fn_resetLogin = function()
     var objApp = nexacro.getApplication();
 
     // 전역 사용자 정보 초기화
-    objApp.gvUserId = "";
+    objApp.gv_userid = "";
 
     // 전역 메뉴 Dataset 초기화
     if (objApp.gds_menu)
