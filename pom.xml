@@ -309,7 +309,10 @@
 				<version>3.7.0</version>
             </plugin>
             
-            <!-- 2026-10-01 :: favicon.ico 컴파일 폴더로 복사 -->
+            <!-- 2026-10-01 :: favicon.ico 컴파일 폴더로 복사
+                 원본 : E:\BES\workspace\bes\src\main\bes-ui
+                 복사 : E:\BES\workspace\bes\src\main\webapp\bes-ui
+            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
