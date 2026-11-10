@@ -4,9 +4,9 @@
 <mapper namespace="erp.com.service.impl.COM11020MMapper">
 
     <!--
-    ***************************************************************************************
-         메뉴등록 화면 : 메뉴정보 목록 조회
-    ***************************************************************************************
+    ********************************************************************************
+        메뉴등록 화면 : 메뉴정보 목록 조회
+    ********************************************************************************
     -->
     <select id="selectMenuList" parameterType="map" resultType="map">
 
@@ -33,26 +33,25 @@
 
         <!-- 메뉴코드 또는 메뉴명 검색 -->
         <if test="menuText != null and menuText != ''">
-           and (
-                  upper(cm.child_menu_cd) like '%' || upper(#{menuText}) || '%'
-               or upper(cm.child_menu_nm) like '%' || upper(#{menuText}) || '%'
-           )
+            and (
+                   upper(cm.child_menu_cd) like '%' || upper(#{menuText}) || '%'
+                or upper(cm.child_menu_nm) like '%' || upper(#{menuText}) || '%'
+            )
         </if>
 
         <!-- 사용여부 검색 -->
         <if test="userYn != null and userYn != ''">
-           and cm.user_yn = #{userYn}
+            and cm.user_yn = #{userYn}
         </if>
 
          order by cm.child_menu_seq, cm.menu_id
 
     </select>
 
-
     <!--
-    ***************************************************************************************
-         공통 프레임 : 사용 가능한 메뉴정보 목록 조회
-    ***************************************************************************************
+    ********************************************************************************
+        공통 프레임 : 사용 가능한 메뉴정보 목록 조회
+    ********************************************************************************
     -->
     <select id="selectFrameMenuList" resultType="map">
 
@@ -79,5 +78,102 @@
          order by cm.child_menu_seq, cm.menu_id
 
     </select>
+
+    <!--
+    ********************************************************************************
+        메뉴등록 화면 : 메뉴정보 신규 등록
+    ********************************************************************************
+    -->
+    <insert id="insertMenu" parameterType="map">
+
+        insert into bcom.com_menu (
+               menu_id
+              ,parent_menu_cd
+              ,child_menu_cd
+              ,child_menu_nm
+              ,child_page_ulr
+              ,child_menu_level
+              ,child_menu_seq
+              ,user_yn
+              ,btn_search_yn
+              ,btn_search_init_yn
+              ,btn_save_yn
+              ,btn_add_row_yn
+              ,btn_del_row_yn
+              ,btn_excel_down_yn
+              ,btn_excel_up_yn
+              ,btn_print_yn
+              ,btn_batch_yn
+              ,remark
+              ,create_date
+              ,create_by
+        )
+        values (
+               bcom.com_menu_s.nextval
+              ,#{PARENT_MENU_CD,jdbcType=VARCHAR}
+              ,#{CHILD_MENU_CD,jdbcType=VARCHAR}
+              ,#{CHILD_MENU_NM,jdbcType=VARCHAR}
+              ,#{CHILD_PAGE_ULR,jdbcType=VARCHAR}
+              ,#{CHILD_MENU_LEVEL,jdbcType=NUMERIC}
+              ,#{CHILD_MENU_SEQ,jdbcType=NUMERIC}
+              ,#{USER_YN,jdbcType=VARCHAR}
+              ,#{BTN_SEARCH_YN,jdbcType=VARCHAR}
+              ,#{BTN_SEARCH_INIT_YN,jdbcType=VARCHAR}
+              ,#{BTN_SAVE_YN,jdbcType=VARCHAR}
+              ,#{BTN_ADD_ROW_YN,jdbcType=VARCHAR}
+              ,#{BTN_DEL_ROW_YN,jdbcType=VARCHAR}
+              ,#{BTN_EXCEL_DOWN_YN,jdbcType=VARCHAR}
+              ,#{BTN_EXCEL_UP_YN,jdbcType=VARCHAR}
+              ,#{BTN_PRINT_YN,jdbcType=VARCHAR}
+              ,#{BTN_BATCH_YN,jdbcType=VARCHAR}
+              ,#{REMARK,jdbcType=VARCHAR}
+              ,sysdate
+              ,'SYSTEM'
+        )
+
+    </insert>
+
+    <!--
+    ********************************************************************************
+        메뉴등록 화면 : 메뉴정보 수정
+    ********************************************************************************
+    -->
+    <update id="updateMenu" parameterType="map">
+
+        update bcom.com_menu
+           set parent_menu_cd     = #{PARENT_MENU_CD,jdbcType=VARCHAR}
+              ,child_menu_cd      = #{CHILD_MENU_CD,jdbcType=VARCHAR}
+              ,child_menu_nm      = #{CHILD_MENU_NM,jdbcType=VARCHAR}
+              ,child_page_ulr     = #{CHILD_PAGE_ULR,jdbcType=VARCHAR}
+              ,child_menu_level   = #{CHILD_MENU_LEVEL,jdbcType=NUMERIC}
+              ,child_menu_seq     = #{CHILD_MENU_SEQ,jdbcType=NUMERIC}
+              ,user_yn            = #{USER_YN,jdbcType=VARCHAR}
+              ,btn_search_yn      = #{BTN_SEARCH_YN,jdbcType=VARCHAR}
+              ,btn_search_init_yn = #{BTN_SEARCH_INIT_YN,jdbcType=VARCHAR}
+              ,btn_save_yn        = #{BTN_SAVE_YN,jdbcType=VARCHAR}
+              ,btn_add_row_yn     = #{BTN_ADD_ROW_YN,jdbcType=VARCHAR}
+              ,btn_del_row_yn     = #{BTN_DEL_ROW_YN,jdbcType=VARCHAR}
+              ,btn_excel_down_yn  = #{BTN_EXCEL_DOWN_YN,jdbcType=VARCHAR}
+              ,btn_excel_up_yn    = #{BTN_EXCEL_UP_YN,jdbcType=VARCHAR}
+              ,btn_print_yn       = #{BTN_PRINT_YN,jdbcType=VARCHAR}
+              ,btn_batch_yn       = #{BTN_BATCH_YN,jdbcType=VARCHAR}
+              ,remark             = #{REMARK,jdbcType=VARCHAR}
+              ,update_date        = sysdate
+              ,update_by          = 'SYSTEM'
+         where menu_id = #{MENU_ID,jdbcType=NUMERIC}
+
+    </update>
+
+    <!--
+    ********************************************************************************
+        메뉴등록 화면 : 메뉴정보 삭제
+    ********************************************************************************
+    -->
+    <delete id="deleteMenu" parameterType="map">
+
+        delete from bcom.com_menu
+         where menu_id = #{MENU_ID,jdbcType=NUMERIC}
+
+    </delete>
 
 </mapper>

@@ -3,6 +3,8 @@ package erp.com.service;
 import java.util.List;
 import java.util.Map;
 
+import com.nexacro.java.xapi.data.DataSet;
+
 /**
  * =====================================================================================
  * @packageName     : erp.com.service
@@ -39,4 +41,15 @@ public interface COM11020MService {
      * @throws Exception
      */
     public abstract List<Map<String, Object>> selectFrameMenuList() throws Exception;
+    
+    /**
+     * @methodName      : saveMenuList
+     * @author          : Built1
+     * @date            : 2026.11.10
+     * @description     : 메뉴정보 등록, 수정, 삭제 일괄 처리
+     * @param inMenu    변경된 메뉴정보 Dataset
+     * @return          저장 처리 건수
+     * @throws Exception
+     */
+    public abstract int saveMenuList(DataSet inMenu) throws Exception;
 }

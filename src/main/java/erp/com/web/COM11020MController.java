@@ -9,6 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.nexacro.java.xapi.data.DataSet;
+import com.nexacro.uiadapter.spring.core.annotation.ParamDataSet;
+import com.nexacro.uiadapter.spring.core.annotation.ParamVariable;
 import com.nexacro.uiadapter.spring.core.data.NexacroResult;
 
 import erp.com.service.COM11020MService;
@@ -46,9 +49,12 @@ public class COM11020MController {
      * @throws Exception
      */
     @RequestMapping(value = "selectMenuList.do")
-    public NexacroResult selectMenuList(@RequestParam(value = "menuText", required = false) String menuText,
-                                        @RequestParam(value = "userYn", required = false) String userYn) throws Exception {
+    public NexacroResult selectMenuList(@ParamVariable(name = "menuText", required = false) String menuText,
+                                        @ParamVariable(name = "userYn", required = false) String userYn) throws Exception {
 
+    	 // 조회조건 수신 확인
+        log.info("[메뉴조회] menuText={}, userYn={}", menuText, userYn);
+        
         // 메뉴정보 조회
         List<Map<String, Object>> resultList = service.selectMenuList(menuText, userYn);
 
@@ -80,6 +86,28 @@ public class COM11020MController {
 
         // 공통 프레임 메뉴 결과 Dataset 추가
         result.addDataSet("outFrameMenu", resultList);
+
+        return result;
+    }
+    
+    /**
+     * @methodName      : saveMenuList
+     * @author          : Built1
+     * @date            : 2026.11.10
+     * @description     : 메뉴정보 등록, 수정, 삭제를 일괄 처리하는 메소드
+     * @param inMenu    변경된 메뉴정보 Dataset
+     * @return          저장 처리 결과
+     * @throws Exception
+     */
+    @RequestMapping(value = "saveMenuList.do")
+    public NexacroResult saveMenuList(@ParamDataSet(name = "inMenu") DataSet inMenu) throws Exception {
+
+        // 메뉴정보 일괄 저장
+        int saveCount = service.saveMenuList(inMenu);
+
+        // 저장 처리 결과 생성
+        NexacroResult result = new NexacroResult();
+        result.addVariable("saveCount", saveCount);
 
         return result;
     }

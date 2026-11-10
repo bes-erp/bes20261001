@@ -177,10 +177,7 @@ this.fn_selectTopMenu = function(sTopMenuCd)
         // 현재 2레벨 메뉴에 속한 3레벨 메뉴를 찾을 때 사용
         var sChildCd = dsMenu.getColumn(i, "CHILD_MENU_CD");
 
-        // 현재 메뉴가 2레벨인지 확인
-        // 부모 메뉴 코드가 선택한 1레벨 메뉴 코드와 일치하는지 확인
-        // 두 조건을 만족하면 왼쪽 메뉴 Dataset에 추가
-        if (nLevel == 2 && sParentCd == sTopMenuCd)
+        if (nLevel == 2 && sParentCd == sTopMenuCd && dsMenu.getColumn(i, "USER_YN") == "Y")
         {
             // nRow : ds_menu에 새로 추가된 행 번호
             // addRow : Dataset 마지막에 새로운 데이터 행 추가
@@ -214,7 +211,7 @@ this.fn_selectTopMenu = function(sTopMenuCd)
 
                 // 현재 메뉴가 3레벨이고 부모가 선택한 2레벨 메뉴인 경우
                 // 해당 업무 메뉴를 왼쪽 Grid Dataset에 추가
-                if (nChildLevel == 3 && sChildParentCd == sChildCd)
+                if (nChildLevel == 3 && sChildParentCd == sChildCd && dsMenu.getColumn(j, "USER_YN") == "Y")
                 {
                     // nChildRow : ds_menu에 추가한 3레벨 업무 메뉴 행 번호
                     var nChildRow = this.ds_menu.addRow();
