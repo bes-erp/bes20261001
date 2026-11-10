@@ -117,10 +117,10 @@ this.fn_init = function(obj, e)
 
     // 공통 언어 LIB를 이용하여 저장된 언어 설정 복원
     this.fn_loadLanguage();
-	
+	 
 	// 기본 언어 한국어 설정
-	this.cbo_lang.set_value("KO");
-
+	this.div_login.form.cbo_lang.set_index(0);
+  
     // 로그인 화면에서 사용할 공통 메시지 조회
     // 조회 완료 시 LIB_MESSAGE에서 Application.gds_message에 복사
     this.gfn_loadMessage(this);
