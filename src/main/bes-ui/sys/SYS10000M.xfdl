@@ -331,6 +331,9 @@ this.fn_callBack = function(sSvcID, nErrCd, sErrMsg)
 			if (objTopFrame && objTopFrame.form && objTopFrame.form.fn_setUserInfo)
 			{
 				objTopFrame.form.fn_setUserInfo(objApp.gv_userid);
+				
+				// 로그인에서 선택한 언어를 상단에 반영
+				objTopFrame.form.fn_setLanguageInfo(objApp.gv_lang);
 			}
 
             // DB 메뉴정보를 이용하여 상단 대분류 메뉴 생성
