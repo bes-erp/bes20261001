@@ -2,12 +2,15 @@
 
 /*
  ===============================================================================
- ==  Util 관련 공통 함수
+ ==  libEven 화면 공통 이벤트 관련 함수
+ ==  라이브러리 내부에서 사용하는 함수는 제외
+ ● this.gfn_함수명              	: 라이브러리 외부 함수에 대한 설명
+ ● this._gfn_함수명             	: 라이브러리 내부 함수에 대한 설명
  ===============================================================================
- ● this.gfn_addRow                      :  그리드 첫행 추가 및 지정 셀 포커스 이동
- ● this.gfn_searchClear         		: 검색조건 초기화 함수
- ● this.gfn_searchClearComp     		: 검색조건 컴포넌트 값 초기화 함수 (재귀)
+ ● this.gfn_searchClear         	: 검색조건 초기화 함수
+ ● this.gfn_addRow                  : 그리드 첫행 추가 및 지정 셀 포커스 이동하는 함수
 */
+
 
 /**
  * @description     검색조건 초기화 함수
@@ -33,7 +36,7 @@ pForm.gfn_searchClear = function(objDiv)
 	trace("[서버현재일자] " + sToday);
 
     // 검색조건 컴포넌트 초기화
-    this.gfn_searchClearComp(objDiv.form, sToday);
+    this._gfn_searchClearComp(objDiv.form, sToday);
 };
 
 /**
@@ -41,7 +44,7 @@ pForm.gfn_searchClear = function(objDiv)
  * @param           {objForm    : object    }   대상 Form       : this.div_search.form
  * @param           {sToday     : String    }   현재일자        : yyyyMMdd
  */
-pForm.gfn_searchClearComp = function(objForm, sToday)
+pForm._gfn_searchClearComp = function(objForm, sToday)
 {
     var arrComp = objForm.components;
 
@@ -79,7 +82,7 @@ pForm.gfn_searchClearComp = function(objForm, sToday)
 };
 
 /**
- * @description     그리드 첫행 추가 및 지정 셀 포커스 이동
+ * @description     그리드 첫행 추가 및 지정 셀 포커스 이동하는 함수
  * @param           {objGrid        	: object            }   대상 그리드     : this.grd_message
  * @param           {sFocusCellBindText : String            }   포커스 셀       : 컬럼ID("MESSAGE_CLASS_CD")
  * @example         this.gfn_addRow(this.grd_message, "MESSAGE_CLASS_CD");

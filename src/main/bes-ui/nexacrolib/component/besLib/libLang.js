@@ -2,15 +2,18 @@
 
 /*
  ===============================================================================
- ==  Language 관련 공통 함수
+ ==  libLang 관련 공통 함수
+ ==  라이브러리 내부에서 사용하는 함수는 제외
+ ● this.gfn_함수명              	: 라이브러리 외부 함수에 대한 설명
+ ● this._gfn_함수명             	: 라이브러리 내부 함수에 대한 설명
  ===============================================================================
- ● this.gfn_getLanguage      : 저장된 언어 설정 조회
- ● this.gfn_setLanguage      : 선택 언어를 전역 변수 및 PrivateProfile에 저장
+ ● this.gfn_getLanguage      		: 저장된 언어 설정을 조회하는 함수
+ ● this.gfn_setLanguage      		: 선택 언어를 전역 변수 및 PrivateProfile에 저장하는 함수
  */
 
 
 /**
- * @description     이전에 저장한 언어 설정 조회
+ * @description     저장된 언어 설정을 조회하는 함수
  * @return          {String} 언어 코드 (KO, EN, ZH)
  */
 pForm.gfn_getLanguage = function()
@@ -31,9 +34,8 @@ pForm.gfn_getLanguage = function()
     return sLanguage;
 };
 
-
 /**
- * @description     선택한 언어를 Application 전역 변수 및 PrivateProfile에 저장
+ * @description     선택 언어를 전역 변수 및 PrivateProfile에 저장하는 함수
  * @param           {sLanguage : String} 언어 코드 (KO, EN, ZH)
  * @return          {String} 최종 적용된 언어 코드
  */

@@ -159,7 +159,7 @@
  * 변경일            변경자            변경내역
  *---------------------------------------------------------------------------------------
  * 2026-11-01        Built1            최초작성
- * 2026-11-10        Built1            gfn_code 항수 매개변수 변경
+ * 2026-11-10        Built1            gfn_getCode 항수 매개변수 변경
  ***************************************************************************************/
 
 
@@ -176,12 +176,12 @@
 this.fn_init = function (obj:Form, e:nexacro.LoadEventInfo)
 {
 	// 조회조건
-    this.gfn_code(this, "ds_cbo_message_class_cd", "MESSAGE_CLASS_CD", "", "Y");		// 메시지분류(전체포함)
-	this.gfn_code(this, "ds_cbo_message_type_cd" , "MESSAGE_TYPE_CD" , "", "Y");		// 메시지유형(전체포함)
+    this.gfn_getCode(this, "ds_cbo_message_class_cd", "MESSAGE_CLASS_CD", "", "Y");		// 메시지분류(전체포함)
+	this.gfn_getCode(this, "ds_cbo_message_type_cd" , "MESSAGE_TYPE_CD" , "", "Y");		// 메시지유형(전체포함)
 	
 	// 그리드
-    this.gfn_code(this, "ds_grd_message_class_cd", "MESSAGE_CLASS_CD", "", "S"); 		// 메시지분류(선택포함)
-	this.gfn_code(this, "ds_grd_message_type_cd" , "MESSAGE_TYPE_CD" , "", "S"); 		// 메시지유형(선택포함)
+    this.gfn_getCode(this, "ds_grd_message_class_cd", "MESSAGE_CLASS_CD", "", "S"); 		// 메시지분류(선택포함)
+	this.gfn_getCode(this, "ds_grd_message_type_cd" , "MESSAGE_TYPE_CD" , "", "S"); 		// 메시지유형(선택포함)
 	
 	// 조회조건 초기화
 	this.fn_searchClear();

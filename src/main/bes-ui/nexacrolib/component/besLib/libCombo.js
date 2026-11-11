@@ -2,22 +2,24 @@
 
 /*
  ===============================================================================
- ==  Dataset 관련 공통 함수
- ===============================================================================
- ● this.gfn_code                : 콤보박스 데이터 조회 함수
- ● this.fn_comboCallback        : 콤보박스 데이터 조회 콜백 함수
+ ==  libCombo 관련 공통 함수
+ ==  라이브러리 내부에서 사용하는 함수는 제외
+ ● this.gfn_함수명              	: 라이브러리 외부 함수에 대한 설명
+ ● this._gfn_함수명             	: 라이브러리 내부 함수에 대한 설명
+ =============================================================================== 
+ ● this.gfn_getCode             	: 콤보박스에 공통코드 데이터를 적재하는 함수
  */
 
 
 /**
- * @description     콤보박스 데이터 조회 함수
+ * @description     콤보박스에 공통코드 데이터를 적재하는 함수
  * @param           {objForm            : object                }   해당화면          : this
  * @param           {sComboDataSetId    : String                }   콤보데이터셋ID    : ds_cbo_repeat_cd
  * @param           {sCodeType          : String                }   코드유형          : REPEAT_TYPE_CD
  * @param           {sAactiveType       : String                }   활성여부코드      : Y(유효한데이터), N(유효하지않은데이터), ""(전체)
  * @param           {sAddAllRow         : String                }   전체로우추가      : Y(전체추가), S(선택추가), N(실데이터)
  */
-pForm.gfn_code = function(objForm, sComboDataSetId, sCodeType, sAactiveType, sAddAllRow)
+pForm.gfn_getCode = function(objForm, sComboDataSetId, sCodeType, sAactiveType, sAddAllRow)
 {
     if (this.gfn_isNull(sComboDataSetId)) 
     {
@@ -57,11 +59,10 @@ pForm.gfn_code = function(objForm, sComboDataSetId, sCodeType, sAactiveType, sAd
     var sArgument       = "codeType="     + nexacro.wrapQuote(sCodeType);       // 매개변수 : 코드유형
         sArgument      += " activeType="  + nexacro.wrapQuote(sAactiveType);    // 매개변수 : 활성여부코드 (앞에 공백 필수)
         sArgument      += " addAllRow="   + nexacro.wrapQuote(sAddAllRow);      // 매개변수 : 전체로우추가 (앞에 공백 필수)
-    var sCallbackFunc   = "fn_comboCallback";                                   // 콜백함수
+    var sCallbackFunc   = "_gfn_comboCallback";                                   // 콜백함수
 
     objForm.gfn_transaction(sSvcID, sSvcURL, sInDatasets, sOutDatasets, sArgument, sCallbackFunc);
 };
-
 
 /**
  * @description     콤보박스 데이터 조회 콜백 함수
@@ -69,7 +70,7 @@ pForm.gfn_code = function(objForm, sComboDataSetId, sCodeType, sAactiveType, sAd
  * @param           {nErrCd     : Number    } 오류 코드
  * @param           {sErrMsg    : String    } 오류 메시지
  */
-pForm.fn_comboCallback = function(sSvcID, nErrCd, sErrMsg)
+pForm._gfn_comboCallback = function(sSvcID, nErrCd, sErrMsg)
 {
     // 오류 확인
     if (nErrCd < 0) 

@@ -108,7 +108,7 @@
  *---------------------------------------------------------------------------------------
  * 2026-11-05        Built1            화면 및 스크립트 작성
  * 2026-11-09        Built1            디자인 템플릿 적용
- * 2026-11-10        Built1            gfn_code 함수 매개변수 변경 및스크립트 템플릿 적용
+ * 2026-11-10        Built1            gfn_getCode 함수 매개변수 변경 및 스크립트 템플릿 적용
  ***************************************************************************************/
 
 
@@ -129,12 +129,12 @@
 this.fn_init = function(obj:Form, e:nexacro.LoadEventInfo)
 {
     // 조회조건 공통코드
-    this.gfn_code(this, "ds_cbo_message_class_cd", "MESSAGE_CLASS_CD", "", "Y");  // 메시지 분류 (전체 포함)
-    this.gfn_code(this, "ds_cbo_message_type_cd" , "MESSAGE_TYPE_CD" , "", "Y");  // 메시지 유형 (전체 포함)
+    this.gfn_getCode(this, "ds_cbo_message_class_cd", "MESSAGE_CLASS_CD", "", "Y");  // 메시지 분류 (전체 포함)
+    this.gfn_getCode(this, "ds_cbo_message_type_cd" , "MESSAGE_TYPE_CD" , "", "Y");  // 메시지 유형 (전체 포함)
 
     // 그리드 공통코드
-    this.gfn_code(this, "ds_grd_message_class_cd", "MESSAGE_CLASS_CD", "", "N");  // 메시지 분류
-    this.gfn_code(this, "ds_grd_message_type_cd" , "MESSAGE_TYPE_CD" , "", "N");  // 메시지 유형
+    this.gfn_getCode(this, "ds_grd_message_class_cd", "MESSAGE_CLASS_CD", "", "N");  // 메시지 분류
+    this.gfn_getCode(this, "ds_grd_message_type_cd" , "MESSAGE_TYPE_CD" , "", "N");  // 메시지 유형
 
     // 초기화
     this.div_search.form.edt_message_text_ko.set_value("");
