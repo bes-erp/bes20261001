@@ -202,6 +202,8 @@ pForm.gfn_msgBox = function(sMessageNum, arrArguments)
 	trace("sLanguageCd : " + sLanguageCd);
 	
 	var nRow = gdsMsg.findRow("MESSAGE_NUM", sMessageNum);
+	trace("메시지번호 : " + sMessageNum);
+	trace("메시지 검색 행 : " + nRow);
 
 	if (nRow >= 0) {
 		if (pForm.gfn_isNull(sLanguageCd)) {
@@ -234,6 +236,9 @@ pForm.gfn_msgBox = function(sMessageNum, arrArguments)
 				sMsgText = sMsgText.replace(reg, arrArguments[i]);
 			}
 		}
+		
+		// 메시지 서식 태그 제거 (alert/confirm은 서식 태그 미지원)
+		sMsgText = sMsgText.replace(/<\/?fc\b[^>]*>/gi, "");
 		
 		sMsgType = gdsMsg.getColumn(nRow, "MESSAGE_TYPE_CD");
 		if (sMsgType == "A") alert(sMsgText);

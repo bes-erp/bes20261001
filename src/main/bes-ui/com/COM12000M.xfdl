@@ -16,7 +16,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Div id="div_search" taborder="5" left="10" top="div_com:5" height="46" background="#f6f6f6" right="10" font="12px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" formscrolltype="none" formscrollbartype="none">
+        <Div id="div_search" taborder="5" left="10" top="div_com:5" height="46" background="#EEF2F9" right="10" font="12px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" formscrolltype="none" formscrollbartype="none" text="">
           <Layouts>
             <Layout>
               <Combo id="cbo_message_class_cd" left="114" top="9" width="150" height="24" taborder="0" innerdataset="ds_cbo_message_class_cd" codecolumn="CODE" datacolumn="CODE_NM" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;"/>
@@ -70,7 +70,7 @@
                 <Cell col="1" text="0" edittype="checkbox" displaytype="checkboxcontrol" checkboxtruevalue="1" checkboxfalsevalue="0"/>
                 <Cell col="2" text="*메시지분류" font="bold 11px/1.1 &quot;Malgun Gothic&quot;,&quot;맑은 고딕&quot;,&quot;Arial&quot;"/>
                 <Cell col="3" text="*메시지유형" font="bold 11px/1.1 &quot;Malgun Gothic&quot;,&quot;맑은 고딕&quot;,&quot;Arial&quot;"/>
-                <Cell col="4" text="*메시지번호" font="bold 11px/1.1 &quot;Malgun Gothic&quot;,&quot;맑은 고딕&quot;,&quot;Arial&quot;"/>
+                <Cell col="4" text="메시지번호" font="bold 11px/1.1 &quot;Malgun Gothic&quot;,&quot;맑은 고딕&quot;,&quot;Arial&quot;"/>
                 <Cell col="5" text="*메시지(한글)" font="bold 11px/1.1 &quot;Malgun Gothic&quot;,&quot;맑은 고딕&quot;,&quot;Arial&quot;"/>
                 <Cell col="6" text="메시지(영문)" font="bold 11px/1.1 &quot;Malgun Gothic&quot;,&quot;맑은 고딕&quot;,&quot;Arial&quot;"/>
                 <Cell col="7" text="메시지(중국)" font="bold 11px/1.1 &quot;Malgun Gothic&quot;,&quot;맑은 고딕&quot;,&quot;Arial&quot;"/>
@@ -80,8 +80,8 @@
               <Band id="body">
                 <Cell text="expr:currow+1" edittype="none" textAlign="center"/>
                 <Cell col="1" text="bind:select_yn" displaytype="checkboxcontrol" edittype="checkbox" textAlign="center" checkboxtruevalue="Y" checkboxfalsevalue="N"/>
-                <Cell col="2" text="bind:message_class_cd" displaytype="combocontrol" edittype="expr:expr:dataset.getRowType(currow)==2?'combo':'none'" combodataset="ds_grd_message_class_cd" combocodecol="CODE" combodatacol="CODE_NM"/>
-                <Cell col="3" text="bind:message_type_cd" displaytype="combocontrol" edittype="expr:expr:dataset.getRowType(currow)==2?'combo':'none'" combodataset="ds_grd_message_type_cd" combocodecol="CODE" combodatacol="CODE_NM"/>
+                <Cell col="2" text="bind:message_class_cd" displaytype="combocontrol" edittype="expr:dataset.getRowType(currow)==2?'combo':'none'" combodataset="ds_grd_message_class_cd" combocodecol="CODE" combodatacol="CODE_NM"/>
+                <Cell col="3" text="bind:message_type_cd" displaytype="combocontrol" edittype="expr:dataset.getRowType(currow)==2?'combo':'none'" combodataset="ds_grd_message_type_cd" combocodecol="CODE" combodatacol="CODE_NM"/>
                 <Cell col="4" text="bind:message_num" edittype="none" textAlign="center"/>
                 <Cell col="5" text="bind:message_text_ko" edittype="text" textAlign="left"/>
                 <Cell col="6" text="bind:message_text_en" edittype="text" textAlign="left"/>
@@ -133,14 +133,15 @@ this.fn_init = function(obj:Form, e:nexacro.LoadEventInfo)
     this.gfn_getCode(this, "ds_cbo_message_type_cd" , "MESSAGE_TYPE_CD" , "", "Y");  // 메시지 유형 (전체 포함)
 
     // 그리드 공통코드
-    this.gfn_getCode(this, "ds_grd_message_class_cd", "MESSAGE_CLASS_CD", "", "N");  // 메시지 분류
-    this.gfn_getCode(this, "ds_grd_message_type_cd" , "MESSAGE_TYPE_CD" , "", "N");  // 메시지 유형
+    this.gfn_getCode(this, "ds_grd_message_class_cd", "MESSAGE_CLASS_CD", "", "S");   // 메시지 분류 (선택 포함)
+    this.gfn_getCode(this, "ds_grd_message_type_cd" , "MESSAGE_TYPE_CD" , "", "S");  // 메시지 유형 (선택 포함)
 
     // 초기화
     this.div_search.form.edt_message_text_ko.set_value("");
-
-    this.ds_message.clearData();
     this.fn_setMessageCount();
+	
+	// 필수항목 * 붉은색 표기
+	this.gfn_essential(this);
 };
 
 
@@ -208,10 +209,7 @@ this.fn_save = function(obj:nexacro.Button, e:nexacro.ClickEventInfo)
     }
 
     // 필수 항목 검증
-    if (!this.fn_validate())
-    {
-        return;
-    }
+    if (!this.fn_validate()) return;
 	
 	var sSvcID        = "saveMessage";
     var sSvcURL       = "svcUrl::com/COM12000M/saveMessage.do";
@@ -235,11 +233,6 @@ this.fn_add_row = function(obj:nexacro.Button, e:nexacro.ClickEventInfo)
 {
     // 첫 번째 행에 신규 데이터 추가
     var nRow = this.ds_message.insertRow(0);
-
-    // 신규 행 기본값 설정
-    this.ds_message.setColumn(nRow, "select_yn"       , "N");
-    this.ds_message.setColumn(nRow, "message_class_cd", "NM");
-    this.ds_message.setColumn(nRow, "message_type_cd" , "A");
 
     // 신규 행 선택
     this.ds_message.set_rowposition(nRow);
@@ -349,44 +342,18 @@ this.fn_setMessageCount = function()
  */
 this.fn_validate = function()
 {
-    for (var i = 0; i < this.ds_message.rowcount; i++)
-    {
-        var nRowType = this.ds_message.getRowType(i);
+    var arrRequired = [
+        "message_class_cd",
+        "message_type_cd",
+        "message_text_ko"
+    ];
+    trace("검증 시작");
 
-        // 신규 및 수정된 행만 검사
-        if (nRowType == 2 || nRowType == 4)
-        {
-            var sClassCd = this.ds_message.getColumn(i, "message_class_cd");
-            var sTypeCd  = this.ds_message.getColumn(i, "message_type_cd");
-            var sTextKo  = this.ds_message.getColumn(i, "message_text_ko");
-
-            // 메시지 분류 필수 확인
-            if (this.gfn_isNull(sClassCd))
-            {
-                this.alert("메시지분류는 필수 항목입니다.");
-                this.ds_message.set_rowposition(i);
-                return false;
-            }
-
-            // 메시지 유형 필수 확인
-            if (this.gfn_isNull(sTypeCd))
-            {
-                this.alert("메시지유형은 필수 항목입니다.");
-                this.ds_message.set_rowposition(i);
-                return false;
-            }
-
-            // 메시지 내용 필수 확인
-            if (this.gfn_isNull(sTextKo) || String(sTextKo).trim() == "")
-            {
-                this.alert("메시지(한글)는 필수 항목입니다.");
-                this.ds_message.set_rowposition(i);
-                return false;
-            }
-        }
-    }
-
-    return true;
+    return this.gfn_gridCheckRequired(this.grd_message, arrRequired);
+	
+    trace("검증 결과 : " + bResult);
+    return bResult;
+	
 };
 
 
@@ -458,17 +425,8 @@ this.grd_message_onheadclick = function(obj, e)
     // 체크박스 헤더만 처리
     if (e.cell != 1) return;
 
-    var sCheck = obj.getCellProperty("head", 1, "text");
-    var sValue = (sCheck == "1") ? "N" : "Y";
-
-    // 전체 행 선택 / 해제
-    for (var i = 0; i < this.ds_message.getRowCount(); i++)
-    {
-        this.ds_message.setColumn(i, "select_yn", sValue);
-    }
-
-    // 헤더 체크박스 상태 변경
-    obj.setCellProperty("head", 1, "text", (sValue == "Y") ? "1" : "0");
+     // 공통함수 호출
+    this.gfn_gridCheckAll(obj, 1, "select_yn");
 };]]></Script>
     <Objects>
       <Dataset id="ds_search">

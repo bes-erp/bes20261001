@@ -104,7 +104,7 @@ pForm.gfn_gridCheckRequired = function(objGrid, arrRequired)
                 var nColIndex   = this.gfn_getGridColumnIndex(objGrid, sColumnName);
                 var sHeaderText = this.gfn_getGridHeaderText(objGrid, nColIndex);
 
-                this.gfn_msgBox("MSG-A-10010", [sHeaderText]); //{1} 항목은 필수입니다.
+                this.gfn_msgBox("NM-ALT-10010", [sHeaderText]); //{1} 항목은 필수입니다.
 
                 //오류 발생 위치로 이동
 				if (nColIndex>=0) {
@@ -117,3 +117,30 @@ pForm.gfn_gridCheckRequired = function(objGrid, arrRequired)
     }
     return true;
 };
+
+/** 
+ * @description		그리드 헤더 체크박스 클릭 시 전체 행 선택/해제 처리 함수
+ * @param 			{objGrid		: Object}	그리드 객체(this.grd_message)
+ * @param 			{nHeadCell     	: Number}	헤더 체크박스 셀 인덱스
+ * @param 			{sCheckColumn	: String} 	체크박스 컬럼명
+ */
+pForm.gfn_gridCheckAll = function(objGrid, nHeadCell, sCheckColumn)
+{
+    var objDs = objGrid.getBindDataset();
+
+    // 그리드에 바인딩된 Dataset이 없으면 리턴
+    if (!objDs) return;
+
+    // 현재 헤더 체크박스 상태
+    var sCheck = objGrid.getCellProperty("head", nHeadCell, "text");
+    var sValue = (sCheck == "1") ? "N" : "Y";
+
+    // 전체 행 선택 / 해제
+    for (var nRow = 0; nRow < objDs.rowcount; nRow++)
+    {
+        objDs.setColumn(nRow, sCheckColumn, sValue);
+    }
+
+    // 헤더 체크박스 상태 변경
+    objGrid.setCellProperty("head", nHeadCell, "text", (sValue == "Y") ? "1" : "0");
+};	
