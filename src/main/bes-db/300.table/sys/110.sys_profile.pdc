@@ -1,0 +1,60 @@
+﻿-- ------------------------------------------------------------------------------------------------
+conn system/manager@bes;
+-- ------------------------------------------------------------------------------------------------
+
+-- 테이블 삭제
+drop table bsys.sys_profile cascade constraints;
+
+-- 테이블 생성
+create table bsys.sys_profile
+(
+     profile_cd              varchar2(30)   not null
+    ,profile_name            varchar2(50)   not null
+    ,profile_value           varchar2(30)   not null
+    ,remark                  varchar2(4000)
+    ,create_date             date           default sysdate
+    ,create_by               varchar2(50)   default 'ADMIN'
+    ,update_date             date           default sysdate
+    ,update_by               varchar2(50)   default 'ADMIN'
+) tablespace bes_data;
+
+-- 테이블 설명
+comment on table  bsys.sys_profile                      is '[공통관리] 프로파일';
+comment on column bsys.sys_profile.profile_cd           is '프로파일ID';
+comment on column bsys.sys_profile.profile_name         is '프로파일명';
+comment on column bsys.sys_profile.profile_value        is '프로파일값';
+comment on column bsys.sys_profile.remark               is '비고';
+
+comment on column bsys.sys_profile.create_date          is '생성일시';
+comment on column bsys.sys_profile.create_by            is '생성자';
+comment on column bsys.sys_profile.update_date          is '수정일시';
+comment on column bsys.sys_profile.update_by            is '수정자';
+
+
+-- primary 인덱스
+alter table bsys.sys_profile add constraint sys_profile_pk primary key (profile_cd) using index tablespace bes_index;
+
+-- unique 인덱스
+--create unique index bsys.sys_profile_uk01 on bsys.sys_profile (profile_name) tablespace bes_index;
+
+-- normal 인덱스
+create index bsys.sys_profile_ix01 on bsys.sys_profile (profile_name) tablespace bes_index;
+
+
+-- 권한부여
+--grant all on bsys.sys_profile to bcom;
+--grant all on bsys.sys_profile to bhrm;
+
+-- 시노님 생성
+--create or replace synonym bcom.sys_profile for bsys.sys_profile;
+--create or replace synonym bhrm.sys_profile for bsys.sys_profile;
+
+
+-- ----------------------------------------------------------------------------
+conn bsys/bsys@bes;
+-- ----------------------------------------------------------------------------
+-- 데이터 조회
+select sp.*
+  from sys_profile sp
+ where 1=1
+;

@@ -7,7 +7,7 @@
         <Static id="sta_margin_top" taborder="1" text="10" left="0" top="0" width="1007" height="10" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;"/>
         <Static id="sta_margin_right" taborder="2" text="10" left="997" top="0" width="10" height="720" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;맑은 고딕&quot;"/>
         <Static id="sta_margin_bottom" taborder="3" text="10" left="0" top="710" width="1007" height="10" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;맑은 고딕&quot;"/>
-        <Div id="div_com" taborder="4" text="28" left="10" top="sta_margin_top:0" height="28" right="10" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;">
+        <Div id="div_com" taborder="4" text="28" left="6" top="sta_margin_top:6" height="28" right="14" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;">
           <Layouts>
             <Layout>
               <Button id="btn_searchOpen" taborder="0" left="0" top="2" width="30" height="24" cssclass="btn_WF_searchOpen" onclick="nfn_searchOpen_onclick"/>
@@ -93,6 +93,7 @@
             </Format>
           </Formats>
         </Grid>
+        <Button id="btn_search" taborder="8" top="16" width="34" height="28" tooltiptext="조회" onclick="fn_search" right="73" cssclass="btn_WF_favorite"/>
       </Layout>
     </Layouts>
     <Objects>
