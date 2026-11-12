@@ -29,7 +29,7 @@ public class DbException extends RuntimeException {
 	* @author         		: built1
 	* @date           		: 2026.11.07
 	* @description    		: 데이테베이스 오류내역을 사용자 메시지로 전환하는 함수
-	* @param e
+	* @param 				: e(데이터베이스 억세스 오류)
 	* @return
 	*/
 	private static String getErrorMessage(Exception e) {
@@ -43,6 +43,14 @@ public class DbException extends RuntimeException {
 
             if (sMessage.contains("ORA-00904")) {
                 return "테이블과 불일치하는 컬럼이 존재합니다.";
+            }
+
+            if (sMessage.contains("ORA-00923")) {
+                return "FROM 절이 존재하지 않습니다.";
+            }
+
+            if (sMessage.contains("ORA-00923")) {
+                return "SQL 명령어가 정상적으로 처리되지 않습니다.";
             }
 
             if (sMessage.contains("ORA-00942")) {

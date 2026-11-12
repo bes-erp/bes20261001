@@ -17,13 +17,23 @@ import java.util.Map;
 public interface SYS10000MService {
 
     /**
-    * @methodName      : login
-    * @author          : built1
-    * @date            : 2026.11.02
-    * @description     : 사용자 로그인 인증을 처리하는 메소드
+    * @methodName      		: login
+    * @author          		: built1
+    * @date            		: 2026.11.02
+    * @description     		: 사용자 로그인 인증을 처리하는 메소드
     * @param loginParamMap
     * @return
     * @throws Exception
     */
     public abstract Map<String, Object> login(Map<String, Object> loginParamMap) throws Exception;
+
+	/**
+	* @methodName     		: selectLoginUserInfo
+	* @author         		: built1
+	* @date           		: 2026.11.11
+	* @description    		: 사용자정보를 조회하는 메소드
+	* @param loginParamMap
+	* @return
+	*/
+	public abstract Map<String, Object> selectLoginUserInfo(Map<String, Object> loginParamMap);
 }

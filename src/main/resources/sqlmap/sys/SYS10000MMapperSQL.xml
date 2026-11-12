@@ -3,11 +3,13 @@
 
 <mapper namespace="erp.sys.service.impl.SYS10000MMapper">
 
-    <!--
-    ***************************************************************************************
-         사용자 로그인 인증 패키지 호출
-    ***************************************************************************************
-    -->
+    <!-- ****************************************************************************************
+         사용자 정보
+    ***************************************************************************************** -->
+    
+    <!-- =========================================================
+	     사용자 로그인 인증 패키지 호출
+	========================================================= -->
     <update id="loginPassword" statementType="CALLABLE" parameterType="map">
 
         { call bcom.com_user_pkg.login_password_p(
@@ -18,5 +20,41 @@
         ) }
 
     </update>
+
+	<!-- =========================================================
+	     사용자ID를 기준으로 사용자정보 조회
+	========================================================= -->
+
+    <select id="selectLoginUserInfo" resultType="map">
+
+        select cuiv.user_id
+		      ,cuiv.user_nm
+		      ,cuiv.emp_id
+		      ,cuiv.emp_num
+		      ,cuiv.emp_nm
+		      ,cuiv.company_cd
+		      ,cuiv.company_nm
+		      ,cuiv.dept_cd
+		      ,cuiv.dept_nm
+		      ,cuiv.grade_cd
+		      ,cuiv.grade_nm
+		      ,cuiv.job_cd
+		      ,cuiv.job_nm
+		      ,cuiv.position_cd
+		      ,cuiv.position_nm
+		      ,cuiv.hire_date
+		      ,cuiv.retire_date
+		      ,cuiv.supervisor_emp_id
+		      ,cuiv.supervisor_emp_num
+		      ,cuiv.supervisor_emp_nm
+		  from com_user_info_v cuiv
+		 where 1=1
+
+        <!-- 사용자ID -->
+        <if test='USER_ID != null and USER_ID != ""'>
+           and user_id = #{USER_ID}
+        </if>
+
+    </select>
 
 </mapper>

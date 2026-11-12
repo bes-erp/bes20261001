@@ -182,12 +182,12 @@ this.fn_login = function()
     this.ds_login.setColumn(nRow, "PASSWORD", sPassword);
 
     // 로그인 인증 Transaction 설정
-    var sSvcID        = "login";                         		// 서비스 ID
-    var sSvcURL 	  = "svcUrl::sys/SYS10000M/login.do";		// 로그인 Controller URL  
-    var sInDatasets   = "dsLogin=ds_login";              		// 서버 입력 Dataset
-    var sOutDatasets  = "ds_loginResult=outLogin";       		// 서버 출력 Dataset
-    var sArgument     = "";                             		// 추가 전달 파라미터
-    var sCallbackFunc = "fn_callBack";                   		// Transaction 결과 콜백
+    var sSvcID        = "login";                         		                    // 서비스 ID
+    var sSvcURL 	  = "svcUrl::sys/SYS10000M/login.do";							// 로그인 Controller URL  
+    var sInDatasets   = "dsLogin=ds_login";              							// 서버 입력 Dataset
+    var sOutDatasets  = "ds_loginResult=outLogin gds_user_info=outSelectUserInfo";  // 서버 출력 Dataset
+    var sArgument     = "";                             							// 추가 전달 파라미터
+    var sCallbackFunc = "fn_callBack";                   							// Transaction 결과 콜백
 
     // 공통 LIB의 Transaction 함수를 이용하여 로그인 인증 요청
     this.gfn_transaction(sSvcID, sSvcURL, sInDatasets, sOutDatasets, sArgument, sCallbackFunc);

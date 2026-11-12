@@ -12,6 +12,7 @@
    ,"besLib/libLang.js"
    ,"besLib/libGrid.js"
    ,"besLib/libEvent.js"
+   ,"besLib/libUserInfo.js"
 
   ],
   "scriptsfilter": [    

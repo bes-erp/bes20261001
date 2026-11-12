@@ -48,6 +48,30 @@
         <Column id="CURRENT_DATE" type="STRING" size="256"/>
       </ColumnInfo>
     </Dataset>
+    <Dataset id="gds_user_info">
+      <ColumnInfo>
+        <Column id="USER_ID" type="STRING" size="256"/>
+        <Column id="USER_NM" type="STRING" size="256"/>
+        <Column id="EMP_ID" type="STRING" size="256"/>
+        <Column id="EMP_NUM" type="STRING" size="256"/>
+        <Column id="EMP_NM" type="STRING" size="256"/>
+        <Column id="COMPANY_CD" type="STRING" size="256"/>
+        <Column id="COMPANY_NM" type="STRING" size="256"/>
+        <Column id="DEPT_CD" type="STRING" size="256"/>
+        <Column id="DEPT_NM" type="STRING" size="256"/>
+        <Column id="GRADE_CD" type="STRING" size="256"/>
+        <Column id="GRADE_NM" type="STRING" size="256"/>
+        <Column id="JOB_CD" type="STRING" size="256"/>
+        <Column id="JOB_NM" type="STRING" size="256"/>
+        <Column id="POSITION_CD" type="STRING" size="256"/>
+        <Column id="POSITION_NM" type="STRING" size="256"/>
+        <Column id="HIRE_DATE" type="STRING" size="256"/>
+        <Column id="RETIRE_DATE" type="STRING" size="256"/>
+        <Column id="SUPERVISOR_EMP_ID" type="STRING" size="256"/>
+        <Column id="SUPERVISOR_EMP_NUM" type="STRING" size="256"/>
+        <Column id="SUPERVISOR_EMP_NM" type="STRING" size="256"/>
+      </ColumnInfo>
+    </Dataset>
   </Datasets>
   <Variables>
     <Variable id="gv_userid"/>
