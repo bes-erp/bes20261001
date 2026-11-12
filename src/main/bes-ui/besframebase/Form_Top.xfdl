@@ -5,7 +5,7 @@
       <Layout width="1080" height="50" screenid="Desktop_screen">
         <!-- ===== 왼쪽 영역 ===== -->
         <!-- 로고 및 시스템명 : 글자 폭에 맞춤 + 간격 12 -->
-        <ImageViewer id="img_Brand" taborder="0" left="20" top="13" width="24" height="24" image="theme://images_ifc/bes_icon_24_2x.png" stretch="fit" cssclass="besTopLogo"/>
+        <ImageViewer id="img_Brand" taborder="0" left="20" top="13" width="24" height="24" image="url('theme://bes_icon/bes_logo.png')" stretch="fit" cssclass="besTopLogo"/>
         <Static id="sta_Brand" taborder="1" text="BES" left="img_Brand:12" top="0" width="52" height="49" padding="0px" fittocontents="width" wordWrap="none" cssclass="besTopBrand" cursor="pointer" onclick="sta_Brand_onclick"/>
         <Static id="sta_SystemName" taborder="2" text="Built1 Enterprise System" left="sta_Brand:12" top="0" width="138" height="49" padding="0px" fittocontents="width" wordWrap="none" cssclass="besTopSystemName"/>
         <!-- 언어 선택 -->

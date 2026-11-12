@@ -8713,8 +8713,9 @@
 /* BES 로고 이미지 */
 .ImageViewer.besTopLogo
 {
-    background : transparent;
     -nexa-border : 0px none;
+    -nexa-padding : 0px;
+    background : transparent;
 }
 
 /* BES 브랜드명 */
