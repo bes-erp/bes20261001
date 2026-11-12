@@ -9,6 +9,8 @@
  ===============================================================================
  ● this.gfn_getLanguage      		: 저장된 언어 설정을 조회하는 함수
  ● this.gfn_setLanguage      		: 선택 언어를 전역 변수 및 PrivateProfile에 저장하는 함수
+ ● this.gfn_getCurrentLanguage   	: 현재 적용 중인 언어 코드를 조회하는 함수
+ ● this.gfn_getLanguageInfo      	: 언어 코드의 표시명과 국기 이미지를 조회하는 함수
  */
 
 
@@ -64,4 +66,37 @@ pForm.gfn_setLanguage = function(sLanguage)
 
     // 최종 적용된 언어 코드 반환
     return sLanguage;
+};
+
+/**
+ * @description     현재 적용 중인 언어 코드를 조회하는 함수
+ *                  - 로그인에서 설정한 전역 언어(gv_lang) 우선, 없으면 저장된 언어
+ * @return          {String} 언어 코드 (KO, EN, ZH)
+ */
+pForm.gfn_getCurrentLanguage = function()
+{
+    var sLanguage = nexacro.getApplication().gv_lang;
+
+    if (sLanguage != "KO" && sLanguage != "EN" && sLanguage != "ZH")
+    {
+        sLanguage = this.gfn_getLanguage();
+    }
+
+    return sLanguage;
+};
+
+/**
+ * @description     언어 코드의 표시명과 국기 이미지를 조회하는 함수
+ * @param           {sLanguage : String} 언어 코드 (KO, EN, ZH)
+ * @return          {Object} { code, name, flag } (지원하지 않는 언어는 한국어)
+ */
+pForm.gfn_getLanguageInfo = function(sLanguage)
+{
+    var objLanguageInfo = {
+          "KO" : { code : "KO", name : "한국어/KR", flag : "theme://images_ifc/img_TF_kr.png" }
+        , "EN" : { code : "EN", name : "영어/EN"  , flag : "theme://images_ifc/img_TF_en.png" }
+        , "ZH" : { code : "ZH", name : "중국어/CN", flag : "theme://images_ifc/img_TF_cn.png" }
+    };
+
+    return objLanguageInfo[sLanguage] || objLanguageInfo["KO"];
 };

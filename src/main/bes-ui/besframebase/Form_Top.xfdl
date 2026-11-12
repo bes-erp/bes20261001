@@ -8,32 +8,8 @@
         <ImageViewer id="img_Brand" taborder="0" left="20" top="13" width="24" height="24" image="url('theme://bes_icon/bes_logo.png')" stretch="fit" cssclass="besTopLogo"/>
         <Static id="sta_Brand" taborder="1" text="BES" left="img_Brand:12" top="0" width="52" height="49" padding="0px" fittocontents="width" wordWrap="none" cssclass="besTopBrand" cursor="pointer" onclick="sta_Brand_onclick"/>
         <Static id="sta_SystemName" taborder="2" text="Built1 Enterprise System" left="sta_Brand:12" top="0" width="138" height="49" padding="0px" fittocontents="width" wordWrap="none" cssclass="besTopSystemName"/>
-        <!-- 언어 선택 -->
-        <Button id="btn_language" taborder="7" text="한국어/KR" left="sta_SystemName:12" top="10" width="140" height="30" cssclass="btn_TF_lang" icon="theme://images_ifc/img_TF_kr.png" cursor="pointer" onclick="btn_language_onclick"/>
-        <!-- 언어 선택 팝업 -->
-        <PopupDiv id="pdv_language" taborder="16" visible="false" left="sta_SystemName:12" top="40" width="140" height="87">
-          <Layouts>
-            <Layout width="140" height="87">
-              <Grid id="grd_language" taborder="0" left="0" top="0" right="0" bottom="0" binddataset="ds_language" autoenter="select" autofittype="col" scrolltype="none" oncellclick="pdv_language_grd_language_oncellclick">
-                <Formats>
-                  <Format id="default">
-                    <Columns>
-                      <Column size="36"/>
-                      <Column size="104"/>
-                    </Columns>
-                    <Rows>
-                      <Row size="29"/>
-                    </Rows>
-                    <Band id="body">
-                      <Cell text="bind:flag" displaytype="imagecontrol"/>
-                      <Cell col="1" text="bind:name"/>
-                    </Band>
-                  </Format>
-                </Formats>
-              </Grid>
-            </Layout>
-          </Layouts>
-        </PopupDiv>
+        <!-- 2026-11-12 :: 언어 표시 전용 (로그인에서 선택한 언어만 표시, 상단에서 변경 불가) -->
+        <Button id="btn_language" taborder="7" text="한국어/KR" left="sta_SystemName:12" top="10" width="140" height="30" cssclass="besTopLanguage" icon="theme://images_ifc/img_TF_kr.png" cursor="default" tabstop="false"/>
         <!-- ===== 오른쪽 영역 (기준 컴포넌트부터 먼저 선언) ===== -->
         <Button id="btn_logout" taborder="6" text="로그아웃" right="20" top="0" width="60" height="49" padding="0px" fittocontents="width" wordWrap="none" cssclass="besTopActionButton" cursor="pointer" onclick="btn_logout_onclick"/>
         <Static id="sta_Separator" taborder="5" text="|" right="btn_logout:12" top="0" width="8" height="49" padding="0px" fittocontents="width" textAlign="center" cssclass="besTopSeparator"/>
@@ -90,9 +66,8 @@ this.fn_init = function(obj, e)
         this.fn_setUserInfo(objApp.gv_userid);
     }
 
-    // 로그인에서 선택한 언어를 우선 적용
-    var sLanguage = objApp.gv_lang || this.gfn_getLanguage();
-    this.fn_setLanguageInfo(sLanguage);
+    // 로그인에서 선택한 언어 표시 (공통 LIB)
+    this.fn_setLanguageInfo(this.gfn_getCurrentLanguage());
 };
 
 /***************************************************************************************
@@ -191,28 +166,16 @@ this.fn_setUserInfo = function(sUserName)
 
 /*
  * 기능 : 선택 언어 표시
- * 설명 : 언어 코드에 따라 국기 이미지와 언어명을 설정
+ * 설명 : 로그인에서 선택한 언어의 국기 이미지와 언어명을 표시 (변경 불가)
  */
 this.fn_setLanguageInfo = function(sLanguage)
 {
-    // 언어 Dataset에서 해당 언어 조회
-    var nRow = this.ds_language.findRow("code", sLanguage);
+    // 공통 LIB에서 언어 표시 정보 조회
+    var objLanguageInfo = this.gfn_getLanguageInfo(sLanguage);
 
-    // 지원하지 않는 언어이면 한국어 적용
-    if (nRow < 0)
-    {
-        nRow = this.ds_language.findRow("code", "KO");
-    }
-
-    if (nRow < 0) return;
-
-    // 선택 언어명 및 국기 이미지 조회
-    var sLanguageName = this.ds_language.getColumn(nRow, "name");
-    var sFlagImage = this.ds_language.getColumn(nRow, "flag");
-
-    // 상단 언어 버튼에 적용
-    this.btn_language.set_text(sLanguageName);
-    this.btn_language.set_icon(sFlagImage);
+    // 상단 언어 표시 영역에 적용
+    this.btn_language.set_text(objLanguageInfo.name);
+    this.btn_language.set_icon(objLanguageInfo.flag);
 };
 
 /***************************************************************************************
@@ -257,77 +220,6 @@ this.sta_Brand_onclick = function(obj, e)
 this.btn_logout_onclick = function(obj, e)
 {
     this.fn_logout();
-};
-
-/*
- * 기능 : 언어 선택 팝업 표시
- * 설명 : 언어 버튼 바로 아래에 언어 목록 표시
- */
-this.btn_language_onclick = function(obj, e)
-{
-    var sLanguage = this.gfn_getLanguage();
-
-    var nRow = this.ds_language.findRow("code", sLanguage);
-
-    if (nRow >= 0)
-    {
-        this.ds_language.set_rowposition(nRow);
-    }
-
-    // 버튼의 실제 좌표
-    var nLeft = obj.getOffsetLeft();
-    var nTop = obj.getOffsetTop() + obj.getOffsetHeight();
-
-    // 버튼 아래에 팝업 표시
-    this.pdv_language.trackPopup(nLeft, nTop);
-};
-
-/*
- * 기능 : 언어 변경
- * 설명 : 선택 언어 저장 및 상단 표시 변경
- */
-this.pdv_language_grd_language_oncellclick = function(obj, e)
-{
-    if (e.row < 0) return;
-
-    var sLanguage = this.ds_language.getColumn(e.row, "code");
-
-    if (!sLanguage) return;
-
-    // 전역 언어 및 PrivateProfile 저장
-    sLanguage = this.gfn_setLanguage(sLanguage);
-
-    // 국기와 언어명 변경
-    this.fn_setLanguageInfo(sLanguage);
-
-    // 팝업 닫기
-    this.pdv_language.closePopup();
 };]]></Script>
-    <Objects>
-      <Dataset id="ds_language">
-        <ColumnInfo>
-          <Column id="code" type="STRING" size="256"/>
-          <Column id="flag" type="STRING" size="256"/>
-          <Column id="name" type="STRING" size="256"/>
-        </ColumnInfo>
-        <Rows>
-          <Row>
-            <Col id="code">KO</Col>
-            <Col id="flag">theme://images_ifc/img_TF_kr.png</Col>
-            <Col id="name">한국어/KR</Col>
-          </Row>
-          <Row>
-            <Col id="code">EN</Col>
-            <Col id="flag">theme://images_ifc/img_TF_en.png</Col>
-            <Col id="name">영어/EN</Col>
-          </Row>
-          <Row>
-            <Col id="code">ZH</Col>
-            <Col id="flag">theme://images_ifc/img_TF_cn.png</Col>
-            <Col id="name">중국어/CN</Col>
-          </Row>
-        </Rows>
-      </Dataset>
-    </Objects>
   </Form>
 </FDL>

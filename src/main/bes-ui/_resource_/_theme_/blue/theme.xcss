@@ -8786,6 +8786,25 @@
     font : 12px Arial;
 }
 
+/* 선택 언어 표시 (로그인에서 선택한 언어, 변경 불가) */
+.Button.besTopLanguage,
+.Button.besTopLanguage[status=mouseover],
+.Button.besTopLanguage[status=focused],
+.Button.besTopLanguage[userstatus=pushed],
+.Button.besTopLanguage[userstatus=selected]
+{
+    background : transparent;
+    color : #4A5568;
+    font : 12px "Malgun Gothic", "맑은 고딕", "Arial";
+    cursor : default;
+    -nexa-icon-position : left;
+    -nexa-text-padding : 0px 0px 0px 8px;
+    -nexa-text-align : left;
+    -nexa-padding : 0px 10px 0px 0px;
+    -nexa-border : 0px none;
+    -nexa-edge : none;
+}
+
 
 /***************************************************************************************
  * BES TOP MENU

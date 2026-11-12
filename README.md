@@ -2,6 +2,25 @@
 **☆ [공통] 매일 작업한 내용을 기록하고 push 바랍니다.**
 **☆ [공통] 최근 작업한 내용이 위로 배치, 금일 이후로 작성합니다.**
 
+**☆ [2026-11-12 : dlwmsnw] 파비콘·로고 교체 및 상단 언어 표시 수정**
+ 1. 파비콘 이미지 교체
+ 2. 상단 로고 이미지 교체
+ 3. 로딩 이미지 교체
+ 4. libLang 함수 추가
+  - this.gfn_getCurrentLanguage : 현재 적용 중인 언어 코드 조회
+  - this.gfn_getLanguageInfo    : 언어 코드의 표시명과 국기 이미지 조회
+ 5. Form_Top 수정
+  - 로그인에서 선택한 언어만 표시 (상단에서 언어 변경 불가)
+  - pdv_language, ds_language 삭제
+  - btn_language_onclick, pdv_language_grd_language_oncellclick 삭제
+ 6. xcss 추가
+  - .Button.besTopLanguage : 상단 언어 표시 전용 (드롭다운 화살표·hover 제거, 왼쪽 여백 0)
+ 7. SYS10000M 수정
+  - fn_init 의 cbo_lang.set_index(0) 삭제 (콤보 표시와 실제 적용 언어 불일치 수정)
+ 8. 문서 수정
+  - [BES] 전자정부 & NexacroN24-110.리이브러리 목록_20261111_v0.1.xlsx : libLang 함수 추가
+ 9. ※ pull 후 넥사크로 Generate 및 브라우저 캐시 삭제(Ctrl+F5) 필요
+
 **☆ [2026-11-12 : dims1111] 넥사크로 데이터셋, 변수, 자바변수 SQL, 프로파일 정보 추가**
 1. 넥사크로 데이터셋, 변수, 자바 변수 선언 sql
  - 쿼리 파일 :  /bes/src/main/bes-db/900.tip/넥사크로, 자바 변수선언.sql
