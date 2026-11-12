@@ -13,6 +13,10 @@ import erp.com.service.COM10000MService;
 import erp.core.exh.DbException;
 import lombok.extern.slf4j.Slf4j;
 
+// 클래스 이름 없이 바로 쓸 수 있게 : static 
+// 예. SessionUserInfo.getUserId() ==> getUserId() 
+import static erp.core.util.SessionUserInfo.*;
+
 /**
 * =====================================================================================
 * @packageName    		: erp.com.service.impl
@@ -54,7 +58,11 @@ public class COM10000MServiceimpl implements COM10000MService {
         }
 
         // 사용자 ID 추가
-        mapperParamMap.put("user_id", userId);
+        //mapperParamMap.put("user_id", userId);
+    	
+        // 사용자 ID 추가 : 세션에 존재하는 사용자ID
+    	log.debug("## [ getUserId()             ] : {}", getUserId());    	
+        mapperParamMap.put("user_id", getUserId());
         
         
         // 코드유형 및 코드 조회

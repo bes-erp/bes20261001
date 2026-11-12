@@ -2,6 +2,35 @@
 **☆ [공통] 매일 작업한 내용을 기록하고 push 바랍니다.**
 **☆ [공통] 최근 작업한 내용이 위로 배치, 금일 이후로 작성합니다.**
 
+**☆ [2026-11-12 : dims1111] 자바 로그인 사용자정보 세션함수 추가**
+ 1. 클래스 : SessionUserInfo.java
+ 2. 사용할 클래스에서 import
+ -  import static erp.core.util.SessionUserInfo.*;
+ 3. 사용법
+ - log.debug("## [ getUserId()             ] : {}", getUserId());
+ - mapperParamMap.put("user_id", getUserId());
+ 4. 자바 사용자정보 세션 함수 (엑세파일 시트 추가)
+ - getUserId()          
+ - getUserNm()          
+ - getEmpId()           
+ - getEmpNum()          
+ - getEmpNm()           
+ - getCompanyCd()       
+ - getCompanyNm()       
+ - getDeptCd()          
+ - getDeptNm()          
+ - getGradeCd()         
+ - getGradeNm()         
+ - getJobCd()           
+ - getJobNm()           
+ - getPositionCd()      
+ - getPositionNm()      
+ - getHireDate()        
+ - getRetireDate()      
+ - getSupervisorEmpId() 
+ - getSupervisorEmpNum()
+ - getSupervisorEmpNm() 
+  
 **☆ [2026-11-12 : sdaeun] 메시지등록 화면 개선 및 그리드 공통함수 추가**
 1. 메시지등록 화면(COM12000M) 기능 개선
  - 신규 행 메시지분류 및 메시지유형 수정 가능, 기존 행 수정 제한
