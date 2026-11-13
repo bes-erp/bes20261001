@@ -24,9 +24,7 @@
 	<!-- =========================================================
 	     사용자ID를 기준으로 사용자정보 조회
 	========================================================= -->
-
     <select id="selectLoginUserInfo" resultType="map">
-
         select cuiv.user_id
 		      ,cuiv.user_nm
 		      ,cuiv.emp_id

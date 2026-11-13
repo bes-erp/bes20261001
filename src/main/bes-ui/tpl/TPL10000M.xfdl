@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="TPL10000M" width="1007" height="720" titletext="템플릿-조회" font="bold 12px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" onload="fn_init">
+  <Form id="TPL10000M" width="1007" height="720" titletext="템플릿-조회" onload="fn_init">
     <Layouts>
       <Layout height="720" mobileorientation="landscape" width="1007">
         <Static id="sta_margin_left" taborder="0" text="10" left="0" top="0" width="10" height="720" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;"/>
@@ -10,9 +10,9 @@
         <Div id="div_com" taborder="4" text="28" left="6" top="sta_margin_top:6" height="28" right="14" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;">
           <Layouts>
             <Layout>
-              <Button id="btn_searchOpen" taborder="0" left="0" top="2" width="30" height="24" cssclass="btn_WF_searchOpen" onclick="nfn_searchOpen_onclick"/>
-              <Static id="sta_title" taborder="1" text="메시지 등록" left="btn_searchOpen:5" top="2" width="229" height="24" cssclass="sta_WF_title" fittocontents="width" font="bold 14px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;"/>
-              <Button id="btn_save" taborder="2" top="0" height="28" right="4" width="34" icon="url('theme://bes_icon/16/bes_icon_save_red.png')" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" onclick="fn_save" tooltiptext="저장" background="" cssclass="btn_WF_save"/>
+              <Button id="btn_pageTitle" taborder="0" left="0" top="2" width="24" height="24" onclick="nfn_searchOpen_onclick" cssclass="btn_WF_pageTitle"/>
+              <Static id="sta_title" taborder="1" text="메시지 등록" left="btn_pageTitle:5" top="2" width="229" height="24" cssclass="sta_WF_title" fittocontents="width" font="bold 14px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;"/>
+              <Button id="btn_save" taborder="2" top="2" height="24" right="4" width="24" onclick="fn_save" tooltiptext="저장" background="" cssclass="btn_WF_save"/>
             </Layout>
           </Layouts>
         </Div>
@@ -28,8 +28,8 @@
               <Static id="sta_message_text_ko" text="메시지(한글)" left="557" top="10" width="100" height="24" verticalAlign="middle" taborder="4" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" textAlign="right"/>
               <Edit id="edt_message_text_ko" left="sta_message_text_ko:5" top="10" width="200" height="24" taborder="5" maxlength="300" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;"/>
               <Static id="sta_margin_left00_00" taborder="8" text="10" left="cbo_message_type_cd:0" top="0" width="10" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" bottom="0"/>
-              <Button id="btn_searchClear" taborder="10" top="9" height="28" tooltiptext="초기화" width="34" right="4" onclick="fn_searchClear" icon="url('theme://bes_icon/16/bes_icon_reset_navy.png')" cssclass="btn_WF_searchClear"/>
-              <Button id="btn_search" taborder="9" top="9" width="34" height="28" tooltiptext="조회" icon="url('theme://bes_icon/14/bes_icon_search_navy_14.png')" onclick="fn_search" right="btn_searchClear:2" cssclass="btn_WF_search"/>
+              <Button id="btn_searchClear" taborder="10" top="10" height="24" tooltiptext="초기화" width="24" right="4" onclick="fn_searchClear" cssclass="btn_WF_searchClear"/>
+              <Button id="btn_search" taborder="9" top="10" width="24" height="24" tooltiptext="조회" onclick="fn_search" right="btn_searchClear:2" cssclass="btn_WF_search"/>
               <Static id="sta_margin_left00_00_00" taborder="11" text="10" top="0" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" bottom="0" width="4" right="0"/>
               <Calendar id="cal_currentDate" taborder="12" left="735" top="17" width="150" height="20" dateformat="yyyy-MM-dd"/>
             </Layout>
@@ -38,12 +38,12 @@
         <Div id="div_title" taborder="6" text="32" left="10" top="div_search:5" height="32" right="10" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;">
           <Layouts>
             <Layout>
-              <Button id="btn_favorite" taborder="1" left="0" top="2" width="24" height="24" cssclass="btn_WF_favorite"/>
-              <Static id="sta_title" taborder="0" text="메시지 목록" left="btn_favorite:5" top="1" width="68" height="24" cssclass="sta_WF_title" font="bold 12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" fittocontents="width"/>
-              <Button id="btn_delRow" taborder="3" top="2" width="34" height="28" tooltiptext="행삭제" right="4" icon="url('theme://bes_icon/16/bes_icon_delrow_navy.png')" onclick="fn_del_row" cssclass="btn_WF_delRow"/>
-              <Button id="btn_addRow" taborder="2" top="2" width="34" height="28" tooltiptext="행추가" right="btn_delRow:2" onclick="fn_add_row" icon="url('theme://bes_icon/16/bes_icon_addrow_navy.png')" cssclass="btn_WF_addRow"/>
-              <Button id="btn_excel_down" taborder="4" top="2" width="34" height="28" tooltiptext="엑셀다운로드" right="btn_addRow:2" icon="url('theme://bes_icon/16/bes_icon_exceldown_navy.png')" background="" onclick="fn_excel_down" cssclass="btn_WF_excelDown"/>
-              <Static id="sta_titleCnt" taborder="5" text="| 1,000건" left="sta_title:1" top="1" width="70" height="24" cssclass="sta_WF_titleCnt" font="10px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" fittocontents="width"/>
+              <Button id="btn_favorite" taborder="1" left="0" top="2" width="24" height="24" cssclass="btn_WF_gridTitle"/>
+              <Static id="sta_gridTitle" taborder="0" text="메시지 목록" left="btn_favorite:5" top="1" width="68" height="24" cssclass="sta_WF_gridTitle" font="bold 12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" fittocontents="width"/>
+              <Button id="btn_delRow" taborder="3" top="4" width="24" height="24" tooltiptext="행삭제" right="4" onclick="fn_del_row" cssclass="btn_WF_delRow"/>
+              <Button id="btn_addRow" taborder="2" top="4" width="24" height="24" tooltiptext="행추가" right="btn_delRow:2" onclick="fn_add_row" cssclass="btn_WF_addRow"/>
+              <Button id="btn_excel_down" taborder="4" top="4" width="24" height="24" tooltiptext="엑셀다운로드" right="btn_addRow:2" background="" onclick="fn_excel_down" cssclass="btn_WF_excelDown"/>
+              <Static id="sta_titleCnt" taborder="5" text="| 1,000건" left="sta_gridTitle:1" top="1" width="70" height="24" cssclass="sta_WF_titleCnt" font="10px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" fittocontents="width"/>
             </Layout>
           </Layouts>
         </Div>
@@ -93,7 +93,6 @@
             </Format>
           </Formats>
         </Grid>
-        <Button id="btn_search" taborder="8" top="16" width="34" height="28" tooltiptext="조회" onclick="fn_search" right="73" cssclass="btn_WF_favorite"/>
       </Layout>
     </Layouts>
     <Objects>
