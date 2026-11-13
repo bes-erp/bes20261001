@@ -124,16 +124,14 @@ pForm.gfn_addRow = function(objGrid, sFocusCellBindText)
  */
 pForm.gfn_delRow = function(objGrid)
 {
-    var sCheckColumn = "SELECT_YN";
+    var sCheckColumn = "CHK";
 
     // 대상 그리드에 바인딩된 Dataset
     var objDs = objGrid.getBindDataset();
-    if (!objDs) return;
+    if (this.gfn_isNull(objDs)) return;
 
     // 선택 컬럼이 없으면 리턴
     if (objDs.getColIndex(sCheckColumn) < 0) return;
-
-    var nDeleteCnt = 0;
 
     // 선택된 행을 역순으로 삭제
     for (var nRow = objDs.rowcount - 1; nRow >= 0; nRow--)
@@ -141,14 +139,7 @@ pForm.gfn_delRow = function(objGrid)
         if (objDs.getColumn(nRow, sCheckColumn) == "Y")
         {
             objDs.deleteRow(nRow);
-            nDeleteCnt++;
         }
     }
 
-    // 선택된 행이 없으면 메시지 출력
-    if (nDeleteCnt == 0)
-    {
-        this.alert("삭제할 행을 선택해주세요.");
-        return;
-    }
 };
