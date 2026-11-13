@@ -3,6 +3,8 @@ package erp.sys.web;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -31,6 +33,7 @@ import lombok.extern.slf4j.Slf4j;
  * -------------------------------------------------------------------------------------
  * 2026.11.03        Built1             최초 생성
  * 2026.11.11	 	 Built1             로그인 사용자정보를 세션정보로 전환
+ * 2026.11.12	 	 Built1             로그인시간 세션정보 추가, 사용자정보 팝업 연동
  */
 @Slf4j
 @Controller
@@ -68,6 +71,9 @@ public class SYS10000MController {
             
             // 사용자정보 → 세션 VO 변환
             SYS10000MVO loginUserInfo = toSYS10000MVO(userInfoMap);
+
+            // 로그인시간 등록 (세션 생성 시각 : 사용자정보 팝업 표시용)
+            loginUserInfo.setLoginTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 
             // 기존 세션 무효화
             HttpSession session = request.getSession(false);
@@ -208,6 +214,7 @@ public class SYS10000MController {
         userInfoMap.put("SUPERVISOR_EMP_ID",  vo.getSupervisorEmpId());
         userInfoMap.put("SUPERVISOR_EMP_NUM", vo.getSupervisorEmpNum());
         userInfoMap.put("SUPERVISOR_EMP_NM",  vo.getSupervisorEmpNm());
+        userInfoMap.put("LOGIN_TIME",         vo.getLoginTime());
 
         return userInfoMap;
     }

@@ -10,6 +10,7 @@
  ● this.gfn_isNull                  : null 체크 함수
  ● this.gfn_center                 	: 대상 컴포넌트를 기준 영역의 중앙에 배치 
  ● this.gfn_essential           	: 필수항목 * 붉은색 표시 함수(Div, Tab, Grid 등)
+ ● this.gfn_getTextWidth            : 문자열이 화면에 표시될 때의 가로 폭(px) 계산 함수
 */
 
 /**
@@ -132,5 +133,40 @@ pForm._gfn_essentialGrid = function(objGrid)
             objGrid.setCellProperty("head", i, "displaytype", "decoratetext");
             objGrid.setCellProperty("head", i, "text", MARK + sHead.substr(1).trim());
         }
+    }
+};
+
+
+/**
+ * @description     문자열이 화면에 표시될 때의 가로 폭(px) 계산 함수
+ *                  - 웹 브라우저(HTML5) 환경에서 Canvas로 계산
+ *                  - 계산할 수 없는 환경(Runtime 등)이면 0 반환
+ * @param           {sText  : String} 측정할 문자열       : "홍길동님 환영합니다"
+ * @param           {sFont  : String} 글꼴 (CSS font 형식) : "12px Malgun Gothic"
+ * @return          {nWidth : Number} 문자열 폭(px), 계산 불가 시 0
+ * @example         var nWidth = this.gfn_getTextWidth("홍길동님 환영합니다", "12px Malgun Gothic");
+ */
+pForm.gfn_getTextWidth = function(sText, sFont)
+{
+    if (this.gfn_isNull(sText)) return 0;
+
+    try
+    {
+        // 측정용 Canvas는 한 번만 생성하여 재사용
+        if (!pForm._gfn_textCanvas)
+        {
+            pForm._gfn_textCanvas = document.createElement("canvas").getContext("2d");
+        }
+
+        var objContext = pForm._gfn_textCanvas;
+
+        objContext.font = sFont;
+
+        return Math.ceil(objContext.measureText(String(sText)).width);
+    }
+    catch (e)
+    {
+        // 웹 브라우저가 아닌 환경 (Canvas 미지원)
+        return 0;
     }
 };

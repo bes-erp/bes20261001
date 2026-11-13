@@ -9,6 +9,7 @@
  ===============================================================================
  ● this.gfn_isLogin                 : 로그인 여부 체크 함수
  ● this.gfn_getUserInfo             : 로그인 사용자정보 컬럼값 조회 함수
+●  this.gfn_clearUserInfo           : 로그인 사용자정보 초기화 함수(로그아웃 시 사용)
  ===============================================================================
  ● 전역 속성 목록 (gds_user_info 컬럼)
    this.gUserId           			: 사용자ID          (USER_ID)
@@ -31,6 +32,7 @@
    this.gSupervisorEmpId  			: 상위자ID          (SUPERVISOR_EMP_ID)
    this.gSupervisorEmpNum 			: 상위자사번        (SUPERVISOR_EMP_NUM)
    this.gSupervisorEmpNm  			: 상위자성명        (SUPERVISOR_EMP_NM)
+   this.gLoginTime        			: 로그인시간        (LOGIN_TIME)
 */
 
 /**
@@ -65,6 +67,25 @@ pForm.gfn_getUserInfo = function(sColId)
 	if (objValue !== undefined && objValue !== null) objReturnValue = objValue;
 
 	return objReturnValue;
+};
+
+
+/**
+ * @description		로그인 사용자정보 초기화 함수 (로그아웃 시 사용)
+ *                  - gds_user_info 데이터 삭제
+ *                  - gv_userid 초기화
+ * @return 			없음
+ * @example         this.gfn_clearUserInfo();
+ */
+pForm.gfn_clearUserInfo = function()
+{
+	var objApp = nexacro.getApplication();
+
+	// 로그인 사용자 ID 초기화
+	objApp.gv_userid = "";
+
+	// 로그인 사용자정보 Dataset 초기화
+	if (objApp.gds_user_info) objApp.gds_user_info.clearData();
 };
 
 /**
@@ -111,6 +132,7 @@ var arrUserProp = [
 	, ["gSupervisorEmpId" , "SUPERVISOR_EMP_ID" ]
 	, ["gSupervisorEmpNum", "SUPERVISOR_EMP_NUM"]
 	, ["gSupervisorEmpNm" , "SUPERVISOR_EMP_NM" ]
+	, ["gLoginTime"       , "LOGIN_TIME"        ]
 ];
 
 // 이미 등록된 경우 중복 등록 방지

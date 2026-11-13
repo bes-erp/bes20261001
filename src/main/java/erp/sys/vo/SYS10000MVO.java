@@ -43,5 +43,6 @@ public class SYS10000MVO implements Serializable {
     private Long   supervisorEmpId;		// 상위자ID
     private String supervisorEmpNum;	// 상위자사번
     private String supervisorEmpNm;		// 상위자성명
+    private String loginTime;			// 로그인시간 (세션생성시각)
     
 }

@@ -21,6 +21,7 @@ import erp.sys.vo.SYS10000MVO;
 * 수정일자         		수정자             수정내용
 * -------------------------------------------------------------------------------------
 * 2026.11.12        	Built1             최초 생성
+* 2026.11.13        	Built1             로그인시간(getLoginTime) 조회 추가
 */
 public class SessionUserInfo {
 
@@ -110,5 +111,6 @@ public class SessionUserInfo {
     public static Long   getSupervisorEmpId()  { return get(SYS10000MVO::getSupervisorEmpId); }  // SUPERVISOR_EMP_ID
     public static String getSupervisorEmpNum() { return get(SYS10000MVO::getSupervisorEmpNum); } // SUPERVISOR_EMP_NUM
     public static String getSupervisorEmpNm()  { return get(SYS10000MVO::getSupervisorEmpNm); }  // SUPERVISOR_EMP_NM
+    public static String getLoginTime()        { return get(SYS10000MVO::getLoginTime); }        // LOGIN_TIME
     
 }

@@ -3,25 +3,34 @@
   <Form id="Form_Top" width="1080" height="50" titletext="공통 상단 영역" cssclass="besTopForm" scrollbartype="none" onload="Form_Top_onload">
     <Layouts>
       <Layout width="1080" height="50" screenid="Desktop_screen">
-        <!-- ===== 왼쪽 영역 ===== -->
-        <!-- 로고 및 시스템명 : 글자 폭에 맞춤 + 간격 12 -->
         <ImageViewer id="img_Brand" taborder="0" left="20" top="13" width="24" height="24" image="url('theme://bes_icon/bes_logo.png')" stretch="fit" cssclass="besTopLogo"/>
         <Static id="sta_Brand" taborder="1" text="BES" left="img_Brand:12" top="0" width="52" height="49" padding="0px" fittocontents="width" wordWrap="none" cssclass="besTopBrand" cursor="pointer" onclick="sta_Brand_onclick"/>
         <Static id="sta_SystemName" taborder="2" text="Built1 Enterprise System" left="sta_Brand:12" top="0" width="138" height="49" padding="0px" fittocontents="width" wordWrap="none" cssclass="besTopSystemName"/>
-        <!-- 2026-11-12 :: 언어 표시 전용 (로그인에서 선택한 언어만 표시, 상단에서 변경 불가) -->
-        <Button id="btn_language" taborder="7" text="한국어/KR" left="sta_SystemName:12" top="10" width="140" height="30" cssclass="besTopLanguage" icon="theme://images_ifc/img_TF_kr.png" cursor="default" tabstop="false"/>
-        <!-- ===== 오른쪽 영역 (기준 컴포넌트부터 먼저 선언) ===== -->
+        <Button id="btn_language" taborder="7" text="한국어/KR" left="sta_SystemName:12" top="10" width="140" height="30" cssclass="besTopLanguage" icon="theme://images_ifc/img_TF_kr.png" tabstop="false"/>
         <Button id="btn_logout" taborder="6" text="로그아웃" right="20" top="0" width="60" height="49" padding="0px" fittocontents="width" wordWrap="none" cssclass="besTopActionButton" cursor="pointer" onclick="btn_logout_onclick"/>
         <Static id="sta_Separator" taborder="5" text="|" right="btn_logout:12" top="0" width="8" height="49" padding="0px" fittocontents="width" textAlign="center" cssclass="besTopSeparator"/>
-        <Button id="btn_changePw" taborder="4" text="패스워드 변경" right="sta_Separator:12" top="0" width="92" height="49" padding="0px" fittocontents="width" wordWrap="none" cssclass="besTopActionButton" cursor="pointer" onclick="btn_changePw_onclick"/>
-        <Static id="sta_UserName" taborder="3" text="" right="btn_changePw:12" top="0" width="175" height="49" textAlign="right" wordWrap="none" cssclass="besTopUserName"/>
+        <Button id="btn_user" taborder="3" text="" right="sta_Separator:12" top="0" width="220" height="49" textAlign="right" wordWrap="none" cssclass="besTopUser" onclick="btn_user_onclick"/>
+        <PopupDiv id="pdv_userInfo" taborder="16" visible="false" left="803" top="50" width="257" height="254" cssclass="besUserPopup">
+          <Layouts>
+            <Layout width="257" height="254">
+              <ImageViewer id="img_userPhoto" taborder="0" left="20" top="20" width="60" height="60" stretch="fixaspectratio" cssclass="besUserPhoto"/>
+              <Static id="sta_userId" taborder="1" text="" left="100" top="28" right="20" height="20" wordWrap="none" cssclass="besUserPopupSub"/>
+              <Static id="sta_userNm" taborder="2" text="" left="100" top="48" right="20" height="22" wordWrap="none" cssclass="besUserPopupName"/>
+              <Button id="btn_changeUserInfo" taborder="4" text="사용자정보 수정" right="20" top="96" width="105" height="24" cssclass="besUserPopupButton" onclick="pdv_userInfo_btn_changeUserInfo_onclick"/>
+              <Button id="btn_changePw" taborder="3" text="비밀번호 변경" left="20" top="96" right="btn_changeUserInfo:8" height="24" cssclass="besUserPopupButton" onclick="pdv_userInfo_btn_changePw_onclick"/>
+              <Static id="sta_deptLabel" taborder="5" text="소속" left="20" top="140" right="20" height="20" cssclass="besUserPopupLabel"/>
+              <Static id="sta_dept" taborder="6" text="" left="20" top="160" right="20" height="20" wordWrap="none" cssclass="besUserPopupValue"/>
+              <Static id="sta_loginTimeLabel" taborder="7" text="로그인 시간" left="20" top="194" right="20" height="20" cssclass="besUserPopupLabel"/>
+              <Static id="sta_loginTime" taborder="8" text="" left="20" top="214" right="20" height="20" wordWrap="none" cssclass="besUserPopupValue"/>
+            </Layout>
+          </Layouts>
+        </PopupDiv>
         <!-- ===== 가이드 (컴포넌트를 따라다니도록 상대 좌표) ===== -->
         <Static id="sta_guideLeft" taborder="8" text="20" left="0" top="0" width="20" height="50" visible="false" background="aqua" opacity="0.5" textAlign="center"/>
         <Static id="sta_guideRight" taborder="9" text="20" right="0" top="0" width="20" height="50" visible="false" background="aqua" opacity="0.5" textAlign="center"/>
         <Static id="sta_guideLogoGap" taborder="10" text="12" left="img_Brand:0" top="0" width="12" height="50" visible="false" background="aqua" opacity="0.5" textAlign="center"/>
         <Static id="sta_guideBrandGap" taborder="11" text="12" left="sta_Brand:0" top="0" width="12" height="50" visible="false" background="aqua" opacity="0.5" textAlign="center"/>
         <Static id="sta_guideLanguageGap" taborder="12" text="12" left="sta_SystemName:0" top="0" width="12" height="50" visible="false" background="aqua" opacity="0.5" textAlign="center"/>
-        <Static id="sta_guideUserGap" taborder="13" text="12" right="btn_changePw:0" top="0" width="12" height="50" visible="false" background="aqua" opacity="0.5" textAlign="center"/>
         <Static id="sta_guideSeparatorLeftGap" taborder="14" text="12" right="sta_Separator:0" top="0" width="12" height="50" visible="false" background="aqua" opacity="0.5" textAlign="center"/>
         <Static id="sta_guideSeparatorRightGap" taborder="15" text="12" right="btn_logout:0" top="0" width="12" height="50" visible="false" background="aqua" opacity="0.5" textAlign="center"/>
       </Layout>
@@ -34,13 +43,17 @@
  * 작성일          : 2026-11-03
  *
  * 화면            : 공통 상단 영역
- * 설명            : BES 로고, 로그인 사용자 정보 및 로그아웃 관리
+ * 설명            : BES 로고, 선택 언어, 로그인 사용자 정보 및 로그아웃 관리
  *---------------------------------------------------------------------------------------
  * 변경일            변경자            변경내역
  *---------------------------------------------------------------------------------------
  * 2026-11-03        Built1            공통 상단 화면 구성
  * 2026-11-09        Built1            IFC 프레임 구조에 맞춰 홈 이동 경로 변경
  * 2026-11-09        Built1            로그아웃 시 전체 업무 탭 초기화 연동
+ * 2026-11-12        Built1            선택 언어 표시 전용으로 변경
+ * 2026-11-13        Built1            사용자정보 팝업 추가 (패스워드 변경 버튼 팝업으로 이동)
+ * 2026-11-13        Built1            로그아웃 시 서버 세션 무효화(logout.do) 연동
+ * 2026-11-13        Built1            사용자정보 팝업 위치를 사용자 아이콘 ~ 로그아웃 영역에 맞춤
  ***************************************************************************************/
 
 
@@ -48,41 +61,76 @@
  * 1. FORM 변수 선언
  ***************************************************************************************/
 
+// 사용자정보 팝업 최소 너비 (여백 20 + 비밀번호 변경 80 + 간격 8 + 사용자정보 수정 105 + 여백 20)
+this.fv_popupMinWidth = 233;
+
+// 사용자명 앞 아이콘 영역 너비 (아이콘 18 + 아이콘과 글자 간격 6)
+this.fv_userIconWidth = 24;
+
+// 사용자명 글꼴 (xcss .Button.besTopUser 의 font 와 동일하게 유지)
+this.fv_userFont = "12px Malgun Gothic";
+
 
 /***************************************************************************************
  * 2. FORM LOAD
  ***************************************************************************************/
 
-/*
- * 기능 : 상단 영역 초기화
- * 설명 : 로그인 사용자 정보 및 선택 언어 표시
+/**
+ * @description     상단 영역 초기화 함수
+ *                  - 로그인 사용자명 표시 (공통 LIB : gds_user_info)
+ *                  - 로그인에서 선택한 언어 표시 (공통 LIB : libLang)
+ * @param           {obj    : nexacro.Form      }   이벤트 발생 Form    : this
+ * @param           {e      : nexacro.EventInfo }   이벤트 정보         : e
+ * @example         this.fn_init(obj, e);
  */
 this.fn_init = function(obj, e)
 {
-    var objApp = nexacro.getApplication();
+    // 로그인 사용자명 표시
+    this.fn_setUserInfo();
 
-    if (objApp.gv_userid)
-    {
-        this.fn_setUserInfo(objApp.gv_userid);
-    }
-
-    // 로그인에서 선택한 언어 표시 (공통 LIB)
+    // 로그인에서 선택한 언어 표시
     this.fn_setLanguageInfo(this.gfn_getCurrentLanguage());
 };
+
 
 /***************************************************************************************
  * 3. 공통 버튼
  ***************************************************************************************/
 
-/*
- * 기능 : 로그아웃
- * 설명 : 업무 탭과 ChildFrame을 제거한 후 로그인 화면으로 이동
+/**
+ * @description     로그아웃 요청 함수
+ *                  - 서버 세션 무효화(logout.do) 요청
+ *                  - 화면 초기화는 콜백(fn_callBack)에서 처리
+ * @example         this.fn_requestLogout();
+ */
+this.fn_requestLogout = function()
+{
+    // 로그아웃 Transaction 설정
+    var sSvcID        = "logout";                               // 서비스 ID
+    var sSvcURL       = "svcUrl::sys/SYS10000M/logout.do";      // 로그아웃 Controller URL
+    var sInDatasets   = "";                                     // 서버 입력 Dataset 없음
+    var sOutDatasets  = "";                                     // 서버 출력 Dataset 없음
+    var sArgument     = "";                                     // 추가 전달 파라미터 없음
+    var sCallbackFunc = "fn_callBack";                          // Transaction 결과 콜백
+
+    // 공통 LIB를 이용하여 로그아웃 요청
+    this.gfn_transaction(sSvcID, sSvcURL, sInDatasets, sOutDatasets, sArgument, sCallbackFunc);
+};
+
+/**
+ * @description     로그아웃 화면 처리 함수
+ *                  - 열린 업무 탭 및 ChildFrame 전체 제거
+ *                  - 로그인 화면 입력값 초기화
+ *                  - 로그인 사용자정보 초기화 (공통 LIB : gfn_clearUserInfo)
+ *                  - 로그인 프레임 표시 및 업무 영역 숨김
+ * @example         this.fn_logout();
  */
 this.fn_logout = function()
 {
+    // Application 전역 객체
     var objApp = nexacro.getApplication();
 
-    // objFrameSet : 로그인 및 업무 영역을 구분하는 최상위 프레임
+    // 로그인 및 업무 영역을 구분하는 최상위 프레임
     var objFrameSet = objApp.mainframe.VFrameSetMain;
 
     if (!objFrameSet)
@@ -91,7 +139,7 @@ this.fn_logout = function()
         return;
     }
 
-    // objMdiFrame : IFC형 업무 탭 관리 프레임
+    // IFC형 업무 탭 관리 프레임
     var objMdiFrame = objFrameSet.VFrameSetWork.HFrameSetWork.VFrameSetContent.MdiFrame;
 
     // 업무 탭 관리 함수 존재 여부 확인
@@ -116,57 +164,121 @@ this.fn_logout = function()
         objLoginFrame.form.fn_resetLogin();
     }
 
-    // 로그인 사용자 ID 초기화
-    objApp.gv_userid = "";
+    // 로그인 사용자정보 초기화 (공통 LIB)
+    this.gfn_clearUserInfo();
 
     // 상단 사용자 표시 정보 초기화
-    this.fn_setUserInfo("");
+    this.fn_setUserInfo();
 
     // 로그인 프레임 표시 및 업무 영역 숨김
     objFrameSet.set_separatesize("*,0");
-
-    // 로그아웃 완료 안내
-    this.alert("로그아웃되었습니다.");
 };
 
 
 /***************************************************************************************
- * 4. TRANSACTION, CALLBACK
+ * 4. TRANSACTION / CALLBACK
  ***************************************************************************************/
+
+/**
+ * @description     상단 영역 Transaction 결과 처리 함수
+ *                  - logout : 서버 세션이 이미 만료되어 오류가 발생해도 화면은 로그아웃 처리
+ * @param           {sSvcID     : String    }   서비스 ID           : logout
+ * @param           {nErrCd     : Number    }   서버 처리 결과 코드 : 0(정상), 음수(오류)
+ * @param           {sErrMsg    : String    }   서버 오류 메시지
+ */
+this.fn_callBack = function(sSvcID, nErrCd, sErrMsg)
+{
+    switch (sSvcID)
+    {
+        // 로그아웃 결과
+        case "logout":
+
+            // 서버 오류는 기록만 하고 화면 로그아웃은 계속 진행
+            if (nErrCd < 0)
+            {
+                trace("[로그아웃] 서버 오류 : " + sErrMsg);
+            }
+
+            // 로그아웃 화면 처리
+            this.fn_logout();
+            break;
+
+        default:
+            break;
+    }
+};
 
 
 /***************************************************************************************
  * 5. 팝업 호출 및 콜백
  ***************************************************************************************/
 
+/**
+ * @description     사용자정보 팝업 내용 설정 함수
+ *                  - 아이디, 이름 : this.gUserId, this.gUserNm
+ *                  - 소속         : 회사명 · 부서명 · 직급명 (값이 있는 항목만 표시)
+ *                  - 로그인 시간  : this.gLoginTime (서버 세션 생성 시각)
+ * @example         this.fn_setUserPopupInfo();
+ */
+this.fn_setUserPopupInfo = function()
+{
+    // 사용자정보 팝업 내부 Form
+    var objPopup = this.pdv_userInfo.form;
+
+    // 아이디 및 이름 표시
+    objPopup.sta_userId.set_text(this.gUserId);
+    objPopup.sta_userNm.set_text(this.gUserNm);
+
+    // 소속 : 값이 있는 항목만 " · " 로 연결
+    var arrDept = [];
+
+    if (!this.gfn_isNull(this.gCompanyNm)) arrDept.push(this.gCompanyNm);
+    if (!this.gfn_isNull(this.gDeptNm))    arrDept.push(this.gDeptNm);
+    if (!this.gfn_isNull(this.gGradeNm))   arrDept.push(this.gGradeNm);
+
+    objPopup.sta_dept.set_text(arrDept.join(" · "));
+
+    // 로그인 시간 표시
+    objPopup.sta_loginTime.set_text(this.gLoginTime);
+};
+
 
 /***************************************************************************************
  * 6. 기타 함수
  ***************************************************************************************/
 
-/*
- * 기능 : 로그인 사용자 정보 표시
- * 설명 : 로그인 사용자 ID를 상단 환영 문구에 반영
+/**
+ * @description     로그인 사용자명 표시 함수
+ *                  - 로그인 상태 : "{사용자명}님 환영합니다" (사용자명이 없으면 아이디)
+ *                  - 미로그인    : 빈 값
+ *                  - 기존 호출부 호환을 위해 매개변수는 받지만 사용하지 않음
+ * @param           {sUserName  : String    }   (미사용) 기존 호환용
+ * @example         this.fn_setUserInfo();
  */
 this.fn_setUserInfo = function(sUserName)
 {
-    // 기존 상단 사용자 표시 컴포넌트
-    if (!this.sta_UserName) return;
+    // 사용자명 버튼 존재 여부 확인
+    if (!this.btn_user) return;
 
-    // 사용자 정보가 없으면 안내 문구 초기화
-    if (!sUserName)
+    // 로그인 전이거나 로그아웃 후
+    if (!this.gfn_isLogin())
     {
-        this.sta_UserName.set_text("");
+        this.btn_user.set_text("");
         return;
     }
 
-    // 로그인 사용자 환영 문구 표시
-    this.sta_UserName.set_text(sUserName + "님 환영합니다.");
+    // 표시할 이름 : 사용자명 우선, 없으면 아이디
+    var sDisplayName = this.gfn_isNull(this.gUserNm) ? this.gUserId : this.gUserNm;
+
+    // 상단 환영 문구 표시
+    this.btn_user.set_text(sDisplayName + "님 환영합니다");
 };
 
-/*
- * 기능 : 선택 언어 표시
- * 설명 : 로그인에서 선택한 언어의 국기 이미지와 언어명을 표시 (변경 불가)
+/**
+ * @description     선택 언어 표시 함수
+ *                  - 로그인에서 선택한 언어의 국기 이미지와 언어명 표시 (상단에서 변경 불가)
+ * @param           {sLanguage  : String    }   언어 코드           : KO, EN, ZH
+ * @example         this.fn_setLanguageInfo("KO");
  */
 this.fn_setLanguageInfo = function(sLanguage)
 {
@@ -178,25 +290,31 @@ this.fn_setLanguageInfo = function(sLanguage)
     this.btn_language.set_icon(objLanguageInfo.flag);
 };
 
+
 /***************************************************************************************
  * 7. 이벤트
  ***************************************************************************************/
 
-/*
- * 기능 : 상단 영역 로딩 이벤트
+/**
+ * @description     상단 영역 로딩 이벤트
+ * @param           {obj    : nexacro.Form      }   이벤트 발생 Form
+ * @param           {e      : nexacro.EventInfo }   이벤트 정보
  */
 this.Form_Top_onload = function(obj, e)
 {
+    // 상단 영역 초기화
     this.fn_init(obj, e);
 };
 
-
-/*
- * 기능 : BES 로고 클릭
- * 설명 : 업무 탭은 유지하고 기존 Form_Work 홈 화면 표시
+/**
+ * @description     BES 로고 클릭 이벤트
+ *                  - 업무 탭은 유지하고 기본 홈 화면(Form_Work) 표시
+ * @param           {obj    : nexacro.Static            }   이벤트 발생 컴포넌트 : sta_Brand
+ * @param           {e      : nexacro.ClickEventInfo    }   클릭 이벤트 정보
  */
 this.sta_Brand_onclick = function(obj, e)
 {
+    // Application 전역 객체
     var objApp = nexacro.getApplication();
 
     // IFC형 MDI 프레임 접근
@@ -212,14 +330,94 @@ this.sta_Brand_onclick = function(obj, e)
     objMdiFrame.form.fn_selectTab("");
 };
 
+/**
+ * @description     사용자명 클릭 이벤트
+ *                  - 사용자정보 팝업 내용 갱신 후 표시
+ *                  - 팝업 왼쪽 끝   : 사용자 아이콘 왼쪽 끝과 맞춤
+ *                  - 팝업 오른쪽 끝 : 로그아웃 버튼 오른쪽 끝과 맞춤
+ *                  - 계산한 너비가 최소 너비(fv_popupMinWidth)보다 작으면 최소 너비로 오른쪽 끝 기준 표시
+ *                  - 글자 폭 계산 : 공통 LIB(gfn_getTextWidth)
+ * @param           {obj    : nexacro.Button            }   이벤트 발생 컴포넌트 : btn_user
+ * @param           {e      : nexacro.ClickEventInfo    }   클릭 이벤트 정보
+ */
+this.btn_user_onclick = function(obj, e)
+{
+    // 미로그인 상태이면 팝업 미표시
+    if (!this.gfn_isLogin()) return;
 
-/*
- * 기능 : 로그아웃 버튼 클릭
- * 설명 : 공통 로그아웃 함수 호출
+    // 팝업 내용 갱신
+    this.fn_setUserPopupInfo();
+
+    // 사용자명 글자 폭 (오른쪽 정렬이므로 글자 폭 + 아이콘 폭 만큼 왼쪽에 아이콘이 위치)
+    var nTextWidth = this.gfn_getTextWidth(obj.text, this.fv_userFont);
+
+    // 팝업 오른쪽 끝 : 로그아웃 버튼 오른쪽 끝
+    var nRight = this.btn_logout.getOffsetLeft() + this.btn_logout.getOffsetWidth();
+
+    // 팝업 왼쪽 끝 : 사용자 아이콘 왼쪽 끝
+    var nLeft  = obj.getOffsetLeft() + obj.getOffsetWidth() - nTextWidth - this.fv_userIconWidth;
+
+    // 팝업 너비 (계산 불가 또는 최소 너비 미만이면 최소 너비 적용)
+    var nWidth = nRight - nLeft;
+
+    if (nTextWidth <= 0 || nWidth < this.fv_popupMinWidth)
+    {
+        nWidth = this.fv_popupMinWidth;
+        nLeft  = nRight - nWidth;
+    }
+
+    // 팝업 위치 : 상단 영역 바로 아래
+    var nTop = obj.getOffsetTop() + obj.getOffsetHeight();
+
+    // 사용자정보 팝업 너비 적용 후 표시
+    this.pdv_userInfo.set_width(nWidth);
+    this.pdv_userInfo.trackPopup(nLeft, nTop);
+};
+
+/**
+ * @description     로그아웃 버튼 클릭 이벤트
+ *                  - 확인 후 서버 세션 무효화 요청
+ * @param           {obj    : nexacro.Button            }   이벤트 발생 컴포넌트 : btn_logout
+ * @param           {e      : nexacro.ClickEventInfo    }   클릭 이벤트 정보
  */
 this.btn_logout_onclick = function(obj, e)
 {
-    this.fn_logout();
-};]]></Script>
+    // 로그아웃 확인
+    if (!this.confirm("로그아웃 하시겠습니까?")) return;
+
+    // 로그아웃 요청
+    this.fn_requestLogout();
+};
+
+/**
+ * @description     비밀번호 변경 버튼 클릭 이벤트 (사용자정보 팝업)
+ *                  - TODO : 비밀번호 변경 화면 개발 후 연결
+ * @param           {obj    : nexacro.Button            }   이벤트 발생 컴포넌트 : btn_changePw
+ * @param           {e      : nexacro.ClickEventInfo    }   클릭 이벤트 정보
+ */
+this.pdv_userInfo_btn_changePw_onclick = function(obj, e)
+{
+    // 사용자정보 팝업 닫기
+    this.pdv_userInfo.closePopup();
+
+    // 개발 전 안내
+    this.alert("개발 예정");
+};
+
+/**
+ * @description     사용자정보 수정 버튼 클릭 이벤트 (사용자정보 팝업)
+ *                  - TODO : 사용자정보 수정 화면 개발 후 연결
+ * @param           {obj    : nexacro.Button            }   이벤트 발생 컴포넌트 : btn_changeUserInfo
+ * @param           {e      : nexacro.ClickEventInfo    }   클릭 이벤트 정보
+ */
+this.pdv_userInfo_btn_changeUserInfo_onclick = function(obj, e)
+{
+    // 사용자정보 팝업 닫기 
+    this.pdv_userInfo.closePopup();
+
+    // 개발 전 안내
+    this.alert("개발 예정");
+};
+]]></Script>
   </Form>
 </FDL>

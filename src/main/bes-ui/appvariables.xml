@@ -70,6 +70,7 @@
         <Column id="SUPERVISOR_EMP_ID" type="STRING" size="256"/>
         <Column id="SUPERVISOR_EMP_NUM" type="STRING" size="256"/>
         <Column id="SUPERVISOR_EMP_NM" type="STRING" size="256"/>
+        <Column id="LOGIN_TIME" type="STRING" size="256"/>
       </ColumnInfo>
     </Dataset>
   </Datasets>
