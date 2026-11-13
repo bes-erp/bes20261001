@@ -4061,6 +4061,35 @@
 	-nexa-edge : url('theme://images_ifc/none.png');
 }
 
+
+/* 2026-10-01 :: 페이지 타이틀 추가 */
+.Button.btn_WF_pageTitle,
+.Button.btn_WF_pageTitle[status=mouseover],
+.Button.btn_WF_pageTitle[status=focused],
+.Button.btn_WF_pageTitle[status=disabled],
+.Button.btn_WF_pageTitle[userstatus=pushed],
+.Button.btn_WF_pageTitle[userstatus=selected]
+{
+	background : transparent;	
+	-nexa-icon : url('theme://bes_image/pageTitle/btn_WF_pageTitle.png');
+	-nexa-padding : 0px;
+	-nexa-edge : url('theme://images_ifc/none.png');
+}
+
+/* 2026-10-01 :: 그리드 타이틀 추가 */
+.Button.btn_WF_gridTitle,
+.Button.btn_WF_gridTitle[status=mouseover],
+.Button.btn_WF_gridTitle[status=focused],
+.Button.btn_WF_gridTitle[status=disabled],
+.Button.btn_WF_gridTitle[userstatus=pushed],
+.Button.btn_WF_gridTitle[userstatus=selected]
+{
+	background : transparent;	
+	-nexa-icon : url('theme://bes_image/gridTitle/btn_WF_gridTitle.png');
+	-nexa-padding : 0px;
+	-nexa-edge : url('theme://images_ifc/none.png');
+}
+
 /*  Common My Menu Add Button  */
 .Button.btn_WF_favorite,
 .Button.btn_WF_favorite[status=mouseover],
