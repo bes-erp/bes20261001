@@ -51,6 +51,12 @@ this.fv_tabLeft = 42;
 // fv_tabWidth : 업무 탭 1개 너비
 this.fv_tabWidth = 155;
 
+// fv_tabTop : 업무 탭 상단 여백 (크롬 카드형 : 탭 위로 MDI 배경이 보이도록)
+this.fv_tabTop = 4;
+
+// fv_tabHeight : 업무 탭 높이 (MDI 높이 30 - 상단 여백 4)
+this.fv_tabHeight = 26;
+
 // fv_tabNavWidth : 이동 버튼 영역 너비 (btn_tabPrev 28 + btn_tabNext 28)
 this.fv_tabNavWidth = 56;
 
@@ -453,7 +459,8 @@ this.fn_createTabs = function(bShowActive)
         // 업무 탭 선택 버튼
         var sTabId = "btn_tab_" + j;
 
-        var objTab = new nexacro.Button(sTabId, nLeft, 0, nTabWidth, 30, null, null, null, null, null, null, this);
+        //var objTab = new nexacro.Button(sTabId, nLeft, 0, nTabWidth, 30, null, null, null, null, null, null, this);
+		var objTab = new nexacro.Button(sTabId, nLeft, this.fv_tabTop, nTabWidth, this.fv_tabHeight, null, null, null, null, null, null, this);
 
         this.addChild(sTabId, objTab);
 
@@ -468,7 +475,8 @@ this.fn_createTabs = function(bShowActive)
         // 업무 탭 닫기 버튼
         var sCloseId = "btn_close_" + j;
 
-        var objClose = new nexacro.Button(sCloseId, nLeft + nTabWidth - 28, 4, 22, 22, null, null, null, null, null, null, this);
+        //var objClose = new nexacro.Button(sCloseId, nLeft + nTabWidth - 28, 4, 22, 22, null, null, null, null, null, null, this);
+		var objClose = new nexacro.Button(sCloseId, nLeft + nTabWidth - 26, this.fv_tabTop + 4, 18, 18, null, null, null, null, null, null, this);
 
         this.addChild(sCloseId, objClose);
 
