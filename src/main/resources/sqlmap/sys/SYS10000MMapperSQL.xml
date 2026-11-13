@@ -18,7 +18,6 @@
              ,#{result_cd, mode=OUT, jdbcType=VARCHAR}
              ,#{result_descr, mode=OUT, jdbcType=VARCHAR}
         ) }
-
     </update>
 
 	<!-- =========================================================
@@ -52,7 +51,19 @@
         <if test='USER_ID != null and USER_ID != ""'>
            and user_id = #{USER_ID}
         </if>
-
     </select>
+	
+	<!-- =========================================================
+     [시스템관리] 프로파일 전체 목록 조회 (로그인 시 1회, 넥사크로 gds_profile 적재용)
+	========================================================= -->
+	<select id="selectProfileList" resultType="map">
+	    select /* SYS10000MMapper.selectProfileList */
+	           sp.profile_cd
+	          ,sp.profile_name
+	          ,sp.profile_value
+	      from sys_profile sp
+	     where 1=1
+	     order by sp.profile_cd 
+	</select>
 
 </mapper>

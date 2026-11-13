@@ -9113,6 +9113,30 @@
     -nexa-edge : none;
 }
 
+/* 업무 탭 이동 버튼 (‹ ›) : 본문 #4A5568, 왼쪽 구분선 #E3E8EF */
+.Button.besMdiTabNav,
+.Button.besMdiTabNav[status=mouseover],
+.Button.besMdiTabNav[status=focused],
+.Button.besMdiTabNav[userstatus=pushed]
+{
+    background : #F4F7FA;
+    color : #4A5568;
+    font : bold 20px Arial;
+    cursor : pointer;
+    -nexa-padding : 0px 0px 3px 0px;
+    -nexa-border : 0px none, 0px none, 0px none, 1px solid #E3E8EF;
+    -nexa-edge : none;
+}
+
+/* 업무 탭 이동 버튼 - 비활성 (맨 앞 / 맨 끝) : 비활성 #C9D1DC */
+.Button.besMdiTabNav[status=disabled]
+{
+    background : #F4F7FA;
+    color : #C9D1DC;
+    cursor : default;
+    -nexa-border : 0px none, 0px none, 0px none, 1px solid #E3E8EF;
+    -nexa-edge : none;
+}
 
 /***************************************************************************************
  * BES TAB WORK

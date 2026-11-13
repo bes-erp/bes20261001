@@ -1,5 +1,6 @@
 package erp.sys.service;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -35,5 +36,15 @@ public interface SYS10000MService {
 	* @param loginParamMap
 	* @return
 	*/
+    
 	public abstract Map<String, Object> selectLoginUserInfo(Map<String, Object> loginParamMap);
+	
+	/**
+	* @methodName     		: selectProfileList
+	* @author         		: built1
+	* @date           		: 2026.11.13
+	* @description    		: [시스템관리] 프로파일 전체 목록을 조회하는 메소드
+	* @return
+	*/
+	public abstract List<Map<String, Object>> selectProfileList();
 }

@@ -1,9 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="Form_Mdi" width="1080" height="30" titletext="업무 탭 영역" cssclass="besMdiForm" scrollbartype="none" onload="Form_Mdi_onload">
+  <Form id="Form_Mdi" width="1080" height="30" titletext="업무 탭 영역" cssclass="besMdiForm" scrollbartype="none" onload="Form_Mdi_onload" onsize="Form_Mdi_onsize">
     <Layouts>
       <Layout width="1080" height="30" screenid="Desktop_screen">
         <Button id="btn_home" taborder="0" text="⌂" left="0" top="0" width="42" height="30" cssclass="besMdiHome" cursor="pointer" onclick="btn_home_onclick"/>
+        <Button id="btn_tabNext" taborder="2" text="›" right="0" top="0" width="28" height="30" visible="false" cssclass="besMdiTabNav" onclick="btn_tabNext_onclick"/>
+        <Button id="btn_tabPrev" taborder="1" text="‹" right="btn_tabNext:0" top="0" width="28" height="30" visible="false" cssclass="besMdiTabNav" onclick="btn_tabPrev_onclick"/>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/***************************************************************************************
@@ -23,6 +25,8 @@
  * 2026-11-06        Built1            전역 Dataset 및 프레임 ID 변경
  * 2026-11-09        Built1            FrameSet 기반 업무 ChildFrame 관리
  * 2026-11-09        Built1            로그아웃 시 전체 업무 탭 초기화 기능 추가
+ * 2026-11-13        Built1            업무 탭 최대 개수 제한 (프로파일 : MDI_TAB_MAX_CNT)
+ * 2026-11-13        Built1            업무 탭이 MDI 넓이 초과 시 이동 버튼(‹ ›) 추가
  ***************************************************************************************/
 
 
@@ -38,19 +42,41 @@ this.fv_tabList = [];
 // 빈 문자열이면 기본 홈 화면
 this.fv_activeMenuCd = "";
 
+// fv_tabStartIndex : 업무 탭 표시 시작 위치 (이동 버튼으로 변경)
+this.fv_tabStartIndex = 0;
+
+// fv_tabLeft : 첫 번째 업무 탭 시작 위치 (홈 버튼 너비)
+this.fv_tabLeft = 42;
+
+// fv_tabWidth : 업무 탭 1개 너비
+this.fv_tabWidth = 155;
+
+// fv_tabNavWidth : 이동 버튼 영역 너비 (btn_tabPrev 28 + btn_tabNext 28)
+this.fv_tabNavWidth = 56;
+
+// fv_tabMaxProfileCd : 업무 탭 최대 개수 프로파일 코드 (sys_profile)
+this.fv_tabMaxProfileCd = "MDI_TAB_MAX_CNT";
+
+// fv_tabMaxDefault : 업무 탭 최대 개수 예비값 (기본은 DB sys_profile 의 MDI_TAB_MAX_CNT 사용)
+//                    gds_profile 미조회, 프로파일 미등록, 값 오류일 때만 사용
+this.fv_tabMaxDefault = 7;
+
 
 /***************************************************************************************
  * 2. FORM LOAD
  ***************************************************************************************/
 
-/*
- * 기능 : 업무 탭 초기화
- * 설명 : 최초 로딩 시 탭 목록 및 선택 메뉴 초기화
+/**
+ * @description     업무 탭 초기화 함수
+ *                  - 최초 로딩 시 탭 목록, 선택 메뉴, 표시 시작 위치 초기화
+ * @param           {obj    : nexacro.Form      }   이벤트 발생 Form
+ * @param           {e      : nexacro.EventInfo }   이벤트 정보
  */
 this.fn_init = function(obj, e)
 {
     this.fv_tabList = [];
     this.fv_activeMenuCd = "";
+    this.fv_tabStartIndex = 0;
 };
 
 
@@ -117,11 +143,35 @@ this.fn_getTabInfo = function(sMenuCd)
 };
 
 
+/**
+ * @description     업무 탭 최대 개수 조회 함수
+ *                  - 공통 LIB(gfn_getProfile)로 sys_profile 의 MDI_TAB_MAX_CNT 조회
+ *                  - 값이 없거나 숫자가 아니거나 0 이하이면 기본값(fv_tabMaxDefault) 사용
+ * @return          {Number} 업무 탭 최대 개수
+ * @example         var nMaxCnt = this.fn_getTabMaxCnt();
+ */
+this.fn_getTabMaxCnt = function()
+{
+    // 프로파일 값 조회 (문자열)
+    var sMaxCnt = this.gfn_getProfile(this.fv_tabMaxProfileCd, String(this.fv_tabMaxDefault));
+
+    // 숫자로 변환
+    var nMaxCnt = parseInt(sMaxCnt, 10);
+
+    // 잘못된 값이면 기본값
+    if (isNaN(nMaxCnt) || nMaxCnt <= 0)
+    {
+        nMaxCnt = this.fv_tabMaxDefault;
+    }
+
+    return nMaxCnt;
+};
+
 
 /*
  * 기능 : 업무 탭 생성 및 화면 열기
  * 설명 : 동일한 메뉴가 열려 있으면 기존 화면 선택
- *        신규 메뉴이면 업무 영역을 먼저 확보한 후
+ *        신규 메뉴이면 최대 개수 확인 후 업무 영역을 먼저 확보하고
  *        ChildFrame을 생성하여 FrameSet에 등록
  */
 this.fn_openTab = function(sMenuCd, sMenuNm, sFormUrl)
@@ -129,12 +179,21 @@ this.fn_openTab = function(sMenuCd, sMenuNm, sFormUrl)
     // 필수 메뉴정보 확인
     if (!sMenuCd || !sFormUrl) return;
 
-    // 이미 열린 업무 탭이면 기존 화면 활성화
+    // 이미 열린 업무 탭이면 기존 화면 활성화 (최대 개수 확인 대상 아님)
     var objInfo = this.fn_getTabInfo(sMenuCd);
 
     if (objInfo)
     {
         this.fn_selectTab(sMenuCd);
+        return;
+    }
+
+    // 업무 탭 최대 개수 확인 (프로파일 : MDI_TAB_MAX_CNT)
+    var nMaxCnt = this.fn_getTabMaxCnt();
+
+    if (this.fv_tabList.length >= nMaxCnt)
+    {
+        this.alert("화면은 최대 " + nMaxCnt + "개 까지 오픈 가능합니다.");
         return;
     }
 
@@ -196,6 +255,7 @@ this.fn_openTab = function(sMenuCd, sMenuNm, sFormUrl)
  * 설명 : 홈 화면과 업무 FrameSet 표시 상태 전환
  *        선택한 업무 ChildFrame만 표시하고 나머지는 숨김
  *        선택한 업무의 상단 및 왼쪽 메뉴 복원
+ *        선택한 업무 탭이 보이도록 탭 표시 위치 조정
  */
 this.fn_selectTab = function(sMenuCd)
 {
@@ -213,8 +273,8 @@ this.fn_selectTab = function(sMenuCd)
         // 현재 활성 메뉴 코드 초기화
         this.fv_activeMenuCd = "";
 
-        // 업무 탭 버튼 갱신
-        this.fn_createTabs();
+        // 업무 탭 버튼 갱신 (현재 표시 위치 유지)
+        this.fn_createTabs(false);
         return;
     }
 
@@ -252,8 +312,8 @@ this.fn_selectTab = function(sMenuCd)
     // 선택한 업무의 상단 및 왼쪽 메뉴 복원
     this.fn_syncTopMenu(sMenuCd);
 
-    // 업무 탭 버튼 갱신
-    this.fn_createTabs();
+    // 업무 탭 버튼 갱신 (선택한 탭이 보이도록 위치 조정)
+    this.fn_createTabs(true);
 };
 
 
@@ -304,49 +364,99 @@ this.fn_syncTopMenu = function(sMenuCd)
 };
 
 
-/*
- * 기능 : 업무 탭 버튼 생성
- * 설명 : 열린 업무 탭 목록을 기준으로 선택 및 닫기 버튼 구성
+/**
+ * @description     업무 탭 버튼 생성 함수
+ *                  - 열린 업무 탭 목록을 기준으로 선택 및 닫기 버튼 구성
+ *                  - 업무 탭 전체 너비가 MDI 넓이를 초과하면 이동 버튼(‹ ›) 표시
+ *                  - 표시 가능한 개수만큼 fv_tabStartIndex 부터 탭 표시
+ * @param           {bShowActive : Boolean} true  : 선택한 업무 탭이 보이도록 표시 위치 조정
+ *                                          false : 현재 표시 위치 유지 (이동 버튼, 탭 닫기 등)
+ * @example         this.fn_createTabs(true);
  */
-this.fn_createTabs = function()
+this.fn_createTabs = function(bShowActive)
 {
     // 기존 동적 업무 탭 버튼 제거
     for (var i = this.components.length - 1; i >= 0; i--)
     {
         var objComp = this.components[i];
 
-        if (objComp.name.indexOf("btn_tab_") == 0 ||
-            objComp.name.indexOf("btn_close_") == 0)
+        if (objComp.name.indexOf("btn_tab_") == 0 || objComp.name.indexOf("btn_close_") == 0)
         {
             this.removeChild(objComp.name);
             objComp.destroy();
         }
     }
 
-    var nLeft     = 42;
-    var nTabWidth = 155;
+    var nTabCnt   = this.fv_tabList.length;
+    var nTabWidth = this.fv_tabWidth;
 
-    // 열린 업무 탭 수만큼 버튼 생성
-    for (var j = 0; j < this.fv_tabList.length; j++)
+    // 업무 탭을 표시할 수 있는 영역 너비 (홈 버튼 제외)
+    var nAreaWidth = this.getOffsetWidth() - this.fv_tabLeft;
+
+    // 업무 탭 전체 너비가 영역을 초과하는지 확인
+    var bOverflow = (nTabCnt * nTabWidth > nAreaWidth);
+
+    // 초과 시 이동 버튼 영역만큼 표시 영역 축소
+    if (bOverflow)
+    {
+        nAreaWidth -= this.fv_tabNavWidth;
+    }
+
+    // 한 번에 표시 가능한 업무 탭 개수 (최소 1개)
+    var nVisibleCnt = Math.max(1, Math.floor(nAreaWidth / nTabWidth));
+
+    // 선택한 업무 탭이 보이도록 표시 시작 위치 조정
+    if (bShowActive)
+    {
+        var nActiveIndex = -1;
+
+        for (var k = 0; k < nTabCnt; k++)
+        {
+            if (this.fv_tabList[k].menuCd == this.fv_activeMenuCd)
+            {
+                nActiveIndex = k;
+                break;
+            }
+        }
+
+        if (nActiveIndex >= 0)
+        {
+            // 선택한 탭이 표시 범위 왼쪽에 있으면 시작 위치를 당김
+            if (nActiveIndex < this.fv_tabStartIndex)
+            {
+                this.fv_tabStartIndex = nActiveIndex;
+            }
+
+            // 선택한 탭이 표시 범위 오른쪽에 있으면 시작 위치를 밂
+            if (nActiveIndex >= this.fv_tabStartIndex + nVisibleCnt)
+            {
+                this.fv_tabStartIndex = nActiveIndex - nVisibleCnt + 1;
+            }
+        }
+    }
+
+    // 표시 시작 위치 범위 보정 (0 ~ 마지막 탭이 보이는 위치)
+    var nMaxStart = Math.max(0, nTabCnt - nVisibleCnt);
+
+    this.fv_tabStartIndex = Math.min(Math.max(0, this.fv_tabStartIndex), nMaxStart);
+
+    // 표시 범위의 업무 탭만 생성
+    var nLeft = this.fv_tabLeft;
+    var nEnd  = Math.min(nTabCnt, this.fv_tabStartIndex + nVisibleCnt);
+
+    for (var j = this.fv_tabStartIndex; j < nEnd; j++)
     {
         var objInfo = this.fv_tabList[j];
 
         // 업무 탭 선택 버튼
         var sTabId = "btn_tab_" + j;
 
-        var objTab = new nexacro.Button(
-            sTabId, nLeft, 0, nTabWidth, 30,
-            null, null, null, null, null, null, this
-        );
+        var objTab = new nexacro.Button(sTabId, nLeft, 0, nTabWidth, 30, null, null, null, null, null, null, this);
 
         this.addChild(sTabId, objTab);
 
         objTab.set_text(objInfo.menuNm);
-        objTab.set_cssclass(
-            objInfo.menuCd == this.fv_activeMenuCd
-                ? "besMdiTabSelected"
-                : "besMdiTab"
-        );
+        objTab.set_cssclass(objInfo.menuCd == this.fv_activeMenuCd ? "besMdiTabSelected" : "besMdiTab");
         objTab.set_cursor("pointer");
         objTab.menuCd = objInfo.menuCd;
 
@@ -356,10 +466,7 @@ this.fn_createTabs = function()
         // 업무 탭 닫기 버튼
         var sCloseId = "btn_close_" + j;
 
-        var objClose = new nexacro.Button(
-            sCloseId, nLeft + nTabWidth - 28, 4, 22, 22,
-            null, null, null, null, null, null, this
-        );
+        var objClose = new nexacro.Button(sCloseId, nLeft + nTabWidth - 28, 4, 22, 22, null, null, null, null, null, null, this);
 
         this.addChild(sCloseId, objClose);
 
@@ -374,6 +481,13 @@ this.fn_createTabs = function()
         // 다음 탭 위치
         nLeft += nTabWidth;
     }
+
+    // 이동 버튼 표시 및 활성 상태 (맨 앞이면 ‹ 비활성, 맨 끝이면 › 비활성)
+    this.btn_tabPrev.set_visible(bOverflow);
+    this.btn_tabNext.set_visible(bOverflow);
+
+    this.btn_tabPrev.set_enable(this.fv_tabStartIndex > 0);
+    this.btn_tabNext.set_enable(this.fv_tabStartIndex + nVisibleCnt < nTabCnt);
 };
 
 
@@ -432,7 +546,8 @@ this.fn_closeTab = function(sMenuCd)
     }
     else
     {
-        this.fn_createTabs();
+        // 현재 표시 위치 유지 (범위는 fn_createTabs 에서 자동 보정)
+        this.fn_createTabs(false);
     }
 };
 
@@ -440,7 +555,7 @@ this.fn_closeTab = function(sMenuCd)
 /*
  * 기능 : 전체 업무 탭 초기화
  * 설명 : 로그아웃 시 생성된 업무 ChildFrame을 모두 제거
- *        탭 관리 배열과 선택 메뉴를 초기화하고 홈 화면 복원
+ *        탭 관리 배열, 선택 메뉴, 표시 시작 위치를 초기화하고 홈 화면 복원
  */
 this.fn_closeAllTabs = function()
 {
@@ -474,8 +589,11 @@ this.fn_closeAllTabs = function()
     // 현재 선택된 업무 메뉴 초기화
     this.fv_activeMenuCd = "";
 
+    // 업무 탭 표시 시작 위치 초기화
+    this.fv_tabStartIndex = 0;
+
     // MDI 버튼 목록 초기화
-    this.fn_createTabs();
+    this.fn_createTabs(false);
 
     // 기존 Form_Work 홈 화면 표시
     objContent.set_separatesize("30,*,0");
@@ -494,6 +612,22 @@ this.fn_closeAllTabs = function()
 this.Form_Mdi_onload = function(obj, e)
 {
     this.fn_init(obj, e);
+};
+
+
+/**
+ * @description     업무 탭 영역 크기 변경 이벤트
+ *                  - 브라우저 크기나 왼쪽 메뉴 접기/펼치기로 MDI 넓이가 바뀌면
+ *                    표시 가능한 탭 개수와 이동 버튼 표시 여부를 다시 계산
+ * @param           {obj    : nexacro.Form          }   이벤트 발생 Form
+ * @param           {e      : nexacro.SizeEventInfo }   크기 변경 이벤트 정보
+ */
+this.Form_Mdi_onsize = function(obj, e)
+{
+    // 업무 탭이 없으면 다시 그릴 필요 없음
+    if (this.fv_tabList.length == 0) return;
+
+    this.fn_createTabs(true);
 };
 
 
@@ -521,6 +655,36 @@ this.fn_tab_onclick = function(obj, e)
 this.fn_close_onclick = function(obj, e)
 {
     this.fn_closeTab(obj.menuCd);
+};
+
+
+/**
+ * @description     이전 업무 탭 이동 버튼(‹) 클릭 이벤트
+ *                  - 표시 시작 위치를 한 칸 왼쪽으로 이동 (선택 탭은 변경하지 않음)
+ * @param           {obj    : nexacro.Button            }   이벤트 발생 컴포넌트 : btn_tabPrev
+ * @param           {e      : nexacro.ClickEventInfo    }   클릭 이벤트 정보
+ */
+this.btn_tabPrev_onclick = function(obj, e)
+{
+    this.fv_tabStartIndex--;
+
+    // 범위 보정은 fn_createTabs 에서 처리
+    this.fn_createTabs(false);
+};
+
+
+/**
+ * @description     다음 업무 탭 이동 버튼(›) 클릭 이벤트
+ *                  - 표시 시작 위치를 한 칸 오른쪽으로 이동 (선택 탭은 변경하지 않음)
+ * @param           {obj    : nexacro.Button            }   이벤트 발생 컴포넌트 : btn_tabNext
+ * @param           {e      : nexacro.ClickEventInfo    }   클릭 이벤트 정보
+ */
+this.btn_tabNext_onclick = function(obj, e)
+{
+    this.fv_tabStartIndex++;
+
+    // 범위 보정은 fn_createTabs 에서 처리
+    this.fn_createTabs(false);
 };
 ]]></Script>
   </Form>

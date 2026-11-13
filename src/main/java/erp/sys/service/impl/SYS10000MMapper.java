@@ -1,5 +1,6 @@
 package erp.sys.service.impl;
 
+import java.util.List;
 import java.util.Map;
 
 import org.egovframe.rte.psl.dataaccess.mapper.Mapper;
@@ -39,5 +40,14 @@ public interface SYS10000MMapper {
 	* @return
 	*/
 	public abstract Map<String, Object> selectLoginUserInfo(Map<String, Object> loginParamMap);
+	
+	/**
+	* @methodName     		: selectProfileList
+	* @author         		: built1
+	* @date           		: 2026.11.13
+	* @description    		: [시스템관리] 프로파일 전체 목록을 조회하는 메소드 (넥사크로 gds_profile 적재용)
+	* @return
+	*/
+	public abstract List<Map<String, Object>> selectProfileList();
  
 }

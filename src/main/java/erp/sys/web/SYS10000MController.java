@@ -89,6 +89,9 @@ public class SYS10000MController {
             
             // 사용자정보 데이터셋 추가 (넥사크로 gds_user_info 용)
             result.addDataSet("outSelectUserInfo", Collections.singletonList(toUserInfoMap(loginUserInfo)));
+            
+            // 시스템 프로파일 데이터셋 추가 (넥사크로 gds_profile 용)
+            result.addDataSet("outSelectProfileList", service.selectProfileList());
         }
 
         // 로그인 결과 데이터셋 추가

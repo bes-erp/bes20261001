@@ -73,6 +73,13 @@
         <Column id="LOGIN_TIME" type="STRING" size="256"/>
       </ColumnInfo>
     </Dataset>
+    <Dataset id="gds_profile">
+      <ColumnInfo>
+        <Column id="PROFILE_CD" type="STRING" size="256"/>
+        <Column id="PROFILE_NAME" type="STRING" size="256"/>
+        <Column id="PROFILE_VALUE" type="STRING" size="256"/>
+      </ColumnInfo>
+    </Dataset>
   </Datasets>
   <Variables>
     <Variable id="gv_userid"/>

@@ -1,6 +1,7 @@
 package erp.sys.service.impl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -96,6 +97,22 @@ public class SYS10000MServiceimpl implements SYS10000MService {
 	public Map<String, Object> selectLoginUserInfo(Map<String, Object> loginParamMap) {
 		try {
 			return mapper.selectLoginUserInfo(loginParamMap);			
+		} catch (Exception e) {
+			throw new DbException(e);
+		}
+	}
+	
+	/**
+	* @methodName     		: selectProfileList
+	* @author         		: built1
+	* @date           		: 2026.11.13
+	* @description    		: [시스템관리] 프로파일 전체 목록을 조회하는 구현메소드
+	* @return				: 프로파일목록
+	*/
+	@Override
+	public List<Map<String, Object>> selectProfileList() {
+		try {
+			return mapper.selectProfileList();			
 		} catch (Exception e) {
 			throw new DbException(e);
 		}

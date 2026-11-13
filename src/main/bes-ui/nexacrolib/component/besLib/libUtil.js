@@ -11,6 +11,7 @@
  ● this.gfn_center                 	: 대상 컴포넌트를 기준 영역의 중앙에 배치 
  ● this.gfn_essential           	: 필수항목 * 붉은색 표시 함수(Div, Tab, Grid 등)
  ● this.gfn_getTextWidth            : 문자열이 화면에 표시될 때의 가로 폭(px) 계산 함수
+ ● this.gfn_getProfile              : 프로파일 코드로 시스템 프로파일 값을 조회하는 함수
 */
 
 /**
@@ -169,4 +170,39 @@ pForm.gfn_getTextWidth = function(sText, sFont)
         // 웹 브라우저가 아닌 환경 (Canvas 미지원)
         return 0;
     }
+};
+
+
+/**
+ * @description     프로파일 코드로 시스템 프로파일 값을 조회하는 함수
+ *                  - 로그인 시 서버에서 받은 gds_profile(sys_profile)에서 조회
+ *                  - 프로파일이 없거나 값이 비어 있으면 기본값 반환
+ *                  - 반환값은 문자열이므로 숫자로 사용할 때는 parseInt 등으로 변환
+ * @param           {sProfileCd     : String    }   프로파일 코드   : MDI_TAB_MAX_CNT
+ * @param           {sDefaultValue  : String    }   기본값          : "7"
+ * @return          {sReturnValue   : String    }   프로파일 값 (없으면 기본값)
+ * @example         var sMaxCnt = this.gfn_getProfile("MDI_TAB_MAX_CNT", "7");
+ */
+pForm.gfn_getProfile = function(sProfileCd, sDefaultValue)
+{
+    // 기본값 (미입력 시 빈 문자열)
+    var sReturnValue = this.gfn_isNull(sDefaultValue) ? "" : String(sDefaultValue);
+
+    // 프로파일 전역 Dataset
+    var gdsProfile = nexacro.getApplication().gds_profile;
+
+    // 프로파일 Dataset 미존재 또는 미조회
+    if (!gdsProfile || gdsProfile.getRowCount() == 0) return sReturnValue;
+
+    // 프로파일 코드 검색
+    var nRow = gdsProfile.findRow("PROFILE_CD", sProfileCd);
+
+    if (nRow < 0) return sReturnValue;
+
+    // 프로파일 값이 비어 있으면 기본값
+    var sValue = gdsProfile.getColumn(nRow, "PROFILE_VALUE");
+
+    if (this.gfn_isNull(sValue)) return sReturnValue;
+
+    return String(sValue);
 };
