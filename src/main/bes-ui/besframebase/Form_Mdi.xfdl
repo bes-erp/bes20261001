@@ -4,8 +4,8 @@
     <Layouts>
       <Layout width="1080" height="30" screenid="Desktop_screen">
         <Button id="btn_home" taborder="0" text="⌂" left="0" top="0" width="42" height="30" cssclass="besMdiHome" cursor="pointer" onclick="btn_home_onclick"/>
-        <Button id="btn_tabNext" taborder="2" text="›" right="0" top="0" width="28" height="30" visible="false" cssclass="besMdiTabNav" onclick="btn_tabNext_onclick"/>
-        <Button id="btn_tabPrev" taborder="1" text="‹" right="btn_tabNext:0" top="0" width="28" height="30" visible="false" cssclass="besMdiTabNav" onclick="btn_tabPrev_onclick"/>
+        <Button id="btn_tabNext" taborder="2" text="›" right="0" top="0" width="28" height="30" enable="false" cssclass="besMdiTabNav" onclick="btn_tabNext_onclick"/>
+        <Button id="btn_tabPrev" taborder="1" text="‹" right="btn_tabNext:0" top="0" width="28" height="30" enable="false" cssclass="besMdiTabNav" onclick="btn_tabPrev_onclick"/>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/***************************************************************************************
@@ -391,16 +391,18 @@ this.fn_createTabs = function(bShowActive)
     var nTabWidth = this.fv_tabWidth;
 
     // 업무 탭을 표시할 수 있는 영역 너비 (홈 버튼 제외)
-    var nAreaWidth = this.getOffsetWidth() - this.fv_tabLeft;
+    //var nAreaWidth = this.getOffsetWidth() - this.fv_tabLeft;
 
     // 업무 탭 전체 너비가 영역을 초과하는지 확인
-    var bOverflow = (nTabCnt * nTabWidth > nAreaWidth);
+    //var bOverflow = (nTabCnt * nTabWidth > nAreaWidth);
 
     // 초과 시 이동 버튼 영역만큼 표시 영역 축소
-    if (bOverflow)
-    {
-        nAreaWidth -= this.fv_tabNavWidth;
-    }
+    //if (bOverflow)
+    //{
+    //    nAreaWidth -= this.fv_tabNavWidth;
+    //}
+	// 업무 탭을 표시할 수 있는 영역 너비 (홈 버튼, 이동 버튼 영역 제외)
+    var nAreaWidth = this.getOffsetWidth() - this.fv_tabLeft - this.fv_tabNavWidth;
 
     // 한 번에 표시 가능한 업무 탭 개수 (최소 1개)
     var nVisibleCnt = Math.max(1, Math.floor(nAreaWidth / nTabWidth));
@@ -483,13 +485,13 @@ this.fn_createTabs = function(bShowActive)
     }
 
     // 이동 버튼 표시 및 활성 상태 (맨 앞이면 ‹ 비활성, 맨 끝이면 › 비활성)
-    this.btn_tabPrev.set_visible(bOverflow);
-    this.btn_tabNext.set_visible(bOverflow);
+    //this.btn_tabPrev.set_visible(bOverflow);
+    //this.btn_tabNext.set_visible(bOverflow);
 
     this.btn_tabPrev.set_enable(this.fv_tabStartIndex > 0);
     this.btn_tabNext.set_enable(this.fv_tabStartIndex + nVisibleCnt < nTabCnt);
 };
-
+ 
 
 /*
  * 기능 : 업무 탭 닫기
