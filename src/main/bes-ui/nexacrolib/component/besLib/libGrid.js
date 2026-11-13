@@ -11,6 +11,7 @@
  ● this.gfn_getGridColumnIndex 		: 그리드 특정 컬럼의 인덱스 찾기는 함수
  ● this.gfn_getGridHeaderText 		: 그리드 컬럼 인덱스를 기준으로 헤더 텍스트 찾는 함수
  ● this.gfn_gridCheckRequired		: 그리드의 필수 항목 체크하는 함수
+ ● this.gfn_gridCheckAll			: 그리드 헤더 체크박스 클릭 시 전체 행 선택/해제 처리 함수
 */
 
 
@@ -120,16 +121,39 @@ pForm.gfn_gridCheckRequired = function(objGrid, arrRequired)
 
 /** 
  * @description		그리드 헤더 체크박스 클릭 시 전체 행 선택/해제 처리 함수
- * @param 			{objGrid		: Object}	그리드 객체(this.grd_message)
- * @param 			{nHeadCell     	: Number}	헤더 체크박스 셀 인덱스
- * @param 			{sCheckColumn	: String} 	체크박스 컬럼명
+ * @param 			{objGrid  : Object					   }  그리드 객체
+ * @param           {e        : nexacro.GridClickEventInfo }  그리드 헤더 클릭 이벤트 정보 
  */
-pForm.gfn_gridCheckAll = function(objGrid, nHeadCell, sCheckColumn)
+pForm.gfn_gridCheckAll = function(objGrid, e)
 {
+    var sCheckColumn = "SELECT_YN";
+	
     var objDs = objGrid.getBindDataset();
-
-    // 그리드에 바인딩된 Dataset이 없으면 리턴
     if (!objDs) return;
+	
+    // SELECT_YN 컬럼의 Body 셀 인덱스 조회
+    var nBodyCell = objGrid.getBindCellIndex("body", sCheckColumn);
+    if (nBodyCell < 0) return;
+	
+	// Body 셀의 컬럼 위치 조회
+    var nCol = objGrid.getCellProperty("body", nBodyCell, "col");
+
+    // SELECT_YN과 동일한 컬럼 위치의 헤더 셀 탐색
+    var nHeadCell = -1;
+
+    for (var i = 0; i < objGrid.getCellCount("head"); i++)
+    {
+        if (objGrid.getCellProperty("head", i, "col") == nCol)
+        {
+            nHeadCell = i;
+            break;
+        }
+    }
+
+    if (nHeadCell < 0) return;
+
+    // 체크박스 헤더 클릭 시에만 처리
+    if (e.cell != nHeadCell) return;
 
     // 현재 헤더 체크박스 상태
     var sCheck = objGrid.getCellProperty("head", nHeadCell, "text");
@@ -143,4 +167,4 @@ pForm.gfn_gridCheckAll = function(objGrid, nHeadCell, sCheckColumn)
 
     // 헤더 체크박스 상태 변경
     objGrid.setCellProperty("head", nHeadCell, "text", (sValue == "Y") ? "1" : "0");
-};	
+};

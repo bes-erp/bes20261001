@@ -76,7 +76,7 @@ pForm._gfn_searchClearComp = function(objForm, sToday)
         }
         else if (objComp instanceof nexacro.Div)            // Div : 내부 재귀 처리
         {
-            this.gfn_searchClearComp(objComp.form, sToday);
+            this._gfn_searchClearComp(objComp.form, sToday);
         }
     }
 };
@@ -114,5 +114,41 @@ pForm.gfn_addRow = function(objGrid, sFocusCellBindText)
 		// 지정 셀 이동 및 편집 상태
         objGrid.setCellPos(nCell);
         objGrid.showEditor(true);
+    }
+};
+
+/**
+ * @description     그리드에서 선택된 행을 삭제하는 함수
+ * @param           {objForm    : object    } 대상 그리드 : this.grd_message
+ * @example         this.gfn_delRow(this.grd_message);
+ */
+pForm.gfn_delRow = function(objGrid)
+{
+    var sCheckColumn = "SELECT_YN";
+
+    // 대상 그리드에 바인딩된 Dataset
+    var objDs = objGrid.getBindDataset();
+    if (!objDs) return;
+
+    // 선택 컬럼이 없으면 리턴
+    if (objDs.getColIndex(sCheckColumn) < 0) return;
+
+    var nDeleteCnt = 0;
+
+    // 선택된 행을 역순으로 삭제
+    for (var nRow = objDs.rowcount - 1; nRow >= 0; nRow--)
+    {
+        if (objDs.getColumn(nRow, sCheckColumn) == "Y")
+        {
+            objDs.deleteRow(nRow);
+            nDeleteCnt++;
+        }
+    }
+
+    // 선택된 행이 없으면 메시지 출력
+    if (nDeleteCnt == 0)
+    {
+        this.alert("삭제할 행을 선택해주세요.");
+        return;
     }
 };

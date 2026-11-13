@@ -9,6 +9,7 @@
  ===============================================================================
  ● this.gfn_dataSetChange			: DataSet 데이터 변경여부 체크 함수
  ● this.gfn_transaction				: DataSet 데이터를 처리(신규/수정/삭제/조회 등)하기 위한 서비스를 호출하는 트랜잭션 함수
+ ● this.gfn_setRowCount 			: Dataset 전체 건수 표시 함수
  */
 
 
@@ -74,4 +75,17 @@ pForm._gfn_callback = function(sServiceID, nErrorCode, sErrorMessage)
 		alert("[라이브러리 오류] : " + sErrorMessage);
 		return;
 	}
+};
+
+/**
+ * @description     Dataset의 전체 건수를 Static에 표시하는 함수
+ * @param           {objDs     : nexacro.NormalDataset} 대상 Dataset
+ * @param           {objStatic : nexacro.Static}        건수 표시 Static
+ * @example         this.gfn_setRowCount(this.ds_message, this.div_title.form.sta_titleCnt);
+ */
+pForm.gfn_setRowCount = function(objDs, objStatic)
+{
+    if (!objDs || !objStatic) return;
+
+    objStatic.set_text("| " + objDs.rowcount + "건");
 };
