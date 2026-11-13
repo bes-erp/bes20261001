@@ -2,6 +2,26 @@
 **☆ [공통] 매일 작업한 내용을 기록하고 push 바랍니다.**
 **☆ [공통] 최근 작업한 내용이 위로 배치, 금일 이후로 작성합니다.**
 
+**☆ [2026-11-13 : dlwmsnw] 사용자정보 팝업, 로그아웃 세션 연동, 업무 탭 최대 개수 제한**
+ 1. 공통 상단(Form_Top) 사용자정보 팝업 추가
+  - 상단 표기 : {사용자명}님 환영합니다 | 로그아웃 (패스워드 변경 → 팝업으로 이동)
+  - 사용자명 클릭 시 팝업 : 사진, 아이디, 이름, 소속, 로그인 시간
+ 2. 로그아웃 서버 세션 무효화 연동 (logout.do)
+ 3. 로그인시간 세션정보 추가
+  - SYS10000MVO, SYS10000MController, SessionUserInfo(getLoginTime()), gds_user_info(LOGIN_TIME)
+ 4. 업무 탭(Form_Mdi) 최대 개수 제한 및 이동 버튼 추가
+  - 최대 개수 : sys_profile.MDI_TAB_MAX_CNT (로그인 시 gds_profile 적재)
+  - 이동 버튼(‹ ›) : 항상 표시, 넘길 탭이 있을 때만 활성화
+ 5. 넥사크로 라이브러리 추가
+  - libUserInfo : this.gLoginTime, this.gfn_clearUserInfo
+  - libUtil     : this.gfn_getTextWidth, this.gfn_getProfile
+ 6. xcss 추가 : besTopUser, BES USER POPUP, besMdiTabNav (BES 컬러 팔레트 기준)
+ 7. 기타
+  - 이미지 색상 변경 : img_TF_user.png, img_pop_user.png
+  - COM10000MMapperSQL -> CBO10000MMapperSQL 수정 (이사님 요청)
+ 8. 문서 수정
+  - [BES] 전자정부 & NexacroN24-110.리이브러리 목록_20261111_v0.1.xlsx
+
 **☆ [2026-11-12 : dims1111] 자바 로그인 사용자정보 세션함수 추가**
  1. 클래스 : SessionUserInfo.java
  2. 사용할 클래스에서 import
