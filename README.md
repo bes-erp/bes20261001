@@ -14,9 +14,9 @@
   - 넥사크로 접근자 프로퍼티 : this.gLangCd (언어코드)
   - 이클립스 getter 함수 : getLangCd() (언어코드)
   - 이클립스에서는 반드시 임포트 : import static erp.core.util.SessionUserInfo.*;
-    예) log.debug("## [ COM12000MServiceimpl ] : {}", "COM12000MServiceimpl");
-        log.debug("## [ getLangCd()          ] : {}", getLangCd());
-        log.debug("## [ getUserId()          ] : {}", getUserId());
+  - 예) log.debug("## [ COM12000MServiceimpl ] : {}", "COM12000MServiceimpl");
+  -     log.debug("## [ getLangCd()          ] : {}", getLangCd());
+  -     log.debug("## [ getUserId()          ] : {}", getUserId());
  4. 넥사크로 라이브러리 파일 업데이트
   - 파일 : [BES] 전자정부 & NexacroN24-110.리이브러리 목록_20261111_v0.1.xlsx
   - 파일 : [BES] 전자정부 & NexacroN24-120.넥사크로 세션정보 생성_20261113_v0.1.xlsx
