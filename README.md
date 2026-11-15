@@ -2,6 +2,25 @@
 **☆ [공통] 매일 작업한 내용을 기록하고 push 바랍니다.**
 **☆ [공통] 최근 작업한 내용이 위로 배치, 금일 이후로 작성합니다.**
 
+**☆ [2026-11-15 : dims1111] 매뉴얼, 언어코드 세션 통합, 라이블러 파일 업데이트**
+ 1. 매뉴얼 현행화
+  - 폴더 명칭 변경 : 110.설치 메뉴얼 => 110.설치 매뉴얼
+  - 현행화 내용 : 엔진엑스 강제 종료, 이클립스 최적화 등
+ 2. 매뉴얼 추가
+  - [BES] 전자정부 & NexacroN24-230.오라클 19.3.0.0c 설치 및 삭제_20261027_v0.1.pptx
+  - [BES] 전자정부 & NexacroN24-240.로그인 및 민감정보 로그 제외 또는 마스킹 처리_20261027_v0.1.pptx
+ 3. 언어코드 세션 통합
+  - gds_user_info : LANG_CD 추가
+  - 넥사크로 접근자 프로퍼티 : this.gLangCd (언어코드)
+  - 이클립스 getter 함수 : getLangCd() (언어코드)
+  - 이클립스에서는 반드시 임포트 : import static erp.core.util.SessionUserInfo.*;
+    예) log.debug("## [ COM12000MServiceimpl ] : {}", "COM12000MServiceimpl");
+        log.debug("## [ getLangCd()          ] : {}", getLangCd());
+        log.debug("## [ getUserId()          ] : {}", getUserId());
+ 4. 넥사크로 라이브러리 파일 업데이트
+  - 파일 : [BES] 전자정부 & NexacroN24-110.리이브러리 목록_20261111_v0.1.xlsx
+  - 파일 : [BES] 전자정부 & NexacroN24-120.넥사크로 세션정보 생성_20261113_v0.1.xlsx
+  
 **☆ [2026-11-12 : sdaeunn] 메시지등록 화면 개선 및 공통함수 추가**
  1. 메시지등록 화면(COM12000M) 기능 개선
   - Dataset 컬럼 ID 대문자 통일 및 관련 스크립트 수정

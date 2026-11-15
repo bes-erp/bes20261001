@@ -91,6 +91,7 @@ public class SessionUserInfo {
     // =================================================================================
     // 사용자정보 항목별 조회 (넥사크로 gds_user_info 컬럼과 대응)
     // =================================================================================
+    public static String getLangCd()           { return get(SYS10000MVO::getLangCd); }           // LANG_CD
     public static String getUserId()           { return get(SYS10000MVO::getUserId); }           // USER_ID
     public static String getUserNm()           { return get(SYS10000MVO::getUserNm); }           // USER_NM
     public static Long   getEmpId()            { return get(SYS10000MVO::getEmpId); }            // EMP_ID

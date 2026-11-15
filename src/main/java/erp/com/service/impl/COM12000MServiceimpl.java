@@ -9,6 +9,7 @@ import erp.com.service.COM12000MService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 import com.nexacro.java.xapi.data.DataSet;
+import static erp.core.util.SessionUserInfo.*;
 
 /**
 * =====================================================================================
@@ -44,6 +45,11 @@ public class COM12000MServiceimpl implements COM12000MService {
     @Override
     public List<Map<String, Object>> selectMessageList(Map<String, Object> searchParamMap, String userId) throws Exception {
 
+
+        log.debug("## [ COM12000MServiceimpl ] : {}", "COM12000MServiceimpl");
+        log.debug("## [ getLangCd()          ] : {}", getLangCd());
+        log.debug("## [ getUserId()          ] : {}", getUserId());
+        
         // 검색조건(데이터셋 및 매개변수) 병합처리를 위한 변수(Map) 선언
         Map<String, Object> mapperParamMap = new HashMap<>();
 
