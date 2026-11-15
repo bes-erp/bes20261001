@@ -4,6 +4,7 @@ package erp.core.util;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 import com.p6spy.engine.spy.appender.MessageFormattingStrategy;
 
@@ -34,6 +35,18 @@ public class SqlParsing implements MessageFormattingStrategy {
     private static final String SUBQUERY_KEY_PREFIX = "__SQ";
     private static final String SUBQUERY_KEY_SUFFIX = "__";
 
+    /**
+     * 2026.11.15 :: 비밀번호 평문 로그 노출 방지
+     * 프로시저명 뒤 두 번째 인자(비밀번호)를 '********'로 치환
+     * - (?i)      : 대소문자 무시
+     * - (?:[^']|'')* : 비밀번호에 작은따옴표가 포함된 경우('' 이스케이프)도 처리
+     */
+    private static final Pattern[] MASK_PATTERNS = {
+        Pattern.compile("(?i)(login_password_p\\s*\\(\\s*'(?:[^']|'')*'\\s*,\\s*)'(?:[^']|'')*'")
+        // 비밀번호를 다루는 프로시저가 더 있으면 같은 형식으로 추가
+        // , Pattern.compile("(?i)(change_password_p\\s*\\(\\s*'(?:[^']|'')*'\\s*,\\s*)'(?:[^']|'')*'")
+    };
+    
     @Override
     public String formatMessage(
             int connectionId,
@@ -48,11 +61,23 @@ public class SqlParsing implements MessageFormattingStrategy {
             return "";
         }
 
-        String formattedSql = pretty(sql);
+        String maskedSql = maskSensitive(sql);
+        String formattedSql = pretty(maskedSql);
 
         return "\n\n/* [ 쿼리실행시간 ] : " + elapsed + " ms */\n"
                 + formattedSql.trim()
                 + "\n";
+    }
+
+    /**
+     * 민감정보(비밀번호) 마스킹
+     */
+    private String maskSensitive(String sql) {
+        String result = sql;
+        for (Pattern pattern : MASK_PATTERNS) {
+            result = pattern.matcher(result).replaceAll("$1'********'");
+        }
+        return result;
     }
 
     /**

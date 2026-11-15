@@ -15,6 +15,11 @@
         <Logger name="erp" level="DEBUG" additivity="false">
             <AppenderRef ref="console" />
         </Logger>
+
+	    <!-- 2026.10.01 :: 로그인 비밀번호 프로시저는 파라미터 로그 차단 -->
+	    <Logger name="erp.sys.service.impl.SYS10000MMapper.loginPassword" level="INFO" additivity="false">
+	        <AppenderRef ref="console"/>
+	    </Logger>
                 
         <!-- 2026.10.01 :: 콘솔에 파싱된 쿼리 문장 들여쓰기/줄간격 매개변수 병합 처리-->
 	        <Logger name="p6spy" level="INFO" additivity="false">
