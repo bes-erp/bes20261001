@@ -13,10 +13,10 @@
     <update id="loginPassword" statementType="CALLABLE" parameterType="map">
 
         { call bcom.com_user_pkg.login_password_p(
-              #{user_id, mode=IN, jdbcType=VARCHAR}
-             ,#{password, mode=IN, jdbcType=VARCHAR}
-             ,#{result_cd, mode=OUT, jdbcType=VARCHAR}
-             ,#{result_descr, mode=OUT, jdbcType=VARCHAR}
+              #{user_id, 		mode=IN,  jdbcType=VARCHAR}
+             ,#{password,	 	mode=IN,  jdbcType=VARCHAR}
+             ,#{result_cd, 		mode=OUT, jdbcType=VARCHAR}
+             ,#{result_descr, 	mode=OUT, jdbcType=VARCHAR}
         ) }
     </update>
 
@@ -24,7 +24,8 @@
 	     사용자ID를 기준으로 사용자정보 조회
 	========================================================= -->
     <select id="selectLoginUserInfo" resultType="map">
-        select cuiv.user_id
+        select #{LANG_CD}  as lang_cd
+              ,cuiv.user_id
 		      ,cuiv.user_nm
 		      ,cuiv.emp_id
 		      ,cuiv.emp_num

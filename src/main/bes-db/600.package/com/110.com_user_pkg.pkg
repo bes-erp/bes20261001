@@ -1,4 +1,4 @@
-﻿create or replace package bcom.com_user_pkg
+create or replace package bcom.com_user_pkg
 is
    /*
     * =========================================================================
@@ -9,9 +9,13 @@ is
     * -------------------------------------------------------------------------
     * 권한 부여
     * -------------------------------------------------------------------------
+    * sqlplus sys / as sysdba
     * sqlplus sys@//210.112.232.44:1531/bes as sysdba
     * grant execute on sys.dbms_crypto to bsys;
     * grant execute on sys.dbms_crypto to bcom;
+    *
+    * grant execute on bcom.com_user_pkg to bsys;
+    * create synonym bsys.com_user_pkg for bcom.com_user_pkg;
     * -------------------------------------------------------------------------
     * Update History
     * -------------------------------------------------------------------------

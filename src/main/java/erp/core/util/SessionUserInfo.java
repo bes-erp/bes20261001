@@ -54,7 +54,7 @@ public class SessionUserInfo {
             return null;
         }
 
-        // 세션에 저장해 둔 로그인 사용자정보를 꺼내기
+        // 세션에 저장된 로그인 사용자정보를 꺼내기
         return (SYS10000MVO) session.getAttribute(SessionConst.LOGIN_USER);
     }
 

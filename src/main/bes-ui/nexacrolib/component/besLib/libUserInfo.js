@@ -9,9 +9,11 @@
  ===============================================================================
  ● this.gfn_isLogin                 : 로그인 여부 체크 함수
  ● this.gfn_getUserInfo             : 로그인 사용자정보 컬럼값 조회 함수
-●  this.gfn_clearUserInfo           : 로그인 사용자정보 초기화 함수(로그아웃 시 사용)
+ ● this.gfn_clearUserInfo           : 로그인 사용자정보 초기화 함수(로그아웃 시 사용)
+ 
  ===============================================================================
  ● 전역 속성 목록 (gds_user_info 컬럼)
+   this.gLangCd           			: 언어코드          (LANG_CD)
    this.gUserId           			: 사용자ID          (USER_ID)
    this.gUserNm           			: 사용자명          (USER_NM)
    this.gEmpId            			: 임직원ID          (EMP_ID)
@@ -112,7 +114,8 @@ pForm._gfn_defineUserProp = function(sPropNm, sColId)
  ===============================================================================
 */
 var arrUserProp = [
-	  ["gUserId"          , "USER_ID"           ]
+	  ["gLangCd"          , "LANG_CD"           ]
+	, ["gUserId"          , "USER_ID"           ]
 	, ["gUserNm"          , "USER_NM"           ]
 	, ["gEmpId"           , "EMP_ID"            ]
 	, ["gEmpNum"          , "EMP_NUM"           ]

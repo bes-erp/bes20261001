@@ -17,12 +17,14 @@ import lombok.Data;
 * 수정일자         		수정자             수정내용
 * -------------------------------------------------------------------------------------
 * 2026.11.11        	Built1             최초 생성
+* 2026.11.15            Built1             langCd 추가
 */
 @Data
 public class SYS10000MVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private String langCd;				// 언어코드(KO,EN,ZH,JA,OT) 
     private String userId;				// 사용자ID
     private String userNm;				// 사용자명
     private Long   empId;				// 임직원ID

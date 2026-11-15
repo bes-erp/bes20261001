@@ -1,4 +1,4 @@
-﻿PL/SQL Developer Test script 3.0
+PL/SQL Developer Test script 3.0
 8
 begin
   -- Call the procedure
@@ -15,7 +15,7 @@ TEST01
 5
 p_password
 1
-test1234!
+Test1234!
 5
 p_update_by
 1

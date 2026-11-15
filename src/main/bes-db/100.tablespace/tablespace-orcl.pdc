@@ -1,4 +1,4 @@
-﻿-- ------------------------------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------
 -- DB Version : Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production Version 19.3.0.0.0
 -- 사용자 비밀번호 변경
 -- sqlplus / as sysdba
@@ -18,8 +18,8 @@ drop tablespace bes_data  including contents and datafiles;
 drop tablespace bes_index including contents and datafiles;
 
 -- 테이블스페이스 생성
-create tablespace bes_data  datafile 'c:\oracle\19c\oradata\orcl\bes_data01.dbf'  size 50m reuse autoextend on next 10m maxsize unlimited;
-create tablespace bes_index datafile 'c:\oracle\19c\oradata\orcl\bes_idx01.dbf'   size 50m reuse autoextend on next 10m maxsize unlimited;
+create tablespace bes_data  datafile 'E:\BES\servers\oracle-19.3c\oradata\ORCL\bes_data01.dbf'  size 50m reuse autoextend on next 10m maxsize unlimited;
+create tablespace bes_index datafile 'E:\BES\servers\oracle-19.3c\oradata\ORCL\bes_idx01.dbf'   size 50m reuse autoextend on next 10m maxsize unlimited;
 
 -- 테이블스페이스 조회
 select df.status    as "상태"

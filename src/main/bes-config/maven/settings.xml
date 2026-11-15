@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<settings xmlns="http://maven.apache.org/SETTINGS/1.2.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.2.0
+          https://maven.apache.org/xsd/settings-1.2.0.xsd">
+
+    <!-- 로컬 저장소 위치 -->
+    <localRepository>E:\BES\develpment\maven\repository</localRepository>
+
+    <!-- 온라인 여부 -->
+    <offline>false</offline>
+
+    <!-- 플러그인 그룹 -->
+    <pluginGroups>
+        <pluginGroup>org.apache.maven.plugins</pluginGroup>
+    </pluginGroups>
+
+    <!-- 프록시 설정 -->
+    <proxies>
+        <!-- 회사 프록시 사용 시 설정 -->
+    </proxies>
+
+    <!-- 서버 인증정보 -->
+    <servers>
+    </servers>
+
+    <!-- 미러 설정 -->
+    <mirrors>
+
+        <!-- Maven Central -->
+        <mirror>
+            <id>central</id>
+            <mirrorOf>central</mirrorOf>
+            <name>Maven Central</name>
+            <url>https://repo.maven.apache.org/maven2</url>
+        </mirror>
+
+    </mirrors>
+
+    <!-- 프로파일 -->
+    <profiles>
+
+        <profile>
+            <id>default-profile</id>
+
+            <repositories>
+
+                <repository>
+                    <id>central</id>
+                    <url>https://repo.maven.apache.org/maven2</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </repository>
+
+            </repositories>
+
+            <pluginRepositories>
+
+                <pluginRepository>
+                    <id>central</id>
+                    <url>https://repo.maven.apache.org/maven2</url>
+                </pluginRepository>
+
+            </pluginRepositories>
+
+        </profile>
+
+    </profiles>
+
+    <activeProfiles>
+        <activeProfile>default-profile</activeProfile>
+    </activeProfiles>
+
+</settings>
+
