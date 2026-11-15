@@ -1,6 +1,7 @@
 package erp.sys.web;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.time.LocalDateTime;
@@ -68,9 +69,11 @@ public class SYS10000MController {
         	
         	// 사용자정보 조회
             Map<String, Object> userInfoMap = service.selectLoginUserInfo(loginParamMap);
+            // log.debug("## [ [1] DB 조회 결과        ] : {}", userInfoMap);
             
             // 사용자정보 → 세션 VO 변환
             SYS10000MVO loginUserInfo = toSYS10000MVO(userInfoMap);
+            // log.debug("## [ [2] VO 변환 결과        ] : {}", loginUserInfo);
 
             // 로그인시간 등록 (세션 생성 시각 : 사용자정보 팝업 표시용)
             loginUserInfo.setLoginTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
@@ -88,6 +91,7 @@ public class SYS10000MController {
             session.setMaxInactiveInterval(SessionConst.SESSION_TIMEOUT);
             
             // 사용자정보 데이터셋 추가 (넥사크로 gds_user_info 용)
+            // log.debug("## [ [3] 넥사크로 전송 데이터] : {}", loginUserInfo);
             result.addDataSet("outSelectUserInfo", Collections.singletonList(toUserInfoMap(loginUserInfo)));
             
             // 시스템 프로파일 데이터셋 추가 (넥사크로 gds_profile 용)
@@ -113,17 +117,31 @@ public class SYS10000MController {
     @RequestMapping(value = "getSessionUser.do")
     public NexacroResult getSessionUser(HttpSession session) throws Exception {
 
-        NexacroResult result = new NexacroResult();
+    	NexacroResult result = new NexacroResult();
 
-        SYS10000MVO loginUser = (SYS10000MVO) session.getAttribute(SessionConst.LOGIN_USER);
+        SYS10000MVO loginUserInfo = (SYS10000MVO) session.getAttribute(SessionConst.LOGIN_USER);
 
-        if (loginUser == null) {
+        if (loginUserInfo == null) {
             result.setErrorCode(-1);
             result.setErrorMsg("세션이 만료되었습니다. 다시 로그인해 주세요.");
             return result;
         }
 
-        result.addDataSet("outUserInfo", Collections.singletonList(toUserInfoMap(loginUser)));
+        // 세션 사용자ID로 최신 사용자정보 재조회
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("USER_ID", loginUserInfo.getUserId());
+
+        Map<String, Object> userInfoMap = service.selectLoginUserInfo(paramMap);
+
+        if (userInfoMap != null) {
+            SYS10000MVO refreshUser = toSYS10000MVO(userInfoMap);
+            refreshUser.setLoginTime(loginUserInfo.getLoginTime());     // 로그인시간 유지
+
+            session.setAttribute(SessionConst.LOGIN_USER, refreshUser);
+            loginUserInfo = refreshUser;
+        }
+
+        result.addDataSet("outSelectUserInfo", Collections.singletonList(toUserInfoMap(loginUserInfo)));
 
         return result;
     }
@@ -161,6 +179,7 @@ public class SYS10000MController {
 
         SYS10000MVO vo = new SYS10000MVO();
 
+        vo.setLangCd(toStr(userInfoMap.get("LANG_CD")));
         vo.setUserId(toStr(userInfoMap.get("USER_ID")));
         vo.setUserNm(toStr(userInfoMap.get("USER_NM")));
         vo.setEmpId(toLong(userInfoMap.get("EMP_ID")));
@@ -197,6 +216,7 @@ public class SYS10000MController {
 
         Map<String, Object> userInfoMap = new LinkedHashMap<>();
 
+        userInfoMap.put("LANG_CD",            vo.getLangCd());
         userInfoMap.put("USER_ID",            vo.getUserId());
         userInfoMap.put("USER_NM",            vo.getUserNm());
         userInfoMap.put("EMP_ID",             vo.getEmpId());

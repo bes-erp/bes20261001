@@ -50,6 +50,7 @@
     </Dataset>
     <Dataset id="gds_user_info">
       <ColumnInfo>
+        <Column id="LANG_CD" type="STRING" size="256"/>
         <Column id="USER_ID" type="STRING" size="256"/>
         <Column id="USER_NM" type="STRING" size="256"/>
         <Column id="EMP_ID" type="STRING" size="256"/>

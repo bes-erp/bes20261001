@@ -24,7 +24,7 @@
 	     사용자ID를 기준으로 사용자정보 조회
 	========================================================= -->
     <select id="selectLoginUserInfo" resultType="map">
-        select #{LANG_CD}  as lang_cd
+        select nvl(#{LANG_CD}, 'KO') as lang_cd
               ,cuiv.user_id
 		      ,cuiv.user_nm
 		      ,cuiv.emp_id
@@ -64,6 +64,7 @@
 	          ,sp.profile_value
 	      from sys_profile sp
 	     where 1=1
+           and sp.profile_cd = 'MDI_TAB_MAX_CNT'
 	     order by sp.profile_cd 
 	</select>
 
