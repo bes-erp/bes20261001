@@ -12,31 +12,32 @@
   - 자바 클래스 : PasswordHasher.java 
  3. 이클립스, 자바, 매퍼 대소문자 규칙
   - 넥사크로 : 데이터셋 대문자
-             : 데이터셋 명명 규칙 : ds_login_result ("_"로 구분)
-             : 예시
-             <ColumnInfo>
-			  	<Column id="USER_ID" type="STRING" size="256"/>
-			  	<Column id="PASSWORD" type="STRING" size="256"/>
-				<Column id="LANG_CD" type="STRING" size="256"/>
-			 </ColumnInfo>
+  -          : 데이터셋 명명 규칙 : ds_login_result ("_"로 구분)
+  -          : 예시
+  -          <ColumnInfo>
+  -			  	<Column id="USER_ID" type="STRING" size="256"/>
+  -			  	<Column id="PASSWORD" type="STRING" size="256"/>
+  -				<Column id="LANG_CD" type="STRING" size="256"/>
+  -			 </ColumnInfo>
 			 
   - 자바 : 데이터베이스 컬럼 직접 사용 대문자 (get, set)
-  	     : 예시
-  	     String sResultCd    = toStr(loginResultMap.get("RESULT_CD"));
-         String sResultDescr = toStr(loginResultMap.get("RESULT_DESCR"));
+  -	     : 예시
+  -	     String sResultCd    = toStr(loginResultMap.get("RESULT_CD"));
+  -      String sResultDescr = toStr(loginResultMap.get("RESULT_DESCR"));
          
   - 매퍼 : 쿼리는 소문자, 조건의 매개변수는 대문자
-         : 쿼리 작성시 첫줄에 /* 매퍼이름.쿼리ID */ 반드시 표기
-         : 예시
-         <select id="selectLoginPassword" parameterType="string" resultType="map">
-         	select /* SYS10000MMapper.selectLoginPassword */
-                   cu.password
-                  ,cu.user_yn
-                  ,cu.lock_yn
-              from com_user cu
-             where 1=1
-               and cu.user_id = #{USER_ID}
-    </select>
+  -       : 쿼리 작성시 첫줄에 /* 매퍼이름.쿼리ID */ 반드시 표기
+  -       : 스키마.명칭의 스키마 사용하지 않음
+  -       : 예시
+  -       <select id="selectLoginPassword" parameterType="string" resultType="map">
+  -      	select /* SYS10000MMapper.selectLoginPassword */
+  -                cu.password
+  -               ,cu.user_yn
+  -               ,cu.lock_yn
+  -           from com_user cu
+  -          where 1=1
+  -            and cu.user_id = #{USER_ID}
+  -       </select>
   
 **☆ [2026-11-16 : sdaeunn] 웹폰트 적용 및 공통 버튼 디자인 개선 **
  1. Pretendard 웹폰트 적용
