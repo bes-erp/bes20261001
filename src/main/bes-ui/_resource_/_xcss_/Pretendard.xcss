@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XCSS version="1.1">
+  <Predefines/>
+  <CSSData><![CDATA[/* Work 영역 - 일반 텍스트 */
+.Static.font_WF
+{
+    font : 12px/normal "Pretendard";
+}
+
+/* Work 영역 - 화면 제목 */
+.Static.font_WF_title
+{
+    font : normal 700 15px/normal "Pretendard";
+}
+
+/* Work 영역 - 목록 제목 */
+.Static.font_WF_listTitle
+{
+    font : normal 700 13px/normal "Pretendard";
+}
+
+/* Work 영역 - 버튼 */
+.Button.font_WF
+{
+    font : 12px/normal "Pretendard";
+}
+
+/* Work 영역 - 입력창 */
+.Edit.font_WF
+{
+    font : 12px/normal "Pretendard";
+}
+
+/* Work 영역 - 콤보박스 */
+.Combo.font_WF
+{
+    font : 12px/normal "Pretendard";
+}
+
+/* Work 영역 - Grid 헤더 */
+.Grid.font_WF_grid .head .row .cell
+{
+    font : normal 700 12px/normal "Pretendard";
+}
+
+/* Work 영역 - Grid 데이터 */
+.Grid.font_WF_grid .body .row .cell
+{
+    font : normal 400 12px/normal "Pretendard";
+}
+
+]]></CSSData>
+</XCSS>

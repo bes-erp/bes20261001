@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XCSS version="1.1">
+  <Predefines/>
+  <CSSData><![CDATA[
+/* =========================================================
+   Work 영역 - 공통 버튼 아이콘
+   ========================================================= */
+
+/* 조회 버튼 */
+.Button.btn_WF_search
+{
+    background : transparent;
+    -nexa-icon : URL("http://localhost:8011/bes-ui/_resource_/_icon_/search.png");
+    -nexa-icon-position : left;
+    -nexa-padding : 0px;
+}
+
+/* 초기화 버튼 */
+.Button.btn_WF_searchClear
+{
+    background : transparent;
+    -nexa-icon : URL("http://localhost:8011/bes-ui/_resource_/_icon_/reset.png");
+    -nexa-icon-position : left;
+    -nexa-padding : 0px;
+}
+
+/* 저장 버튼 */
+.Button.btn_WF_save
+{
+    background : transparent;
+    -nexa-icon : URL("http://localhost:8011/bes-ui/_resource_/_icon_/save.png");
+    -nexa-icon-position : left;
+    -nexa-padding : 0px;
+}
+
+/* 행 추가 버튼 */
+.Button.btn_WF_addRow
+{
+    background : transparent;
+    -nexa-icon : URL("http://localhost:8011/bes-ui/_resource_/_icon_/add_row.png");
+    -nexa-icon-position : left;
+    -nexa-padding : 0px;
+}
+
+/* 행 삭제 버튼 */
+.Button.btn_WF_delRow
+{
+    background : transparent;
+    -nexa-icon : URL("http://localhost:8011/bes-ui/_resource_/_icon_/delete_row.png");
+    -nexa-icon-position : left;
+    -nexa-padding : 0px;
+}
+
+/* 엑셀 다운로드 버튼 */
+.Button.btn_WF_excelDown
+{
+    background : transparent;
+    -nexa-icon : URL("http://localhost:8011/bes-ui/_resource_/_icon_/excel_download.png");
+    -nexa-icon-position : left;
+    -nexa-padding : 0px;
+}
+]]></CSSData>
+</XCSS>
