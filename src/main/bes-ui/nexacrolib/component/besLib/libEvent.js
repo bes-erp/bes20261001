@@ -122,32 +122,36 @@ pForm.gfn_addRow = function(objGrid, sFocusCellBindText)
  *                  - 체크 컬럼 값이 "Y" 인 행을 역순으로 삭제
  *                  - 체크 컬럼명이 다른 화면은 두 번째 매개변수로 지정 (미지정 시 CHK)
  * @param           {objGrid      : object    } 대상 그리드   : this.grd_message
- * @param           {sCheckColumn : String    } 체크 컬럼명   : "SELECT_YN" (미지정 시 "CHK")
- * @example         this.gfn_delRow(this.grd_message);
- *                  this.gfn_delRow(this.grd_message, "SELECT_YN");
+ * @param           {sCheckColumn : String    } 체크 컬럼명   : "CHK"
  */
-pForm.gfn_delRow = function(objGrid, sCheckColumn)
+ 
+pForm.gfn_delRow = function(objGrid)
 {
-    // 체크 컬럼명 (미지정 시 기본 CHK)
-    if (this.gfn_isNull(sCheckColumn)) sCheckColumn = "CHK";
+    var sCheckColumn = "CHK";
 
     // 대상 그리드에 바인딩된 Dataset
     var objDs = objGrid.getBindDataset();
-    if (this.gfn_isNull(objDs)) return;
+    if (!objDs) return;
 
-    // 체크 컬럼이 없으면 원인을 남기고 리턴
-    if (objDs.getColIndex(sCheckColumn) < 0)
-    {
-        trace("[행삭제] " + objDs.name + " 에 체크 컬럼(" + sCheckColumn + ")이 없습니다.");
-        return;
-    }
+    // 선택 컬럼이 없으면 리턴
+    if (objDs.getColIndex(sCheckColumn) < 0) return;
 
-    // 체크된 행을 역순으로 삭제
+    var nDeleteCnt = 0;
+
+    // 선택된 행을 역순으로 삭제
     for (var nRow = objDs.rowcount - 1; nRow >= 0; nRow--)
     {
         if (objDs.getColumn(nRow, sCheckColumn) == "Y")
         {
             objDs.deleteRow(nRow);
+            nDeleteCnt++;
         }
+    }
+
+    // 선택된 행이 없으면 메시지 출력
+    if (nDeleteCnt == 0)
+    {
+        this.alert("삭제할 행을 선택해주세요.");
+        return;
     }
 };

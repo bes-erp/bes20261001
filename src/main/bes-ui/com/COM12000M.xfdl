@@ -241,7 +241,7 @@ this.fn_add_row = function(obj, e)
  */
 this.fn_del_row = function(obj, e)
 {
-    this.gfn_delRow(this.grd_message, "SELECT_YN");
+    this.gfn_delRow(this.grd_message);
 
     this.gfn_setRowCount(this.ds_message, this.div_title.form.sta_titleCnt);
 };

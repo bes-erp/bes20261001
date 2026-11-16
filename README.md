@@ -2,6 +2,18 @@
 **☆ [공통] 매일 작업한 내용을 기록하고 push 바랍니다.**
 **☆ [공통] 최근 작업한 내용이 위로 배치, 금일 이후로 작성합니다.**
 
+**☆ [2026-11-16 : sdaeunn] 웹폰트 적용 및 공통 버튼 디자인 개선 **
+ 1. Pretendard 웹폰트 적용
+  - Pretendard 웹폰트 파일(Regular, Medium, SemiBold, Bold) 등록
+  - UserFont(Pretendard.xfont) 생성 및 Environment 설정
+  - Work 영역 전용 폰트 스타일(Pretendard.xcss) 추가
+ 2. 공통 버튼 스타일(Button.xcss) 추가
+  - 조회, 초기화, 저장, 행 추가, 행 삭제, 엑셀 다운로드 버튼 아이콘 등록
+  - 버튼별 cssclass 정의 및 아이콘 공통 관리
+ 3. 메시지등록 화면(COM12000M) 개선
+  - Work 영역 전용 폰트 cssclass 적용
+  - 공통 버튼 아이콘 cssclass 적용 
+
 **☆ [2026-11-16 : dlwmsnw] 업무 탭 디자인 변경, 다국어 확대(JA·OT), gv_lang·gv_userid 삭제**
  1. 업무 탭(Form_Mdi) 선택 표시 디자인 변경
   - 선택 탭 : 흰 카드 + 보조 청록 500(#0E8C78) 테두리 2px, 위쪽 모서리 둥글게

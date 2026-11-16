@@ -126,19 +126,19 @@ pForm.gfn_gridCheckRequired = function(objGrid, arrRequired)
  */
 pForm.gfn_gridCheckAll = function(objGrid, e)
 {
-    var sCheckColumn = "SELECT_YN";
+    var sCheckColumn = "CHK";
 	
     var objDs = objGrid.getBindDataset();
     if (!objDs) return;
 	
-    // SELECT_YN 컬럼의 Body 셀 인덱스 조회
+    // CHK 컬럼의 Body 셀 인덱스 조회
     var nBodyCell = objGrid.getBindCellIndex("body", sCheckColumn);
     if (nBodyCell < 0) return;
 	
 	// Body 셀의 컬럼 위치 조회
     var nCol = objGrid.getCellProperty("body", nBodyCell, "col");
 
-    // SELECT_YN과 동일한 컬럼 위치의 헤더 셀 탐색
+    // CHK과 동일한 컬럼 위치의 헤더 셀 탐색
     var nHeadCell = -1;
 
     for (var i = 0; i < objGrid.getCellCount("head"); i++)
@@ -156,15 +156,15 @@ pForm.gfn_gridCheckAll = function(objGrid, e)
     if (e.cell != nHeadCell) return;
 
     // 현재 헤더 체크박스 상태
-    var sCheck = objGrid.getCellProperty("head", nHeadCell, "text");
-    var sValue = (sCheck == "1") ? "N" : "Y";
+	var sCheck = objGrid.getCellProperty("head", nHeadCell, "text");
+	var sValue = (sCheck == "Y") ? "N" : "Y";
 
-    // 전체 행 선택 / 해제
-    for (var nRow = 0; nRow < objDs.rowcount; nRow++)
-    {
-        objDs.setColumn(nRow, sCheckColumn, sValue);
-    }
+	// 전체 행 선택 / 해제
+	for (var nRow = 0; nRow < objDs.rowcount; nRow++)
+	{
+		objDs.setColumn(nRow, sCheckColumn, sValue);
+	}
 
-    // 헤더 체크박스 상태 변경
-    objGrid.setCellProperty("head", nHeadCell, "text", (sValue == "Y") ? "1" : "0");
+	// 헤더 체크박스 상태 변경
+	objGrid.setCellProperty("head", nHeadCell, "text", sValue);
 };
