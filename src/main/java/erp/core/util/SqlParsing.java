@@ -4,6 +4,7 @@ package erp.core.util;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.p6spy.engine.spy.appender.MessageFormattingStrategy;
@@ -24,6 +25,10 @@ import com.p6spy.engine.spy.appender.MessageFormattingStrategy;
  * 2026.11.11           Built1             서브쿼리(인라인뷰/스칼라/IN/EXISTS) 재귀 포맷팅,
  *                                         UNION/MINUS 등 집합연산자, WITH절 처리,
  *                                         select 직후 주석(쿼리ID) 줄 분리
+ * 2026.11.16           Built1             PL/SQL 호출 포맷팅 개선
+ *                                         ({ call } / begin ~ end; / 앞쪽 주석 / ? = call 지원,
+ *                                          출력은 바로 실행 가능한 begin ~ end; 블록으로 통일,
+ *                                          해석할 수 없는 블록은 원문 유지)
  * =====================================================================================
  */
 public class SqlParsing implements MessageFormattingStrategy {
@@ -31,22 +36,30 @@ public class SqlParsing implements MessageFormattingStrategy {
     private static final String INDENT_SELECT = "       ";
     private static final String INDENT_COMMA = "     , ";
 
+    /** PL/SQL 호출문 들여쓰기 */
+    private static final String PLSQL_BLOCK_INDENT = "    ";
+    private static final String PLSQL_PARAM_FIRST  = "      ";
+    private static final String PLSQL_PARAM_NEXT   = "    , ";
+
     /** 서브쿼리 자리표시자 (예: __SQ0__) */
     private static final String SUBQUERY_KEY_PREFIX = "__SQ";
     private static final String SUBQUERY_KEY_SUFFIX = "__";
 
+    /** PL/SQL 블록 끝의 end; (뒤에 / 가 붙은 경우 포함) */
+    private static final Pattern PLSQL_END = Pattern.compile("(?is)^(.*)\\bend\\b\\s*;?\\s*/?\\s*$");
+
     /**
-     * 2026.11.15 :: 비밀번호 평문 로그 노출 방지
-     * 프로시저명 뒤 두 번째 인자(비밀번호)를 '********'로 치환
-     * - (?i)      : 대소문자 무시
-     * - (?:[^']|'')* : 비밀번호에 작은따옴표가 포함된 경우('' 이스케이프)도 처리
+     * 비밀번호 평문 로그 노출 방지
+     * - 위치 지정 방식 : change_password_p('사용자ID', '비밀번호', ...) 의 두 번째 인자
+     * - 이름 지정 방식 : p_password => '비밀번호'
+     * - (?:[^']|'')*   : 비밀번호에 작은따옴표가 포함된 경우('' 이스케이프)도 처리
+     * 비밀번호를 다루는 프로시저가 추가되면 같은 형식으로 추가
      */
     private static final Pattern[] MASK_PATTERNS = {
-        Pattern.compile("(?i)(login_password_p\\s*\\(\\s*'(?:[^']|'')*'\\s*,\\s*)'(?:[^']|'')*'")
-        // 비밀번호를 다루는 프로시저가 더 있으면 같은 형식으로 추가
-        // , Pattern.compile("(?i)(change_password_p\\s*\\(\\s*'(?:[^']|'')*'\\s*,\\s*)'(?:[^']|'')*'")
+        Pattern.compile("(?i)(change_password_p\\s*\\(\\s*'(?:[^']|'')*'\\s*,\\s*)'(?:[^']|'')*'"),
+        Pattern.compile("(?i)(p_password\\s*=>\\s*)'(?:[^']|'')*'")
     };
-    
+
     @Override
     public String formatMessage(
             int connectionId,
@@ -94,9 +107,7 @@ public class SqlParsing implements MessageFormattingStrategy {
             return text;
         }
 
-        String lower = text.toLowerCase(Locale.ROOT);
-
-        if (lower.startsWith("begin") || lower.startsWith("declare")) {
+        if (isPlsqlCall(text)) {
             return formatPlsqlCall(text);
         }
 
@@ -1020,114 +1031,263 @@ public class SqlParsing implements MessageFormattingStrategy {
         return out.toString().replaceFirst("\\n$", "");
     }
 
+    // =================================================================================
+    // PL/SQL 호출문 처리
+    // =================================================================================
+
     /**
-     * PL/SQL 호출문은 매개변수명과 값을 정렬한다.
-     * 문자열 리터럴 안의 쉼표 및 괄호는 분리 기준으로 사용하지 않는다.
+     * PL/SQL 호출문 여부 (앞쪽 주석은 건너뛰고 판단)
+     * begin ~ end; / declare ~ / { call ... } / { ? = call ... } / call ...
+     */
+    private boolean isPlsqlCall(String text) {
+        List<String> ignore = new ArrayList<>();
+        String rest = text.substring(collectComments(text, 0, ignore)).trim();
+        String lower = rest.toLowerCase(Locale.ROOT);
+
+        return lower.matches("(?s)^(begin|declare|call)\\b.*") || lower.startsWith("{");
+    }
+
+    /**
+     * PL/SQL 호출문을 매개변수 단위로 정렬하고,
+     * SQL Developer 등에 바로 붙여 실행할 수 있도록 begin ~ end; 블록으로 통일해 출력한다.
+     * 해석 형식
+     *   - { call 패키지.프로시저(인자, ...) }      → begin 패키지.프로시저(...); end;
+     *   - { ? = call 패키지.함수(인자, ...) }      → begin ? := 패키지.함수(...); end;
+     *   - begin [주석] [{ call }] 패키지.프로시저(인자, ...); end;
+     *   - 앞쪽 주석(쿼리ID 등)은 begin 다음 줄에 표시
+     * declare 블록, 여러 문장이 들어 있는 블록 등 해석할 수 없는 형식은
+     * 잘못 바꿔 보여주지 않도록 공백만 정리된 원문을 그대로 반환한다.
      */
     private String formatPlsqlCall(String sql) {
         String text = sql.trim();
-        int beginIdx = text.toLowerCase(Locale.ROOT).indexOf("begin");
-        int openIdx = text.indexOf('(', beginIdx);
+        List<String> comments = new ArrayList<>();
 
-        if (beginIdx < 0 || openIdx < 0) return text;
+        // 1. 앞쪽 주석 분리
+        String rest = text.substring(collectComments(text, 0, comments)).trim();
+        String lower = rest.toLowerCase(Locale.ROOT);
 
-        int closeIdx = findMatchingParen(text, openIdx);
-        if (closeIdx < 0) return text;
-
-        String callName = text.substring(beginIdx + 5, openIdx).trim();
-        String paramText = text.substring(openIdx + 1, closeIdx).trim();
-        List<String> params = splitParameters(paramText);
-        int maxLen = 0;
-
-        for (String param : params) {
-            int idx = param.indexOf("=>");
-            if (idx > 0) maxLen = Math.max(maxLen, param.substring(0, idx).trim().length());
+        if (lower.matches("(?s)^declare\\b.*")) {
+            return text;
         }
 
-        StringBuilder out = new StringBuilder("begin\n    ")
-                .append(callName).append("(\n");
-
-        for (int i = 0; i < params.size(); i++) {
-            String param = params.get(i);
-            int idx = param.indexOf("=>");
-            out.append(i == 0 ? "          " : "        , ");
-            if (idx > 0) {
-                String name = param.substring(0, idx).trim();
-                String value = param.substring(idx + 2).trim();
-                out.append(String.format(Locale.ROOT, "%-" + maxLen + "s => %s", name, value));
-            } else {
-                out.append(param);
+        // 2. begin ~ end; 블록이면 껍데기를 벗기고 안쪽 문장만 해석
+        if (lower.matches("(?s)^begin\\b.*")) {
+            Matcher m = PLSQL_END.matcher(rest.substring(5));
+            if (!m.matches()) {
+                return text;
             }
-            out.append("\n");
+            rest = m.group(1).trim();
+            rest = rest.substring(collectComments(rest, 0, comments)).trim();
         }
 
-        out.append("    );\nend;");
-        String suffix = text.substring(closeIdx + 1).trim();
-        if (!suffix.isEmpty() && !suffix.equals(";")) {
-            out.append("\n").append(suffix);
+        // 3. 호출문 해석
+        PlsqlCall call = parseCall(rest);
+        if (call == null) {
+            return text;
         }
+
+        // 4. 출력 : 항상 실행 가능한 begin ~ end; 블록으로 표시
+        String base = PLSQL_BLOCK_INDENT;
+        StringBuilder out = new StringBuilder("begin\n");
+
+        for (String comment : comments) {
+            out.append(base).append(comment).append("\n");
+        }
+
+        out.append(base);
+        if (call.returnBind) {
+            out.append("? := ");
+        }
+        out.append(call.name);
+
+        if (call.params == null) {
+            // 괄호 없는 호출
+        } else if (call.params.isEmpty()) {
+            out.append("()");
+        } else {
+            out.append("(\n");
+
+            int maxLen = 0;
+            for (String param : call.params) {
+                int idx = namedArrowIndex(param);
+                if (idx > 0) {
+                    maxLen = Math.max(maxLen, param.substring(0, idx).trim().length());
+                }
+            }
+
+            for (int i = 0; i < call.params.size(); i++) {
+                String param = call.params.get(i);
+                out.append(base).append(i == 0 ? PLSQL_PARAM_FIRST : PLSQL_PARAM_NEXT);
+
+                int idx = namedArrowIndex(param);
+                if (idx > 0) {
+                    String name = param.substring(0, idx).trim();
+                    String value = param.substring(idx + 2).trim();
+                    out.append(String.format(Locale.ROOT, "%-" + maxLen + "s => %s", name, value));
+                } else {
+                    out.append(param);
+                }
+                out.append("\n");
+            }
+            out.append(base).append(")");
+        }
+
+        out.append(";\nend;");
         return out.toString();
     }
 
-    private int findMatchingParen(String text, int openIdx) {
-        int depth = 0;
-        boolean inString = false;
-        for (int i = openIdx; i < text.length(); i++) {
+    /** 해석된 PL/SQL 호출문 */
+    private static final class PlsqlCall {
+        boolean escape;        // { } 로 감싼 JDBC 호출 구문
+        boolean returnBind;    // ? = call (함수 반환값)
+        boolean callKeyword;   // call 키워드 사용
+        String name;           // 패키지.프로시저
+        List<String> params;   // 인자 목록 (괄호 없으면 null)
+    }
+
+    /**
+     * 단일 호출문을 해석한다. 호출문이 아니거나 문장이 여러 개면 null.
+     */
+    private PlsqlCall parseCall(String body) {
+        PlsqlCall call = new PlsqlCall();
+        String text = stripTrailingSemicolons(body.trim());
+
+        // { ... } JDBC 호출 구문
+        if (text.startsWith("{")) {
+            if (!text.endsWith("}")) {
+                return null;
+            }
+            call.escape = true;
+            text = text.substring(1, text.length() - 1).trim();
+        }
+
+        // ? = call 함수
+        Matcher ret = Pattern.compile("^\\?\\s*=\\s*").matcher(text);
+        if (ret.find()) {
+            call.returnBind = true;
+            text = text.substring(ret.end());
+        }
+
+        // call 키워드
+        Matcher kw = Pattern.compile("(?i)^call\\s+").matcher(text);
+        if (kw.find()) {
+            call.callKeyword = true;
+            text = text.substring(kw.end());
+        }
+
+        // 프로시저명 (스키마.패키지.프로시저)
+        int i = 0;
+        while (i < text.length()
+                && (Character.isLetterOrDigit(text.charAt(i))
+                || "_$#.".indexOf(text.charAt(i)) >= 0)) {
+            i++;
+        }
+        if (i == 0) {
+            return null;
+        }
+        call.name = text.substring(0, i);
+
+        int open = skipWhitespace(text, i);
+        if (open >= text.length()) {
+            call.params = null;
+            return call;
+        }
+        if (text.charAt(open) != '(') {
+            return null;
+        }
+
+        int close = findCloseParen(text, open);
+        if (close < 0) {
+            return null;
+        }
+
+        // 닫는 괄호 뒤에 다른 문장이 있으면 해석하지 않음
+        if (!stripTrailingSemicolons(text.substring(close + 1).trim()).isEmpty()) {
+            return null;
+        }
+
+        String paramText = text.substring(open + 1, close).trim();
+        call.params = paramText.isEmpty() ? new ArrayList<>() : splitParameters(paramText);
+        return call;
+    }
+
+    /**
+     * start 위치부터 이어지는 주석을 모두 모으고, 주석이 끝난 위치를 반환한다.
+     */
+    private int collectComments(String text, int start, List<String> comments) {
+        int i = skipWhitespace(text, start);
+
+        while (i < text.length()) {
             char ch = text.charAt(i);
             char next = i + 1 < text.length() ? text.charAt(i + 1) : '\0';
-            if (inString) {
-                if (ch == '\'' && next == '\'') i++;
-                else if (ch == '\'') inString = false;
+
+            if ((ch == '/' && next == '*') || (ch == '-' && next == '-')) {
+                int end = skipLiteral(text, i);
+                comments.add(text.substring(i, end).trim());
+                i = skipWhitespace(text, end);
+            } else {
+                break;
+            }
+        }
+        return i;
+    }
+
+    private String stripTrailingSemicolons(String text) {
+        String result = text.trim();
+        while (result.endsWith(";")) {
+            result = result.substring(0, result.length() - 1).trim();
+        }
+        return result;
+    }
+
+    /**
+     * 이름 지정 방식(p_name => 값)의 => 위치. 문자열 안의 => 는 제외. 없으면 -1.
+     */
+    private int namedArrowIndex(String param) {
+        int i = 0;
+        while (i < param.length() - 1) {
+            int end = skipLiteral(param, i);
+            if (end > i) {
+                i = end;
                 continue;
             }
-            if (ch == '\'') {
-                inString = true;
-            } else if (ch == '(') {
-                depth++;
-            } else if (ch == ')' && --depth == 0) {
+            if (param.charAt(i) == '=' && param.charAt(i + 1) == '>') {
                 return i;
             }
+            i++;
         }
         return -1;
     }
 
+    /**
+     * 최상위 콤마 기준으로 인자를 나눈다.
+     * 문자열, 주석, 함수 괄호 안의 콤마는 분리 기준으로 사용하지 않는다.
+     */
     private List<String> splitParameters(String text) {
         List<String> params = new ArrayList<>();
-        StringBuilder current = new StringBuilder();
         int depth = 0;
-        boolean inString = false;
+        int last = 0;
+        int i = 0;
 
-        for (int i = 0; i < text.length(); i++) {
-            char ch = text.charAt(i);
-            char next = i + 1 < text.length() ? text.charAt(i + 1) : '\0';
-
-            if (inString) {
-                current.append(ch);
-                if (ch == '\'' && next == '\'') {
-                    current.append(next);
-                    i++;
-                } else if (ch == '\'') {
-                    inString = false;
-                }
+        while (i < text.length()) {
+            int end = skipLiteral(text, i);
+            if (end > i) {
+                i = end;
                 continue;
             }
-            if (ch == '\'') {
-                inString = true;
-                current.append(ch);
-            } else if (ch == '(') {
+
+            char ch = text.charAt(i);
+            if (ch == '(') {
                 depth++;
-                current.append(ch);
             } else if (ch == ')') {
                 depth = Math.max(0, depth - 1);
-                current.append(ch);
             } else if (ch == ',' && depth == 0) {
-                params.add(current.toString().trim());
-                current.setLength(0);
-            } else {
-                current.append(ch);
+                params.add(text.substring(last, i).trim());
+                last = i + 1;
             }
+            i++;
         }
-        if (current.length() > 0) params.add(current.toString().trim());
+        params.add(text.substring(last).trim());
         return params;
     }
 }

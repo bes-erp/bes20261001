@@ -67,5 +67,5 @@ public interface SYS10000MMapper {
 	* @param                : menuParamMap(USER_ID, USER_YN)
 	* @return
 	*/
-	public abstract Object selectMenuList(Map<String, Object> menuParamMap);
+	public abstract List<Map<String, Object>> selectMenuList(Map<String, Object> menuParamMap);
 }
