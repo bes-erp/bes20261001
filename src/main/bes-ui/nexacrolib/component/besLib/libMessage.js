@@ -222,10 +222,19 @@ pForm.gfn_msgBox = function(sMessageNum, arrArguments)
 				case "JA":
 					sMsgText = gdsMsg.getColumn(nRow, "MESSAGE_TEXT_JA");
 					break;
+				case "OT":
+					sMsgText = gdsMsg.getColumn(nRow, "MESSAGE_TEXT_OT");
+					break;
 				default:
-					sMsgText = "";
+					sMsgText = gdsMsg.getColumn(nRow, "MESSAGE_TEXT_KO");
 			}
 		}
+		
+		// 해당 언어 메시지가 비어 있으면 한국어로 대체 (gfn_getMessage 와 동일한 처리)
+		if (pForm.gfn_isNull(sMsgText)) sMsgText = gdsMsg.getColumn(nRow, "MESSAGE_TEXT_KO");
+		
+		// 한국어 메시지도 없으면 빈 문자열 (이후 치환·태그 제거 시 오류 방지)
+		if (pForm.gfn_isNull(sMsgText)) sMsgText = "";
 		
 		// 메시지 치환
 		if (!pForm.gfn_isNull(arrArguments))
