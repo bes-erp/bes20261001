@@ -2,6 +2,42 @@
 **☆ [공통] 매일 작업한 내용을 기록하고 push 바랍니다.**
 **☆ [공통] 최근 작업한 내용이 위로 배치, 금일 이후로 작성합니다.**
 
+**☆ [2026-11-16 : dims1111] 로그인 비밀번호 검증 WAS 이관 및 대문자 규칙 적용 **
+ 1. 로그인 화면 정규화 진행
+  - 넥사크로
+  - 자바
+  - 매퍼
+ 2. 비밀번호 검증 오라클 패키지에서 자바 클래스로 변경
+  - 원인 : 오라클 패캐지 7초 
+  - 자바 클래스 : PasswordHasher.java 
+ 3. 이클립스, 자바, 매퍼 대소문자 규칙
+  - 넥사크로 : 데이터셋 대문자
+             : 데이터셋 명명 규칙 : ds_login_result ("_"로 구분)
+             : 예시
+             <ColumnInfo>
+			  	<Column id="USER_ID" type="STRING" size="256"/>
+			  	<Column id="PASSWORD" type="STRING" size="256"/>
+				<Column id="LANG_CD" type="STRING" size="256"/>
+			 </ColumnInfo>
+			 
+  - 자바 : 데이터베이스 컬럼 직접 사용 대문자 (get, set)
+  	     : 예시
+  	     String sResultCd    = toStr(loginResultMap.get("RESULT_CD"));
+         String sResultDescr = toStr(loginResultMap.get("RESULT_DESCR"));
+         
+  - 매퍼 : 쿼리는 소문자, 조건의 매개변수는 대문자
+         : 쿼리 작성시 첫줄에 /* 매퍼이름.쿼리ID */ 반드시 표기
+         : 예시
+         <select id="selectLoginPassword" parameterType="string" resultType="map">
+         	select /* SYS10000MMapper.selectLoginPassword */
+                   cu.password
+                  ,cu.user_yn
+                  ,cu.lock_yn
+              from com_user cu
+             where 1=1
+               and cu.user_id = #{USER_ID}
+    </select>
+  
 **☆ [2026-11-16 : sdaeunn] 웹폰트 적용 및 공통 버튼 디자인 개선 **
  1. Pretendard 웹폰트 적용
   - Pretendard 웹폰트 파일(Regular, Medium, SemiBold, Bold) 등록
