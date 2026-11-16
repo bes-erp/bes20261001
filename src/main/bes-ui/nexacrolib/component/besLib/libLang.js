@@ -68,9 +68,6 @@ pForm.gfn_setLanguage = function(sLanguage)
         sLanguage = "KO";
     }
 
-    // 공통 메시지 LIB에서 사용하는 전역 언어 코드
-    objApp.gv_lang = sLanguage;
-
     // 기존 전역 언어 설정 유지
     objApp.languageCd = sLanguage;
 
@@ -86,19 +83,12 @@ pForm.gfn_setLanguage = function(sLanguage)
 
 /**
  * @description     현재 적용 중인 언어 코드를 조회하는 함수
- *                  - 로그인에서 설정한 전역 언어(gv_lang) 우선, 없으면 저장된 언어
+ *                  - gfn_setLanguage 로 PrivateProfile 에 저장된 언어 코드 반환
  * @return          {String} 언어 코드 (KO, EN, ZH, JA, OT)
  */
 pForm.gfn_getCurrentLanguage = function()
 {
-    var sLanguage = nexacro.getApplication().gv_lang;
-
-    if (!this._gfn_isLanguage(sLanguage))
-    {
-        sLanguage = this.gfn_getLanguage();
-    }
-
-    return sLanguage;
+    return this.gfn_getLanguage();
 };
 
 /**
