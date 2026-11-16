@@ -1,0 +1,254 @@
+create or replace package bcom.com_user_pkg
+is   
+   /*
+    * =========================================================================
+    * Package Name     : com_user_pkg
+    * Description      : 사용자 비밀번호 저장,변경 및 로그인 체크
+    * Author           : Built1
+    * Created Date     : 2026-10-01
+    * -------------------------------------------------------------------------
+    * 권한 부여
+    * -------------------------------------------------------------------------
+    * sqlplus sys / as sysdba
+    * sqlplus sys@//210.112.232.44:1531/bes as sysdba
+    * grant execute on sys.dbms_crypto to bsys;
+    * grant execute on sys.dbms_crypto to bcom;
+    *
+    * grant execute on bcom.com_user_pkg to bsys;
+    * create synonym bsys.com_user_pkg for bcom.com_user_pkg;
+    * -------------------------------------------------------------------------
+    * Update History
+    * -------------------------------------------------------------------------
+    * 작성일자         작성자      내용
+    * -------------------------------------------------------------------------
+    * 2026-10-01       Built1      최초작성
+    * =========================================================================
+    */
+
+    -- Public variable declarations
+    g_package_name                     varchar2(50) default 'com_user_pkg';
+
+    -- ------------------------------------------------------------------------
+    -- System public function and procedure declarations
+    -- ------------------------------------------------------------------------
+
+    -- ------------------------------------------------------------------------
+    -- 사용자 비밀번호 등록 및 변경
+    -- ------------------------------------------------------------------------
+    procedure change_password_p
+        (p_user_id                     in  varchar2                            -- 사용자ID
+        ,p_password                    in  varchar2                            -- 비밀번호
+        ,p_update_by                   in  varchar2                            -- 수정자
+        ,p_result_cd                   out varchar2                            -- 결과코드 : S(성공), F(실패)
+        ,p_result_descr                out varchar2                            -- 결과메시지
+        );
+
+    -- ------------------------------------------------------------------------
+    -- 로그인 결과 처리 (해시 검증은 WAS에서 수행)
+    -- ------------------------------------------------------------------------
+    procedure login_result_p
+        (p_user_id                     in  varchar2                            -- 사용자ID
+        ,p_success_yn                  in  varchar2                            -- 검증결과 : Y/N
+        ,p_result_cd                   out varchar2                            -- 결과코드 : S(성공), F(실패)
+        ,p_result_descr                out varchar2                            -- 결과메시지
+        );
+
+end com_user_pkg;
+/
+create or replace package body bcom.com_user_pkg
+is
+
+    -- ------------------------------------------------------------------------
+    -- 정적변수 선언
+    --   비밀번호 저장 형식 : 알고리즘$반복횟수$SALT(HEX)$HASH(HEX)
+    --   Java erp.core.util.PasswordHasher 와 동일한 값을 유지해야 함
+    -- ------------------------------------------------------------------------
+    c_algorithm                        constant varchar2(20) := 'PBKDF2-SHA256';
+    c_iterations                       constant pls_integer  := 210000;
+    c_salt_length                      constant pls_integer  := 16;
+    c_max_fail_count                   constant pls_integer  := 5;
+
+    c_msg_login_fail                   constant varchar2(100) := '사용자ID 또는 비밀번호가 올바르지 않습니다.';
+
+
+    -- ------------------------------------------------------------------------
+    -- PBKDF2-HMAC-SHA-256 해시 생성 (출력 32바이트 : 단일 블록)
+    -- ------------------------------------------------------------------------
+    function hash_f
+        (p_password                    in  varchar2
+        ,p_salt                        in  raw
+        ) return raw
+    is
+        l_password_raw                 raw(32767);
+        l_u                            raw(32);
+        l_t                            raw(32);
+    begin
+
+        l_password_raw := utl_i18n.string_to_raw(p_password, 'AL32UTF8');
+
+        -- PBKDF2의 첫 번째 블록 U1 = HMAC(비밀번호, SALT || INT(1))
+        l_u := dbms_crypto.mac
+                   (utl_raw.concat(p_salt, hextoraw('00000001'))
+                   ,dbms_crypto.hmac_sh256
+                   ,l_password_raw
+                   );
+
+        l_t := l_u;
+
+        -- U2부터 반복 계산 후 XOR 결합
+        for i in 2 .. c_iterations
+        loop
+            l_u := dbms_crypto.mac
+                       (l_u
+                       ,dbms_crypto.hmac_sh256
+                       ,l_password_raw
+                       );
+
+            l_t := utl_raw.bit_xor(l_t, l_u);
+        end loop;
+
+        return l_t;
+
+    end hash_f;
+
+
+    -- ------------------------------------------------------------------------
+    -- 비밀번호 저장 문자열 생성
+    -- ------------------------------------------------------------------------
+    function encode_f
+        (p_password                    in  varchar2
+        ) return varchar2
+    is
+        l_salt                         raw(16);
+        l_hash                         raw(32);
+    begin
+
+        l_salt := dbms_crypto.randombytes(c_salt_length);
+        l_hash := hash_f(p_password, l_salt);
+
+        return c_algorithm
+               || '$' || to_char(c_iterations)
+               || '$' || rawtohex(l_salt)
+               || '$' || rawtohex(l_hash);
+
+    end encode_f;
+
+
+    -- ------------------------------------------------------------------------
+    -- 사용자 비밀번호 등록 및 변경
+    -- ------------------------------------------------------------------------
+    procedure change_password_p
+        (p_user_id                     in  varchar2                            -- 사용자ID
+        ,p_password                    in  varchar2                            -- 비밀번호
+        ,p_update_by                   in  varchar2                            -- 수정자
+        ,p_result_cd                   out varchar2                            -- 결과코드 : S(성공), F(실패)
+        ,p_result_descr                out varchar2                            -- 결과메시지
+        )
+    is
+        l_password                     varchar2(512);
+    begin
+
+        p_result_cd    := 'F';
+        p_result_descr := null;
+
+        if p_user_id is null then
+            p_result_descr := '사용자ID는 필수 항목입니다.';
+            return;
+        end if;
+
+        if p_password is null or length(p_password) < 8 then
+            p_result_descr := '비밀번호는 8자 이상 입력합니다.';
+            return;
+        end if;
+
+        l_password := encode_f(p_password);
+
+        update com_user
+           set password             = l_password
+             , last_pw_change_date  = sysdate
+             , update_date          = sysdate
+             , update_by            = nvl(p_update_by, 'admin')
+         where user_id              = p_user_id;
+
+        if sql%rowcount = 0 then
+            p_result_descr := '등록된 사용자를 찾을 수 없습니다.';
+            return;
+        end if;
+
+        p_result_cd    := 'S';
+        p_result_descr := '비밀번호가 변경되었습니다.';
+
+    exception
+        when others then
+            p_result_cd    := 'F';
+            p_result_descr := '비밀번호 변경 중 오류가 발생했습니다.';
+
+    end change_password_p;
+
+
+    -- ------------------------------------------------------------------------
+    -- 로그인 결과 처리 (해시 검증은 WAS에서 수행)
+    --   성공(Y) : 실패 횟수 초기화, 최종 로그인 일시 갱신
+    --   실패(N) : 실패 횟수 + 1, c_max_fail_count 이상이면 계정 잠금
+    --   대상 사용자가 없으면 성공으로 처리하지 않음
+    -- ------------------------------------------------------------------------
+    procedure login_result_p
+        (p_user_id                     in  varchar2                            -- 사용자ID
+        ,p_success_yn                  in  varchar2                            -- 검증결과 : Y/N
+        ,p_result_cd                   out varchar2                            -- 결과코드 : S(성공), F(실패)
+        ,p_result_descr                out varchar2                            -- 결과메시지
+        )
+    is
+        l_fail_cnt                     com_user.login_fail_count%type;
+    begin
+
+        p_result_cd    := 'F';
+        p_result_descr := c_msg_login_fail;
+
+        if p_user_id is null then
+            return;
+        end if;
+
+        if p_success_yn = 'Y' then
+
+            update com_user
+               set login_fail_count = 0
+                 , last_login_date  = sysdate
+                 , update_date      = sysdate
+             where user_id          = p_user_id;
+
+            -- 대상 사용자가 없으면 실패 유지
+            if sql%rowcount = 0 then
+                return;
+            end if;
+
+            p_result_cd    := 'S';
+            p_result_descr := '로그인에 성공했습니다.';
+
+        else
+
+            update com_user
+               set login_fail_count = nvl(login_fail_count, 0) + 1
+                 , lock_yn          = case when nvl(login_fail_count, 0) + 1 >= c_max_fail_count
+                                           then 'Y'
+                                           else nvl(lock_yn, 'N')
+                                       end
+                 , update_date      = sysdate
+             where user_id          = p_user_id
+            returning login_fail_count into l_fail_cnt;
+
+            if l_fail_cnt >= c_max_fail_count then
+                p_result_descr := '로그인 실패 횟수 초과로 계정이 잠겼습니다.';
+            end if;
+
+        end if;
+
+    exception
+        when others then
+            p_result_cd    := 'F';
+            p_result_descr := '로그인 처리 중 오류가 발생했습니다.';
+
+    end login_result_p;
+
+end com_user_pkg;
+/

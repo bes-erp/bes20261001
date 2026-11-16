@@ -1,71 +1,125 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+<!--
+    =====================================================================================
+    파일명      : SYS10000MMapper.xml
+    설명        : 사용자 로그인 인증 및 로그인 후 조회
+    =====================================================================================
+    2026.11.02  Built1  최초 생성
+    2026.11.16  Built1  loginPassword 삭제 (비밀번호 검증 WAS 이관), 바인딩 변수 대문자 적용
+    =====================================================================================
+-->
+
 <mapper namespace="erp.sys.service.impl.SYS10000MMapper">
 
-    <!-- ****************************************************************************************
-         사용자 정보
-    ***************************************************************************************** -->
-    
     <!-- =========================================================
-	     사용자 로그인 인증 패키지 호출
-	========================================================= -->
-    <update id="loginPassword" statementType="CALLABLE" parameterType="map">
+         로그인 검증용 비밀번호 해시 및 계정상태 조회
+         결과 키 : PASSWORD, USER_YN, LOCK_YN
+    ========================================================== -->
+    <select id="selectLoginPassword" parameterType="string" resultType="map">
+        select /* SYS10000MMapper.selectLoginPassword */
+               cu.password
+             , cu.user_yn
+             , cu.lock_yn
+          from com_user cu
+         where cu.user_id = #{USER_ID}
+    </select>
 
-        { call bcom.com_user_pkg.login_password_p(
-              #{user_id, 		mode=IN,  jdbcType=VARCHAR}
-             ,#{password,	 	mode=IN,  jdbcType=VARCHAR}
-             ,#{result_cd, 		mode=OUT, jdbcType=VARCHAR}
-             ,#{result_descr, 	mode=OUT, jdbcType=VARCHAR}
+    <!-- =========================================================
+         로그인 검증 결과 기록 (실패 횟수, 계정 잠금)
+         IN  : USER_ID, SUCCESS_YN
+         OUT : RESULT_CD, RESULT_DESCR
+    ========================================================== -->
+    <update id="loginResult" statementType="CALLABLE" parameterType="map">
+        { call bcom.com_user_pkg.login_result_p(
+              #{USER_ID,      mode=IN,  jdbcType=VARCHAR}
+            , #{SUCCESS_YN,   mode=IN,  jdbcType=VARCHAR}
+            , #{RESULT_CD,    mode=OUT, jdbcType=VARCHAR}
+            , #{RESULT_DESCR, mode=OUT, jdbcType=VARCHAR}
         ) }
     </update>
 
-	<!-- =========================================================
-	     사용자ID를 기준으로 사용자정보 조회
-	========================================================= -->
-    <select id="selectLoginUserInfo" resultType="map">
-        select nvl(#{LANG_CD}, 'KO') as lang_cd
-              ,cuiv.user_id
-		      ,cuiv.user_nm
-		      ,cuiv.emp_id
-		      ,cuiv.emp_num
-		      ,cuiv.emp_nm
-		      ,cuiv.company_cd
-		      ,cuiv.company_nm
-		      ,cuiv.dept_cd
-		      ,cuiv.dept_nm
-		      ,cuiv.grade_cd
-		      ,cuiv.grade_nm
-		      ,cuiv.job_cd
-		      ,cuiv.job_nm
-		      ,cuiv.position_cd
-		      ,cuiv.position_nm
-		      ,cuiv.hire_date
-		      ,cuiv.retire_date
-		      ,cuiv.supervisor_emp_id
-		      ,cuiv.supervisor_emp_num
-		      ,cuiv.supervisor_emp_nm
-		  from com_user_info_v cuiv
-		 where 1=1
-
-        <!-- 사용자ID -->
-        <if test='USER_ID != null and USER_ID != ""'>
-           and user_id = #{USER_ID}
-        </if>
+    <!-- =========================================================
+         로그인 사용자정보(세션정보) 조회
+         파라미터 : USER_ID(필수), LANG_CD
+    ========================================================== -->
+    <select id="selectLoginUserInfo" parameterType="map" resultType="map">
+        select /* SYS10000MMapper.selectLoginUserInfo */
+               nvl(#{LANG_CD}, 'KO') as lang_cd
+             , cuiv.user_id
+             , cuiv.user_nm
+             , cuiv.emp_id
+             , cuiv.emp_num
+             , cuiv.emp_nm
+             , cuiv.company_cd
+             , cuiv.company_nm
+             , cuiv.dept_cd
+             , cuiv.dept_nm
+             , cuiv.grade_cd
+             , cuiv.grade_nm
+             , cuiv.job_cd
+             , cuiv.job_nm
+             , cuiv.position_cd
+             , cuiv.position_nm
+             , cuiv.hire_date
+             , cuiv.retire_date
+             , cuiv.supervisor_emp_id
+             , cuiv.supervisor_emp_num
+             , cuiv.supervisor_emp_nm
+          from com_user_info_v cuiv
+         where cuiv.user_id = #{USER_ID}
     </select>
-	
-	<!-- =========================================================
-     [시스템관리] 프로파일 전체 목록 조회 (로그인 시 1회, 넥사크로 gds_profile 적재용)
-	========================================================= -->
-	<select id="selectProfileList" resultType="map">
-	    select /* SYS10000MMapper.selectProfileList */
-	           sp.profile_cd
-	          ,sp.profile_name
-	          ,sp.profile_value
-	      from sys_profile sp
-	     where 1=1
-           and sp.profile_cd = 'MDI_TAB_MAX_CNT'
-	     order by sp.profile_cd 
-	</select>
+
+    <!-- =========================================================
+         시스템 프로파일 조회 (로그인 시 1회, 넥사크로 gds_profile 적재용)
+         현재는 MDI 탭 최대 개수만 조회
+    ========================================================== -->
+    <select id="selectProfileList" resultType="map">
+        select /* SYS10000MMapper.selectProfileList */
+               sp.profile_cd
+             , sp.profile_name
+             , sp.profile_value
+          from sys_profile sp
+         where sp.profile_cd = 'MDI_TAB_MAX_CNT'
+         order by sp.profile_cd
+    </select>
+
+    <!-- =========================================================
+         메뉴정보 목록 조회
+         수정예정 : 사용자 / 권한 / 메뉴 조회
+    ========================================================== -->
+    <select id="selectMenuList" parameterType="map" resultType="map">
+        select /* SYS10000MMapper.selectMenuList */
+               cm.menu_id
+              ,cm.parent_menu_cd
+              ,cm.child_menu_cd
+              ,cm.child_menu_nm
+              ,cm.child_page_ulr
+              ,cm.child_menu_level
+              ,cm.child_menu_seq
+              ,cm.user_yn
+              ,cm.btn_search_yn
+              ,cm.btn_search_init_yn
+              ,cm.btn_save_yn
+              ,cm.btn_add_row_yn
+              ,cm.btn_del_row_yn
+              ,cm.btn_excel_down_yn
+              ,cm.btn_excel_up_yn
+              ,cm.btn_print_yn
+              ,cm.btn_batch_yn
+              ,cm.remark
+          from com_menu cm
+         where 1=1
+
+        <!-- 사용여부 검색 -->
+        <if test="USER_YN != null and USER_YN != ''">
+            and cm.user_yn = #{USER_YN}
+        </if>
+
+         order by cm.child_menu_seq
+                 ,cm.menu_id
+
+    </select>
 
 </mapper>

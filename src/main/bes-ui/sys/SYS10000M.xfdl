@@ -9,7 +9,7 @@
           <Column id="LANG_CD" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
-      <Dataset id="ds_loginResult">
+      <Dataset id="ds_login_result">
         <ColumnInfo>
           <Column id="RESULT_CD" type="STRING" size="256"/>
           <Column id="RESULT_DESCR" type="STRING" size="256"/>
@@ -35,7 +35,7 @@
           </Row>
         </Rows>
       </Dataset>
-      <Dataset id="ds_frameMenu">
+      <Dataset id="ds_frame_menu">
         <ColumnInfo>
           <Column id="MENU_ID" type="STRING" size="256"/>
           <Column id="PARENT_MENU_CD" type="STRING" size="256"/>
@@ -61,6 +61,39 @@
           <Column id="UPDATE_BY" type="STRING" size="256"/>
         </ColumnInfo>
       </Dataset>
+      <Dataset id="ds_user_info">
+        <ColumnInfo>
+          <Column id="LANG_CD" type="STRING" size="256"/>
+          <Column id="USER_ID" type="STRING" size="256"/>
+          <Column id="USER_NM" type="STRING" size="256"/>
+          <Column id="EMP_ID" type="STRING" size="256"/>
+          <Column id="EMP_NUM" type="STRING" size="256"/>
+          <Column id="EMP_NM" type="STRING" size="256"/>
+          <Column id="COMPANY_CD" type="STRING" size="256"/>
+          <Column id="COMPANY_NM" type="STRING" size="256"/>
+          <Column id="DEPT_CD" type="STRING" size="256"/>
+          <Column id="DEPT_NM" type="STRING" size="256"/>
+          <Column id="GRADE_CD" type="STRING" size="256"/>
+          <Column id="GRADE_NM" type="STRING" size="256"/>
+          <Column id="JOB_CD" type="STRING" size="256"/>
+          <Column id="JOB_NM" type="STRING" size="256"/>
+          <Column id="POSITION_CD" type="STRING" size="256"/>
+          <Column id="POSITION_NM" type="STRING" size="256"/>
+          <Column id="HIRE_DATE" type="STRING" size="256"/>
+          <Column id="RETIRE_DATE" type="STRING" size="256"/>
+          <Column id="SUPERVISOR_EMP_ID" type="STRING" size="256"/>
+          <Column id="SUPERVISOR_EMP_NUM" type="STRING" size="256"/>
+          <Column id="SUPERVISOR_EMP_NM" type="STRING" size="256"/>
+          <Column id="LOGIN_TIME" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_profile">
+        <ColumnInfo>
+          <Column id="PROFILE_CD" type="STRING" size="256"/>
+          <Column id="PROFILE_NAME" type="STRING" size="256"/>
+          <Column id="PROFILE_VALUE" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
     </Objects>
     <Script type="xscript5.1"><![CDATA[/***************************************************************************************
  * 프로젝트        : Built1 Enterprise System 구축 프로젝트
@@ -76,6 +109,8 @@
  *---------------------------------------------------------------------------------------
  * 2026-11-02        Built1            최초작성
  * 2026-11-06        Built1            IFC 로그인 레이아웃 및 다국어 적용
+ * 2026-11-16        Built1            Dataset 명칭 변경 (ds_login_result, ds_user_info, ds_frame_menu)
+ * 2026-11-16        Built1            로그인 중복 요청 방지, 언어 설정·Dataset 초기화 중복 정리
  ***************************************************************************************/
 
 // include "besLib::libLang.xjs";
@@ -100,6 +135,9 @@ this.fv_passwordKey = "BES_DEV_PASSWORD";
 // 현재 로그인 화면에 적용된 언어 코드
 this.fv_language = "KO";
 
+// 로그인 Transaction 진행 여부 (Enter·버튼 연타로 인한 중복 요청 방지)
+this.fv_isLoginRunning = false;
+
 
 /***************************************************************************************
  * 2. FORM LOAD
@@ -116,14 +154,9 @@ this.fn_init = function(obj, e)
     // 저장된 아이디 및 비밀번호 정보 복원
     this.fn_loadLoginInfo();
 
-    // 공통 언어 LIB를 이용하여 저장된 언어 설정 복원
+    // 저장된 언어 설정 복원 (저장된 값이 없으면 한국어)
     this.fn_loadLanguage();
-	 
-	// 기본 언어 한국어 설정
-	this.fv_language = this.gfn_setLanguage("KO");
-	this.div_login.form.cbo_lang.set_value("KO");
-	this.fn_setLanguage("KO");
-  
+
     // 로그인 화면에서 사용할 공통 메시지 조회
     // 조회 완료 시 LIB_MESSAGE에서 Application.gds_message에 복사
     this.gfn_loadMessage(this);
@@ -139,6 +172,12 @@ this.fn_init = function(obj, e)
  */
 this.fn_login = function()
 {
+    // 이미 로그인 요청이 진행 중이면 무시 (Enter 연타, 버튼 더블클릭 방지)
+    if (this.fv_isLoginRunning)
+    {
+        return;
+    }
+
     // 로그인 입력 컴포넌트가 포함된 Div Form
     var objLogin = this.div_login.form;
 
@@ -153,16 +192,14 @@ this.fn_login = function()
 
     // 아이디 입력 여부 확인
     if (this.gfn_isNull(sUserId))
-	{
-		// DB 공통 메시지 다국어 테스트
-		//trace("[메시지 테스트] 현재 언어: " + nexacro.getApplication().gv_lang);
+    {
+        // 아이디 미입력 안내 메시지 출력
+        this.gfn_getMessage("NM-ALT-10010", ["사용자ID"]);
 
-		this.gfn_getMessage("NM-ALT-10010", ["사용자ID"]);
-
-		// 아이디 입력창으로 포커스 이동
-		objLogin.edt_userId.setFocus();
-		return;
-	}
+        // 아이디 입력창으로 포커스 이동
+        objLogin.edt_userId.setFocus();
+        return;
+    }
 
     // 비밀번호 입력 여부 확인
     if (this.gfn_isNull(sPassword))
@@ -186,8 +223,8 @@ this.fn_login = function()
         return;
     }
 
-    // 이전 로그인 요청 데이터 초기화
-    this.ds_login.clearData();
+    // 이전 로그인 요청 및 결과 데이터 초기화
+    this.fn_clearLoginData();
 
     // 로그인 요청 Dataset에 신규 행 생성
     var nRow = this.ds_login.addRow();
@@ -200,16 +237,21 @@ this.fn_login = function()
 
     // 서버에 전달할 언어코드 설정
     this.ds_login.setColumn(nRow, "LANG_CD", sLangCd);
-	
-	// trace(this.ds_login.saveXML());
 
     // 로그인 인증 Transaction 설정
-    var sSvcID        = "login";                         		                    								 // 서비스 ID
-    var sSvcURL 	  = "svcUrl::sys/SYS10000M/login.do";															 // 로그인 Controller URL  
-    var sInDatasets   = "dsLogin=ds_login";              															 // 서버 입력 Dataset
-	var sOutDatasets  = "ds_loginResult=outLogin gds_user_info=outSelectUserInfo gds_profile=outSelectProfileList";  // 서버 출력 Dataset
-    var sArgument     = "";                             															 // 추가 전달 파라미터
-    var sCallbackFunc = "fn_callBack";                   															 // Transaction 결과 콜백
+    //   - "=" 왼쪽 : 화면 Dataset 명, 오른쪽 : 서버(Controller) Dataset 명
+    var sSvcID        = "login";                                 // 서비스 ID
+    var sSvcURL       = "svcUrl::sys/SYS10000M/login.do";        // 로그인 Controller URL
+    var sInDatasets   = "dsLogin=ds_login";                      // 서버 입력 Dataset
+    var sOutDatasets  = "ds_login_result=outLogin "              // 로그인 결과
+                      + "ds_user_info=outSelectUserInfo "        // 사용자정보
+                      + "ds_profile=outSelectProfileList "       // 시스템 프로파일
+                      + "ds_frame_menu=outSelectMenuList";       // 메뉴정보
+    var sArgument     = "";                                      // 추가 전달 파라미터
+    var sCallbackFunc = "fn_callBack";                           // Transaction 결과 콜백
+
+    // 로그인 진행 상태로 전환 (콜백에서 해제)
+    this.fn_setLoginRunning(true);
 
     // 공통 LIB의 Transaction 함수를 이용하여 로그인 인증 요청
     this.gfn_transaction(sSvcID, sSvcURL, sInDatasets, sOutDatasets, sArgument, sCallbackFunc);
@@ -221,24 +263,31 @@ this.fn_login = function()
  ***************************************************************************************/
 
 /**
- * @description 로그인 인증 및 메뉴 조회 Transaction 결과 처리
+ * @description 로그인 인증 Transaction 결과 처리
+ *              (2026-11-16 : 사용자정보/프로파일/메뉴 조회를 로그인 Transaction으로 통합)
  * @param       {sSvcID  : String} 서비스 ID
  * @param       {nErrCd  : Number} 서버 처리 결과 코드
  * @param       {sErrMsg : String} 서버 오류 메시지
  */
 this.fn_callBack = function(sSvcID, nErrCd, sErrMsg)
 {
+    // 로그인 Transaction 공통 처리 (성공/실패 공통)
+    if (sSvcID == "login")
+    {
+        // 로그인 진행 상태 해제 (버튼 다시 활성화)
+        this.fn_setLoginRunning(false);
+
+        // 로그인 요청 Dataset의 비밀번호 데이터 제거
+        this.ds_login.clearData();
+    }
+
     // 서버 통신 또는 처리 중 오류 발생 여부 확인
     if (nErrCd < 0)
     {
-        // 로그인 서비스에서 오류가 발생한 경우
+        // 로그인 서비스 오류 시 비밀번호 입력값 제거
         if (sSvcID == "login")
         {
-            // 비밀번호가 포함된 요청 Dataset 초기화
-            this.ds_login.clearData();
-
-            // 화면에 입력된 비밀번호 제거
-            this.div_login.form.edt_password.set_value(null);
+            this.fn_clearPassword();
         }
 
         // 서버에서 반환한 오류 메시지 출력
@@ -252,48 +301,23 @@ this.fn_callBack = function(sSvcID, nErrCd, sErrMsg)
         // 사용자 로그인 인증 결과
         case "login":
 
-            // 로그인 요청 Dataset의 비밀번호 데이터 제거
-            this.ds_login.clearData();
-
             // 로그인 결과 데이터 존재 여부 확인
-            if (this.ds_loginResult.getRowCount() == 0)
+            if (this.ds_login_result.getRowCount() == 0)
             {
-                // 비밀번호 입력값 초기화
-                this.div_login.form.edt_password.set_value(null);
-
-                // 로그인 결과가 없는 경우 안내 메시지 출력
+                this.fn_clearPassword();
                 this.fn_showLoginMessage("NO_LOGIN_RESULT", "로그인 결과가 없습니다.");
                 return;
             }
 
-            // 서버에서 반환한 로그인 처리 결과 코드
-            var sResultCd  = this.ds_loginResult.getColumn(0, "RESULT_CD");
+            // 서버에서 반환한 로그인 처리 결과 코드 및 메시지
+            var sResultCd  = this.ds_login_result.getColumn(0, "RESULT_CD");
+            var sResultMsg = this.ds_login_result.getColumn(0, "RESULT_DESCR");
 
-            // 서버에서 반환한 로그인 처리 결과 메시지
-            var sResultMsg = this.ds_loginResult.getColumn(0, "RESULT_DESCR");
-
-            // 로그인 성공 여부 확인
-            if (sResultCd == "S")
+            // 로그인 인증 실패
+            if (sResultCd != "S")
             {
-                // Application 전역 객체 조회
-                var objApp = nexacro.getApplication();
-
-                // 로그인한 사용자 아이디를 전역 변수에 저장
-                objApp.gv_userid = this.div_login.form.edt_userId.value;
-
-                // 공통 언어 LIB를 이용하여 선택 언어 저장
-                this.fv_language = this.gfn_setLanguage(this.fv_language);
-
-                // 로그인 정보 저장 설정 반영
-                this.fn_saveLoginInfo();
-
-                // 로그인 사용자에게 허용된 DB 메뉴정보 조회
-                this.fn_selectFrameMenuList();
-            }
-            else
-            {
-                // 로그인 인증 실패 시 비밀번호 입력값 제거
-                this.div_login.form.edt_password.set_value(null);
+                // 비밀번호 입력값 제거
+                this.fn_clearPassword();
 
                 // 서버에서 반환한 인증 실패 메시지 출력
                 if (this.gfn_isNull(sResultMsg))
@@ -305,72 +329,16 @@ this.fn_callBack = function(sSvcID, nErrCd, sErrMsg)
                     this.alert(sResultMsg);
                 }
 
-                // 비밀번호 입력창으로 포커스 이동
+                // 메시지 확인 후 비밀번호 입력창으로 포커스 이동
                 this.div_login.form.edt_password.setFocus();
-            }
-
-            break;
-
-        // 로그인 사용자별 메뉴정보 조회 결과
-        case "selectFrameMenuList":
-
-            // 메뉴 조회 결과가 없는 경우 처리
-            if (this.ds_frameMenu.getRowCount() == 0)
-            {
-                this.fn_showLoginMessage("NO_MENU", "사용 가능한 메뉴정보가 없습니다.");
                 return;
             }
 
-            // Application 전역 객체 조회
-            var objApp = nexacro.getApplication();
+            // 로그인 정보 저장 설정 반영 (아이디 저장)
+            this.fn_saveLoginInfo();
 
-            // Application에 전역 메뉴 Dataset이 정의되어 있는지 확인
-            if (!objApp.gds_menu)
-            {
-                this.alert("전역 메뉴 Dataset을 찾을 수 없습니다.");
-                return;
-            }
-
-            // DB에서 조회한 메뉴정보를 전역 Dataset에 복사
-            objApp.gds_menu.copyData(this.ds_frameMenu);
-
-            // 로그인 화면을 숨기고 메인 업무 화면 표시
-            this.fn_goMain();
-
-            // 메인 업무 프레임 객체 조회
-            var objWorkFrame = objApp.mainframe.VFrameSetMain.VFrameSetWork;
-
-            // 상단 사용자 정보 프레임
-            var objTopFrame  = objWorkFrame.TopFrame;
-
-            // 상단 대분류 메뉴 프레임
-            var objMenuFrame = objWorkFrame.MenuFrame;
-
-            // 왼쪽 하위 메뉴 프레임
-            var objLeftFrame = objWorkFrame.HFrameSetWork.LeftFrame;
-
-            // 로그인 사용자 정보 갱신
-			if (objTopFrame && objTopFrame.form && objTopFrame.form.fn_setUserInfo)
-			{
-				// 로그인 사용자명 표시 (공통 LIB : gds_user_info)
-				objTopFrame.form.fn_setUserInfo();
-				 
-				// 로그인에서 선택한 언어를 상단에 반영
-				objTopFrame.form.fn_setLanguageInfo(objApp.gv_lang);
-			}
-
-            // DB 메뉴정보를 이용하여 상단 대분류 메뉴 생성
-            if (objMenuFrame && objMenuFrame.form && objMenuFrame.form.fn_createTopMenu)
-            {
-                objMenuFrame.form.fn_createTopMenu();
-            }
-
-            // 선택된 대분류에 맞춰 왼쪽 메뉴 초기화
-            if (objLeftFrame && objLeftFrame.form && objLeftFrame.form.fn_init)
-            {
-                objLeftFrame.form.fn_init();
-            }
-
+            // 로그인 성공 후처리 (전역 Dataset 복제 및 메인 화면 전환)
+            this.fn_loginSuccess();
             break;
 
         default:
@@ -389,28 +357,65 @@ this.fn_callBack = function(sSvcID, nErrCd, sErrMsg)
  ***************************************************************************************/
 
 /**
- * @description 로그인 사용자별 DB 메뉴정보 조회
+ * @description 로그인 성공 후처리
+ *              로그인 응답 데이터를 전역 Dataset에 복제하고 메인 업무 화면 표시
  */
-this.fn_selectFrameMenuList = function()
+this.fn_loginSuccess = function()
 {
-    // 이전 메뉴 조회 결과 초기화
-    this.ds_frameMenu.clearData();
+    // Application 전역 객체 조회
+    var objApp = nexacro.getApplication();
 
-    // 메뉴 조회 Transaction 설정
-    var sSvcID        = "selectFrameMenuList";                // 서비스 ID
-    var sSvcURL       = "svcUrl::com/menu/selectMenuList.do"; // 메뉴 조회 Controller URL
-    var sInDatasets   = "";                                   // 서버 입력 Dataset 없음
-    var sOutDatasets  = "ds_frameMenu=outMenu";                // 서버 출력 Dataset
-    var sArgument     = "";                                   // 추가 전달 파라미터 없음
-    var sCallbackFunc = "fn_callBack";                         // Transaction 결과 콜백
+    // 메뉴 조회 결과가 없는 경우 처리
+    if (this.ds_frame_menu.getRowCount() == 0)
+    {
+        this.fn_showLoginMessage("NO_MENU", "사용 가능한 메뉴정보가 없습니다.");
+        return;
+    }
 
-    // 공통 LIB를 이용하여 로그인 사용자 메뉴 조회
-    this.gfn_transaction(sSvcID, sSvcURL, sInDatasets, sOutDatasets, sArgument, sCallbackFunc);
+    // Application에 전역 Dataset이 정의되어 있는지 확인
+    if (!objApp.gds_user_info || !objApp.gds_profile || !objApp.gds_menu)
+    {
+        this.alert("전역 Dataset(gds_user_info, gds_profile, gds_menu)을 찾을 수 없습니다.");
+        return;
+    }
+
+    // 로그인 응답 데이터를 전역 Dataset에 복제
+    objApp.gds_user_info.copyData(this.ds_user_info);    // 사용자정보
+    objApp.gds_profile.copyData(this.ds_profile);        // 시스템 프로파일
+    objApp.gds_menu.copyData(this.ds_frame_menu);        // 메뉴정보
+
+    // 로그인 화면을 숨기고 메인 업무 화면 표시
+    this.fn_goMain();
+
+    // 메인 업무 프레임 객체 조회
+    var objWorkFrame = objApp.mainframe.VFrameSetMain.VFrameSetWork;
+    var objTopFrame  = objWorkFrame.TopFrame;                   // 상단 사용자 정보 프레임
+    var objMenuFrame = objWorkFrame.MenuFrame;                  // 상단 대분류 메뉴 프레임
+    var objLeftFrame = objWorkFrame.HFrameSetWork.LeftFrame;    // 왼쪽 하위 메뉴 프레임
+
+    // 로그인 사용자 정보 및 언어 갱신
+    if (objTopFrame && objTopFrame.form && objTopFrame.form.fn_setUserInfo)
+    {
+        objTopFrame.form.fn_setUserInfo();
+        objTopFrame.form.fn_setLanguageInfo(objApp.gv_lang);
+    }
+
+    // DB 메뉴정보를 이용하여 상단 대분류 메뉴 생성
+    if (objMenuFrame && objMenuFrame.form && objMenuFrame.form.fn_createTopMenu)
+    {
+        objMenuFrame.form.fn_createTopMenu();
+    }
+
+    // 선택된 대분류에 맞춰 왼쪽 메뉴 초기화
+    if (objLeftFrame && objLeftFrame.form && objLeftFrame.form.fn_init)
+    {
+        objLeftFrame.form.fn_init();
+    }
 };
-
 
 /**
  * @description 저장된 로그인 정보 및 체크박스 상태 복원
+ *              비밀번호 저장/복원은 보안정책 위배로 제외
  */
 this.fn_loadLoginInfo = function()
 {
@@ -420,86 +425,49 @@ this.fn_loadLoginInfo = function()
     // 이전에 저장한 아이디 저장 여부
     var sSaveId = nexacro.getPrivateProfile(this.fv_saveIdKey);
 
-    // 이전에 저장한 비밀번호 저장 여부
-    var sSavePw = nexacro.getPrivateProfile(this.fv_savePwKey);
-
     // 아이디 저장 체크박스 선택 상태 복원
     objLogin.chk_saveId.set_value(sSaveId == "1" ? 1 : 0);
-
-    // 비밀번호 저장 체크박스 선택 상태 복원
-    objLogin.chk_savePw.set_value(sSavePw == "1" ? 1 : 0);
 
     // 아이디 저장을 선택한 경우 이전 아이디 복원
     if (sSaveId == "1")
     {
-        // PrivateProfile에 저장된 아이디를 입력창에 표시
         objLogin.edt_userId.set_value(nexacro.getPrivateProfile(this.fv_userIdKey));
     }
     else
     {
-        // 아이디 저장을 선택하지 않은 경우 입력값 초기화
         objLogin.edt_userId.set_value(null);
     }
 
-    // 기존 비밀번호 저장 기능 유지
-    if (sSavePw == "1")
-    {
-        // PrivateProfile에 저장된 비밀번호를 입력창에 표시
-        objLogin.edt_password.set_value(nexacro.getPrivateProfile(this.fv_passwordKey));
-    }
-    else
-    {
-        // 비밀번호 저장을 선택하지 않은 경우 입력값 초기화
-        objLogin.edt_password.set_value(null);
-    }
+    // 비밀번호 입력값 초기화 및 기존에 저장된 비밀번호 삭제
+    objLogin.edt_password.set_value(null);
+    nexacro.removePrivateProfile(this.fv_savePwKey);
+    nexacro.removePrivateProfile(this.fv_passwordKey);
 };
 
 
 /**
  * @description 로그인 성공 시 로그인 정보 저장 설정 반영
+ *              비밀번호 저장은 보안정책 위배로 제외
  */
 this.fn_saveLoginInfo = function()
 {
     // 로그인 입력 컴포넌트가 포함된 Div Form
     var objLogin = this.div_login.form;
 
-    // 아이디 저장 체크박스 선택 여부
-    var bSaveId = (objLogin.chk_saveId.value == 1);
-
-    // 비밀번호 저장 체크박스 선택 여부
-    var bSavePw = (objLogin.chk_savePw.value == 1);
-
-    // 아이디 저장을 선택한 경우
-    if (bSaveId)
+    // 아이디 저장
+    if (objLogin.chk_saveId.value == 1)
     {
-        // 아이디 저장 여부 기록
         nexacro.setPrivateProfile(this.fv_saveIdKey, "1");
-
-        // 사용자 아이디 저장
         nexacro.setPrivateProfile(this.fv_userIdKey, objLogin.edt_userId.value);
     }
     else
     {
-        // 저장된 아이디 관련 정보 삭제
         nexacro.removePrivateProfile(this.fv_saveIdKey);
         nexacro.removePrivateProfile(this.fv_userIdKey);
     }
 
-    // 비밀번호 저장을 선택한 경우
-    if (bSavePw)
-    {
-        // 비밀번호 저장 여부 기록
-        nexacro.setPrivateProfile(this.fv_savePwKey, "1");
-
-        // 기존 BES 비밀번호 저장 동작 유지
-        nexacro.setPrivateProfile(this.fv_passwordKey, objLogin.edt_password.value);
-    }
-    else
-    {
-        // 저장된 비밀번호 관련 정보 삭제
-        nexacro.removePrivateProfile(this.fv_savePwKey);
-        nexacro.removePrivateProfile(this.fv_passwordKey);
-    }
+    // 비밀번호 저장 기능 제거 (보안 : 클라이언트 평문 저장 금지)
+    // 기존에 남아 있는 비밀번호 삭제는 화면 로딩 시 fn_loadLoginInfo에서 처리
 };
 
 
@@ -508,19 +476,21 @@ this.fn_saveLoginInfo = function()
  */
 this.fn_loadLanguage = function()
 {
-    // 공통 LIB에서 이전에 저장한 언어 코드 조회
+    // 공통 LIB에서 이전에 저장한 언어 코드 조회 (없으면 한국어)
     var sLanguage = this.gfn_getLanguage();
 
-    // 현재 로그인 화면의 언어 변수 설정
-    this.fv_language = sLanguage;
+    if (this.gfn_isNull(sLanguage))
+    {
+        sLanguage = "KO";
+    }
 
-    // 공통 LIB를 이용하여 Application 언어 설정
-    this.gfn_setLanguage(sLanguage);
+    // 공통 LIB를 이용하여 Application 언어 설정 (LIB에서 보정된 값 사용)
+    sLanguage = this.gfn_setLanguage(sLanguage);
 
     // 언어 선택 Combo에 저장된 언어 적용
     this.div_login.form.cbo_lang.set_value(sLanguage);
 
-    // 선택 언어에 맞춰 로그인 화면 문구 변경
+    // 선택 언어에 맞춰 로그인 화면 문구 변경 (fv_language도 함께 설정됨)
     this.fn_setLanguage(sLanguage);
 };
 
@@ -561,7 +531,7 @@ this.fn_setLanguage = function(sLanguage)
 
         // 중국어
         case "ZH":
- 
+
             // 로그인 화면 제목
             objLogin.sta_loginTitle.set_text("登录");
 
@@ -675,18 +645,48 @@ this.fn_centerLogin = function()
 
 
 /**
+ * @description 로그인 요청 및 결과 Dataset 초기화
+ *              (fn_login, fn_resetLogin 공통 사용)
+ */
+this.fn_clearLoginData = function()
+{
+    this.ds_login.clearData();          // 로그인 요청
+    this.ds_login_result.clearData();   // 로그인 결과
+    this.ds_user_info.clearData();      // 사용자정보
+    this.ds_profile.clearData();        // 시스템 프로파일
+    this.ds_frame_menu.clearData();     // 메뉴정보
+};
+
+
+/**
+ * @description 비밀번호 입력값 제거 (로그인 실패·오류 공통)
+ */
+this.fn_clearPassword = function()
+{
+    this.div_login.form.edt_password.set_value(null);
+};
+
+
+/**
+ * @description 로그인 진행 상태 설정
+ *              진행 중에는 로그인 버튼을 비활성화하여 중복 요청 방지
+ * @param       {bRunning : Boolean} 진행 여부
+ */
+this.fn_setLoginRunning = function(bRunning)
+{
+    this.fv_isLoginRunning = bRunning;
+    this.div_login.form.btn_login.set_enable(!bRunning);
+};
+
+
+/**
  * @description 로그아웃 후 로그인 화면 데이터 초기화
  */
 this.fn_resetLogin = function()
 {
-    // 로그인 요청 Dataset 초기화
-    this.ds_login.clearData();
-
-    // 로그인 결과 Dataset 초기화
-    this.ds_loginResult.clearData();
-
-    // 메뉴 조회 Dataset 초기화
-    this.ds_frameMenu.clearData();
+    // 로그인 화면 Dataset 초기화 및 진행 상태 해제
+    this.fn_clearLoginData();
+    this.fn_setLoginRunning(false);
 
     // Application 전역 객체 조회
     var objApp = nexacro.getApplication();
@@ -694,11 +694,10 @@ this.fn_resetLogin = function()
     // 전역 사용자 정보 초기화
     objApp.gv_userid = "";
 
-    // 전역 메뉴 Dataset 초기화
-    if (objApp.gds_menu)
-    {
-        objApp.gds_menu.clearData();
-    }
+    // 전역 Dataset 초기화
+    if (objApp.gds_user_info) objApp.gds_user_info.clearData();
+    if (objApp.gds_profile)   objApp.gds_profile.clearData();
+    if (objApp.gds_menu)      objApp.gds_menu.clearData();
 
     // 저장된 로그인 정보 복원
     this.fn_loadLoginInfo();
@@ -763,8 +762,6 @@ this.cbo_lang_onitemchanged = function(obj, e)
 {
     // Combo에서 새로 선택한 언어 코드
     var sLanguage = e.postvalue;
-
-    //trace("[언어변경] 선택값: " + sLanguage);
 
     // 공통 LIB를 이용하여 언어 설정 저장 및 전역 변수 반영
     sLanguage = this.gfn_setLanguage(sLanguage);
