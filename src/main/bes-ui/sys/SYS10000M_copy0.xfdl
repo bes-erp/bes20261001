@@ -1,0 +1,809 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="SYS10000M" width="1280" height="720" titletext="로그인" background="#f0f0f0" onload="SYS10000M_onload" onsize="SYS10000M_onsize">
+    <Objects>
+      <Dataset id="ds_login">
+        <ColumnInfo>
+          <Column id="USER_ID" type="STRING" size="256"/>
+          <Column id="PASSWORD" type="STRING" size="256"/>
+          <Column id="LANG_CD" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_login_result">
+        <ColumnInfo>
+          <Column id="RESULT_CD" type="STRING" size="256"/>
+          <Column id="RESULT_DESCR" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_lang">
+        <ColumnInfo>
+          <Column id="LANG_CD" type="STRING" size="256"/>
+          <Column id="LANG_NM" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="LANG_CD">KO</Col>
+            <Col id="LANG_NM">한국어(KOR)</Col>
+          </Row>
+          <Row>
+            <Col id="LANG_CD">EN</Col>
+            <Col id="LANG_NM">English(ENG)</Col>
+          </Row>
+          <Row>
+            <Col id="LANG_CD">ZH</Col>
+            <Col id="LANG_NM">中文(CHN)</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="ds_frame_menu">
+        <ColumnInfo>
+          <Column id="MENU_ID" type="STRING" size="256"/>
+          <Column id="PARENT_MENU_CD" type="STRING" size="256"/>
+          <Column id="CHILD_MENU_CD" type="STRING" size="256"/>
+          <Column id="CHILD_MENU_NM" type="STRING" size="256"/>
+          <Column id="CHILD_PAGE_ULR" type="STRING" size="256"/>
+          <Column id="CHILD_MENU_LEVEL" type="INT" size="256"/>
+          <Column id="CHILD_MENU_SEQ" type="INT" size="256"/>
+          <Column id="USER_YN" type="STRING" size="256"/>
+          <Column id="BTN_SEARCH_YN" type="STRING" size="256"/>
+          <Column id="BTN_SEARCH_INIT_YN" type="STRING" size="256"/>
+          <Column id="BTN_SAVE_YN" type="STRING" size="256"/>
+          <Column id="BTN_ADD_ROW_YN" type="STRING" size="256"/>
+          <Column id="BTN_DEL_ROW_YN" type="STRING" size="256"/>
+          <Column id="BTN_EXCEL_DOWN_YN" type="STRING" size="256"/>
+          <Column id="BTN_EXCEL_UP_YN" type="STRING" size="256"/>
+          <Column id="BTN_PRINT_YN" type="STRING" size="256"/>
+          <Column id="BTN_BATCH_YN" type="STRING" size="256"/>
+          <Column id="REMARK" type="STRING" size="256"/>
+          <Column id="CREATE_DATE" type="STRING" size="256"/>
+          <Column id="CREATE_BY" type="STRING" size="256"/>
+          <Column id="UPDATE_DATE" type="STRING" size="256"/>
+          <Column id="UPDATE_BY" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_user_info">
+        <ColumnInfo>
+          <Column id="LANG_CD" type="STRING" size="256"/>
+          <Column id="USER_ID" type="STRING" size="256"/>
+          <Column id="USER_NM" type="STRING" size="256"/>
+          <Column id="EMP_ID" type="STRING" size="256"/>
+          <Column id="EMP_NUM" type="STRING" size="256"/>
+          <Column id="EMP_NM" type="STRING" size="256"/>
+          <Column id="COMPANY_CD" type="STRING" size="256"/>
+          <Column id="COMPANY_NM" type="STRING" size="256"/>
+          <Column id="DEPT_CD" type="STRING" size="256"/>
+          <Column id="DEPT_NM" type="STRING" size="256"/>
+          <Column id="GRADE_CD" type="STRING" size="256"/>
+          <Column id="GRADE_NM" type="STRING" size="256"/>
+          <Column id="JOB_CD" type="STRING" size="256"/>
+          <Column id="JOB_NM" type="STRING" size="256"/>
+          <Column id="POSITION_CD" type="STRING" size="256"/>
+          <Column id="POSITION_NM" type="STRING" size="256"/>
+          <Column id="HIRE_DATE" type="STRING" size="256"/>
+          <Column id="RETIRE_DATE" type="STRING" size="256"/>
+          <Column id="SUPERVISOR_EMP_ID" type="STRING" size="256"/>
+          <Column id="SUPERVISOR_EMP_NUM" type="STRING" size="256"/>
+          <Column id="SUPERVISOR_EMP_NM" type="STRING" size="256"/>
+          <Column id="LOGIN_TIME" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_profile">
+        <ColumnInfo>
+          <Column id="PROFILE_CD" type="STRING" size="256"/>
+          <Column id="PROFILE_NAME" type="STRING" size="256"/>
+          <Column id="PROFILE_VALUE" type="STRING" size="256"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+    <Script type="xscript5.1"><![CDATA[/***************************************************************************************
+ * 프로젝트        : Built1 Enterprise System 구축 프로젝트
+ * 업무구분        : 시스템관리
+ * 파일명          : SYS10000M.xfdl
+ * 작성자          : Built1
+ * 작성일          : 2026-11-02
+ *
+ * 화면            : 로그인
+ * 설명            : 사용자 로그인 및 개인의 세션정보 등록
+ *---------------------------------------------------------------------------------------
+ * 변경일            변경자            변경내역
+ *---------------------------------------------------------------------------------------
+ * 2026-11-02        Built1            최초작성
+ * 2026-11-06        Built1            IFC 로그인 레이아웃 및 다국어 적용
+ * 2026-11-16        Built1            Dataset 명칭 변경 (ds_login_result, ds_user_info, ds_frame_menu)
+ * 2026-11-16        Built1            로그인 중복 요청 방지, 언어 설정·Dataset 초기화 중복 정리
+ ***************************************************************************************/
+
+// include "besLib::libLang.xjs";
+// include "besLib::libMessage.xjs";
+
+/***************************************************************************************
+ * 1. FORM 변수 선언
+ ***************************************************************************************/
+
+// 아이디 저장 여부를 관리하는 PrivateProfile 키
+this.fv_saveIdKey   = "BES_DEV_SAVE_ID";
+
+// 저장된 사용자 아이디를 관리하는 PrivateProfile 키
+this.fv_userIdKey   = "BES_DEV_USER_ID";
+
+// 비밀번호 저장 여부를 관리하는 PrivateProfile 키
+this.fv_savePwKey   = "BES_DEV_SAVE_PW";
+
+// 저장된 비밀번호를 관리하는 PrivateProfile 키
+this.fv_passwordKey = "BES_DEV_PASSWORD";
+
+// 현재 로그인 화면에 적용된 언어 코드
+this.fv_language = "KO";
+
+// 로그인 Transaction 진행 여부 (Enter·버튼 연타로 인한 중복 요청 방지)
+this.fv_isLoginRunning = false;
+
+
+/***************************************************************************************
+ * 2. FORM LOAD
+ ***************************************************************************************/
+
+/**
+ * @description 로그인 화면 초기화
+ */
+this.fn_init = function(obj, e)
+{
+    // 공통 LIB를 이용하여 로그인 영역 중앙 정렬
+    this.fn_centerLogin();
+
+    // 저장된 아이디 및 비밀번호 정보 복원
+    this.fn_loadLoginInfo();
+
+    // 저장된 언어 설정 복원 (저장된 값이 없으면 한국어)
+    this.fn_loadLanguage();
+
+    // 로그인 화면에서 사용할 공통 메시지 조회
+    // 조회 완료 시 LIB_MESSAGE에서 Application.gds_message에 복사
+    this.gfn_loadMessage(this);
+};
+
+
+/***************************************************************************************
+ * 3. 공통 버튼
+ ***************************************************************************************/
+
+/**
+ * @description 사용자 로그인 인증 요청
+ */
+this.fn_login = function()
+{
+    // 이미 로그인 요청이 진행 중이면 무시 (Enter 연타, 버튼 더블클릭 방지)
+    if (this.fv_isLoginRunning)
+    {
+        return;
+    }
+
+    // 로그인 입력 컴포넌트가 포함된 Div Form
+    var objLogin = this.div_login.form;
+
+    // 사용자가 입력한 로그인 아이디
+    var sUserId   = objLogin.edt_userId.value;
+
+    // 사용자가 입력한 로그인 비밀번호
+    var sPassword = objLogin.edt_password.value;
+
+    // 사용자가 입력한 로그인 언어코드
+    var sLangCd   = objLogin.cbo_lang.value;
+
+    // 아이디 입력 여부 확인
+    if (this.gfn_isNull(sUserId))
+    {
+        // 아이디 미입력 안내 메시지 출력
+        this.gfn_getMessage("NM-ALT-10010", ["사용자ID"]);
+
+        // 아이디 입력창으로 포커스 이동
+        objLogin.edt_userId.setFocus();
+        return;
+    }
+
+    // 비밀번호 입력 여부 확인
+    if (this.gfn_isNull(sPassword))
+    {
+        // 비밀번호 미입력 안내 메시지 출력
+        this.gfn_getMessage("NM-ALT-10010", ["비밀번호"]);
+
+        // 비밀번호 입력창으로 포커스 이동
+        objLogin.edt_password.setFocus();
+        return;
+    }
+
+    // 언어코드 입력 여부 확인
+    if (this.gfn_isNull(sLangCd))
+    {
+        // 언어코드 미입력 안내 메시지 출력
+        this.gfn_getMessage("NM-ALT-10010", ["언어코드"]);
+
+        // 언어코드 입력창으로 포커스 이동
+        objLogin.cbo_lang.setFocus();
+        return;
+    }
+
+    // 이전 로그인 요청 및 결과 데이터 초기화
+    this.fn_clearLoginData();
+
+    // 로그인 요청 Dataset에 신규 행 생성
+    var nRow = this.ds_login.addRow();
+
+    // 서버에 전달할 사용자 아이디 설정
+    this.ds_login.setColumn(nRow, "USER_ID", sUserId);
+
+    // 서버에 전달할 비밀번호 설정
+    this.ds_login.setColumn(nRow, "PASSWORD", sPassword);
+
+    // 서버에 전달할 언어코드 설정
+    this.ds_login.setColumn(nRow, "LANG_CD", sLangCd);
+
+    // 로그인 인증 Transaction 설정
+    //   - "=" 왼쪽 : 화면 Dataset 명, 오른쪽 : 서버(Controller) Dataset 명
+    var sSvcID        = "login";                                 // 서비스 ID
+    var sSvcURL       = "svcUrl::sys/SYS10000M/login.do";        // 로그인 Controller URL
+    var sInDatasets   = "dsLogin=ds_login";                      // 서버 입력 Dataset
+    var sOutDatasets  = "ds_login_result=outLogin "              // 로그인 결과
+                      + "ds_user_info=outSelectUserInfo "        // 사용자정보
+                      + "ds_profile=outSelectProfileList "       // 시스템 프로파일
+                      + "ds_frame_menu=outSelectMenuList";       // 메뉴정보
+    var sArgument     = "";                                      // 추가 전달 파라미터
+    var sCallbackFunc = "fn_callBack";                           // Transaction 결과 콜백
+
+    // 로그인 진행 상태로 전환 (콜백에서 해제)
+    this.fn_setLoginRunning(true);
+
+    // 공통 LIB의 Transaction 함수를 이용하여 로그인 인증 요청
+    this.gfn_transaction(sSvcID, sSvcURL, sInDatasets, sOutDatasets, sArgument, sCallbackFunc);
+};
+
+
+/***************************************************************************************
+ * 4. TRANSACTION / CALLBACK
+ ***************************************************************************************/
+
+/**
+ * @description 로그인 인증 Transaction 결과 처리
+ *              (2026-11-16 : 사용자정보/프로파일/메뉴 조회를 로그인 Transaction으로 통합)
+ * @param       {sSvcID  : String} 서비스 ID
+ * @param       {nErrCd  : Number} 서버 처리 결과 코드
+ * @param       {sErrMsg : String} 서버 오류 메시지
+ */
+this.fn_callBack = function(sSvcID, nErrCd, sErrMsg)
+{
+    // 로그인 Transaction 공통 처리 (성공/실패 공통)
+    if (sSvcID == "login")
+    {
+        // 로그인 진행 상태 해제 (버튼 다시 활성화)
+        this.fn_setLoginRunning(false);
+
+        // 로그인 요청 Dataset의 비밀번호 데이터 제거
+        this.ds_login.clearData();
+    }
+
+    // 서버 통신 또는 처리 중 오류 발생 여부 확인
+    if (nErrCd < 0)
+    {
+        // 로그인 서비스 오류 시 비밀번호 입력값 제거
+        if (sSvcID == "login")
+        {
+            this.fn_clearPassword();
+        }
+
+        // 서버에서 반환한 오류 메시지 출력
+        this.alert(sErrMsg);
+        return;
+    }
+
+    // 서비스 ID에 따라 처리 결과 구분
+    switch (sSvcID)
+    {
+        // 사용자 로그인 인증 결과
+        case "login":
+
+            // 로그인 결과 데이터 존재 여부 확인
+            if (this.ds_login_result.getRowCount() == 0)
+            {
+                this.fn_clearPassword();
+                this.fn_showLoginMessage("NO_LOGIN_RESULT", "로그인 결과가 없습니다.");
+                return;
+            }
+
+            // 서버에서 반환한 로그인 처리 결과 코드 및 메시지
+            var sResultCd  = this.ds_login_result.getColumn(0, "RESULT_CD");
+            var sResultMsg = this.ds_login_result.getColumn(0, "RESULT_DESCR");
+
+            // 로그인 인증 실패
+            if (sResultCd != "S")
+            {
+                // 비밀번호 입력값 제거
+                this.fn_clearPassword();
+
+                // 서버에서 반환한 인증 실패 메시지 출력
+                if (this.gfn_isNull(sResultMsg))
+                {
+                    this.fn_showLoginMessage("LOGIN_FAILED", "로그인에 실패했습니다.");
+                }
+                else
+                {
+                    this.alert(sResultMsg);
+                }
+
+                // 메시지 확인 후 비밀번호 입력창으로 포커스 이동
+                this.div_login.form.edt_password.setFocus();
+                return;
+            }
+
+            // 로그인 정보 저장 설정 반영 (아이디 저장)
+            this.fn_saveLoginInfo();
+
+            // 로그인 성공 후처리 (전역 Dataset 복제 및 메인 화면 전환)
+            this.fn_loginSuccess();
+            break;
+
+        default:
+            break;
+    }
+};
+
+
+/***************************************************************************************
+ * 5. 팝업 호출 및 콜백
+ ***************************************************************************************/
+
+
+/***************************************************************************************
+ * 6. 기타 함수
+ ***************************************************************************************/
+
+/**
+ * @description 로그인 성공 후처리
+ *              로그인 응답 데이터를 전역 Dataset에 복제하고 메인 업무 화면 표시
+ */
+this.fn_loginSuccess = function()
+{
+    // Application 전역 객체 조회
+    var objApp = nexacro.getApplication();
+
+    // 메뉴 조회 결과가 없는 경우 처리
+    if (this.ds_frame_menu.getRowCount() == 0)
+    {
+        this.fn_showLoginMessage("NO_MENU", "사용 가능한 메뉴정보가 없습니다.");
+        return;
+    }
+
+    // Application에 전역 Dataset이 정의되어 있는지 확인
+    if (!objApp.gds_user_info || !objApp.gds_profile || !objApp.gds_menu)
+    {
+        this.alert("전역 Dataset(gds_user_info, gds_profile, gds_menu)을 찾을 수 없습니다.");
+        return;
+    }
+
+    // 로그인 응답 데이터를 전역 Dataset에 복제
+    objApp.gds_user_info.copyData(this.ds_user_info);    // 사용자정보
+    objApp.gds_profile.copyData(this.ds_profile);        // 시스템 프로파일
+    objApp.gds_menu.copyData(this.ds_frame_menu);        // 메뉴정보
+
+    // 로그인 화면을 숨기고 메인 업무 화면 표시
+    this.fn_goMain();
+
+    // 메인 업무 프레임 객체 조회
+    var objWorkFrame = objApp.mainframe.VFrameSetMain.VFrameSetWork;
+    var objTopFrame  = objWorkFrame.TopFrame;                   // 상단 사용자 정보 프레임
+    var objMenuFrame = objWorkFrame.MenuFrame;                  // 상단 대분류 메뉴 프레임
+    var objLeftFrame = objWorkFrame.HFrameSetWork.LeftFrame;    // 왼쪽 하위 메뉴 프레임
+
+    // 로그인 사용자 정보 및 언어 갱신
+    if (objTopFrame && objTopFrame.form && objTopFrame.form.fn_setUserInfo)
+    {
+        objTopFrame.form.fn_setUserInfo();
+        objTopFrame.form.fn_setLanguageInfo(objApp.gv_lang);
+    }
+
+    // DB 메뉴정보를 이용하여 상단 대분류 메뉴 생성
+    if (objMenuFrame && objMenuFrame.form && objMenuFrame.form.fn_createTopMenu)
+    {
+        objMenuFrame.form.fn_createTopMenu();
+    }
+
+    // 선택된 대분류에 맞춰 왼쪽 메뉴 초기화
+    if (objLeftFrame && objLeftFrame.form && objLeftFrame.form.fn_init)
+    {
+        objLeftFrame.form.fn_init();
+    }
+};
+
+/**
+ * @description 저장된 로그인 정보 및 체크박스 상태 복원
+ *              비밀번호 저장/복원은 보안정책 위배로 제외
+ */
+this.fn_loadLoginInfo = function()
+{
+    // 로그인 입력 컴포넌트가 포함된 Div Form
+    var objLogin = this.div_login.form;
+
+    // 이전에 저장한 아이디 저장 여부
+    var sSaveId = nexacro.getPrivateProfile(this.fv_saveIdKey);
+
+    // 아이디 저장 체크박스 선택 상태 복원
+    objLogin.chk_saveId.set_value(sSaveId == "1" ? 1 : 0);
+
+    // 아이디 저장을 선택한 경우 이전 아이디 복원
+    if (sSaveId == "1")
+    {
+        objLogin.edt_userId.set_value(nexacro.getPrivateProfile(this.fv_userIdKey));
+    }
+    else
+    {
+        objLogin.edt_userId.set_value(null);
+    }
+
+    // 비밀번호 입력값 초기화 및 기존에 저장된 비밀번호 삭제
+    objLogin.edt_password.set_value(null);
+    nexacro.removePrivateProfile(this.fv_savePwKey);
+    nexacro.removePrivateProfile(this.fv_passwordKey);
+};
+
+
+/**
+ * @description 로그인 성공 시 로그인 정보 저장 설정 반영
+ *              비밀번호 저장은 보안정책 위배로 제외
+ */
+this.fn_saveLoginInfo = function()
+{
+    // 로그인 입력 컴포넌트가 포함된 Div Form
+    var objLogin = this.div_login.form;
+
+    // 아이디 저장
+    if (objLogin.chk_saveId.value == 1)
+    {
+        nexacro.setPrivateProfile(this.fv_saveIdKey, "1");
+        nexacro.setPrivateProfile(this.fv_userIdKey, objLogin.edt_userId.value);
+    }
+    else
+    {
+        nexacro.removePrivateProfile(this.fv_saveIdKey);
+        nexacro.removePrivateProfile(this.fv_userIdKey);
+    }
+
+    // 비밀번호 저장 기능 제거 (보안 : 클라이언트 평문 저장 금지)
+    // 기존에 남아 있는 비밀번호 삭제는 화면 로딩 시 fn_loadLoginInfo에서 처리
+};
+
+
+/**
+ * @description 공통 언어 LIB를 이용하여 이전 언어 설정 복원
+ */
+this.fn_loadLanguage = function()
+{
+    // 공통 LIB에서 이전에 저장한 언어 코드 조회 (없으면 한국어)
+    var sLanguage = this.gfn_getLanguage();
+
+    if (this.gfn_isNull(sLanguage))
+    {
+        sLanguage = "KO";
+    }
+
+    // 공통 LIB를 이용하여 Application 언어 설정 (LIB에서 보정된 값 사용)
+    sLanguage = this.gfn_setLanguage(sLanguage);
+
+    // 언어 선택 Combo에 저장된 언어 적용
+    this.div_login.form.cbo_lang.set_value(sLanguage);
+
+    // 선택 언어에 맞춰 로그인 화면 문구 변경 (fv_language도 함께 설정됨)
+    this.fn_setLanguage(sLanguage);
+};
+
+
+/**
+ * @description 선택한 언어에 맞춰 로그인 화면 문구 변경
+ * @param       {sLanguage : String} 언어 코드 (KO, EN, ZH)
+ */
+this.fn_setLanguage = function(sLanguage)
+{
+    // 로그인 입력 컴포넌트가 포함된 Div Form
+    var objLogin = this.div_login.form;
+
+    // 현재 로그인 화면에 적용된 언어 코드
+    this.fv_language = sLanguage;
+
+    // 언어별 로그인 화면 문구 설정
+    switch (sLanguage)
+    {
+        // 영어
+        case "EN":
+
+            // 로그인 화면 제목
+            objLogin.sta_loginTitle.set_text("Login");
+
+            // 로그인 화면 안내 문구
+            objLogin.sta_subTitle.set_text("Please log in to use the system.");
+
+            // 아이디 및 비밀번호 입력 안내 문구
+            objLogin.edt_userId.set_displaynulltext("User ID");
+            objLogin.edt_password.set_displaynulltext("Password");
+
+            // 로그인 버튼 및 저장 체크박스 문구
+            objLogin.btn_login.set_text("Login");
+            objLogin.chk_saveId.set_text("Save ID");
+            objLogin.chk_savePw.set_text("Save Password");
+            break;
+
+        // 중국어
+        case "ZH":
+
+            // 로그인 화면 제목
+            objLogin.sta_loginTitle.set_text("登录");
+
+            // 로그인 화면 안내 문구
+            objLogin.sta_subTitle.set_text("登录后即可使用系统。");
+
+            // 아이디 및 비밀번호 입력 안내 문구
+            objLogin.edt_userId.set_displaynulltext("用户名");
+            objLogin.edt_password.set_displaynulltext("密码");
+
+            // 로그인 버튼 및 저장 체크박스 문구
+            objLogin.btn_login.set_text("登录");
+            objLogin.chk_saveId.set_text("保存账号");
+            objLogin.chk_savePw.set_text("保存密码");
+            break;
+
+        // 한국어 및 지원하지 않는 언어
+        default:
+
+            // 로그인 화면 제목
+            objLogin.sta_loginTitle.set_text("로그인");
+
+            // 로그인 화면 안내 문구
+            objLogin.sta_subTitle.set_text("로그인 후 시스템을 이용하실 수 있습니다.");
+
+            // 아이디 및 비밀번호 입력 안내 문구
+            objLogin.edt_userId.set_displaynulltext("아이디");
+            objLogin.edt_password.set_displaynulltext("비밀번호");
+
+            // 로그인 버튼 및 저장 체크박스 문구
+            objLogin.btn_login.set_text("로그인");
+            objLogin.chk_saveId.set_text("아이디 저장");
+            objLogin.chk_savePw.set_text("비밀번호 저장");
+            break;
+    }
+};
+
+
+/**
+ * @description DB 공통 메시지 조회 결과를 이용하여 메시지 출력
+ * @param       {sMessageNum     : String} 공통 메시지 번호
+ * @param       {sDefaultMessage : String} 메시지 미등록 시 기본 안내문
+ */
+this.fn_showLoginMessage = function(sMessageNum, sDefaultMessage)
+{
+    // Application 전역 객체
+    var objApp = nexacro.getApplication();
+
+    // 공통 메시지 Dataset
+    var objMessageDs = objApp.gds_message;
+
+    // 공통 메시지 Dataset 및 메시지 번호 존재 여부 확인
+    if (objMessageDs && objMessageDs.findRow("MESSAGE_NUM", sMessageNum) >= 0)
+    {
+        // 기존 LIB_UTIL의 공통 메시지 함수 호출
+        this.gfn_msgBox(sMessageNum);
+        return;
+    }
+
+    // 공통 메시지 DB에 등록되지 않은 경우 기본 문구 출력
+    this.alert(sDefaultMessage);
+};
+
+
+/**
+ * @description 로그인 성공 후 메인 업무 화면 표시
+ */
+this.fn_goMain = function()
+{
+    // Application 전역 객체
+    var objApp = nexacro.getApplication();
+
+    // 로그인 프레임과 메인 업무 프레임을 관리하는 VFrameSet
+    var objMainFrame = objApp.mainframe.VFrameSetMain;
+
+    // 메인 프레임 존재 여부 확인
+    if (!objMainFrame)
+    {
+        this.alert("메인 프레임을 찾을 수 없습니다.");
+        return;
+    }
+
+    // 로그인 프레임 숨김 및 메인 업무 프레임 표시
+    objMainFrame.set_separatesize("0,*");
+};
+
+
+/**
+ * @description 공통 LIB를 이용하여 로그인 영역 중앙 정렬
+ */
+this.fn_centerLogin = function()
+{
+    // LIB_UTIL.gfn_center를 이용하여 로그인 Div 중앙 정렬
+    this.gfn_center(this.div_login, this);
+
+    // 중앙 정렬된 로그인 Div의 가로 위치
+    var nLeft   = this.div_login.getOffsetLeft();
+
+    // 중앙 정렬된 로그인 Div의 세로 위치
+    var nTop    = this.div_login.getOffsetTop();
+
+    // 로그인 Div의 너비
+    var nWidth  = this.div_login.getOffsetWidth();
+
+    // 로그인 Div의 높이
+    var nHeight = this.div_login.getOffsetHeight();
+
+    // 저작권 문구를 로그인 Div 아래쪽에 배치
+    this.sta_copyright.move(nLeft, nTop + nHeight + 20, nWidth, 30);
+};
+
+
+/**
+ * @description 로그인 요청 및 결과 Dataset 초기화
+ *              (fn_login, fn_resetLogin 공통 사용)
+ */
+this.fn_clearLoginData = function()
+{
+    this.ds_login.clearData();          // 로그인 요청
+    this.ds_login_result.clearData();   // 로그인 결과
+    this.ds_user_info.clearData();      // 사용자정보
+    this.ds_profile.clearData();        // 시스템 프로파일
+    this.ds_frame_menu.clearData();     // 메뉴정보
+};
+
+
+/**
+ * @description 비밀번호 입력값 제거 (로그인 실패·오류 공통)
+ */
+this.fn_clearPassword = function()
+{
+    this.div_login.form.edt_password.set_value(null);
+};
+
+
+/**
+ * @description 로그인 진행 상태 설정
+ *              진행 중에는 로그인 버튼을 비활성화하여 중복 요청 방지
+ * @param       {bRunning : Boolean} 진행 여부
+ */
+this.fn_setLoginRunning = function(bRunning)
+{
+    this.fv_isLoginRunning = bRunning;
+    this.div_login.form.btn_login.set_enable(!bRunning);
+};
+
+
+/**
+ * @description 로그아웃 후 로그인 화면 데이터 초기화
+ */
+this.fn_resetLogin = function()
+{
+    // 로그인 화면 Dataset 초기화 및 진행 상태 해제
+    this.fn_clearLoginData();
+    this.fn_setLoginRunning(false);
+
+    // Application 전역 객체 조회
+    var objApp = nexacro.getApplication();
+
+    // 전역 사용자 정보 초기화
+    objApp.gv_userid = "";
+
+    // 전역 Dataset 초기화
+    if (objApp.gds_user_info) objApp.gds_user_info.clearData();
+    if (objApp.gds_profile)   objApp.gds_profile.clearData();
+    if (objApp.gds_menu)      objApp.gds_menu.clearData();
+
+    // 저장된 로그인 정보 복원
+    this.fn_loadLoginInfo();
+
+    // 저장된 언어 설정 복원
+    this.fn_loadLanguage();
+};
+
+
+/***************************************************************************************
+ * 7. 이벤트
+ ***************************************************************************************/
+
+/**
+ * @description 로그인 화면 최초 로딩 이벤트
+ */
+this.SYS10000M_onload = function(obj, e)
+{
+    // 로그인 화면 초기화
+    this.fn_init(obj, e);
+};
+
+
+/**
+ * @description 로그인 화면 크기 변경 이벤트
+ */
+this.SYS10000M_onsize = function(obj, e)
+{
+    // 화면 크기에 맞춰 로그인 영역 중앙 정렬
+    this.fn_centerLogin();
+};
+
+
+/**
+ * @description 로그인 버튼 클릭 이벤트
+ */
+this.btn_login_onclick = function(obj, e)
+{
+    // 사용자 로그인 인증 요청
+    this.fn_login();
+};
+
+
+/**
+ * @description 비밀번호 입력창 Enter 키 이벤트
+ */
+this.edt_password_onkeydown = function(obj, e)
+{
+    // Enter 키 입력 여부 확인
+    if (e.keycode == 13)
+    {
+        // 사용자 로그인 인증 요청
+        this.fn_login();
+    }
+};
+
+
+/**
+ * @description 언어 선택 Combo 변경 이벤트
+ */
+this.cbo_lang_onitemchanged = function(obj, e)
+{
+    // Combo에서 새로 선택한 언어 코드
+    var sLanguage = e.postvalue;
+
+    // 공통 LIB를 이용하여 언어 설정 저장 및 전역 변수 반영
+    sLanguage = this.gfn_setLanguage(sLanguage);
+
+    // 로그인 화면 문구 변경
+    this.fn_setLanguage(sLanguage);
+};]]></Script>
+    <Layouts>
+      <Layout width="1280" height="720" screenid="Desktop_screen">
+        <Div id="div_login" taborder="0" left="427" top="128" width="426" height="463" cssclass="besLoginPanel" text="">
+          <Layouts>
+            <Layout width="426" height="463">
+              <Static id="sta_guideTop" taborder="11" text="26" visible="false" left="0" top="0" width="426" height="26" background="lightseagreen" opacity="0.5" textAlign="center"/>
+              <Static id="sta_guideLeft" taborder="12" text="26" visible="false" left="0" top="26" width="26" height="411" background="gold" opacity="0.5" textAlign="center"/>
+              <Static id="sta_guideRight" taborder="13" text="26" visible="false" left="400" top="26" width="26" height="411" background="gold" opacity="0.5" textAlign="center"/>
+              <Static id="sta_guideBottom" taborder="14" text="26" visible="false" left="0" top="437" width="426" height="26" background="lightseagreen" opacity="0.5" textAlign="center"/>
+              <Static id="sta_guideHeaderGap" taborder="15" text="15" visible="false" left="146" top="26" width="15" height="30" background="lightseagreen" opacity="0.5" textAlign="center"/>
+              <Static id="sta_guideTitleGap" taborder="17" text="15" visible="false" left="50" top="145" width="326" height="15" background="lightseagreen" opacity="0.5" textAlign="center"/>
+              <Static id="sta_guideSubtitleGap" taborder="18" text="15" visible="false" left="50" top="188" width="326" height="15" background="lightseagreen" opacity="0.5" textAlign="center"/>
+              <Static id="sta_guideInputGap" taborder="19" text="15" visible="false" left="50" top="225" width="326" height="15" background="lightseagreen" opacity="0.5" textAlign="center"/>
+              <Static id="sta_guideEditGap" taborder="20" text="10" visible="false" left="50" top="272" width="241" height="10" background="lightseagreen" opacity="0.5" textAlign="center"/>
+              <Static id="sta_guideCheckGap" taborder="21" text="15" visible="false" left="50" top="314" width="241" height="15" background="lightseagreen" opacity="0.5" textAlign="center"/>
+              <Static id="sta_guideInputLeft" taborder="25" text="24" visible="false" left="26" top="240" width="24" height="74" background="gold" opacity="0.5" textAlign="center" verticalAlign="middle"/>
+              <Static id="sta_guideButtonLeft" taborder="24" text="5" visible="false" left="291" top="240" width="5" height="74" background="gold" opacity="0.5" textAlign="center" verticalAlign="middle"/>
+              <Static id="sta_guideButtonRight" taborder="22" text="24" visible="false" left="376" top="240" width="24" height="74" background="gold" opacity="0.5" textAlign="center" verticalAlign="middle"/>
+              <Static id="sta_guideBrandGap" taborder="23" text="60" visible="false" left="50" top="353" width="326" height="60" background="lightseagreen" opacity="0.5" textAlign="center"/>
+              <Static id="sta_systemName" taborder="0" left="26" top="26" width="120" height="30" text="BES" cssclass="besLoginSubtitle"/>
+              <Combo id="cbo_lang" taborder="1" left="250" top="26" width="150" height="30" innerdataset="ds_lang" codecolumn="LANG_CD" datacolumn="LANG_NM" value="ko-KR" cssclass="besLoginCombo" onitemchanged="cbo_lang_onitemchanged"/>
+              <Static id="sta_title" taborder="2" left="50" top="90" width="326" height="55" text="BES" textAlign="center" cssclass="besLoginTitle"/>
+              <Static id="sta_loginTitle" taborder="3" left="50" top="160" width="326" height="28" text="로그인" textAlign="center" cssclass="besLoginSubtitle"/>
+              <Static id="sta_subTitle" taborder="4" left="35" top="203" width="356" height="22" text="로그인 후 시스템을 이용하실 수 있습니다." textAlign="center" cssclass="besLoginSubtitle"/>
+              <Edit id="edt_userId" taborder="5" left="50" top="240" width="241" height="32" displaynulltext="아이디" cssclass="besLoginEdit"/>
+              <Edit id="edt_password" taborder="6" left="50" top="282" width="241" height="32" password="true" displaynulltext="비밀번호" cssclass="besLoginEdit" onkeydown="edt_password_onkeydown"/>
+              <Button id="btn_login" taborder="7" left="296" top="240" width="80" height="74" text="로그인" cssclass="besLoginButton" onclick="btn_login_onclick"/>
+              <CheckBox id="chk_saveId" taborder="8" left="50" top="329" width="125" height="24" text="아이디 저장" cssclass="besLoginCheckbox"/>
+              <CheckBox id="chk_savePw" taborder="9" left="192" top="329" width="170" height="24" text="비밀번호 저장" cssclass="besLoginCheckbox"/>
+              <Static id="sta_brandName" taborder="10" left="50" top="413" width="326" height="24" text="Built1 Enterprise System" textAlign="center" cssclass="besLoginSubtitle"/>
+            </Layout>
+          </Layouts>
+        </Div>
+        <Static id="sta_copyright" taborder="1" left="427" top="611" width="426" height="30" text="© BES. All rights reserved." textAlign="center" cssclass="besLoginCopyright"/>
+      </Layout>
+    </Layouts>
+  </Form>
+</FDL>

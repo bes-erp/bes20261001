@@ -2,6 +2,40 @@
 **☆ [공통] 매일 작업한 내용을 기록하고 push 바랍니다.**
 **☆ [공통] 최근 작업한 내용이 위로 배치, 금일 이후로 작성합니다.**
 
+**☆ [2026-11-16 : sdaeunn] 웹폰트 적용 및 공통 버튼 디자인 개선 **
+ 1. Pretendard 웹폰트 적용
+  - Pretendard 웹폰트 파일(Regular, Medium, SemiBold, Bold) 등록
+  - UserFont(Pretendard.xfont) 생성 및 Environment 설정
+  - Work 영역 전용 폰트 스타일(Pretendard.xcss) 추가
+ 2. 공통 버튼 스타일(Button.xcss) 추가
+  - 조회, 초기화, 저장, 행 추가, 행 삭제, 엑셀 다운로드 버튼 아이콘 등록
+  - 버튼별 cssclass 정의 및 아이콘 공통 관리
+ 3. 메시지등록 화면(COM12000M) 개선
+  - Work 영역 전용 폰트 cssclass 적용
+  - 공통 버튼 아이콘 cssclass 적용 
+
+**☆ [2026-11-16 : dlwmsnw] 업무 탭 디자인 변경, 다국어 확대(JA·OT), gv_lang·gv_userid 삭제**
+ 1. 업무 탭(Form_Mdi) 선택 표시 디자인 변경
+  - 선택 탭 : 흰 카드 + 보조 청록 500(#0E8C78) 테두리 2px, 위쪽 모서리 둥글게
+  - 하단 기준선 : 같은 색 2px, 선택 탭 아래만 열림 (sta_tabLineL, sta_tabLineR)
+  - 선택 전후 탭 글자 위치 동일, NRE 표시 보정 (선택 탭 아래 덮개, 닫기 버튼 여백 0)
+ 2. 다국어 지원 확대 (일본어 JA, 기타 OT 추가)
+  - libLang : 지원 언어 확인 함수(_gfn_isLanguage) 추가, 일본어/JP · 기타/OT 표시 정보 추가
+  - libMessage : gfn_msgBox OT 추가, 미지원 언어·빈 메시지는 한국어로 대체
+  - SYS10000M : 로그인 언어 콤보 JA, OT 추가, 일본어 로그인 문구 추가 (OT 는 영어 문구)
+  - bes_icon : img_TF_jp.png(일본 국기), img_TF_ot.png(지구본) 추가
+ 3. 넥사크로 전역 변수 gv_lang, gv_userid 삭제
+  - appvariables.xml : gv_lang, gv_userid 삭제
+  - 현재 언어 : this.gfn_getCurrentLanguage() (PrivateProfile 저장값 기준)
+  - 사용자 ID : 넥사크로 this.gUserId / 자바 getUserId() (SessionUserInfo)
+  - libLang, libMessage, libUserInfo, SYS10000M 수정 (로그인 후 상단 언어 표시 추가)
+ 4. 메시지등록(COM12000M) 사용자 ID 서버 세션 조회로 변경
+  - 화면에서 userId 전달 제거, Controller·Service·Serviceimpl 에서 getUserId() 사용
+  - 세션이 없으면 저장 차단 (isLogin)
+ 5. libEvent : gfn_delRow 체크 컬럼 매개변수 추가 (미지정 시 기존 CHK)
+ 6. web.xml : 세션 쿠키 경로를 / 로 지정
+  - nginx(/bes) 와 Tomcat(/built1) 경로 차이로 세션이 유지되지 않던 문제 해결 (nginx 수정 불필요)
+  
 **☆ [2026-11-15 : dims1111] 매뉴얼, 언어코드 세션 통합, 라이브러리 파일 업데이트**
  1. 매뉴얼 현행화
   - 폴더 명칭 변경 : 110.설치 메뉴얼 => 110.설치 매뉴얼

@@ -40,5 +40,7 @@
         </VFrameSet>
       </MainFrame>
     </Layout>
+    <Style url="xcssrc::Pretendard.xcss"/>
+    <Style url="xcssrc::Button.xcss"/>
   </Application>
 </ADL>

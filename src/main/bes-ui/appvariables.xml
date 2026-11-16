@@ -82,9 +82,6 @@
       </ColumnInfo>
     </Dataset>
   </Datasets>
-  <Variables>
-    <Variable id="gv_userid"/>
-    <Variable id="gv_lang"/>
-  </Variables>
+  <Variables/>
   <DataObjects/>
 </AppVariables>

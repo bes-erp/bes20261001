@@ -16,6 +16,7 @@ import java.util.Map;
 * 2026.11.04        	Built1             최초 생성
 * 2026.11.05        	Built1             수정
 * 2026.11.10			Built1			   데이터 저장 기능 추가
+* 2026.11.16			Built1			   사용자 ID 를 화면 전달값(userId) 대신 서버 세션(getUserId)으로 변경
 */
 public interface COM12000MService {
 
@@ -29,7 +30,7 @@ public interface COM12000MService {
     * @return
     * @throws Exception
     */
-    public abstract List<Map<String, Object>> selectMessageList(Map<String, Object> searchParamMap, String userId) throws Exception;
+    public abstract List<Map<String, Object>> selectMessageList(Map<String, Object> searchParamMap) throws Exception;
     
     /**
     * @methodName     		: saveMessage
@@ -41,5 +42,5 @@ public interface COM12000MService {
     * @return
     * @throws Exception
     */
-    public abstract int saveMessage(List<Map<String, Object>> messageList, String userId) throws Exception;
+    public abstract int saveMessage(List<Map<String, Object>> messageList) throws Exception;
 }

@@ -9,7 +9,7 @@
     ************************************************************* -->
     <select id="selectMessageList" resultType="map">
 
-        select 'N'                          as "SELECT_YN"
+        select 'N'                          as "CHK"
               ,substr(sm.message_num, 1, 2) as "MESSAGE_CLASS_CD"
               ,sm.message_type_cd           as "MESSAGE_TYPE_CD"
               ,sm.message_num               as "MESSAGE_NUM"

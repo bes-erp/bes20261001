@@ -33,6 +33,14 @@
             <Col id="LANG_CD">ZH</Col>
             <Col id="LANG_NM">中文(CHN)</Col>
           </Row>
+          <Row>
+            <Col id="LANG_CD">JA</Col>
+            <Col id="LANG_NM">日本語(JPN)</Col>
+          </Row>
+          <Row>
+            <Col id="LANG_CD">OT</Col>
+            <Col id="LANG_NM">Other(OT)</Col>
+          </Row>
         </Rows>
       </Dataset>
       <Dataset id="ds_frame_menu">
@@ -512,6 +520,7 @@ this.fn_setLanguage = function(sLanguage)
     {
         // 영어
         case "EN":
+		case "OT":
 
             // 로그인 화면 제목
             objLogin.sta_loginTitle.set_text("Login");
@@ -546,6 +555,25 @@ this.fn_setLanguage = function(sLanguage)
             objLogin.btn_login.set_text("登录");
             objLogin.chk_saveId.set_text("保存账号");
             objLogin.chk_savePw.set_text("保存密码");
+            break;
+			
+		// 일본어
+        case "JA":
+
+            // 로그인 화면 제목
+            objLogin.sta_loginTitle.set_text("ログイン");
+
+            // 로그인 화면 안내 문구
+            objLogin.sta_subTitle.set_text("ログイン後にシステムをご利用いただけます。");
+
+            // 아이디 및 비밀번호 입력 안내 문구
+            objLogin.edt_userId.set_displaynulltext("ユーザーID");
+            objLogin.edt_password.set_displaynulltext("パスワード");
+
+            // 로그인 버튼 및 저장 체크박스 문구
+            objLogin.btn_login.set_text("ログイン");
+            objLogin.chk_saveId.set_text("ID保存");
+            objLogin.chk_savePw.set_text("パスワード保存");
             break;
 
         // 한국어 및 지원하지 않는 언어
