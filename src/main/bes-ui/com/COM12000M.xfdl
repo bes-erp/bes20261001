@@ -110,6 +110,7 @@
  * 2026-11-09        Built1            디자인 템플릿 적용
  * 2026-11-10        Built1            gfn_getCode 함수 매개변수 변경 및 스크립트 템플릿 적용
  * 2026-11-13        Built1            Dataset 컬럼명 대문자 통일 및 공통함수 적용  
+ * 2026-11-16        Built1            gv_userid 삭제, 사용자 ID 서버 세션 조회로 변경
  ***************************************************************************************/
 
 
@@ -166,15 +167,12 @@ this.fn_search = function(obj:nexacro.Button, e:nexacro.ClickEventInfo)
     this.ds_search.setColumn(nRow, "MESSAGE_TYPE_CD" , this.div_search.form.cbo_message_type_cd.value);
     this.ds_search.setColumn(nRow, "MESSAGE_TEXT_KO" , this.div_search.form.edt_message_text_ko.value);
 
-    // 사용자 정보
-    var sUserId = nexacro.getApplication().gv_userId;
-
     // Transaction 설정
     var sSvcID        = "selectMessageList";
     var sSvcURL       = "svcUrl::com/COM12000M/selectMessageList.do";
     var sInDatasets   = "inSearch=ds_search";
     var sOutDatasets  = "ds_message=outSelectMessageList";
-    var sArgument     = "userId=" + nexacro.wrapQuote(sUserId || "");
+    var sArgument     = ""; // 사용자 ID 는 서버 세션에서 조회
     var sCallbackFunc = "fn_callBack";
 
     // 메시지 목록 조회
@@ -214,8 +212,8 @@ this.fn_save = function(obj:nexacro.Button, e:nexacro.ClickEventInfo)
     var sSvcURL       = "svcUrl::com/COM12000M/saveMessage.do";
     var sInDatasets   = "inMessage=ds_message:U";
     var sOutDatasets  = "";
-    var sArgument     = "userId=" + nexacro.wrapQuote(nexacro.getApplication().gv_userId || "");
-    var sCallbackFunc = "fn_callBack";
+    var sArgument     = ""; // 사용자 ID 는 서버 세션에서 조회
+	var sCallbackFunc = "fn_callBack";
 
     this.gfn_transaction(sSvcID, sSvcURL, sInDatasets, sOutDatasets, sArgument, sCallbackFunc);
 };
@@ -243,7 +241,7 @@ this.fn_add_row = function(obj, e)
  */
 this.fn_del_row = function(obj, e)
 {
-    this.gfn_delRow(this.grd_message);
+    this.gfn_delRow(this.grd_message, "SELECT_YN");
 
     this.gfn_setRowCount(this.ds_message, this.div_title.form.sta_titleCnt);
 };

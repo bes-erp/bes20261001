@@ -129,7 +129,7 @@ pForm._gfn_selMessage = function(sMessageNum, arrParam)
         return sMessage;
     }
 
-    // 언어별 컬럼 선택 (gv_lang 미설정 시 국어)
+    // 언어별 컬럼 선택 (현재 언어 메시지가 없으면 한국어)
     sMessage = gdsMessage.getColumn(nRow, this._gfn_getMessageColumn());
 
     // 해당 언어 메시지가 비어 있으면 국어로 대체
@@ -170,9 +170,8 @@ pForm._gfn_selMessage = function(sMessageNum, arrParam)
  */
 pForm._gfn_getMessageColumn = function()
 {
-    var sGvLang = nexacro.getApplication().gv_lang;
-
-    sGvLang = sGvLang ? String(sGvLang).toUpperCase() : "KO";
+    // 현재 언어 코드 (공통 LIB : libLang)
+    var sGvLang = this.gfn_getCurrentLanguage();
 
     switch (sGvLang)
     {

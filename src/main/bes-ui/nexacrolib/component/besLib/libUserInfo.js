@@ -75,16 +75,12 @@ pForm.gfn_getUserInfo = function(sColId)
 /**
  * @description		로그인 사용자정보 초기화 함수 (로그아웃 시 사용)
  *                  - gds_user_info 데이터 삭제
- *                  - gv_userid 초기화
  * @return 			없음
  * @example         this.gfn_clearUserInfo();
  */
 pForm.gfn_clearUserInfo = function()
 {
 	var objApp = nexacro.getApplication();
-
-	// 로그인 사용자 ID 초기화
-	objApp.gv_userid = "";
 
 	// 로그인 사용자정보 Dataset 초기화
 	if (objApp.gds_user_info) objApp.gds_user_info.clearData();

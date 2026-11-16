@@ -24,6 +24,7 @@ import static erp.core.util.SessionUserInfo.*;
 * 2026.11.04        	Built1             최초 생성
 * 2026.11.05        	Built1             수정
 * 2026.11.10			Built1			   데이터 저장 기능 추가
+* 2026.11.16			Built1			   사용자 ID 를 화면 전달값(userId) 대신 서버 세션(getUserId)으로 변경
 */
 @Slf4j
 @Service
@@ -43,7 +44,7 @@ public class COM12000MServiceimpl implements COM12000MService {
     * @throws Exception
     */
     @Override
-    public List<Map<String, Object>> selectMessageList(Map<String, Object> searchParamMap, String userId) throws Exception {
+    public List<Map<String, Object>> selectMessageList(Map<String, Object> searchParamMap) throws Exception {
 
 
         log.debug("## [ COM12000MServiceimpl ] : {}", "COM12000MServiceimpl");
@@ -58,8 +59,8 @@ public class COM12000MServiceimpl implements COM12000MService {
             mapperParamMap.putAll(searchParamMap);
         }
 
-        // 사용자 ID 추가
-        mapperParamMap.put("user_id", userId);
+        // 사용자 ID 추가 (서버 세션 : SessionUserInfo)
+        mapperParamMap.put("user_id", getUserId());
 
         // 메시지 목록 조회 및 결과 리턴
         return mapper.selectMessageList(mapperParamMap);
@@ -77,9 +78,14 @@ public class COM12000MServiceimpl implements COM12000MService {
 	*/
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public int saveMessage(List<Map<String, Object>> messageList, String userId) throws Exception {
+	public int saveMessage(List<Map<String, Object>> messageList) throws Exception {
 	
-	    if (messageList == null || messageList.isEmpty()) {
+	    // 로그인 세션 확인 (세션 만료 또는 서버 재시작 후 저장 방지)
+	    if (!isLogin()) {
+	        throw new IllegalStateException("로그인 세션이 존재하지 않습니다. 다시 로그인해 주세요.");
+	    }
+		
+		if (messageList == null || messageList.isEmpty()) {
 	        return 0;
 	    }
 	
@@ -98,7 +104,7 @@ public class COM12000MServiceimpl implements COM12000MService {
 	        int nRowType = ((Number) objRowType).intValue();
 	
 	        Map<String, Object> mapperParamMap = new HashMap<>(message);
-	        mapperParamMap.put("user_id", userId);
+	        mapperParamMap.put("user_id", getUserId());
 	
 	        int nResult = 0;
 	

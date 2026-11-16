@@ -77,4 +77,12 @@
 		<location>/common/error.jsp</location>
 	</error-page>
     
+    <!-- 세션 쿠키 경로를 사이트 전체(/)로 지정 (nginx 프록시 경로 /bes 와 Tomcat 경로 /built1 불일치 해결) -->
+    <session-config>
+        <cookie-config>
+            <path>/</path>
+            <http-only>true</http-only>
+        </cookie-config>
+    </session-config>
+    
 </web-app>
