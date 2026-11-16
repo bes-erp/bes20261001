@@ -10,7 +10,7 @@
 .Button.btn_WF_search
 {
     background : transparent;
-    -nexa-icon : URL("./_resource_/_icon_/search.png");
+    -nexa-icon : URL('theme://bes_icon/search.png');
     -nexa-icon-position : left;
     -nexa-padding : 0px;
 }
@@ -19,7 +19,7 @@
 .Button.btn_WF_searchClear
 {
     background : transparent;
-    -nexa-icon : URL("./_resource_/_icon_/reset.png");
+    -nexa-icon : URL('theme://bes_icon/reset.png');
     -nexa-icon-position : left;
     -nexa-padding : 0px;
 }
@@ -28,7 +28,7 @@
 .Button.btn_WF_save
 {
     background : transparent;
-    -nexa-icon : URL("./_resource_/_icon_/save.png");
+    -nexa-icon : URL('theme://bes_icon/save.png');
     -nexa-icon-position : left;
     -nexa-padding : 0px;
 }
@@ -37,7 +37,7 @@
 .Button.btn_WF_addRow
 {
     background : transparent;
-    -nexa-icon : URL("./_resource_/_icon_/add_row.png");
+    -nexa-icon : URL('theme://bes_icon/add_row.png');
     -nexa-icon-position : left;
     -nexa-padding : 0px;
 }
@@ -46,7 +46,7 @@
 .Button.btn_WF_delRow
 {
     background : transparent;
-    -nexa-icon : URL("./_resource_/_icon_/delete_row.png");
+    -nexa-icon : URL('theme://bes_icon/delete_row.png');
     -nexa-icon-position : left;
     -nexa-padding : 0px;
 }
@@ -55,7 +55,7 @@
 .Button.btn_WF_excelDown
 {
     background : transparent;
-    -nexa-icon : URL("./_resource_/_icon_/excel_download.png");
+    -nexa-icon : URL('theme://bes_icon/excel_download.png');
     -nexa-icon-position : left;
     -nexa-padding : 0px;
 }
