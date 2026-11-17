@@ -9049,7 +9049,7 @@
  * BES MDI TAB
  *
  * 화면 : Form_Mdi
- * 설명 : 업무 탭 - 연회색 바탕에 선택 탭만 테두리 있는 흰 카드로 표시
+ * 설명 : 업무 탭 - 연회색 바탕에 선택 탭만 흰 배경 + 상단 강조선으로 표시
  ***************************************************************************************/
 /* 업무 탭 영역 배경 */
 .Form.besMdiForm
@@ -9057,18 +9057,12 @@
     background : #F4F7FA;
 }
 
-/* 업무 탭 하단 기준선 : 보조 청록 500 #0E8C78 (2px, 기준선은 이 컴포넌트 하나만 그림) */
+/* 업무 탭 하단 기준선 : 보조 청록 500 #0E8C78 (1px, 기준선은 이 컴포넌트 하나만 그림) */
 .Static.besMdiTabLine
 {
     background : #0E8C78; /* #E8892B */
 }
 
-/* 선택 탭 아래 덮개 : 배경 #FFFFFF (NRE 에서 선택 탭 아래 테두리가 그려지는 경우 가림) */
-.Static.besMdiTabCover
-{
-    background : #FFFFFF;
-    -nexa-border : 0px none;
-}
 
 /* 홈 버튼 : 배경 투명 (하단 기준선이 비쳐 보이도록) */
 .Button.besMdiHome,
@@ -9084,7 +9078,7 @@
     -nexa-edge : none;
 }
 
-/* 업무 탭 기본 : 배경 투명, 선택 탭과 같은 위치에 투명 테두리 2px (선택 전후 글자 위치 동일) */
+/* 업무 탭 기본 : 배경 투명, 선택 탭과 같은 위치에 투명 상단 테두리 2px (선택 전후 글자 위치 동일) */
 .Button.besMdiTab,
 .Button.besMdiTab[status=mouseover],
 .Button.besMdiTab[status=focused],
@@ -9092,13 +9086,13 @@
 {
     background : transparent;
     color : #4A5568;
-    font : 13px Arial;
-    -nexa-border : 0px none, 2px solid transparent, 0px none, 2px solid transparent;
+    font : 12px Arial;
+    -nexa-border : 1px solid transparent, 0px none, 0px none, 0px none;
     -nexa-edge : none;
-    -nexa-padding : 0px 26px 6px 0px; /* 3번째 값. 아래 여백*/
+    -nexa-padding : 0px 26px 3px 8px;
 }
 
-/* 선택한 업무 탭 : 흰 카드, 위·좌·우 테두리 보조 청록 500 #0E8C78 (2px), 아래는 열림, 위쪽 모서리만 둥글게 */
+/* 선택한 업무 탭 : 흰 카드, 상단 강조선 포인트 오렌지 #E8892B (2px), 좌·우·아래 테두리 없음, 직각 */
 .Button.besMdiTabSelected,
 .Button.besMdiTabSelected[status=mouseover],
 .Button.besMdiTabSelected[status=focused],
@@ -9106,12 +9100,10 @@
 {
     background : #FFFFFF;
     color : #1F3F73;
-    font : bold 13px Arial;
-    border-radius : 8px 8px 0px 0px;
-    -nexa-border : 2px solid #0E8C78, 2px solid #0E8C78, 0px none, 2px solid #0E8C78;
-    /*-nexa-border : 2px solid #E8892B, 2px solid #E8892B, 0px none, 2px solid #E8892B;*/
+    font : bold 12px Arial;
+    -nexa-border : 1px solid #E8892B, 0px none, 0px none, 0px none;
     -nexa-edge : none;
-    -nexa-padding : 0px 26px 2px 8px; /* 마지막 오른쪽으로 갈 만큼 짝수로 늘리기 */
+    -nexa-padding : 0px 26px 3px 8px;
 }
 
 /* 업무 탭 닫기 버튼 */
@@ -9122,7 +9114,7 @@
 {
     background : transparent;
     color : #8A94A6;
-    font : 16px Arial;
+    font : 14px Arial;
     -nexa-padding : 0px;
     -nexa-border : 0px none;
     -nexa-edge : none;
