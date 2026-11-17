@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="COM12000M" width="1007" height="720" titletext="메시지등록" font="bold 12px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" onload="fn_init">
+  <Form id="COM12000M" width="1007" height="720" titletext="메시지등록" font="bold 12px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" onload="fn_init" ontimer="COM12000M_ontimer">
     <Layouts>
       <Layout height="720" mobileorientation="landscape" width="1007">
         <Static id="sta_margin_left" taborder="0" text="10" left="0" top="0" width="10" height="720" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;"/>
@@ -46,7 +46,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Grid id="grd_message" left="10" top="div_title:0" right="10" bottom="10" taborder="7" binddataset="ds_message" selecttype="row" autoenter="select" autofittype="none" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" onheadclick="grd_message_onheadclick" cssclass="font_WF_grid">
+        <Grid id="grd_message" left="10" top="div_title:0" right="10" bottom="10" taborder="7" binddataset="ds_message" selecttype="row" autoenter="select" autofittype="none" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" onheadclick="grd_message_onheadclick" cssclass="font_WF_grid" oncelldblclick="grd_message_oncelldblclick">
           <Formats>
             <Format id="default">
               <Columns>
@@ -92,6 +92,7 @@
             </Format>
           </Formats>
         </Grid>
+        <Static id="sta_toast" taborder="8" width="140" height="24" visible="false" background="#FFFFFF" color="#334155" textAlign="center" verticalAlign="middle" font="10pt/normal &quot;Pretendard&quot;" border="1px solid #CBD5E1" left="260" top="95"/>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/***************************************************************************************
@@ -111,6 +112,7 @@
  * 2026-11-10        Built1            gfn_getCode 함수 매개변수 변경 및 스크립트 템플릿 적용
  * 2026-11-13        Built1            Dataset 컬럼명 대문자 통일 및 공통함수 적용   
  * 2026-11-16        Built1            gv_userid 삭제, 사용자 ID 서버 세션 조회로 변경
+ * 2026-11-17        Built1            메시지번호 복사 기능 
  ***************************************************************************************/
 
 
@@ -371,7 +373,50 @@ this.fn_resetSelectionOnlyRows = function()
 this.grd_message_onheadclick = function(obj, e)
 {
     this.gfn_gridCheckAll(obj, e);
-};]]></Script>
+};
+
+/*
+ * 기능 : 메시지번호 복사
+ * : 그리드 메시지번호 셀 더블클릭 시 클립보드에 복사
+ */
+this.grd_message_oncelldblclick = function(obj, e)
+{
+    // 메시지번호 컬럼 확인
+    var nCell = obj.getBindCellIndex("body", "MESSAGE_NUM");
+
+    if (e.row < 0 || e.cell != nCell) return;
+
+    // 메시지번호 조회
+    var sMessageNum = this.ds_message.getColumn(e.row, "MESSAGE_NUM");
+
+    if (this.gfn_isNull(sMessageNum)) return;
+
+    // 클립보드 복사
+    system.setClipboard("CF_TEXT", sMessageNum);
+
+     // 토스트 메시지 출력
+    this.sta_toast.set_text("✓ 메시지번호 복사 완료");
+	this.sta_toast.set_visible(true);
+	this.sta_toast.bringToFront();
+
+    // 자동 숨김
+    this.killTimer(12000);
+    this.setTimer(12000, 500);
+};
+
+/*
+ * 기능 : 토스트 메시지 숨김
+ * : 일정 시간 경과 후 토스트 메시지 자동 숨김
+ */
+this.COM12000M_ontimer = function(obj, e)
+{
+    if (e.timerid == 12000)
+    {
+        this.killTimer(12000);
+        this.sta_toast.set_visible(false);
+    }
+};
+]]></Script>
     <Objects>
       <Dataset id="ds_search">
         <ColumnInfo>

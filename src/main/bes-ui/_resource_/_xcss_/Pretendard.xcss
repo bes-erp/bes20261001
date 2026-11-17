@@ -1,7 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <XCSS version="1.1">
   <Predefines/>
-  <CSSData><![CDATA[/* Work 영역 - 일반 텍스트 */
+  <CSSData><![CDATA[/* =========================================================
+   Work 영역 - 공통 폰트
+   ========================================================= */
+
+/* Work 영역 - 일반 텍스트 */
 .Static.font_WF
 {
     font : 12px/normal "Pretendard";
@@ -37,6 +41,23 @@
     font : 12px/normal "Pretendard";
 }
 
+/* Work 영역 - 콤보박스 입력 텍스트 */
+.Combo.font_WF .comboedit
+{
+    font : normal 400 12px/normal "Pretendard";
+}
+
+/* Work 영역 - 콤보박스 목록 */
+.Combo.font_WF .combolist .listboxitem
+{
+    font : normal 400 12px/normal "Pretendard";
+}
+
+
+/* =========================================================
+   Work 영역 - Grid 폰트
+   ========================================================= */
+
 /* Work 영역 - Grid 헤더 */
 .Grid.font_WF_grid .head .row .cell
 {
@@ -49,5 +70,27 @@
     font : normal 400 12px/normal "Pretendard";
 }
 
-]]></CSSData>
+/* Work 영역 - Grid 데이터 편집 */
+.Grid.font_WF_grid .body .row .cell .celledit
+{
+    font : normal 400 12px/normal "Pretendard";
+}
+
+/* Work 영역 - Grid 콤보박스 */
+.Grid.font_WF_grid .body .row .cell .cellcombo
+{
+    font : normal 400 12px/normal "Pretendard";
+}
+
+/* Work 영역 - Grid 콤보박스 입력 텍스트 */
+.Grid.font_WF_grid .body .row .cell .cellcombo .comboedit
+{
+    font : normal 400 12px/normal "Pretendard";
+}
+
+/* Work 영역 - Grid 콤보박스 목록 */
+.Grid.font_WF_grid .body .row .cell .cellcombo .combolist .listboxitem
+{
+    font : normal 400 12px/normal "Pretendard";
+}]]></CSSData>
 </XCSS>
