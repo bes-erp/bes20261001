@@ -472,15 +472,14 @@ this.fn_createTabs = function(bShowActive)
         objTab.addEventHandler("onclick", this.fn_tab_onclick, this);
         objTab.show();
 
-        // 업무 탭 닫기 버튼 (선택·기본 탭 모두 상단 테두리 2px 이 있어 같은 높이)
+        // 업무 탭 닫기 버튼 (탭 글자와 같은 높이 : 선택 탭은 위 여백 2px, 기본 탭은 아래 여백 6px 기준)
         var sCloseId  = "btn_close_" + j;
-        var nCloseTop = this.fv_tabTop + 4;
+        var nCloseTop = bActive ? this.fv_tabTop + 4 : this.fv_tabTop + 2;
         var objClose  = new nexacro.Button(sCloseId, nLeft + nTabWidth - 26, nCloseTop, 18, 18, null, null, null, null, null, null, this);
 
         this.addChild(sCloseId, objClose);
 
-        objClose.set_text("×");
-        objClose.set_cssclass("besMdiTabClose");
+        objClose.set_cssclass(bActive ? "besMdiTabCloseSelected" : "besMdiTabClose");
         objClose.set_cursor("pointer");
         objClose.menuCd = objInfo.menuCd;
 
