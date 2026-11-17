@@ -119,6 +119,7 @@
  * 2026-11-06        Built1            IFC 로그인 레이아웃 및 다국어 적용
  * 2026-11-16        Built1            Dataset 명칭 변경 (ds_login_result, ds_user_info, ds_frame_menu)
  * 2026-11-16        Built1            로그인 중복 요청 방지, 언어 설정·Dataset 초기화 중복 정리
+ * 2026-11-17        Built1            비밀번호 저장 체크박스 ADMIN 전용 표시, gv_lang·gv_userid 잔여 참조 정리
  ***************************************************************************************/
 
 // include "besLib::libLang.xjs";
@@ -146,6 +147,8 @@ this.fv_language = "KO";
 // 로그인 Transaction 진행 여부 (Enter·버튼 연타로 인한 중복 요청 방지)
 this.fv_isLoginRunning = false;
 
+// 비밀번호 저장 체크박스를 표시할 관리자 아이디
+this.fv_adminUserId = "ADMIN";
 
 /***************************************************************************************
  * 2. FORM LOAD
@@ -288,7 +291,7 @@ this.fn_callBack = function(sSvcID, nErrCd, sErrMsg)
         // 로그인 요청 Dataset의 비밀번호 데이터 제거
         this.ds_login.clearData();
     }
-
+ 
     // 서버 통신 또는 처리 중 오류 발생 여부 확인
     if (nErrCd < 0)
     {
@@ -405,7 +408,7 @@ this.fn_loginSuccess = function()
     if (objTopFrame && objTopFrame.form && objTopFrame.form.fn_setUserInfo)
     {
         objTopFrame.form.fn_setUserInfo();
-        objTopFrame.form.fn_setLanguageInfo(objApp.gv_lang);
+        objTopFrame.form.fn_setLanguageInfo(this.gfn_getCurrentLanguage());
     }
 
     // DB 메뉴정보를 이용하여 상단 대분류 메뉴 생성
@@ -445,17 +448,31 @@ this.fn_loadLoginInfo = function()
     {
         objLogin.edt_userId.set_value(null);
     }
+	 
+	// 복원된 아이디 기준으로 비밀번호 저장 체크박스 표시 여부 설정
+    this.fn_setSavePwVisible(objLogin.edt_userId.value);
 
-    // 비밀번호 입력값 초기화 및 기존에 저장된 비밀번호 삭제
-    objLogin.edt_password.set_value(null);
-    nexacro.removePrivateProfile(this.fv_savePwKey);
-    nexacro.removePrivateProfile(this.fv_passwordKey);
+    // 이전에 저장한 비밀번호 저장 여부
+    var sSavePw = nexacro.getPrivateProfile(this.fv_savePwKey);
+
+    // ADMIN이고 비밀번호 저장을 선택한 경우 비밀번호 복원
+    // TODO 운영 반영 전 검토 : 클라이언트 평문 저장은 보안정책 위배
+    if (objLogin.chk_savePw.visible && sSavePw == "1")
+    {
+        objLogin.chk_savePw.set_value(1);
+        objLogin.edt_password.set_value(nexacro.getPrivateProfile(this.fv_passwordKey));
+    }
+    else
+    {
+        objLogin.edt_password.set_value(null);
+        this.fn_setLoginProfile(this.fv_savePwKey, this.fv_passwordKey, false);
+    }
 };
 
 
 /**
  * @description 로그인 성공 시 로그인 정보 저장 설정 반영
- *              비밀번호 저장은 보안정책 위배로 제외
+ *              비밀번호 저장은 ADMIN 전용 테스트 기능 (운영 반영 전 검토)
  */
 this.fn_saveLoginInfo = function()
 {
@@ -463,21 +480,68 @@ this.fn_saveLoginInfo = function()
     var objLogin = this.div_login.form;
 
     // 아이디 저장
-    if (objLogin.chk_saveId.value == 1)
-    {
-        nexacro.setPrivateProfile(this.fv_saveIdKey, "1");
-        nexacro.setPrivateProfile(this.fv_userIdKey, objLogin.edt_userId.value);
-    }
-    else
-    {
-        nexacro.removePrivateProfile(this.fv_saveIdKey);
-        nexacro.removePrivateProfile(this.fv_userIdKey);
-    }
+    this.fn_setLoginProfile(this.fv_saveIdKey, this.fv_userIdKey, objLogin.chk_saveId.value == 1, objLogin.edt_userId.value);
 
-    // 비밀번호 저장 기능 제거 (보안 : 클라이언트 평문 저장 금지)
-    // 기존에 남아 있는 비밀번호 삭제는 화면 로딩 시 fn_loadLoginInfo에서 처리
+    // 비밀번호 저장 (ADMIN 전용)
+    // TODO 운영 반영 전 검토 : 클라이언트 평문 저장은 보안정책 위배
+    this.fn_setLoginProfile(this.fv_savePwKey, this.fv_passwordKey, objLogin.chk_savePw.visible && objLogin.chk_savePw.value == 1, objLogin.edt_password.value);
 };
 
+/**
+ * @description 저장 여부에 따라 PrivateProfile의 저장 플래그와 값을 함께 저장 또는 삭제
+ *              (아이디 저장, 비밀번호 저장 공통 사용)
+ * @param       {sFlagKey  : String}  저장 여부 키 (예: fv_saveIdKey)
+ * @param       {sValueKey : String}  저장 값 키 (예: fv_userIdKey)
+ * @param       {bSave     : Boolean} 저장 여부 (true : 저장, false : 삭제)
+ * @param       {sValue    : String}  저장할 값 (bSave가 false면 무시)
+ * @return      없음
+ * @example     this.fn_setLoginProfile(this.fv_saveIdKey, this.fv_userIdKey, objLogin.chk_saveId.value == 1, objLogin.edt_userId.value);
+ *              this.fn_setLoginProfile(this.fv_savePwKey, this.fv_passwordKey, false);
+ */
+this.fn_setLoginProfile = function(sFlagKey, sValueKey, bSave, sValue)
+{
+    // 저장 : 플래그와 값을 함께 저장
+    if (bSave)
+    {
+        nexacro.setPrivateProfile(sFlagKey, "1");
+        nexacro.setPrivateProfile(sValueKey, sValue);
+        return;
+    }
+
+    // 삭제 : 플래그와 값을 함께 삭제
+    nexacro.removePrivateProfile(sFlagKey);
+    nexacro.removePrivateProfile(sValueKey);
+};
+
+/**
+ * @description 입력한 아이디가 관리자(ADMIN)인 경우에만 비밀번호 저장 체크박스 표시
+ *              관리자가 아니면 체크박스를 숨기고 체크 상태도 해제
+ *              (대소문자, 앞뒤 공백 무시하고 비교)
+ * @param       {sUserId : String} 입력한 사용자 아이디
+ * @return      없음
+ * @example     this.fn_setSavePwVisible(this.div_login.form.edt_userId.value);
+ *              this.fn_setSavePwVisible(e.posttext);
+ */
+this.fn_setSavePwVisible = function(sUserId)
+{
+    // 로그인 입력 컴포넌트가 포함된 Div Form
+    var objLogin = this.div_login.form;
+
+    // 비교용 아이디 (null이면 빈 문자열, 공백 제거 후 대문자 변환)
+    var sCheckId = this.gfn_isNull(sUserId) ? "" : String(sUserId).trim().toUpperCase();
+
+    // 관리자 아이디 여부
+    var bAdmin = (sCheckId == this.fv_adminUserId);
+	//trace("## [fn_setSavePwVisible] sUserId=[" + sUserId + "], sCheckId=[" + sCheckId + "], bAdmin=" + bAdmin);
+	// 관리자일 때만 비밀번호 저장 체크박스 표시
+    objLogin.chk_savePw.set_visible(bAdmin);
+
+    // 관리자가 아니면 체크 상태 해제 (숨겨진 채로 체크가 남지 않도록)
+    if (!bAdmin)
+    {
+        objLogin.chk_savePw.set_value(0);
+    }
+};
 
 /**
  * @description 공통 언어 LIB를 이용하여 이전 언어 설정 복원
@@ -719,9 +783,6 @@ this.fn_resetLogin = function()
     // Application 전역 객체 조회
     var objApp = nexacro.getApplication();
 
-    // 전역 사용자 정보 초기화
-    objApp.gv_userid = "";
-
     // 전역 Dataset 초기화
     if (objApp.gds_user_info) objApp.gds_user_info.clearData();
     if (objApp.gds_profile)   objApp.gds_profile.clearData();
@@ -782,6 +843,16 @@ this.edt_password_onkeydown = function(obj, e)
     }
 };
 
+/**
+ * @description 아이디 입력창 입력 이벤트
+ *              한 글자 입력/삭제할 때마다 관리자 여부를 확인하여 비밀번호 저장 체크박스 표시
+ */
+this.edt_userId_oninput = function(obj, e)
+{
+    //trace("## [edt_userId_oninput] text=[" + obj.text + "]");
+    // 현재 입력창에 보이는 텍스트 기준으로 표시 여부 설정
+    this.fn_setSavePwVisible(obj.text);
+};
 
 /**
  * @description 언어 선택 Combo 변경 이벤트
@@ -790,7 +861,7 @@ this.cbo_lang_onitemchanged = function(obj, e)
 {
     // Combo에서 새로 선택한 언어 코드
     var sLanguage = e.postvalue;
-
+ 
     // 공통 LIB를 이용하여 언어 설정 저장 및 전역 변수 반영
     sLanguage = this.gfn_setLanguage(sLanguage);
 
@@ -821,11 +892,11 @@ this.cbo_lang_onitemchanged = function(obj, e)
               <Static id="sta_title" taborder="2" left="50" top="90" width="326" height="55" text="BES" textAlign="center" cssclass="besLoginTitle"/>
               <Static id="sta_loginTitle" taborder="3" left="50" top="160" width="326" height="28" text="로그인" textAlign="center" cssclass="besLoginSubtitle"/>
               <Static id="sta_subTitle" taborder="4" left="35" top="203" width="356" height="22" text="로그인 후 시스템을 이용하실 수 있습니다." textAlign="center" cssclass="besLoginSubtitle"/>
-              <Edit id="edt_userId" taborder="5" left="50" top="240" width="241" height="32" displaynulltext="아이디" cssclass="besLoginEdit"/>
+              <Edit id="edt_userId" taborder="5" left="50" top="240" width="241" height="32" displaynulltext="아이디" cssclass="besLoginEdit" oninput="edt_userId_oninput"/>
               <Edit id="edt_password" taborder="6" left="50" top="282" width="241" height="32" password="true" displaynulltext="비밀번호" cssclass="besLoginEdit" onkeydown="edt_password_onkeydown"/>
               <Button id="btn_login" taborder="7" left="296" top="240" width="80" height="74" text="로그인" cssclass="besLoginButton" onclick="btn_login_onclick"/>
               <CheckBox id="chk_saveId" taborder="8" left="50" top="329" width="125" height="24" text="아이디 저장" cssclass="besLoginCheckbox"/>
-              <CheckBox id="chk_savePw" taborder="9" left="192" top="329" width="170" height="24" text="비밀번호 저장" cssclass="besLoginCheckbox"/>
+              <CheckBox id="chk_savePw" taborder="9" left="192" top="329" width="170" height="24" text="비밀번호 저장" cssclass="besLoginCheckbox" visible="false"/>
               <Static id="sta_brandName" taborder="10" left="50" top="413" width="326" height="24" text="Built1 Enterprise System" textAlign="center" cssclass="besLoginSubtitle"/>
             </Layout>
           </Layouts>
