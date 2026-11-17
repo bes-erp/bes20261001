@@ -80,8 +80,8 @@
               <Band id="body">
                 <Cell text="expr:currow+1" edittype="none" textAlign="center"/>
                 <Cell col="1" text="bind:CHK" displaytype="checkboxcontrol" edittype="checkbox" textAlign="center" checkboxtruevalue="Y" checkboxfalsevalue="N"/>
-                <Cell col="2" text="bind:MESSAGE_CLASS_CD" displaytype="combocontrol" edittype="expr:dataset.getRowType(currow)==2?'combo':'none'" combodataset="ds_grd_message_class_cd" combocodecol="CODE" combodatacol="CODE_NM"/>
-                <Cell col="3" text="bind:MESSAGE_TYPE_CD" displaytype="combocontrol" edittype="expr:dataset.getRowType(currow)==2?'combo':'none'" combodataset="ds_grd_message_type_cd" combocodecol="CODE" combodatacol="CODE_NM"/>
+                <Cell col="2" text="bind:MESSAGE_CLASS_CD" displaytype="expr:dataset.getRowType(currow)==2?'combocontrol':'combotext'" edittype="expr:dataset.getRowType(currow)==2?'combo':'none'" combodataset="ds_grd_message_class_cd" combocodecol="CODE" combodatacol="CODE_NM"/>
+                <Cell col="3" text="bind:MESSAGE_TYPE_CD" displaytype="expr:dataset.getRowType(currow)==2?'combocontrol':'combotext'" edittype="expr:dataset.getRowType(currow)==2?'combo':'none'" combodataset="ds_grd_message_type_cd" combocodecol="CODE" combodatacol="CODE_NM"/>
                 <Cell col="4" text="bind:MESSAGE_NUM" edittype="none" textAlign="center"/>
                 <Cell col="5" text="bind:MESSAGE_TEXT_KO" edittype="text" textAlign="left"/>
                 <Cell col="6" text="bind:MESSAGE_TEXT_EN" edittype="text" textAlign="left"/>
