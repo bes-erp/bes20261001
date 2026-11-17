@@ -2,6 +2,21 @@
 **☆ [공통] 매일 작업한 내용을 기록하고 push 바랍니다.**
 **☆ [공통] 최근 작업한 내용이 위로 배치, 금일 이후로 작성합니다.**
 
+**☆ [2026-11-17 : dlwmsnw] 업무 탭 디자인 변경, 로그인 비밀번호 저장 관리, gv_lang·gv_userid 잔여 참조 정리**
+ 1. 업무 탭(Form_Mdi) 선택 표시 디자인 변경
+  - 선택 탭 : 직각, 네이비 100(#D6E0F0) → 네이비 50(#EEF2F9) → 흰색 그라데이션, 상단 강조선 보조 청록 500(#0E8C78) 2px, 좌·우 테두리 제거
+  - 하단 기준선 : 2px → 1px
+  - 닫기 버튼(×) : 텍스트 → 이미지, 선택 탭 × 강조 (besMdiTabCloseSelected)
+  - bes_icon : btn_tab_close.png(#8A94A6), btn_tab_close_sel.png(#1F3F73) 추가
+  - 글자 위치 : 선택 탭은 강조선과, 기본 탭은 기준선과 간격을 두도록 조정
+  - 둥근 모서리 제거로 NRE 보정용 선택 탭 덮개(btn_tab_cover, besMdiTabCover) 삭제
+ 2. 로그인 화면(SYS10000M) 비밀번호 저장 관리
+  - 비밀번호 저장 체크박스 기본 숨김, 아이디 ADMIN 입력 시에만 표시 (edt_userId oninput)
+  - ADMIN 전용 비밀번호 저장/복원 추가
+ 3. SYS10000M gv_lang, gv_userid 잔여 참조 정리
+  - fn_loginSuccess : gv_lang → this.gfn_getCurrentLanguage()
+  - fn_resetLogin : gv_userid 초기화 삭제 (gds_user_info 초기화로 대체)
+
 **☆ [2026-11-16 : dims1111] 로그인 비밀번호 검증 WAS 이관 및 대문자 규칙 적용 **
  1. 로그인 화면 정규화 진행
   - 넥사크로
