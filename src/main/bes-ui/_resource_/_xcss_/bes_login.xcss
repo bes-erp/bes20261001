@@ -1,0 +1,532 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XCSS version="1.1">
+  <Predefines/>
+  <CSSData><![CDATA[/***************************************************************************************
+ * BES LOGIN
+ * 화면 : SYS10000M
+ * 설명 : BES 로그인 화면 전용 스타일
+ ***************************************************************************************/
+
+/* 로그인 패널 */
+.Div.besLoginPanel
+{
+    background : #FFFFFF;
+    -nexa-border : 1px solid #E3E8EF;
+    border-radius : 12px;
+}
+
+/* BES 제목 */
+.Static.besLoginTitle
+{
+    color : #1F3F73;
+    font : bold 32px Arial;
+}
+
+/* 로그인 부제목 */
+.Static.besLoginSubtitle
+{
+    color : #8A94A6;
+    font : 13px Arial;
+}
+
+/* 아이디, 비밀번호 라벨 */
+.Static.besLoginLabel
+{
+    color : #1A2333;
+    font : bold 13px Arial;
+}
+
+/* 로그인 입력창 */
+.Edit.besLoginEdit
+{
+    background : #FFFFFF;
+    color : #1A2333;
+    -nexa-border : 1px solid #C9D1DC;
+    border-radius : 5px;
+    font : 14px Arial;
+}
+
+/* 로그인 입력창 포커스 */
+.Edit.besLoginEdit[status=focused]
+{
+    -nexa-border : 1px solid #2F5A9E;
+}
+
+/* 로그인 체크박스 */
+.CheckBox.besLoginCheckbox
+{
+    color : #4A5568;
+    font : 12px Arial;
+}
+
+/* 로그인 버튼 - 기본 */
+.Button.besLoginButton
+{
+    background : #1F3F73;
+    color : #FFFFFF;
+    -nexa-border : 0px none;
+    -nexa-edge : none;
+    border-radius : 5px;
+    font : bold 16px Arial;
+}
+
+/* 로그인 버튼 - 마우스 오버 */
+.Button.besLoginButton[status=mouseover]
+{
+    background : #2F5A9E;
+    color : #FFFFFF;
+    -nexa-border : 0px none;
+    -nexa-edge : none;
+}
+
+/* 로그인 버튼 - 포커스 */
+.Button.besLoginButton[status=focused]
+{
+    background : #1F3F73;
+    color : #FFFFFF;
+    -nexa-border : 0px none;
+    -nexa-edge : none;
+}
+
+/* 로그인 버튼 - 클릭 */
+.Button.besLoginButton[userstatus=pushed]
+{
+    background : #182F57;
+    color : #FFFFFF;
+    -nexa-border : 0px none;
+    -nexa-edge : none;
+}
+
+/* 로그인 하단 문구 */
+.Static.besLoginCopyright
+{
+    color : #8A94A6;
+    font : 12px Arial;
+}
+
+
+/***************************************************************************************
+ * BES TOP
+ * 화면 : Form_Top
+ * 설명 : 상단 로고, 시스템명, 사용자 정보 및 공통 버튼 스타일
+ ***************************************************************************************/
+
+/* 상단 프레임 */
+.Form.besTopForm
+{
+    background : #FFFFFF;
+}
+
+/* BES 로고 이미지 */
+.ImageViewer.besTopLogo
+{
+    -nexa-border : 0px none;
+    -nexa-padding : 0px;
+    background : transparent;
+}
+
+/* BES 브랜드명 */
+.Static.besTopBrand
+{
+    color : #1F3F73;
+    font : bold 22px Arial;
+}
+
+/* 시스템명 */
+.Static.besTopSystemName
+{
+    color : #4A5568;
+    font : 12px Arial;
+}
+
+/* 로그인 사용자 정보 */
+.Static.besTopUserName
+{
+    color : #4A5568;
+    font : 12px Arial;
+}
+
+/* 패스워드 변경 및 로그아웃 버튼 */
+.Button.besTopActionButton
+{
+    background : transparent;
+    color : #2F5A9E;
+    -nexa-border : 0px none;
+    -nexa-edge : none;
+    font : 12px Arial;
+}
+
+
+/* 버튼 마우스 오버 */
+.Button.besTopActionButton[status=mouseover]
+{
+    background : transparent;
+    color : #2F5A9E;
+    -nexa-border : 0px none;
+    -nexa-edge : none;
+}
+
+/* 버튼 포커스 */
+.Button.besTopActionButton[status=focused]
+{
+    background : transparent;
+    color : #2F5A9E;
+    -nexa-border : 0px none;
+    -nexa-edge : none;
+}
+
+/* 버튼 클릭 */
+.Button.besTopActionButton[userstatus=pushed]
+{
+    background : transparent;
+    color : #2F5A9E;
+    -nexa-border : 0px none;
+    -nexa-edge : none;
+}
+
+
+
+/* 사용자 정보와 버튼 사이 구분선 */
+.Static.besTopSeparator
+{
+    color : #C9D1DC;
+    font : 12px Arial;
+}
+
+/* 선택 언어 표시 (로그인에서 선택한 언어, 변경 불가) */
+.Button.besTopLanguage,
+.Button.besTopLanguage[status=mouseover],
+.Button.besTopLanguage[status=focused],
+.Button.besTopLanguage[userstatus=pushed],
+.Button.besTopLanguage[userstatus=selected]
+{
+    background : transparent;
+    color : #4A5568;
+    font : 12px "Malgun Gothic", "맑은 고딕", "Arial";
+    cursor : default;
+    -nexa-icon-position : left;
+    -nexa-text-padding : 0px 0px 0px 8px;
+    -nexa-text-align : left;
+    -nexa-padding : 0px 10px 0px 0px;
+    -nexa-border : 0px none;
+    -nexa-edge : none;
+}
+
+
+/* 로그인 사용자명 (클릭 시 사용자정보 팝업) : 로그아웃 버튼과 동일한 메인 500 #2F5A9E, 상태 변화 없음 */
+.Button.besTopUser,
+.Button.besTopUser[status=mouseover],
+.Button.besTopUser[status=focused],
+.Button.besTopUser[userstatus=pushed],
+.Button.besTopUser[userstatus=selected]
+{
+    background : transparent;
+    color : #2F5A9E;
+    font : 12px "Malgun Gothic", "맑은 고딕", "Arial";
+    cursor : pointer;
+    -nexa-icon : url('theme://bes_icon/img_TF_user.png');
+    -nexa-icon-position : left;
+    -nexa-text-padding : 0px 0px 0px 6px;
+    -nexa-text-decoration : none;
+    -nexa-padding : 0px;
+    -nexa-border : 0px none;
+    -nexa-edge : none;
+}
+
+/***************************************************************************************
+ * BES USER POPUP
+ * 화면 : Form_Top (pdv_userInfo)
+ * 설명 : 사용자정보 팝업 스타일 (BES 컬러 팔레트 기준)
+ ***************************************************************************************/
+
+/* 팝업 : 배경 #FFFFFF, 구분선 #E3E8EF */
+.PopupDiv.besUserPopup
+{
+    background : #FFFFFF;
+    -nexa-border : 1px solid #E3E8EF;
+    border-radius : 8px;
+    box-shadow : 0px 4px 12px RGBA(31,63,115,0.15);
+}
+
+/* 사진 : 면 #F4F7FA (사진이 없으면 기본 아이콘) */
+.ImageViewer.besUserPhoto
+{
+    background : url('theme://bes_icon/img_pop_user.png') no-repeat center center #F4F7FA;
+    border-radius : 30px;
+    -nexa-border : 0px none;
+    -nexa-padding : 0px;
+}
+
+/* 아이디 : 보조 글자 #8A94A6 */
+.Static.besUserPopupSub
+{
+    color : #8A94A6;
+    font : 12px "Malgun Gothic", "맑은 고딕", "Arial";
+}
+
+/* 이름 : 제목 #1A2333 */
+.Static.besUserPopupName
+{
+    color : #1A2333;
+    font : bold 15px "Malgun Gothic", "맑은 고딕", "Arial";
+}
+
+/* 항목명(소속, 로그인 시간) : 보조 글자 #8A94A6 */
+.Static.besUserPopupLabel
+{
+    color : #8A94A6;
+    font : 12px "Malgun Gothic", "맑은 고딕", "Arial";
+}
+
+/* 항목값 : 본문 #4A5568 */
+.Static.besUserPopupValue
+{
+    color : #4A5568;
+    font : 13px "Malgun Gothic", "맑은 고딕", "Arial";
+}
+
+/* 비밀번호 변경 / 사용자정보 수정 버튼 - 기본 : 테두리 비활성 #C9D1DC */
+.Button.besUserPopupButton,
+.Button.besUserPopupButton[userstatus=selected]
+{
+    background : #FFFFFF;
+    color : #4A5568;
+    font : 12px "Malgun Gothic", "맑은 고딕", "Arial";
+    -nexa-border : 1px solid #C9D1DC;
+    border-radius : 4px;
+    -nexa-edge : none;
+    -nexa-padding : 0px;
+    cursor : pointer;
+}
+
+/* 비밀번호 변경 / 사용자정보 수정 버튼 - 마우스 오버, 포커스 : 메인 50 #EEF2F9 */
+.Button.besUserPopupButton[status=mouseover],
+.Button.besUserPopupButton[status=focused]
+{
+    background : #EEF2F9;
+    color : #1F3F73;
+    -nexa-border : 1px solid #ADC1E2;
+    -nexa-edge : none;
+}
+
+/* 비밀번호 변경 / 사용자정보 수정 버튼 - 클릭 : 메인 100 #D6E0F0 */
+.Button.besUserPopupButton[userstatus=pushed]
+{
+    background : #D6E0F0;
+    color : #1F3F73;
+    -nexa-border : 1px solid #7F9DCF;
+    -nexa-edge : none;
+}
+
+
+/***************************************************************************************
+ * BES TOP MENU
+ *
+ * 화면 : Form_Menu
+ * 설명 : DB 기반 최상위 메뉴 및 왼쪽 메뉴 접기/펼치기 버튼 스타일
+ ***************************************************************************************/
+
+/* 상단 메뉴 배경 */
+.Form.besMenuForm,
+.Div.besMenuDiv
+{
+    background : #1F3F73;
+}
+
+/* 상단 메뉴 기본, 마우스 오버 및 클릭 상태 고정 */
+.Button.besMenuButton,
+.Button.besMenuButton[status=mouseover],
+.Button.besMenuButton[status=focused],
+.Button.besMenuButton[userstatus=pushed],
+.Button.besMenuButton[status=mouseover][userstatus=pushed],
+.Button.besMenuButtonSelected,
+.Button.besMenuButtonSelected[status=mouseover],
+.Button.besMenuButtonSelected[status=focused],
+.Button.besMenuButtonSelected[userstatus=pushed],
+.Button.besMenuButtonSelected[status=mouseover][userstatus=pushed]
+{
+    background : #1F3F73;
+    color : #FFFFFF;
+    font : bold 15px Arial;
+    cursor : pointer;
+    -nexa-text-align : center;
+    -nexa-vertical-align : middle;
+    -nexa-padding : 0px 0px 2px 0px;
+    -nexa-border : 0px none;
+    -nexa-edge : none;
+}
+
+/* 왼쪽 메뉴가 펼쳐진 상태 : 메뉴 접기 아이콘 */
+.Button.besMenuToggleClose,
+.Button.besMenuToggleClose[status=mouseover],
+.Button.besMenuToggleClose[status=focused],
+.Button.besMenuToggleClose[userstatus=pushed],
+.Button.besMenuToggleClose[userstatus=selected]
+{
+    background : url('theme://images_ifc/img_TF_leftMenu_open.png') no-repeat center #1F3F73;
+    cursor : pointer;
+    -nexa-border : 0px none;
+    -nexa-edge : none;
+}
+
+/* 왼쪽 메뉴가 접힌 상태 : 메뉴 펼치기 아이콘 */
+.Button.besMenuToggleOpen,
+.Button.besMenuToggleOpen[status=mouseover],
+.Button.besMenuToggleOpen[status=focused],
+.Button.besMenuToggleOpen[userstatus=pushed],
+.Button.besMenuToggleOpen[userstatus=selected]
+{
+    background : url('theme://images_ifc/img_TF_leftMenu_close.png') no-repeat center #1F3F73;
+    cursor : pointer;
+    -nexa-border : 0px none;
+    -nexa-edge : none;
+}
+
+
+/***************************************************************************************
+ * BES LEFT MENU
+ *
+ * 화면 : Form_Left
+ * 설명 : 왼쪽 메뉴 배경 및 Grid 마우스 오버, 선택 상태 스타일
+ ***************************************************************************************/
+
+/* 왼쪽 메뉴 Form 배경 */
+.Form.besLeftForm
+{
+    background : #FFFFFF;
+}
+
+/* 왼쪽 메뉴 Div 배경 */
+.Div.besLeftMenuDiv
+{
+    background : #FFFFFF;
+    -nexa-border : 0px none;
+}
+
+/* 왼쪽 메뉴 Grid 기본 스타일 */
+.Grid.besLeftMenuGrid
+{
+    background : #FFFFFF;
+    -nexa-border : 0px none;
+    cursor : pointer;
+}
+
+/* 왼쪽 메뉴 기본, 마우스 오버 및 선택 상태 고정 */
+.Grid.besLeftMenuGrid .body .row .cell,
+.Grid.besLeftMenuGrid .body .row .cell[status=mouseover],
+.Grid.besLeftMenuGrid .body .row .cell[userstatus=selected],
+.Grid.besLeftMenuGrid .body .row .cell[status=mouseover][userstatus=selected]
+{
+    background : #FFFFFF;
+    color : #1A2333;
+    cursor : pointer;
+}
+
+
+/***************************************************************************************
+ * BES MDI TAB
+ *
+ * 화면 : Form_Mdi
+ * 설명 : 업무 탭 기본, 선택, 닫기 및 홈 버튼 스타일
+ ***************************************************************************************/
+
+/* 업무 탭 영역 배경 */
+.Form.besMdiForm
+{
+    background : #F4F7FA;
+}
+
+/* 홈 버튼 */
+.Button.besMdiHome,
+.Button.besMdiHome[status=mouseover],
+.Button.besMdiHome[status=focused],
+.Button.besMdiHome[userstatus=pushed]
+{
+    background : #F4F7FA;
+    color : #4A5568;
+    font : 18px Arial;
+    -nexa-border : 0px none;
+    -nexa-edge : none;
+}
+
+/* 업무 탭 기본 */
+.Button.besMdiTab,
+.Button.besMdiTab[status=mouseover],
+.Button.besMdiTab[status=focused],
+.Button.besMdiTab[userstatus=pushed]
+{
+    background : #F4F7FA;
+    color : #4A5568;
+    font : 13px Arial;
+    -nexa-border : 0px none;
+    -nexa-edge : none;
+    -nexa-padding : 0px 26px 0px 8px;
+}
+
+/* 선택한 업무 탭 */
+.Button.besMdiTabSelected,
+.Button.besMdiTabSelected[status=mouseover],
+.Button.besMdiTabSelected[status=focused],
+.Button.besMdiTabSelected[userstatus=pushed]
+{
+    background : #F4F7FA;
+    color : #1F3F73;
+    font : bold 13px Arial;
+    -nexa-border : 0px none;
+    -nexa-edge : none;
+    -nexa-padding : 0px 26px 0px 8px;
+}
+
+
+/* 업무 탭 닫기 버튼 */
+.Button.besMdiTabClose,
+.Button.besMdiTabClose[status=mouseover],
+.Button.besMdiTabClose[status=focused],
+.Button.besMdiTabClose[userstatus=pushed]
+{
+    background : transparent;
+    color : #8A94A6;
+    font : 16px Arial;
+    -nexa-border : 0px none;
+    -nexa-edge : none;
+}
+
+/* 업무 탭 이동 버튼 (‹ ›) : 본문 #4A5568, 왼쪽 구분선 #E3E8EF */
+.Button.besMdiTabNav,
+.Button.besMdiTabNav[status=mouseover],
+.Button.besMdiTabNav[status=focused],
+.Button.besMdiTabNav[userstatus=pushed]
+{
+    background : #F4F7FA;
+    color : #4A5568;
+    font : bold 20px Arial;
+    cursor : pointer;
+    -nexa-padding : 0px 0px 3px 0px;
+    -nexa-border : 0px none, 0px none, 0px none, 1px solid #E3E8EF;
+    -nexa-edge : none;
+}
+
+/* 업무 탭 이동 버튼 - 비활성 (맨 앞 / 맨 끝) : 비활성 #C9D1DC */
+.Button.besMdiTabNav[status=disabled]
+{
+    background : #F4F7FA;
+    color : #C9D1DC;
+    cursor : default;
+    -nexa-border : 0px none, 0px none, 0px none, 1px solid #E3E8EF;
+    -nexa-edge : none;
+}
+
+/***************************************************************************************
+ * BES TAB WORK
+ *
+ * 화면 : Form_TabWork
+ * 설명 : 업무 화면 컨테이너 배경
+ ***************************************************************************************/
+
+.Form.besTabWorkForm
+{
+    background : #FFFFFF;
+}
+
+]]></CSSData>
+</XCSS>

@@ -1,17 +1,17 @@
-PL/SQL Developer Test script 3.0
+﻿PL/SQL Developer Test script 3.0
 8
 begin
-  -- Call the procedure
-  bcom.com_user_pkg.change_password_p(p_user_id => :p_user_id,
-                                      p_password => :p_password,
-                                      p_update_by => :p_update_by,
-                                      p_result_cd => :p_result_cd,
-                                      p_result_descr => :p_result_descr);
+    -- Call the procedure
+    bcom.com_user_pkg.change_password_p(p_user_id      => :p_user_id
+                                       ,p_password     => :p_password
+                                       ,p_update_by    => :p_update_by
+                                       ,p_result_cd    => :p_result_cd
+                                       ,p_result_descr => :p_result_descr);
 end;
 5
 p_user_id
 1
-TEST01
+ADMIN
 5
 p_password
 1

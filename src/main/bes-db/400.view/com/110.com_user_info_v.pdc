@@ -6,8 +6,7 @@ conn system/manager@bes;
 drop view bcom.com_user_info_v;
 
 -- 뷰 생성
-create or replace view bcom.com_user_info_v
-as
+create or replace view bcom.com_user_info_v as
 select
      /* =======================================================================
       * Package Name     : com_user_info_v
@@ -21,48 +20,73 @@ select
       * 2026-11-01         Built1        최초작성
       * =======================================================================
       */
-/*    
-       cuiv.user_id                              as user_id          
-      ,cuiv.user_nm                              as user_nm          
-      ,cuiv.emp_id                               as emp_id           
-      ,cuiv.emp_num                              as emp_num          
-      ,cuiv.company_cd                           as company_cd       
-      ,cuiv.company_nm                           as company_nm       
-      ,cuiv.dept_cd                              as dept_cd          
-      ,cuiv.dept_nm                              as dept_nm          
-      ,cuiv.grade_cd                             as grade_cd         
-      ,cuiv.grade_nm                             as grade_nm         
-      ,cuiv.job_cd                               as job_cd           
-      ,cuiv.job_nm                               as job_nm           
-      ,cuiv.position_cd                          as position_cd      
-      ,cuiv.position_nm                          as position_nm      
-      ,cuiv.hire_date                            as hire_date              
-      ,cuiv.retire_date                          as retire_date      
+/*
+       cuiv.user_id                              as user_id
+      ,cuiv.user_nm                              as user_nm
+      ,cuiv.emp_id                               as emp_id
+      ,cuiv.emp_num                              as emp_num
+      ,cuiv.company_cd                           as company_cd
+      ,cuiv.company_nm                           as company_nm
+      ,cuiv.dept_cd                              as dept_cd
+      ,cuiv.dept_nm                              as dept_nm
+      ,cuiv.grade_cd                             as grade_cd
+      ,cuiv.grade_nm                             as grade_nm
+      ,cuiv.job_cd                               as job_cd
+      ,cuiv.job_nm                               as job_nm
+      ,cuiv.position_cd                          as position_cd
+      ,cuiv.position_nm                          as position_nm
+      ,cuiv.hire_date                            as hire_date
+      ,cuiv.retire_date                          as retire_date
       ,cuiv.supervisor_emp_nm                    as supervisor_emp_nm
       ,cuiv.supervisor_emp_id                    as supervisor_emp_id
-      ,cuiv.supervisor_emp_nm                    as supervisor_emp_nm 
- */     
-       'TEST01'                                  as user_id          
-      ,'테스트사용자'                            as user_nm          
-      ,20260001                                  as emp_id           
-      ,'20260001'                                as emp_num            
+      ,cuiv.supervisor_emp_nm                    as supervisor_emp_nm
+ */
+       'TEST01'                                  as user_id
+      ,'테스트사용자'                            as user_nm
+      ,20260001                                  as emp_id
+      ,'20260001'                                as emp_num
       ,'다은수진'                                as emp_nm
-      ,'BT1'                                     as company_cd       
-      ,'빌트원'                                  as company_nm       
-      ,'20123'                                   as dept_cd          
-      ,'ERP2팀'                                  as dept_nm          
-      ,'G200'                                    as grade_cd         
-      ,'대리'                                    as grade_nm         
-      ,'J200'                                    as job_cd           
-      ,'시스템개발'                              as job_nm           
-      ,null                                      as position_cd      
-      ,null                                      as position_nm      
-      ,'2020-01-01'                              as hire_date              
+      ,'BT1'                                     as company_cd
+      ,'빌트원'                                  as company_nm
+      ,'20123'                                   as dept_cd
+      ,'ERP2팀'                                  as dept_nm
+      ,'G200'                                    as grade_cd
+      ,'대리'                                    as grade_nm
+      ,'J200'                                    as job_cd
+      ,'시스템개발'                              as job_nm
+      ,null                                      as position_cd
+      ,null                                      as position_nm
+      ,'2020-01-01'                              as hire_date
       ,null                                      as retire_date
       ,20001000                                  as supervisor_emp_id
       ,'20001000'                                as supervisor_emp_num
-      ,'상위관리자'                              as supervisor_emp_nm 
+      ,'상위관리자'                              as supervisor_emp_nm
   from dual cuiv
+ where 1=1
+ 
+ union all
+
+select 'ADMIN'                                   as user_id
+      ,'시스템관리자'                            as user_nm
+      ,20000001                                  as emp_id
+      ,'20000001'                                as emp_num
+      ,'강정기'                                  as emp_nm
+      ,'BT1'                                     as company_cd
+      ,'빌트원'                                  as company_nm
+      ,'20123'                                   as dept_cd
+      ,'ERP2팀'                                  as dept_nm
+      ,null                                      as grade_cd
+      ,'이사'                                    as grade_nm
+      ,null                                      as job_cd
+      ,null                                      as job_nm
+      ,null                                      as position_cd
+      ,null                                      as position_nm
+      ,null                                      as hire_date
+      ,null                                      as retire_date
+      ,null                                      as supervisor_emp_id
+      ,null                                      as supervisor_emp_num
+      ,null                                      as supervisor_emp_nm
+  from dual
  where 1=1
 ;
 

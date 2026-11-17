@@ -11,7 +11,7 @@
           <Layouts>
             <Layout>
               <Button id="btn_pageTitle" taborder="0" left="0" top="2" width="24" height="24" onclick="nfn_searchOpen_onclick" cssclass="btn_WF_pageTitle"/>
-              <Static id="sta_title" taborder="1" text="메시지 등록" left="btn_pageTitle:5" top="2" width="229" height="24" cssclass="sta_WF_title" fittocontents="width" font="bold 14px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;"/>
+              <Static id="sta_page_title" taborder="1" text="메시지 등록" left="btn_pageTitle:5" top="2" width="229" height="24" cssclass="sta_WF_title" fittocontents="width" font="bold 14px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;"/>
               <Button id="btn_save" taborder="2" top="2" height="24" right="4" width="24" onclick="fn_save" tooltiptext="저장" background="" cssclass="btn_WF_save"/>
             </Layout>
           </Layouts>
@@ -38,8 +38,8 @@
         <Div id="div_title" taborder="6" text="32" left="10" top="div_search:5" height="32" right="10" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;">
           <Layouts>
             <Layout>
-              <Button id="btn_favorite" taborder="1" left="0" top="2" width="24" height="24" cssclass="btn_WF_gridTitle"/>
-              <Static id="sta_gridTitle" taborder="0" text="메시지 목록" left="btn_favorite:5" top="1" width="68" height="24" cssclass="sta_WF_gridTitle" font="bold 12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" fittocontents="width"/>
+              <Button id="btn_gridTitle" taborder="1" left="0" top="2" width="24" height="24" cssclass="btn_WF_gridTitle"/>
+              <Static id="sta_gridTitle" taborder="0" text="메시지 목록" left="btn_gridTitle:5" top="1" width="68" height="24" cssclass="sta_WF_gridTitle" font="bold 12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" fittocontents="width"/>
               <Button id="btn_delRow" taborder="3" top="4" width="24" height="24" tooltiptext="행삭제" right="4" onclick="fn_del_row" cssclass="btn_WF_delRow"/>
               <Button id="btn_addRow" taborder="2" top="4" width="24" height="24" tooltiptext="행추가" right="btn_delRow:2" onclick="fn_add_row" cssclass="btn_WF_addRow"/>
               <Button id="btn_excel_down" taborder="4" top="4" width="24" height="24" tooltiptext="엑셀다운로드" right="btn_addRow:2" background="" onclick="fn_excel_down" cssclass="btn_WF_excelDown"/>
@@ -47,7 +47,7 @@
             </Layout>
           </Layouts>
         </Div>
-        <Grid id="grd_message" left="10" top="div_title:0" right="10" bottom="10" taborder="7" binddataset="ds_message" selecttype="row" autoenter="select" autofittype="none" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" oncellclick="fn_grd_oncellclick">
+        <Grid id="grd_message" left="10" top="div_title:0" right="10" bottom="10" taborder="7" binddataset="ds_message" selecttype="row" autoenter="select" autofittype="none" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" onheadclick="fn_grd_onheadclick">
           <Formats>
             <Format id="default">
               <Columns>
@@ -80,7 +80,7 @@
               </Band>
               <Band id="body">
                 <Cell text="expr:currow+1" edittype="none" textAlign="center"/>
-                <Cell col="1" text="bind:SELECT_YN" displaytype="checkboxcontrol" edittype="checkbox" textAlign="center"/>
+                <Cell col="1" text="bind:SELECT_YN" displaytype="expr:expr:dataset.getRowType(currow) == 2 ? 'normal' : 'checkboxcontrol'" edittype="expr:expr:dataset.getRowType(currow) == 2 ? 'none' : 'checkbox'" textAlign="center" checkboxtruevalue="Y" checkboxfalsevalue="N"/>
                 <Cell col="2" text="bind:MESSAGE_CLASS_CD" displaytype="combocontrol" edittype="combo" combodataset="ds_grd_message_class_cd" combocodecol="CODE" combodatacol="CODE_NM"/>
                 <Cell col="3" text="bind:MESSAGE_TYPE_CD" displaytype="combocontrol" edittype="combo" combodataset="ds_grd_message_type_cd" combocodecol="CODE" combodatacol="CODE_NM"/>
                 <Cell col="4" text="bind:MESSAGE_NUM" edittype="none"/>
@@ -180,8 +180,8 @@ this.fn_init = function (obj:Form, e:nexacro.LoadEventInfo)
 	this.gfn_getCode(this, "ds_cbo_message_type_cd" , "MESSAGE_TYPE_CD" , "", "Y");		// 메시지유형(전체포함)
 	
 	// 그리드
-    this.gfn_getCode(this, "ds_grd_message_class_cd", "MESSAGE_CLASS_CD", "", "S"); 		// 메시지분류(선택포함)
-	this.gfn_getCode(this, "ds_grd_message_type_cd" , "MESSAGE_TYPE_CD" , "", "S"); 		// 메시지유형(선택포함)
+    this.gfn_getCode(this, "ds_grd_message_class_cd", "MESSAGE_CLASS_CD", "", "S"); 	// 메시지분류(선택포함)
+	this.gfn_getCode(this, "ds_grd_message_type_cd" , "MESSAGE_TYPE_CD" , "", "S"); 	// 메시지유형(선택포함)
 	
 	// 조회조건 초기화
 	this.fn_searchClear();
@@ -211,7 +211,6 @@ this.fn_search = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
  */
 this.fn_searchClear = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-    // 조회조건 기본값 설정
     this.gfn_searchClear(this.div_search);
 };
 
@@ -222,7 +221,26 @@ this.fn_searchClear = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
  */
 this.fn_save = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+	// 체크박스만 변경된 행의 상태 정리
+    this.fn_resetSelectionOnlyRows();
 
+    if (!this.gfn_dataSetChange(this.ds_message))
+    {
+        this.alert("변경된 데이터가 없습니다.");
+        return;
+    }
+
+    // 필수 항목 검증
+    if (!this.fn_validate()) return;
+	
+	var sSvcID        = "saveMessage";
+    var sSvcURL       = "svcUrl::com/COM12000M/saveMessage.do";
+    var sInDatasets   = "inMessage=ds_message:U";
+    var sOutDatasets  = "";
+    var sArgument     = "userId=" + nexacro.wrapQuote(nexacro.getApplication().gv_userId || "");
+    var sCallbackFunc = "fn_callBack";
+
+    this.gfn_transaction(sSvcID, sSvcURL, sInDatasets, sOutDatasets, sArgument, sCallbackFunc);
 };
 
 
@@ -286,7 +304,7 @@ this.fn_add_row = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
  */
 this.fn_del_row = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
-
+	this.gfn_delRow(this.grd_message);
 };
 
 
@@ -355,6 +373,19 @@ this.fn_callBack = function (sSvcID, nErrCd, sErrMsg)
 this.fn_grd_oncellclick = function(obj:nexacro.Grid,e:nexacro.GridClickEventInfo)
 {
 	this.gfn_gridComboDropdown(obj, e);
+};
+
+/*
+ * 기능 : 그리드 목록 전체 선택 / 해제
+ * : 그리드 헤더 체크박스 클릭 시 전체 행 선택 상태 변경
+ */
+this.fn_grd_onheadclick = function(obj, e)
+{
+    // 체크박스 헤더만 처리
+    if (e.cell != 1) return;
+
+     // 공통함수 호출
+    this.gfn_gridCheckAll(obj, 1, "SELECT_YN");
 };
 ]]></Script>
   </Form>
