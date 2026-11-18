@@ -2,6 +2,21 @@
 **☆ [공통] 매일 작업한 내용을 기록하고 push 바랍니다.**
 **☆ [공통] 최근 작업한 내용이 위로 배치, 금일 이후로 작성합니다.**
 
+**☆ [2026-11-18 : sdaeunn] 공통 라이브러리 개선 및 웹폰트 적용 구조 개선 **
+ 1. 그리드 공통라이브러리(libGrid.js) 개선
+  - 헤더 셀 인덱스 조회 공통함수(gfn_getGridHeaderIndex) 추가
+  - 헤더 체크박스 초기화 공통함수(gfn_gridCheckReset) 추가
+ 2. 데이터셋 공통라이브러리(libDataset.js) 기능 추가
+  - 체크박스 변경 상태 초기화 공통함수(gfn_resetSelectionOnlyRows) 추가
+  - CHK 컬럼만 변경된 기존 행을 저장 대상에서 제외하도록 처리
+ 3. 메시지등록 화면(COM12000M) 개선
+  - 조회조건 영역 상·하단 간격 가이드 Static 추가 및 수직 중앙 정렬
+  - 컴포넌트별 개별 font 속성 제거 및 공통 폰트 스타일 적용
+ 4. Pretendard 웹폰트 적용 구조 개선
+  - XFONT 내 폰트 정의를 별도 CSS 파일로 분리
+  - @import 방식의 WOFF2 웹폰트 로딩 구조 적용
+  - 개발자 PC별 폰트 설치 관련 Generate 오류 해결
+  
 **☆ [2026-11-18 : dlwmsnw] 업무 탭 최대 개수 기본값 제거, 업무 탭 이동·PrivateProfile·로그인 토큰 분석**
  1. 업무 탭 최대 개수 화면 기본값 제거 (Form_Mdi)
   - fv_tabMaxDefault(7) 삭제, sys_profile MDI_TAB_MAX_CNT 값만 사용
