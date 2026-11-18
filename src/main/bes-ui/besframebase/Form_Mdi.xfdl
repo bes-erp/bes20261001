@@ -30,6 +30,7 @@
  * 2026-11-13        Built1            업무 탭 최대 개수 제한 (프로파일 : MDI_TAB_MAX_CNT)
  * 2026-11-13        Built1            업무 탭이 MDI 넓이 초과 시 이동 버튼(‹ ›) 추가
  * 2026-11-17        Built1            업무 탭 디자인 변경 (기준선 1px, 직각 탭, 선택 탭 상단 강조선)
+ * 2026-11-18        Built1            업무 탭 최대 개수 화면 기본값 제거 (sys_profile MDI_TAB_MAX_CNT 만 사용)
  ***************************************************************************************/
 
 
@@ -65,11 +66,6 @@ this.fv_tabNavWidth = 56;
 
 // fv_tabMaxProfileCd : 업무 탭 최대 개수 프로파일 코드 (sys_profile)
 this.fv_tabMaxProfileCd = "MDI_TAB_MAX_CNT";
-
-// fv_tabMaxDefault : 업무 탭 최대 개수 예비값 (기본은 DB sys_profile 의 MDI_TAB_MAX_CNT 사용)
-//                    gds_profile 미조회, 프로파일 미등록, 값 오류일 때만 사용
-this.fv_tabMaxDefault = 7;
-
 
 /***************************************************************************************
  * 2. FORM LOAD
@@ -151,26 +147,26 @@ this.fn_getTabInfo = function(sMenuCd)
     return null;
 };
 
-
 /**
  * @description     업무 탭 최대 개수 조회 함수
- *                  - 공통 LIB(gfn_getProfile)로 sys_profile 의 MDI_TAB_MAX_CNT 조회
- *                  - 값이 없거나 숫자가 아니거나 0 이하이면 기본값(fv_tabMaxDefault) 사용
- * @return          {Number} 업무 탭 최대 개수
+ *                  - 공통 LIB(gfn_getProfile)로 sys_profile 의 MDI_TAB_MAX_CNT 조회 (화면 기본값 없음)
+ *                  - 프로파일 미등록, 숫자가 아니거나 0 이하이면 0 반환 (개수 제한 없음)
+ * @return          {Number} 업무 탭 최대 개수 (0 : 제한 없음)
  * @example         var nMaxCnt = this.fn_getTabMaxCnt();
+ *                  if (nMaxCnt > 0 && this.fv_tabList.length >= nMaxCnt) { ... }
  */
 this.fn_getTabMaxCnt = function()
 {
-    // 프로파일 값 조회 (문자열)
-    var sMaxCnt = this.gfn_getProfile(this.fv_tabMaxProfileCd, String(this.fv_tabMaxDefault));
+    // 프로파일 값 조회 (미등록이면 빈 값)
+    var sMaxCnt = this.gfn_getProfile(this.fv_tabMaxProfileCd, "");
 
     // 숫자로 변환
     var nMaxCnt = parseInt(sMaxCnt, 10);
 
-    // 잘못된 값이면 기본값
+    // 미등록이거나 잘못된 값이면 제한 없음
     if (isNaN(nMaxCnt) || nMaxCnt <= 0)
     {
-        nMaxCnt = this.fv_tabMaxDefault;
+        return 0;
     }
 
     return nMaxCnt;
@@ -197,10 +193,10 @@ this.fn_openTab = function(sMenuCd, sMenuNm, sFormUrl)
         return;
     }
 
-    // 업무 탭 최대 개수 확인 (프로파일 : MDI_TAB_MAX_CNT)
+    // 업무 탭 최대 개수 확인 (프로파일 : MDI_TAB_MAX_CNT, 0 이면 제한 없음)
     var nMaxCnt = this.fn_getTabMaxCnt();
 
-    if (this.fv_tabList.length >= nMaxCnt)
+    if (nMaxCnt > 0 && this.fv_tabList.length >= nMaxCnt)
     {
         this.alert("화면은 최대 " + nMaxCnt + "개 까지 오픈 가능합니다.");
         return;
