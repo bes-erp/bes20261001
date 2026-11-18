@@ -19,14 +19,16 @@
         <Div id="div_search" taborder="5" left="10" top="div_com:5" height="46" background="#EEF2F9" right="10" font="12px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" formscrolltype="none" formscrollbartype="none" text="">
           <Layouts>
             <Layout>
-              <Combo id="cbo_message_class_cd" left="114" top="9" width="150" height="24" taborder="0" innerdataset="ds_cbo_message_class_cd" codecolumn="CODE" datacolumn="CODE_NM" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" cssclass="font_WF"/>
+              <Static id="sta_marginTop" taborder="12" text="10" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" height="11" left="0" top="0" right="0"/>
+              <Static id="sta_marginBottom" taborder="13" text="10" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" left="0" right="0" height="11" top="35"/>
+              <Combo id="cbo_message_class_cd" left="114" top="sta_marginTop:0" width="150" taborder="0" innerdataset="ds_cbo_message_class_cd" codecolumn="CODE" datacolumn="CODE_NM" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" cssclass="font_WF" bottom="sta_marginBottom:0" text=""/>
               <Static id="sta_margin_left" taborder="6" text="10" left="0" top="0" width="10" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" bottom="0"/>
-              <Static id="sta_message_class_cd" text="메시지분류" left="sta_margin_left:0" top="10" width="100" height="24" verticalAlign="middle" taborder="1" textAlign="right" cssclass="font_WF"/>
+              <Static id="sta_message_class_cd" text="메시지분류" left="sta_margin_left:0" top="11" width="100" height="24" verticalAlign="middle" taborder="1" textAlign="right" cssclass="font_WF"/>
               <Static id="sta_margin_left00" taborder="7" text="10" left="cbo_message_class_cd:10" top="0" width="10" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" bottom="0"/>
-              <Static id="sta_message_type_cd" text="메시지유형" left="sta_margin_left00:0" top="10" width="100" height="24" verticalAlign="middle" taborder="2" textAlign="right" cssclass="font_WF"/>
-              <Combo id="cbo_message_type_cd" left="sta_message_type_cd:5" top="10" width="150" height="24" taborder="3" innerdataset="ds_cbo_message_type_cd" codecolumn="CODE" datacolumn="CODE_NM" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" cssclass="font_WF"/>
-              <Static id="sta_message_text_ko" text="메시지(한글)" left="557" top="10" width="100" height="24" verticalAlign="middle" taborder="4" textAlign="right" cssclass="font_WF"/>
-              <Edit id="edt_message_text_ko" left="sta_message_text_ko:5" top="10" width="200" height="24" taborder="5" maxlength="300" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" cssclass="font_WF"/>
+              <Static id="sta_message_type_cd" text="메시지유형" left="sta_margin_left00:0" top="11" width="100" height="24" verticalAlign="middle" taborder="2" textAlign="right" cssclass="font_WF"/>
+              <Combo id="cbo_message_type_cd" left="sta_message_type_cd:5" top="sta_marginTop:0" width="150" height="24" taborder="3" innerdataset="ds_cbo_message_type_cd" codecolumn="CODE" datacolumn="CODE_NM" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" cssclass="font_WF"/>
+              <Static id="sta_message_text_ko" text="메시지(한글)" left="557" top="11" width="100" height="24" verticalAlign="middle" taborder="4" textAlign="right" cssclass="font_WF"/>
+              <Edit id="edt_message_text_ko" left="sta_message_text_ko:5" top="sta_marginTop:0" width="200" taborder="5" maxlength="300" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" cssclass="font_WF" bottom="sta_marginBottom:0"/>
               <Static id="sta_margin_left00_00" taborder="8" text="10" left="cbo_message_type_cd:0" top="0" width="10" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" bottom="0"/>
               <Static id="sta_margin_left00_00_00" taborder="9" text="10" top="0" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" bottom="0" width="4" right="0"/>
               <Button id="btn_searchClear" taborder="11" top="10" height="24" tooltiptext="초기화" width="24" onclick="fn_searchClear" cssclass="btn_WF_searchClear" right="4"/>
@@ -199,7 +201,7 @@ this.fn_searchClear = function(obj, e)
 this.fn_save = function(obj:nexacro.Button, e:nexacro.ClickEventInfo)
 {
     // 체크박스만 변경된 행의 상태 정리
-    this.fn_resetSelectionOnlyRows();
+    this.gfn_resetSelectionOnlyRows(this.ds_message);
 
     if (!this.gfn_dataSetChange(this.ds_message))
     {
@@ -317,51 +319,6 @@ this.fn_validate = function()
 };
 
 
-/*
- * 기능 : 체크박스 선택으로 발생한 변경 상태 정리
- * : CHK만 변경된 기존 행은 저장 대상에서 제외
- */
-this.fn_resetSelectionOnlyRows = function()
-{
-    var ds = this.ds_message;
-
-    for (var i = 0; i < ds.rowcount; i++)
-    {
-        if (ds.getRowType(i) != Dataset.ROWTYPE_UPDATE) continue;
-
-        var bDataChanged = false;
-
-        for (var j = 0; j < ds.getColCount(); j++)
-        {
-            var sColId = ds.getColID(j);
-
-            if (sColId == "CHK") continue;
-
-            if (ds.getColumn(i, sColId) !== ds.getOrgColumn(i, sColId))
-            {
-                bDataChanged = true;
-                break;
-            }
-        }
-
-        if (!bDataChanged)
-        {
-            var bUpdateControl = ds.updatecontrol;
-            ds.set_updatecontrol(false);
-
-            try
-            {
-                ds.setRowType(i, Dataset.ROWTYPE_NORMAL);
-            }
-            finally
-            {
-                ds.set_updatecontrol(bUpdateControl);
-            }
-        }
-    }
-};
-
-
 /***************************************************************************************
  * 8. 이벤트
  * : 화면에서 각 컴포넌트별 이벤트를 작성하는 기능
@@ -415,8 +372,7 @@ this.COM12000M_ontimer = function(obj, e)
         this.killTimer(12000);
         this.sta_toast.set_visible(false);
     }
-};
-]]></Script>
+};]]></Script>
     <Objects>
       <Dataset id="ds_search">
         <ColumnInfo>

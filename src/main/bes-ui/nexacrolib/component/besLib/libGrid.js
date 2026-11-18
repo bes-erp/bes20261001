@@ -9,6 +9,7 @@
  ===============================================================================
  ● this.gfn_gridComboDropdown       : 그리드 콤보 셀 클릭시 드롭다운 목록 즉시 편집 상태로 전환 함수
  ● this.gfn_getGridColumnIndex 		: 그리드 특정 컬럼의 인덱스 찾기는 함수
+ ● this.gfn_getGridHeaderIndex		: 그리드 Body 셀 인덱스를 기준으로 헤더 셀 인덱스를 찾는 함수 
  ● this.gfn_getGridHeaderText 		: 그리드 컬럼 인덱스를 기준으로 헤더 텍스트 찾는 함수
  ● this.gfn_gridCheckRequired		: 그리드의 필수 항목 체크하는 함수
  ● this.gfn_gridCheckAll			: 그리드 헤더 체크박스 클릭 시 전체 행 선택/해제 처리 함수
@@ -50,6 +51,31 @@ pForm.gfn_getGridColumnIndex = function(objGrid, sColumnName)
 		//바인드된 컬럼의 명칭이 동일할 경우 찾은 인덱스 리턴
         if (sBindColumnName == ("bind:" + sColumnName)) return i;
     }
+    return -1;
+};
+
+/**
+ * @description     Body 셀 인덱스를 기준으로 헤더 셀 인덱스를 찾는 함수
+ * @param           {objGrid    : Object}  그리드 객체
+ * @param           {nBodyCell  : Number}  Body 셀 인덱스
+ * @return          {Number}               헤더 셀 인덱스
+ */
+pForm.gfn_getGridHeaderIndex = function(objGrid, nBodyCell)
+{
+    if (nBodyCell < 0) return -1;
+
+    // Body 셀의 컬럼 위치 조회
+    var nCol = objGrid.getCellProperty("body", nBodyCell, "col");
+
+    // 동일한 컬럼 위치의 헤더 셀 탐색
+    for (var i = 0; i < objGrid.getCellCount("head"); i++)
+    {
+        if (objGrid.getCellProperty("head", i, "col") == nCol)
+        {
+            return i;
+        }
+    }
+
     return -1;
 };
 
@@ -127,44 +153,31 @@ pForm.gfn_gridCheckRequired = function(objGrid, arrRequired)
 pForm.gfn_gridCheckAll = function(objGrid, e)
 {
     var sCheckColumn = "CHK";
-	
+
     var objDs = objGrid.getBindDataset();
     if (!objDs) return;
-	
+
     // CHK 컬럼의 Body 셀 인덱스 조회
-    var nBodyCell = objGrid.getBindCellIndex("body", sCheckColumn);
+    var nBodyCell = this.gfn_getGridColumnIndex(objGrid, sCheckColumn);
     if (nBodyCell < 0) return;
-	
-	// Body 셀의 컬럼 위치 조회
-    var nCol = objGrid.getCellProperty("body", nBodyCell, "col");
 
-    // CHK과 동일한 컬럼 위치의 헤더 셀 탐색
-    var nHeadCell = -1;
-
-    for (var i = 0; i < objGrid.getCellCount("head"); i++)
-    {
-        if (objGrid.getCellProperty("head", i, "col") == nCol)
-        {
-            nHeadCell = i;
-            break;
-        }
-    }
-
+    // 헤더 셀 인덱스 조회
+    var nHeadCell = this.gfn_getGridHeaderIndex(objGrid, nBodyCell);
     if (nHeadCell < 0) return;
 
     // 체크박스 헤더 클릭 시에만 처리
     if (e.cell != nHeadCell) return;
 
     // 현재 헤더 체크박스 상태
-	var sCheck = objGrid.getCellProperty("head", nHeadCell, "text");
-	var sValue = (sCheck == "Y") ? "N" : "Y";
+    var sCheck = objGrid.getCellProperty("head", nHeadCell, "text");
+    var sValue = (sCheck == "Y") ? "N" : "Y";
 
-	// 전체 행 선택 / 해제
-	for (var nRow = 0; nRow < objDs.rowcount; nRow++)
-	{
-		objDs.setColumn(nRow, sCheckColumn, sValue);
-	}
+    // 전체 행 선택 / 해제
+    for (var nRow = 0; nRow < objDs.rowcount; nRow++)
+    {
+        objDs.setColumn(nRow, sCheckColumn, sValue);
+    }
 
-	// 헤더 체크박스 상태 변경
-	objGrid.setCellProperty("head", nHeadCell, "text", sValue);
+    // 헤더 체크박스 상태 변경
+    objGrid.setCellProperty("head", nHeadCell, "text", sValue);
 };

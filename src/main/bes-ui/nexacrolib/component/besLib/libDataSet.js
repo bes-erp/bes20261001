@@ -8,8 +8,9 @@
  ● this._gfn_함수명             	: 라이브러리 내부 함수에 대한 설명
  ===============================================================================
  ● this.gfn_dataSetChange			: DataSet 데이터 변경여부 체크 함수
+ ● this.gfn_resetSelectionOnlyRows 	: DataSet 체크박스만 변경된 행의 변경 상태 초기화 함수
  ● this.gfn_transaction				: DataSet 데이터를 처리(신규/수정/삭제/조회 등)하기 위한 서비스를 호출하는 트랜잭션 함수
- ● this.gfn_setRowCount 			: Dataset 전체 건수 표시 함수
+ ● this.gfn_setRowCount 			: Dataset 전체 건수를 Static에 표시하는 함수
  */
 
 
@@ -46,6 +47,58 @@ pForm.gfn_dataSetChange = function(objDs)
 	}
 	
 	return bDsChange;
+};
+
+/**
+ * @description     체크박스만 변경된 기존 행의 변경 상태 초기화
+ *                  CHK 컬럼만 변경된 행은 저장 대상에서 제외
+ * @param           {objDs : nexacro.NormalDataset} 대상 Dataset
+ * @example         this.gfn_resetSelectionOnlyRows(this.ds_message);
+ */
+pForm.gfn_resetSelectionOnlyRows = function(objDs)
+{
+    if (!objDs) return;
+
+    var sCheckColumn = "CHK";
+
+    // 수정된 기존 행의 데이터 변경 여부 확인
+    for (var i = 0; i < objDs.rowcount; i++)
+    {
+        if (objDs.getRowType(i) != Dataset.ROWTYPE_UPDATE) continue;
+
+        var bDataChanged = false;
+
+        for (var j = 0; j < objDs.getColCount(); j++)
+        {
+            var sColId = objDs.getColID(j);
+
+            // 체크박스 컬럼은 변경 여부 확인 대상에서 제외
+            if (sColId == sCheckColumn) continue;
+
+            // 현재 데이터와 원본 데이터 비교
+            if (objDs.getColumn(i, sColId) !== objDs.getOrgColumn(i, sColId))
+            {
+                bDataChanged = true;
+                break;
+            }
+        }
+
+        // 실제 데이터 변경이 없는 경우 RowType 초기화
+        if (!bDataChanged)
+        {
+            var bUpdateControl = objDs.updatecontrol;
+            objDs.set_updatecontrol(false);
+
+            try
+            {
+                objDs.setRowType(i, Dataset.ROWTYPE_NORMAL);
+            }
+            finally
+            {
+                objDs.set_updatecontrol(bUpdateControl);
+            }
+        }
+    }
 };
 
 /**
