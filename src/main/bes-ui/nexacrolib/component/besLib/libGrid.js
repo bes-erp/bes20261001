@@ -13,6 +13,7 @@
  ● this.gfn_getGridHeaderText 		: 그리드 컬럼 인덱스를 기준으로 헤더 텍스트 찾는 함수
  ● this.gfn_gridCheckRequired		: 그리드의 필수 항목 체크하는 함수
  ● this.gfn_gridCheckAll			: 그리드 헤더 체크박스 클릭 시 전체 행 선택/해제 처리 함수
+ ● this.gfn_gridCheckReset 			: 그리드 헤더 체크박스 초기화 함수
 */
 
 
@@ -180,4 +181,25 @@ pForm.gfn_gridCheckAll = function(objGrid, e)
 
     // 헤더 체크박스 상태 변경
     objGrid.setCellProperty("head", nHeadCell, "text", sValue);
+};
+
+/**
+ * @description		그리드 헤더 체크박스 초기화 함수
+ * @param           {objGrid : Object} 그리드 객체
+ * @example         this.gfn_gridCheckReset(this.grd_message);
+ */
+pForm.gfn_gridCheckReset = function(objGrid)
+{
+    var sCheckColumn = "CHK";
+
+    // CHK 컬럼의 Body 셀 인덱스 조회
+    var nBodyCell = this.gfn_getGridColumnIndex(objGrid, sCheckColumn);
+    if (nBodyCell < 0) return;
+
+    // 헤더 셀 인덱스 조회
+    var nHeadCell = this.gfn_getGridHeaderIndex(objGrid, nBodyCell);
+    if (nHeadCell < 0) return;
+
+    // 헤더 체크박스 초기화
+    objGrid.setCellProperty("head", nHeadCell, "text", "N");
 };

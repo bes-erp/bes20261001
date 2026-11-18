@@ -115,6 +115,7 @@
  * 2026-11-13        Built1            Dataset 컬럼명 대문자 통일 및 공통함수 적용   
  * 2026-11-16        Built1            gv_userid 삭제, 사용자 ID 서버 세션 조회로 변경
  * 2026-11-17        Built1            메시지번호 복사 기능 
+ * 2026-11-18        Built1            체크박스 변경 상태 초기화 공통함수 적용
  ***************************************************************************************/
 
 
@@ -228,7 +229,7 @@ this.fn_save = function(obj:nexacro.Button, e:nexacro.ClickEventInfo)
  **************************************************************************************/
 /*
  * 기능 : 행추가
- * : 그리드에 첫 행을 추가하는 기능
+ * : 그리드에 신규 행을 추가하는 기능
  */
 this.fn_add_row = function(obj, e)
 {
@@ -279,7 +280,11 @@ this.fn_callBack = function(sSvcID, nErrCd, sErrMsg)
         // 메시지 목록 조회
         case "selectMessageList":
 
-            this.gfn_setRowCount(this.ds_message, this.div_title.form.sta_titleCnt);
+            // 헤더 체크박스 초기화
+			this.gfn_gridCheckReset(this.grd_message);
+
+			// 메시지 목록 건수 갱신
+			this.gfn_setRowCount(this.ds_message, this.div_title.form.sta_titleCnt);
 
             // 조회 결과가 없는 경우
             if (this.ds_message.rowcount == 0)
@@ -288,7 +293,7 @@ this.fn_callBack = function(sSvcID, nErrCd, sErrMsg)
             }
             break;
 
-        // 메시지 저장 (추후 서버 기능 연결)
+        // 메시지 저장
         case "saveMessage":
             this.alert("정상적으로 저장되었습니다.");
             this.fn_search();
@@ -351,7 +356,7 @@ this.grd_message_oncelldblclick = function(obj, e)
     // 클립보드 복사
     system.setClipboard("CF_TEXT", sMessageNum);
 
-     // 토스트 메시지 출력
+    // 토스트 메시지 출력
     this.sta_toast.set_text("✓ 메시지번호 복사 완료");
 	this.sta_toast.set_visible(true);
 	this.sta_toast.bringToFront();
