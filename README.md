@@ -2,6 +2,26 @@
 **☆ [공통] 매일 작업한 내용을 기록하고 push 바랍니다.**
 **☆ [공통] 최근 작업한 내용이 위로 배치, 금일 이후로 작성합니다.**
 
+**☆ [2026-11-18 : dims1111] 자바에서 메시지 데이터를 세션에서 호출하도록 기능 구현 **
+**1. 수정 파일**
+ - MSG10000MController
+ - 1.1 List<Map<String, Object>> resultList = messageStore.getMessageList(); // 메시지 데이터 조회
+ - 1.2 함수 추가 : 메시지 데이터 DB에서 조회하여 재 적재
+ -     public NexacroResult reloadMessage() throws Exception
+ - 1.3 위 2.2 함수를 메시지 컨트롤러 저장 후 함수[ reloadMessage() ] 호출 해주세요.
+ 
+**2. 신규 파일**
+ - MessageStore.java : 넥사크로의 gds_message 역할
+ - MessageFinder.java : 넥사크로 라이브러리 gfn_getMessage 역할 
+ - 상세한 내용은 자바 주석을 확인하세요
+ 
+**3. 사용 방법**
+ - 임포트 : import static erp.core.util.MessageFinder.*;
+ - log.debug("## getMessage(\"JM-ALT-10041\")  : {}", getMessage("JM-ALT-10041"));  // 사용자정보가 등록되지 않았습니다. 관리자에게 문의해 주세요.
+ 
+ - 임포트 : import erp.core.util.SessionUserInfo;
+ - log.debug("## SessionUserInfo.getLangCd();) : {}", SessionUserInfo.getLangCd());  // 언어코드
+
 **☆ [2026-11-18 : sdaeunn] 공통 라이브러리 개선 및 웹폰트 적용 구조 개선 **
  1. 그리드 공통라이브러리(libGrid.js) 개선
   - 헤더 셀 인덱스 조회 공통함수(gfn_getGridHeaderIndex) 추가
