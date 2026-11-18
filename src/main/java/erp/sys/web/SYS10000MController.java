@@ -19,9 +19,11 @@ import com.nexacro.uiadapter.spring.core.annotation.ParamDataSet;
 import com.nexacro.uiadapter.spring.core.data.NexacroResult;
 
 import erp.core.util.SessionConst;
+import erp.core.util.SessionUserInfo;
 import erp.sys.service.SYS10000MService;
 import erp.sys.vo.SYS10000MVO;
 import lombok.extern.slf4j.Slf4j;
+import static erp.core.util.MessageFinder.*;
 
 /**
  * =====================================================================================
@@ -117,9 +119,11 @@ public class SYS10000MController {
         Map<String, Object> comUserInfoMap = (Map<String, Object>) allDataMap.get("comUserInfo");
 
         // 인증은 성공했으나 사용자정보(사원 매핑 등)가 없는 경우
+        log.debug("## getMessage(\"JM-ALT-10041\")  : {}", getMessage("JM-ALT-10041"));
+        log.debug("## SessionUserInfo.getLangCd();) : {}", SessionUserInfo.getLangCd());
         if (comUserInfoMap == null) {
             log.warn("## [ LOGIN ] 사용자정보 없음 : {}", sUserId);
-            return addLoginResult(result, RESULT_FAIL, "사용자정보가 등록되지 않았습니다. 관리자에게 문의해 주세요.");
+            return addLoginResult(result, RESULT_FAIL, getMessage("JM-ALT-10041"));  // 사용자정보가 등록되지 않았습니다. 관리자에게 문의해 주세요.
         }
 
         // ----------------------------------------------------------------------------
