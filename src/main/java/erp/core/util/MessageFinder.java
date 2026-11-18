@@ -13,7 +13,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 * @author         		: Built1
 * @date           		: 2026.11.17
 * @description    		: 서버판 gfn_getMessage 클래스
-*                         메시지번호와 언어코드로 메시지를 찾아 {0}, {1} ... 을 인자로 치환한다.
+*                         메시지번호와 언어코드로 메시지를 찾아 {1}, {2} ... 을 인자로 치환한다.
 *                         클라이언트 : this.gfn_getMessage("NM-ALT-10010", ["사용자ID"]);
 *                         서버       : MessageFinder.getMessage("NM-ALT-10010", "사용자ID");
 * @Class process
@@ -28,6 +28,9 @@ import org.springframework.web.context.request.RequestContextHolder;
 * -------------------------------------------------------------------------------------
 * 2026.11.17        	Built1             최초 생성
 * 2026.11.17        	Built1             언어코드를 세션(SessionUserInfo.getLangCd())에서 조회하도록 변경
+* 2026.11.18        	Built1             getMessageByLang → getMessageWithoutSession 명칭 변경
+*                                          치환 순번 {1}부터 시작 (넥사크로 gfn_getMessage와 동일)
+*                                          언어코드 공백 제거(trim) 추가
 */
 @Component
 public class MessageFinder {
@@ -57,26 +60,30 @@ public class MessageFinder {
 	* @methodName     		: getMessage
 	* @author         		: Built1
 	* @date           		: 2026.11.17
-	* @description    		: 현재 요청의 언어코드로 메시지를 조회하는 메소드
+	* @description    		: 세션의 언어코드로 메시지를 조회하는 메소드 (로그인 이후 일반 업무용)
+	*                         세션에 언어코드가 없으면(로그인 전, 배치) 기본 언어코드(KO)로 조회
 	* @param messageNum     : 메시지번호 (예. NM-ALT-10010)
-	* @param args           : 치환 인자 ({0}, {1} ...)
+	* @param args           : 치환 인자 ({1}, {2} ...)
 	* @return               : 치환된 메시지
 	*/
 	public static String getMessage(String messageNum, Object... args) {
-		return getMessageByLang(messageNum, currentLangCd(), args);
+		return getMessageWithoutSession(messageNum, currentLangCd(), args);
 	}
 
 	/**
-	* @methodName     		: getMessageByLang
+	* @methodName     		: getMessageWithoutSession
 	* @author         		: Built1
 	* @date           		: 2026.11.17
-	* @description    		: 언어코드를 직접 지정하여 메시지를 조회하는 메소드 (배치, 메일 발송 등)
+	* @description    		: 세션을 쓰지 않고, 넘겨받은 언어코드로 메시지를 조회하는 메소드
+	*                         세션에 언어코드가 없는 상황에서 사용
+	*                         - 로그인 처리 중 (세션 저장 전) : 요청 언어코드(sLangCd) 전달
+	*                         - 배치, 메일 발송 : 받는 사람의 언어코드 전달
 	* @param messageNum     : 메시지번호 (예. NM-ALT-10010)
 	* @param langCd         : 언어코드 (KO, EN, ZH, JA, 그 외)
-	* @param args           : 치환 인자 ({0}, {1} ...)
+	* @param args           : 치환 인자 ({1}, {2} ...)
 	* @return               : 치환된 메시지
 	*/
-	public static String getMessageByLang(String messageNum, String langCd, Object... args) {
+	public static String getMessageWithoutSession(String messageNum, String langCd, Object... args) {
 
 		// 메시지 찾기
 		Map<String, Object> row = messageStore.find(messageNum);
@@ -154,7 +161,7 @@ public class MessageFinder {
 
 		// 언어코드별 컬럼 접미사 선택 : MESSAGE_TEXT_KO / _EN / _ZH / _JA / _OT
 		String suffix;
-		switch (langCd == null ? DEFAULT_LANG_CD : langCd.toUpperCase()) {
+		switch (langCd == null ? DEFAULT_LANG_CD : langCd.trim().toUpperCase()) {
 			case "KO": suffix = "KO"; break;
 			case "EN": suffix = "EN"; break;
 			case "ZH": suffix = "ZH"; break;
@@ -169,7 +176,7 @@ public class MessageFinder {
 	* @methodName     		: format
 	* @author         		: Built1
 	* @date           		: 2026.11.17
-	* @description    		: 메시지의 {0}, {1} ... 을 인자로 치환하는 메소드
+	* @description    		: 메시지의 {1}, {2} ... 을 인자로 치환하는 메소드
 	*                         (MessageFormat과 달리 작은따옴표(')를 특수문자로 취급하지 않음)
 	* @param text           : 메시지
 	* @param args           : 치환 인자

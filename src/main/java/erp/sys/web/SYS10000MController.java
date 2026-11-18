@@ -84,7 +84,8 @@ public class SYS10000MController {
         String sPassword = toStr(reqMap.get("PASSWORD"));
         String sLangCd   = toStr(reqMap.get("LANG_CD"));
 
-        log.debug("## [ LOGIN ] 요청 : {}", sUserId);
+        log.debug("## [ LOGIN ] sUserId : {}", sUserId);
+        log.debug("## [ LOGIN ] sLangCd : {}", sLangCd);
 
         // ----------------------------------------------------------------------------
         // 1. 입력값 검증 (화면 검증과 별개로 서버에서도 확인)
@@ -113,17 +114,21 @@ public class SYS10000MController {
         queryMap.put("USER_ID", sUserId);
         queryMap.put("LANG_CD", sLangCd);
 
+        log.debug("## [ LOGIN ] queryMap : {}", queryMap);
+
         Map<String, Object> allDataMap = service.selectAllData(queryMap);
 
         @SuppressWarnings("unchecked")
         Map<String, Object> comUserInfoMap = (Map<String, Object>) allDataMap.get("comUserInfo");
 
         // 인증은 성공했으나 사용자정보(사원 매핑 등)가 없는 경우
-        log.debug("## getMessage(\"JM-ALT-10041\")  : {}", getMessage("JM-ALT-10041"));
-        log.debug("## SessionUserInfo.getLangCd();) : {}", SessionUserInfo.getLangCd());
+        // 로그인 성공 후 : getMessage("JM-ALT-10041");
+        // 로그인 전      : getMessageWithoutSession("JM-ALT-10041", sLangCd);
+        log.debug("## [ LOGIN ] 성공-getMessageWithoutSession(\"JM-ALT-10041\", sLangCd) : {}", getMessageWithoutSession("JM-ALT-10041", sLangCd));
+        log.debug("## [ LOGIN ] 성공-SessionUserInfo.getLangCd()                         : {}", SessionUserInfo.getLangCd());
         if (comUserInfoMap == null) {
             log.warn("## [ LOGIN ] 사용자정보 없음 : {}", sUserId);
-            return addLoginResult(result, RESULT_FAIL, getMessage("JM-ALT-10041"));  // 사용자정보가 등록되지 않았습니다. 관리자에게 문의해 주세요.
+            return addLoginResult(result, RESULT_FAIL, getMessageWithoutSession("JM-ALT-10041", sLangCd));  // 사용자정보가 등록되지 않았습니다. 관리자에게 문의해 주세요.
         }
 
         // ----------------------------------------------------------------------------
@@ -150,7 +155,9 @@ public class SYS10000MController {
         result.addDataSet("outSelectProfileList", toList(allDataMap.get("sysProfileList")));               // gds_profile
         result.addDataSet("outSelectMenuList"   , toList(allDataMap.get("comUserMenuList")));              // gds_menu
 
-        log.debug("## [ LOGIN ] 성공 : {}", sUserId);
+        // 로그인 성공 후 : getMessage("JM-ALT-10041");
+        log.debug("## [ LOGIN ] 성공-sUserId                      : {}", sUserId);
+        log.debug("## [ LOGIN ] 성공-getMessage(\"JM-ALT-10041\") : {}", getMessage("JM-ALT-10041"));
 
         return addLoginResult(result, RESULT_SUCCESS, sResultDescr);
     }
