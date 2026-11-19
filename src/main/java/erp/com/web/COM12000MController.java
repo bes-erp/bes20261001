@@ -2,17 +2,14 @@ package erp.com.web;
 
 import java.util.List;
 import java.util.Map;
-
 import javax.annotation.Resource;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import com.nexacro.uiadapter.spring.core.annotation.ParamDataSet;
 import com.nexacro.uiadapter.spring.core.annotation.ParamVariable;
 import com.nexacro.uiadapter.spring.core.data.NexacroResult;
-
 import erp.com.service.COM12000MService;
+import erp.core.msg.web.MSG10000MController;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -29,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 * 2026.11.05        	Built1             수정
 * 2026.11.10			Built1			   데이터 저장 기능 추가
 * 2026.11.16			Built1			   사용자 ID 를 화면 전달값(userId) 대신 서버 세션(getUserId)으로 변경
+* 2026.11.19         	Built1             메시지 저장 후 서버 메모리 메시지 데이터 갱신
 */
 @Slf4j
 @Controller
@@ -37,6 +35,10 @@ public class COM12000MController {
 
     @Resource
     private COM12000MService service;
+    
+    // 메시지 데이터 갱신용 Controller
+    @Resource
+    private MSG10000MController msgController;
 
     /**
     * @methodName     		: selectMessageList
@@ -91,6 +93,11 @@ public class COM12000MController {
 	    int nSaveCnt = service.saveMessage(messageList);
 	
 	    log.debug("## [ 저장 건수 ] : {}", nSaveCnt);
+	    
+	    // 메시지 데이터 갱신
+	    if (nSaveCnt > 0) {
+	        msgController.reloadMessage();
+	    }
 	
 	    // 저장결과 리턴
 	    NexacroResult result = new NexacroResult();

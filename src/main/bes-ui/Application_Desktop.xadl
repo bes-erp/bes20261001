@@ -40,7 +40,7 @@
         </VFrameSet>
       </MainFrame>
     </Layout>
-    <Style url="xcssrc::Pretendard.xcss"/>
     <Style url="xcssrc::Button.xcss"/>
+    <Style url="xcssrc::bes_main.xcss"/>
   </Application>
 </ADL>

@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XCSS version="1.1">
+  <Predefines/>
+  <CSSData><![CDATA[/* =========================================================
+   Work 영역 - 공통 폰트
+   ========================================================= */
+
+/* 일반 텍스트 및 입력 컴포넌트 */
+.Static.font_WF,
+.Button.font_WF,
+.Edit.font_WF,
+.Combo.font_WF,
+.Combo.font_WF .comboedit,
+.Combo.font_WF .combolist .listboxitem
+{
+    font : normal 400 12px/normal "Pretendard";
+}
+
+/* 화면 제목 */
+.Static.font_WF_title
+{
+    font : normal 700 15px/normal "Pretendard";
+}
+
+/* 목록 제목 */
+.Static.font_WF_listTitle
+{
+    font : normal 700 13px/normal "Pretendard";
+}
+
+/* Work 영역 - 목록 건수 */
+.Static.font_WF_titleCnt
+{
+    font : normal 400 10px/normal "Pretendard";
+}
+
+/* Work 영역 - 토스트 메시지 */
+.Static.font_WF_toast
+{
+    font : normal 400 10pt/normal "Pretendard";
+}
+
+/* =========================================================
+   Work 영역 - Grid 폰트
+   ========================================================= */
+
+/* Grid 헤더 */
+.Grid.font_WF_grid .head .row .cell
+{
+    font : normal 700 12px/normal "Pretendard";
+}
+
+/* Grid 데이터 및 편집 컴포넌트 */
+.Grid.font_WF_grid .body .row .cell,
+.Grid.font_WF_grid .body .row .cell .celledit,
+.Grid.font_WF_grid .body .row .cell .cellcombo,
+.Grid.font_WF_grid .body .row .cell .cellcombo .comboedit,
+.Grid.font_WF_grid .body .row .cell .cellcombo .combolist .listboxitem
+{
+    font : normal 400 12px/normal "Pretendard";
+}]]></CSSData>
+</XCSS>

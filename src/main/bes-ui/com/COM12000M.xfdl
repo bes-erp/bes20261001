@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="COM12000M" width="1007" height="720" titletext="메시지등록" font="bold 12px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" onload="fn_init" ontimer="COM12000M_ontimer">
+  <Form id="COM12000M" width="1007" height="720" titletext="메시지등록" onload="fn_init" ontimer="COM12000M_ontimer">
     <Layouts>
       <Layout height="720" mobileorientation="landscape" width="1007">
         <Static id="sta_margin_left" taborder="0" text="10" left="0" top="0" width="10" height="720" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;"/>
         <Static id="sta_margin_top" taborder="1" text="10" left="0" top="0" width="1007" height="10" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;"/>
         <Static id="sta_margin_right" taborder="2" text="10" left="997" top="0" width="10" height="720" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;맑은 고딕&quot;"/>
         <Static id="sta_margin_bottom" taborder="3" text="10" left="0" top="710" width="1007" height="10" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;맑은 고딕&quot;"/>
-        <Div id="div_com" taborder="4" text="28" left="10" top="sta_margin_top:0" height="28" right="10" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;">
+        <Div id="div_com" taborder="4" text="28" left="10" top="sta_margin_top:0" height="28" right="10">
           <Layouts>
             <Layout>
               <Static id="sta_title" taborder="0" text="메시지 등록" left="35" top="2" width="229" height="24" cssclass="font_WF_title" fittocontents="width"/>
@@ -16,39 +16,39 @@
             </Layout>
           </Layouts>
         </Div>
-        <Div id="div_search" taborder="5" left="10" top="div_com:5" height="46" background="#EEF2F9" right="10" font="12px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" formscrolltype="none" formscrollbartype="none" text="">
+        <Div id="div_search" taborder="5" left="10" top="div_com:5" height="46" background="#EEF2F9" right="10" formscrolltype="none" formscrollbartype="none" text="">
           <Layouts>
             <Layout>
-              <Static id="sta_marginTop" taborder="12" text="10" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" height="11" left="0" top="0" right="0"/>
-              <Static id="sta_marginBottom" taborder="13" text="10" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" left="0" right="0" height="11" top="35"/>
-              <Combo id="cbo_message_class_cd" left="114" top="sta_marginTop:0" width="150" taborder="0" innerdataset="ds_cbo_message_class_cd" codecolumn="CODE" datacolumn="CODE_NM" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" cssclass="font_WF" bottom="sta_marginBottom:0" text=""/>
+              <Static id="sta_marginTop" taborder="12" text="11" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" height="11" left="0" top="0" right="0"/>
+              <Static id="sta_marginBottom" taborder="13" text="11" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" left="0" right="0" height="11" top="35"/>
+              <Combo id="cbo_message_class_cd" left="114" top="sta_marginTop:0" width="150" taborder="0" innerdataset="ds_cbo_message_class_cd" codecolumn="CODE" datacolumn="CODE_NM" cssclass="font_WF" bottom="sta_marginBottom:0" text=""/>
               <Static id="sta_margin_left" taborder="6" text="10" left="0" top="0" width="10" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" bottom="0"/>
               <Static id="sta_message_class_cd" text="메시지분류" left="sta_margin_left:0" top="11" width="100" height="24" verticalAlign="middle" taborder="1" textAlign="right" cssclass="font_WF"/>
               <Static id="sta_margin_left00" taborder="7" text="10" left="cbo_message_class_cd:10" top="0" width="10" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" bottom="0"/>
               <Static id="sta_message_type_cd" text="메시지유형" left="sta_margin_left00:0" top="11" width="100" height="24" verticalAlign="middle" taborder="2" textAlign="right" cssclass="font_WF"/>
-              <Combo id="cbo_message_type_cd" left="sta_message_type_cd:5" top="sta_marginTop:0" width="150" height="24" taborder="3" innerdataset="ds_cbo_message_type_cd" codecolumn="CODE" datacolumn="CODE_NM" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" cssclass="font_WF"/>
+              <Combo id="cbo_message_type_cd" left="sta_message_type_cd:5" top="sta_marginTop:0" width="150" height="24" taborder="3" innerdataset="ds_cbo_message_type_cd" codecolumn="CODE" datacolumn="CODE_NM" cssclass="font_WF"/>
               <Static id="sta_message_text_ko" text="메시지(한글)" left="557" top="11" width="100" height="24" verticalAlign="middle" taborder="4" textAlign="right" cssclass="font_WF"/>
-              <Edit id="edt_message_text_ko" left="sta_message_text_ko:5" top="sta_marginTop:0" width="200" taborder="5" maxlength="300" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" cssclass="font_WF" bottom="sta_marginBottom:0"/>
+              <Edit id="edt_message_text_ko" left="sta_message_text_ko:5" top="sta_marginTop:0" width="200" taborder="5" maxlength="300" cssclass="font_WF" bottom="sta_marginBottom:0"/>
               <Static id="sta_margin_left00_00" taborder="8" text="10" left="cbo_message_type_cd:0" top="0" width="10" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" bottom="0"/>
               <Static id="sta_margin_left00_00_00" taborder="9" text="10" top="0" background="aqua" textAlign="center" visible="false" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;" bottom="0" width="4" right="0"/>
-              <Button id="btn_searchClear" taborder="11" top="10" height="24" tooltiptext="초기화" width="24" onclick="fn_searchClear" cssclass="btn_WF_searchClear" right="4"/>
-              <Button id="btn_search" taborder="10" top="10" width="24" height="24" tooltiptext="조회" onclick="fn_search" right="btn_searchClear:2" cssclass="btn_WF_search"/>
+              <Button id="btn_searchClear" taborder="11" top="11" height="24" tooltiptext="초기화" width="24" onclick="fn_searchClear" cssclass="btn_WF_searchClear" right="4"/>
+              <Button id="btn_search" taborder="10" top="11" width="24" height="24" tooltiptext="조회" onclick="fn_search" right="btn_searchClear:2" cssclass="btn_WF_search"/>
             </Layout>
           </Layouts>
         </Div>
-        <Div id="div_title" taborder="6" text="30" left="10" top="div_search:5" height="32" right="10" font="10px/normal &quot;Dotum&quot;,&quot;돋움&quot;,&quot;Noto Sans KR Medium&quot;,&quot;Noto Sans KR Light&quot;,&quot;Noto Sans KR ExtraLight&quot;,&quot;Noto Sans KR ExtraBold&quot;,&quot;Noto Sans KR DemiLight&quot;,&quot;Noto Sans KR Black&quot;,&quot;Noto Sans KR SemiBold&quot;,&quot;Noto Sans KR Thin&quot;">
+        <Div id="div_title" taborder="6" text="30" left="10" top="div_search:5" height="32" right="10">
           <Layouts>
             <Layout>
               <Button id="btn_favorite" taborder="1" left="0" top="2" width="24" height="24" cssclass="btn_WF_gridTitle"/>
-              <Static id="sta_gridTitle" taborder="0" text="메시지 목록" left="btn_favorite:5" top="1" width="68" height="24" cssclass="font_WF_listTitle" font="bold 12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" fittocontents="width"/>
+              <Static id="sta_gridTitle" taborder="0" text="메시지 목록" left="btn_favorite:5" top="1" width="68" height="24" cssclass="font_WF_listTitle" fittocontents="width"/>
               <Button id="btn_delRow" taborder="3" top="4" width="24" height="24" tooltiptext="행삭제" right="4" onclick="fn_del_row" cssclass="btn_WF_delRow"/>
               <Button id="btn_addRow" taborder="2" top="4" width="24" height="24" tooltiptext="행추가" right="btn_delRow:2" onclick="fn_add_row" cssclass="btn_WF_addRow" text=""/>
               <Button id="btn_excel_down" taborder="4" top="4" width="24" height="24" tooltiptext="엑셀다운로드" right="btn_addRow:2" background="" onclick="fn_excel_down" cssclass="btn_WF_excelDown"/>
-              <Static id="sta_titleCnt" taborder="5" text="| 1,000건" left="sta_gridTitle:1" top="1" width="70" height="24" cssclass="sta_WF_titleCnt" font="10px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" fittocontents="width"/>
+              <Static id="sta_titleCnt" taborder="5" text="| 1,000건" left="sta_gridTitle:1" top="1" width="70" height="24" cssclass="font_WF_titleCnt" fittocontents="width"/>
             </Layout>
           </Layouts>
         </Div>
-        <Grid id="grd_message" left="10" top="div_title:0" right="10" bottom="10" taborder="7" binddataset="ds_message" selecttype="row" autoenter="select" autofittype="none" font="12px/normal &quot;Malgun Gothic&quot;,&quot;Noto Sans KR Black&quot;" onheadclick="grd_message_onheadclick" cssclass="font_WF_grid" oncelldblclick="grd_message_oncelldblclick">
+        <Grid id="grd_message" left="10" top="div_title:0" right="10" bottom="10" taborder="7" binddataset="ds_message" selecttype="row" autoenter="select" autofittype="none" onheadclick="grd_message_onheadclick" cssclass="font_WF_grid" oncelldblclick="grd_message_oncelldblclick">
           <Formats>
             <Format id="default">
               <Columns>
@@ -94,7 +94,7 @@
             </Format>
           </Formats>
         </Grid>
-        <Static id="sta_toast" taborder="8" width="140" height="24" visible="false" background="#FFFFFF" color="#334155" textAlign="center" verticalAlign="middle" font="10pt/normal &quot;Pretendard&quot;" border="1px solid #CBD5E1" left="260" top="95"/>
+        <Static id="sta_toast" taborder="8" width="140" height="24" visible="false" background="#FFFFFF" color="#334155" textAlign="center" verticalAlign="middle" border="1px solid #CBD5E1" left="260" top="95" cssclass="font_WF_toast"/>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[/***************************************************************************************
